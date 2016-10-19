@@ -65,12 +65,22 @@ public class testUtilities {
 	/**
 	 * Check if connection is NONE and swith to WIFI in that case.
 	 */
-	public void forceWifiIsNeeded(){
+	public void forceWifiOnIfNeeded(){
 		if(AppiumFactory.getAppiumDriver().getConnection().equals(Connection.NONE)){
 			System.out.println("Internet is NONE, switching to WIFI.");
 			AppiumFactory.getAppiumDriver().setConnection(Connection.WIFI);
 		}
 	}
+	/**
+	 * Check if connection is NONE and swith to WIFI in that case.
+	 */
+	public void forceWifiOfIfNeeded(){
+		if(AppiumFactory.getAppiumDriver().getConnection().equals(Connection.WIFI)){
+			System.out.println("Internet is WIFI, switching to NONE.");
+			AppiumFactory.getAppiumDriver().setConnection(Connection.NONE);
+		}
+	}
+	
 	
 //	/**
 //	 * Wait @param maxSecondsToWait for the @param id to appear, using try and catch.

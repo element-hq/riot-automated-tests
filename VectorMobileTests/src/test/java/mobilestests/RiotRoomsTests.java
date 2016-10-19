@@ -4,13 +4,20 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.Connection;
 import pom.RiotLoginAndRegisterPageObjects;
+import pom.RiotMainPageObjects;
+import pom.RiotRoomPageObjects;
 import utility.AppiumFactory;
 import utility.Constant;
 import utility.ScreenshotUtility;
@@ -18,7 +25,7 @@ import utility.testUtilities;
 
 @Listeners({ ScreenshotUtility.class })
 public class RiotRoomsTests extends testUtilities{
-	@BeforeClass
+	@BeforeSuite
 	public void setUp() throws MalformedURLException{
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability("deviceName","a71011c8");
@@ -41,11 +48,89 @@ public class RiotRoomsTests extends testUtilities{
 	
 	/**
 	 * Test that rooms are still accessible when internet connection is off. </br>
-	 * Verifies the connection lost warning in a room.
+	 * Verifies the connection lost notification in a room. </br>
+	 * Bring back the internet connection and verifies that the notification isn't displayed anymore.
+	 * @throws InterruptedException 
+	 */
+	@Test(groups="nointernet")
+	public void roomsListWithoutConnectionTest() throws InterruptedException{
+		String expectedNotificationMessage="Connectivity to the server has been lost.";
+		RiotMainPageObjects riotRoomsList = new RiotMainPageObjects(AppiumFactory.getAppiumDriver());
+		//Verifies that messages are still here : there is more than one.
+		Assert.assertFalse(riotRoomsList.roomsList.isEmpty(), "None room displayed in the rooms list.");
+		//Open the first room.
+		riotRoomsList.roomsList.get(0).click();
+		RiotRoomPageObjects myRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver());
+		//Verifies that the warning message is displayed in the bottom of the messages.
+		Assert.assertTrue(isPresentTryAndCatch(myRoom.roomNotificationArea),"The notification area is not displayed");
+		org.openqa.selenium.Dimension riotLogoDim=myRoom.notificationIcon.getSize();
+	    Assert.assertTrue(riotLogoDim.height!=0 && riotLogoDim.width!=0, "notification icon has null dimension");
+	    Assert.assertEquals(myRoom.notificationMessage.getText(), expectedNotificationMessage);
+	    //Bring back WIFI
+	    System.out.println("Set up the internet connection to WIFI.");
+	    AppiumFactory.getAppiumDriver().setConnection(Connection.WIFI);
+	    //Verifies that the warning message is not displayed anymore in the bottom of the messages.
+	    Assert.assertFalse(isPresentTryAndCatch(myRoom.roomNotificationArea),"The notification area is displayed");
+	    //teardown : going back to rooms list
+	    myRoom.menuBackButton.click();
+	}
+	
+	/**
+	 * Send a message in a room without Internet connection. </br>
+	 * Tests that the message is still added to the messages list. </br>
+	 * Restart the application </br>
+	 * Bring back internet, verifies that Riot proposes to send the unsent message.
+	 * @throws InterruptedException 
 	 */
 	@Test
-	public void roomsListWithoutConnection(){
+	public void sendMessageWithoutConnectionTest() throws InterruptedException{
+		String myMessage="message sent without internet connection";
+		String expectedNotificationMessage="Messages not sent. Resend now?";
 		
+		RiotMainPageObjects riotRoomsList = new RiotMainPageObjects(AppiumFactory.getAppiumDriver());
+		//Open the first room.
+		riotRoomsList.roomsList.get(0).click();
+		//cut internet
+		forceWifiOfIfNeeded();
+		RiotRoomPageObjects myRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver());
+		//send a message, then verifies that it's displayed in the message list
+		myRoom.sendAMessage(myMessage);
+		Assert.assertEquals(myRoom.getTextViewFromMessage(myRoom.lastMessage).getText(), myMessage,"The usent message isn't in the last message.");
+		//Restart the application
+		AppiumFactory.getAppiumDriver().closeApp();
+		AppiumFactory.getAppiumDriver().launchApp();
+		//Reopen the room
+		riotRoomsList = new RiotMainPageObjects(AppiumFactory.getAppiumDriver());
+		riotRoomsList.roomsList.get(0).click();
+		//bring back internet
+		AppiumFactory.getAppiumDriver().setConnection(Connection.WIFI);
+		//Asserts that riot proposes to send the unsent message
+		Assert.assertTrue(isPresentTryAndCatch(myRoom.roomNotificationArea),"The notification area is not displayed");
+		org.openqa.selenium.Dimension riotLogoDim=myRoom.notificationIcon.getSize();
+	    Assert.assertTrue(riotLogoDim.height!=0 && riotLogoDim.width!=0, "notification icon has null dimension");
+	    Assert.assertEquals(myRoom.notificationMessage.getText(), expectedNotificationMessage);
+	    //Click on "Resend now"
+	    myRoom.notificationMessage.click();
+	    //Asserts that the room notification area isn't dispkayed anymore
+	    Assert.assertFalse(isPresentTryAndCatch(myRoom.roomNotificationArea),"The notification area is displayed");
+	    //The previously unsent message is still in the message list
+	    Assert.assertEquals(myRoom.getTextViewFromMessage(myRoom.lastMessage).getText(), myMessage, "The unsent message doesn't isn't in the last message.");
+	    //teardown : going back to rooms list
+	    myRoom.menuBackButton.click();
+	}
+	
+	@Test
+	public void test1() throws InterruptedException{
+
+	}
+	
+
+	@BeforeGroups(groups="nointernet")
+	public void setWifiOffForNoConnectionTests(){
+		if(!AppiumFactory.getAppiumDriver().getConnection().equals(Connection.NONE)){
+			System.out.println("Setting up the connection to NONE for the tests without internet connection.");
+			AppiumFactory.getAppiumDriver().setConnection(Connection.NONE);
+		}
 	}
 	
 	/**
@@ -56,7 +141,7 @@ public class RiotRoomsTests extends testUtilities{
 	public void loginForSetup() throws InterruptedException{
 		if(false==waitUntilDisplayed("im.vector.alpha:id/fragment_recents_list", true, 5)){
 			System.out.println("Can't access to the rooms list page, none user must be logged. Forcing the log-in.");
-			forceWifiIsNeeded();
+			forceWifiOnIfNeeded();
 			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
 			loginPage.emailOrUserNameEditText.sendKeys(Constant.defaultUserName);
 			loginPage.passwordEditText.sendKeys(Constant.defaultUserPwd);

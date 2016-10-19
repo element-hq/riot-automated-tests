@@ -16,7 +16,13 @@ public class RiotMainPageObjects extends testUtilities {
 	public RiotMainPageObjects(AppiumDriver<MobileElement> driver) throws InterruptedException{
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 		Thread.sleep(2000);
-		ExplicitWait(driver,this.roomsExpandableListView);
+		//ExplicitWait(driver,this.roomsExpandableListView);
+		try {
+			waitUntilDisplayed("im.vector.alpha:id/fragment_recents_list", true, 5);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**

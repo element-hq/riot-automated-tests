@@ -1,5 +1,6 @@
 package pom;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.PageFactory;
 
 import io.appium.java_client.AppiumDriver;
@@ -11,7 +12,13 @@ import utility.testUtilities;
 public class RiotRoomPageObjects extends testUtilities{
 	public RiotRoomPageObjects(AppiumDriver<MobileElement> driver){
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
-		ExplicitWait(driver,this.messagesListView);
+		//ExplicitWait(driver,this.messagesListView);
+		try {
+			waitUntilDisplayed("im.vector.alpha:id/listView_messages", true, 5);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -36,6 +43,24 @@ public class RiotRoomPageObjects extends testUtilities{
 	public MobileElement getContextMenuByMessage(MobileElement messageLinearLayout){
 		return messageLinearLayout.findElementById("im.vector.alpha:id/messagesAdapter_action_image");
 	}
+	
+	/**
+	 * Get the textView from a linearLayout object message (first children of the listView_messages).
+	 * @param message
+	 * @return
+	 */
+	public MobileElement getTextViewFromMessage(MobileElement message){
+		return message.findElement(By.id("im.vector.alpha:id/messagesAdapter_body"));
+	}
+	/**
+	 * NOTIFICATION AREA
+	 */
+	@AndroidFindBy(id="im.vector.alpha:id/room_notifications_area")
+	public MobileElement roomNotificationArea;
+	@AndroidFindBy(id="im.vector.alpha:id/room_notification_icon")
+	public MobileElement notificationIcon;
+	@AndroidFindBy(id="im.vector.alpha:id/room_notification_message")
+	public MobileElement notificationMessage;
 		//MobileElement lastMessage=(MobileElement) getDriver().findElementByXPath("//android.widget.ListView[@resource-id='im.vector.alpha:id/listView_messages']/android.widget.LinearLayout[last()]");
 	
 	/**
@@ -67,5 +92,17 @@ public class RiotRoomPageObjects extends testUtilities{
 	public MobileElement voiceCallFromMenuButton;
 	
 
+	/**
+	 * Functions
+	 */
 	
+	/**
+	 * Type and send a message.
+	 * @param message
+	 */
+	public void sendAMessage(String message){
+		messageZoneEditText.sendKeys(message);
+		sendMessageButton.click();
+		System.out.println("Message "+message+" sent in the room.");
+	}
 }
