@@ -31,6 +31,7 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDeviceActionShortcuts;
 import io.appium.java_client.android.AndroidKeyCode;
 import io.appium.java_client.android.Connection;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import pom.RiotLoginAndRegisterPageObjects;
 import pom.RiotMainPageObjects;
 import utility.AppiumFactory;
@@ -62,27 +63,18 @@ public class RiotLoginTests  extends testUtilities{
 		AppiumFactory.getAppiumDriver().quit();
 	}
 	
-	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
-	public void loginTest(String sUserName,String sPassword) throws Exception {
+	@Test(enabled=false)
+	public void simpleLogin() throws Exception {
+		String sUserName="riotuser2", sPassword="riotuser";
 		MobileElement emailOrUserNameEditText= (MobileElement) AppiumFactory.getAppiumDriver().findElement(By.id("im.vector.alpha:id/login_user_name"));
 		WebElement passwordEditText= AppiumFactory.getAppiumDriver().findElement(By.id("im.vector.alpha:id/login_password"));
 		WebElement loginButton= AppiumFactory.getAppiumDriver().findElement(By.id("im.vector.alpha:id/button_login"));
-		emailOrUserNameEditText.sendKeys(sUserName);
-		passwordEditText.sendKeys(sPassword);
+		emailOrUserNameEditText.click();
+		AppiumFactory.getAppiumDriver().getKeyboard().sendKeys(sUserName);
+		passwordEditText.click();
+		AppiumFactory.getAppiumDriver().getKeyboard().sendKeys(sPassword);
 		loginButton.click();
-		(new WebDriverWait(AppiumFactory.getAppiumDriver(), 15)).until(ExpectedConditions.elementToBeClickable(AppiumFactory.getAppiumDriver().findElement(By.xpath("//android.widget.ImageButton"))));
-		MobileElement mainMenuBis = (MobileElement) (new WebDriverWait(AppiumFactory.getAppiumDriver(), 10))
-				.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//android.widget.ImageButton")));
-		mainMenuBis.click();
-
-		//touch the logout button
-		WebElement logOutButton= AppiumFactory.getAppiumDriver().findElement(By.name("Logout"));
-		logOutButton.click();
-		//validate that we are on the log-in page
-		WebElement riotLoginLogo= AppiumFactory.getAppiumDriver().findElement(By.id("im.vector.alpha:id/login_large_logo"));
-		Assert.assertTrue(riotLoginLogo.isDisplayed(), "Riot Logo isn't displayed");
 	}
-
 
 	/**
 	 * Log and logout and iterate on several datas from excel file.
@@ -99,6 +91,7 @@ public class RiotLoginTests  extends testUtilities{
 		//Thread.sleep(5000);
 		mainPage.contextMenuButton.click();
 		mainPage.logOutButton.click();
+		Assert.assertTrue(loginPage.inputsLoginLayout.isDisplayed(), "The login page isn't displayed after the log-out.");
 	}
 	
 	/**
@@ -130,7 +123,7 @@ public class RiotLoginTests  extends testUtilities{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
 		loginPage.forgotPwdButton.click();
 		//touch the back button to close the keywoard
-		((AndroidDeviceActionShortcuts) AppiumFactory.getAppiumDriver()).pressKeyCode(AndroidKeyCode.BACK);
+		//((AndroidDeviceActionShortcuts) AppiumFactory.getAppiumDriver()).pressKeyCode(AndroidKeyCode.BACK);
 		//assertions on the form
 		Assert.assertEquals(loginPage.resetPasswordTextView.getText(), expectedResetPwdMessage);
 		Assert.assertTrue(isPresentTryAndCatch(loginPage.mailResetPwdEditText), "The email address  edittext is not present");
@@ -278,6 +271,7 @@ public class RiotLoginTests  extends testUtilities{
 	    //Finder finder = new Finder("path/to/image", new Region(0, 0, <imgwidth>, <imgheight>));
 	 }
 
+	@Ignore
 	@Test
 	public void logoutTest() throws Exception {
 		if(AppiumFactory.getAppiumDriver()!=null){

@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.Connection;
+import pom.RiotCameraPageObjects;
 import pom.RiotLoginAndRegisterPageObjects;
 import pom.RiotMainPageObjects;
 import pom.RiotRoomPageObjects;
@@ -119,9 +120,57 @@ public class RiotRoomsTests extends testUtilities{
 	    myRoom.menuBackButton.click();
 	}
 	
+	/**
+	 * Take a photo and send it in a room without Internet connection. </br>
+	 * Tests that the photo is still added to the messages list. </br>
+	 * Restart the application </br>
+	 * Bring back internet, verifies that Riot proposes to send the unsent photo.
+	 * @throws InterruptedException 
+	 */
 	@Test
-	public void test1() throws InterruptedException{
-
+	public void sendPhotoWithoutConnectionTest() throws InterruptedException{
+		String expectedNotificationMessage="Messages not sent. Resend now?";
+		String roomNameTest="temp room";
+		
+		RiotMainPageObjects riotRoomsList = new RiotMainPageObjects(AppiumFactory.getAppiumDriver());
+		//Open the first room.
+		riotRoomsList.getRoomByName(roomNameTest).click();
+		//cut internet
+		forceWifiOfIfNeeded();
+		RiotRoomPageObjects myRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver());
+		//send a picture from the camera
+		myRoom.attachPhotoFromCamera("Small");
+		//verifies that it's displayed in the message list
+		waitUntilDisplayed("im.vector.alpha:id/messagesAdapter_image", true, 5);
+		org.openqa.selenium.Dimension takenPhoto=myRoom.getImageFromMessage(myRoom.lastMessage).getSize();
+	    Assert.assertTrue(takenPhoto.height!=0 && takenPhoto.width!=0, "The unsent photo has null dimension");
+    
+		//Restart the application
+		AppiumFactory.getAppiumDriver().closeApp();
+		AppiumFactory.getAppiumDriver().launchApp();
+		//Reopen the room
+		riotRoomsList = new RiotMainPageObjects(AppiumFactory.getAppiumDriver());
+		riotRoomsList.getRoomByName(roomNameTest).click();
+		//bring back internet
+		AppiumFactory.getAppiumDriver().setConnection(Connection.WIFI);
+		//verifies that the upload failed icon is present in the last message
+	    Assert.assertTrue(isPresentTryAndCatch(myRoom.getMediaUploadFailIconFromMessage(myRoom.lastMessage)),"The 'media upload failed' icon isn't displayed on the unsent photo");
+		//Asserts that riot proposes to send the unsent message
+		Assert.assertTrue(isPresentTryAndCatch(myRoom.roomNotificationArea),"The notification area is not displayed");
+		org.openqa.selenium.Dimension riotLogoDim=myRoom.notificationIcon.getSize();
+	    Assert.assertTrue(riotLogoDim.height!=0 && riotLogoDim.width!=0, "notification icon has null dimension");
+	    Assert.assertEquals(myRoom.notificationMessage.getText(), expectedNotificationMessage);
+	    //Click on "Resend now"
+	    myRoom.notificationMessage.click();
+	    //Asserts that the room notification area isn't dispkayed anymore
+	    Assert.assertFalse(isPresentTryAndCatch(myRoom.roomNotificationArea),"The notification area is displayed");
+	    //The previously unsent message is still in the message list
+	    takenPhoto=myRoom.getImageFromMessage(myRoom.lastMessage).getSize();
+	    Assert.assertTrue(takenPhoto.height!=0 && takenPhoto.width!=0, "The unsent photo has null dimension");
+		//verifies that the upload failed icon is present in the last message
+	    Assert.assertFalse(isPresentTryAndCatch(myRoom.getMediaUploadFailIconFromMessage(myRoom.lastMessage)),"The 'media upload failed' icon is displayed on the sent photo");
+	    //teardown : going back to rooms list
+	    myRoom.menuBackButton.click();
 	}
 	
 

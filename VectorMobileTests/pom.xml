@@ -41,6 +41,21 @@
   			<artifactId>testng</artifactId>
   			<version>6.8</version>
   		</plugin>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-javadoc-plugin</artifactId>
+  			<version>2.10.4</version>
+  			        <configuration>
+          <reportOutputDirectory>${project.reporting.outputDirectory}/doc</reportOutputDirectory>
+          <destDir>myapidocs</destDir>
+
+        </configuration>
+  		</plugin>
+  		<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.8</version>
+            </plugin>
   	</plugins>
   </build>
 </project>

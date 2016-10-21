@@ -7,6 +7,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import utility.AppiumFactory;
 import utility.testUtilities;
 
 public class RiotRoomPageObjects extends testUtilities{
@@ -52,6 +53,32 @@ public class RiotRoomPageObjects extends testUtilities{
 	public MobileElement getTextViewFromMessage(MobileElement message){
 		return message.findElement(By.id("im.vector.alpha:id/messagesAdapter_body"));
 	}
+	
+	/**
+	 * Get the imageview attached from a linearLayout object message (first children of the listView_messages).
+	 * @param message
+	 * @return
+	 */
+	public MobileElement getImageFromMessage(MobileElement message){
+		return message.findElement(By.id("im.vector.alpha:id/messagesAdapter_image"));
+	}
+	
+	/**
+	 * Get the media upload failed icon on an attached image from a linearLayout object message (first children of the listView_messages).
+	 * @param message
+	 * @return
+	 */
+	public MobileElement getMediaUploadFailIconFromMessage(MobileElement message){
+		try {
+			return message.findElement(By.id("im.vector.alpha:id/media_upload_failed"));
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		
+	}
+	
+	
 	/**
 	 * NOTIFICATION AREA
 	 */
@@ -84,14 +111,18 @@ public class RiotRoomPageObjects extends testUtilities{
 	public MobileElement quoteItemFromMenu;
 	
 	/**
-	 * CALL MENU
+	 * POPING MENU: CALL MENU (voice call, video call), or ATTACHMENT MENU (send files, take photo)
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/listView_icon_and_text")//call menu with voice and videos buttons
 	public MobileElement callMenuList;
 	@AndroidFindBy(xpath="//android.widget.ListView//android.widget.TextView[@text='Voice Call']/..")//call menu with voice and videos buttons
 	public MobileElement voiceCallFromMenuButton;
-	
-
+	@AndroidFindBy(xpath="//android.widget.ListView//android.widget.TextView[@text='Video Call']/..")//video menu with voice and videos buttons
+	public MobileElement videoCallFromMenuButton;
+	@AndroidFindBy(xpath="//android.widget.ListView//android.widget.TextView[@text='Send files']/..")//send files menu with send files and take photo buttons
+	public MobileElement sendFilesFromMenuButton;
+	@AndroidFindBy(xpath="//android.widget.ListView//android.widget.TextView[@text='Take photo']/..")//take photo menu with send files and take photo buttons
+	public MobileElement takePhotoFromMenuButton;
 	/**
 	 * Functions
 	 */
@@ -104,5 +135,20 @@ public class RiotRoomPageObjects extends testUtilities{
 		messageZoneEditText.sendKeys(message);
 		sendMessageButton.click();
 		System.out.println("Message "+message+" sent in the room.");
+	}
+	/**
+	 * From a room, take a photo and attach it to the messages.
+	 * @param photoSize : choose between Original, Large, Medium, Small.
+	 * @throws InterruptedException 
+	 */
+	public void attachPhotoFromCamera(String photoSize) throws InterruptedException{
+		sendMessageButton.click(); //(this button id is for both attachment files and send message buttons)
+		takePhotoFromMenuButton.click();
+		RiotCameraPageObjects cameraPreview = new RiotCameraPageObjects(AppiumFactory.getAppiumDriver());
+		cameraPreview.triggerCameraButton.click();//take a photo
+		waitUntilDisplayed("im.vector.alpha:id/medias_picker_preview", true, 5);
+		cameraPreview.confirmPickingPictureButton.click();
+		ExplicitWaitToBeVisible(AppiumFactory.getAppiumDriver(), cameraPreview.sendAsMenuLayout);
+		cameraPreview.getItemFromSendAsMenu(photoSize).click();
 	}
 }
