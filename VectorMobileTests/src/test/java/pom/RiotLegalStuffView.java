@@ -14,7 +14,7 @@ public class RiotLegalStuffView extends testUtilities{
 	AppiumDriver<MobileElement> driver;
 	public RiotLegalStuffView(AppiumDriver<MobileElement> driver2){
 		PageFactory.initElements(new AppiumFieldDecorator(driver2), this);
-		ExplicitWait(driver2,this.parentPanel);
+		ExplicitWait(this.parentPanel);
 		driver=driver2;
 	}
 	

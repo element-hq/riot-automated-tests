@@ -104,8 +104,8 @@ public class RiotLoginTests  extends testUtilities{
 		String defaultHomeServerTextEdit="https://matrix.org";
 		String defaultIdentityServerTextEdit="https://vector.im";
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
-		//touch the back button to close the keywoard
-		((AndroidDeviceActionShortcuts) AppiumFactory.getAppiumDriver()).pressKeyCode(AndroidKeyCode.BACK);
+		//hide the keyboard
+		AppiumFactory.getAppiumDriver().hideKeyboard();
 		loginPage.customServerOptionsCheckBox.click();
 		Assert.assertEquals(loginPage.homeServerTextView.getText(), homeServerTextView);
 		Assert.assertEquals(loginPage.identityServerTextView.getText(), identityServerTextView);
@@ -122,8 +122,8 @@ public class RiotLoginTests  extends testUtilities{
 		String expectedResetPwdMessage="To reset your password, enter the email address linked to your account:";
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
 		loginPage.forgotPwdButton.click();
-		//touch the back button to close the keywoard
-		//((AndroidDeviceActionShortcuts) AppiumFactory.getAppiumDriver()).pressKeyCode(AndroidKeyCode.BACK);
+		//hide the keyboard
+		AppiumFactory.getAppiumDriver().hideKeyboard();
 		//assertions on the form
 		Assert.assertEquals(loginPage.resetPasswordTextView.getText(), expectedResetPwdMessage);
 		Assert.assertTrue(isPresentTryAndCatch(loginPage.mailResetPwdEditText), "The email address  edittext is not present");

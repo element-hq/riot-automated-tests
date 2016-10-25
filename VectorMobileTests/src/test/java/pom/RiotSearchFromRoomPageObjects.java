@@ -13,7 +13,7 @@ public class RiotSearchFromRoomPageObjects extends testUtilities{
 	
 	public RiotSearchFromRoomPageObjects(AppiumDriver<MobileElement> driver){
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
-		ExplicitWait(driver,this.mainView);
+		ExplicitWait(this.mainView);
 	}
 	
 	@AndroidFindBy(id="im.vector.alpha:id/decor_content_parent")//main view from the search page

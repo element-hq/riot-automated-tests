@@ -10,13 +10,13 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.Connection;
 
 public class testUtilities {
-	public static void ExplicitWait(AppiumDriver<MobileElement> driver, WebElement element){
-		(new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(element));
+	public static void ExplicitWait(WebElement element){
+		(new WebDriverWait(AppiumFactory.getAppiumDriver(), 10)).until(ExpectedConditions.elementToBeClickable(element));
 		System.out.println((Object) element.getTagName()+" clickable");
 	}
 	
-	public static void ExplicitWaitToBeVisible(AppiumDriver<MobileElement> driver, WebElement element){
-		(new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOf(element));
+	public static void ExplicitWaitToBeVisible(WebElement element){
+		(new WebDriverWait(AppiumFactory.getAppiumDriver(), 10)).until(ExpectedConditions.visibilityOf(element));
 		System.out.println((Object) element.getTagName()+" displayed");
 	}
 	
@@ -40,17 +40,31 @@ public class testUtilities {
 	
 	/**
 	 * Wait @param maxSecondsToWait for the @param id to appear or not, using try and catch.
-	 * @param id
+	 * @param idOrXpath
 	 * @param displayed : put false if you want the object to disapear or true if you want the object to appear
 	 * @param maxSecondsToWait
 	 * @throws InterruptedException 
 	 */
-	public Boolean waitUntilDisplayed(String id, Boolean displayed,int maxSecondsToWait) throws InterruptedException {
+	public Boolean waitUntilDisplayed(String idOrXpath, Boolean displayed,int maxSecondsToWait) throws InterruptedException {
 		Boolean isDisplayed = false;
+		Boolean isXpath=false;
+		if(idOrXpath.contains("//")){
+			isXpath=true;
+		}
+		String verb;
+		if(displayed){
+			verb="appear";
+		}else{
+			verb="disappear";
+		}
 		float secondsWaited=0;
 		do {
 			try {
-				AppiumFactory.getAppiumDriver().findElement(By.id(id));
+				if(isXpath){
+					AppiumFactory.getAppiumDriver().findElement(By.xpath(idOrXpath));
+				}else{
+					AppiumFactory.getAppiumDriver().findElement(By.id(idOrXpath));
+				}
 				isDisplayed=true;
 			} catch (Exception e) {
 				isDisplayed=false;
@@ -58,9 +72,10 @@ public class testUtilities {
 			Thread.sleep(500);
 			secondsWaited=(float) (secondsWaited+0.5);
 		} while (displayed!=isDisplayed && secondsWaited<maxSecondsToWait);
-		System.out.println("Seconds to wait "+id+" to disapear: "+secondsWaited);
+		System.out.println("Seconds to wait "+idOrXpath+" to "+verb+": "+secondsWaited+". isXpath is "+isXpath.toString());
 		return isDisplayed;
 	}
+	
 	
 	/**
 	 * Check if connection is NONE and swith to WIFI in that case.
@@ -80,29 +95,4 @@ public class testUtilities {
 			AppiumFactory.getAppiumDriver().setConnection(Connection.NONE);
 		}
 	}
-	
-	
-//	/**
-//	 * Wait @param maxSecondsToWait for the @param id to appear, using try and catch.
-//	 * @param id
-//	 * @param maxSecondsToWait
-//	 * @throws InterruptedException 
-//	 */
-//	public void waitUntilDisplayed(String id, int maxSecondsToWait) throws InterruptedException{
-//		Boolean isDisplayed = false;
-//		float secondsWaited=0;
-//		do {
-//			try {
-//				MobileElement mobileElement= AppiumFactory.getAppiumDriver().findElement(By.id(id));
-//				//ExplicitWaitToBeVisible(AppiumFactory.getAppiumDriver(), AppiumFactory.getAppiumDriver().findElement(By.id("im.vector.alpha:id/main_input_layout")));
-//				isDisplayed=true;
-//			} catch (Exception e) {
-//				// TODO: handle exception
-//				isDisplayed=false;
-//			}
-//			Thread.sleep(500);
-//			secondsWaited=(float) (secondsWaited+0.5);
-//		} while (true==isDisplayed && secondsWaited<maxSecondsToWait);
-//		System.out.println("Seconds to wait "+id+" to disapear: "+secondsWaited);
-//	}
 }

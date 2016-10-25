@@ -113,6 +113,20 @@ public class RiotLoginAndRegisterPageObjects extends testUtilities{
 	public MobileElement msgboxConfirmationYesButton;
 	
 	/**
+	 * Start a registration to the captcha webview.
+	 * @throws InterruptedException 
+	 */
+	public void fillRegisterForm(String mail, String username, String pwd1, String pwd2) throws InterruptedException{
+		registerButton.click();
+		emailRegisterEditText.sendKeys(mail);
+		userNameRegisterEditText.sendKeys(username);
+		pwd1EditRegisterText.sendKeys(pwd1);
+		pwd2EditRegisterText.sendKeys(pwd2);
+		registerButton.click();
+		waitUntilDisplayed("android:id/parentPanel", true, 10);
+		msgboxConfirmationYesButton.click();
+	}
+	/**
 	 * return true if the parentPanel is present and false if it's not
 	 * @return
 	 */

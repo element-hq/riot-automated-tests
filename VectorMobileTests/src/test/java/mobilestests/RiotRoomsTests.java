@@ -1,26 +1,25 @@
 package mobilestests;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.Connection;
-import pom.RiotCameraPageObjects;
 import pom.RiotLoginAndRegisterPageObjects;
 import pom.RiotMainPageObjects;
 import pom.RiotRoomPageObjects;
 import utility.AppiumFactory;
 import utility.Constant;
+import utility.HttpsRequestsToMatrix;
 import utility.ScreenshotUtility;
 import utility.testUtilities;
 
@@ -173,6 +172,32 @@ public class RiotRoomsTests extends testUtilities{
 	    myRoom.menuBackButton.click();
 	}
 	
+	/**
+	 * Receive a message in a room from an other user. </br>
+	 * Asserts that badge is set to 1 or incremented on the room's item in the rooms list.
+	 * @throws InterruptedException 
+	 * @throws IOException 
+	 */
+	@Test
+	public void checkBadgeAndMessageOnRoomItem() throws InterruptedException, IOException{
+		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
+		String roomName="room tests Jean";
+		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0NzU1OTQxNjYwNTAKMDAyZnNpZ25hdHVyZSDofV-Ok8f6xSEPDNnKuZ9tM8YO_TXiwoKcfuvQrDLilwo";
+		String messageTest="coucou";
+
+		RiotMainPageObjects riotRoomsList = new RiotMainPageObjects(AppiumFactory.getAppiumDriver());
+		//get the current badge on the room.
+		Integer currentBadge=riotRoomsList.getBadgeNumberByRoomName(roomName);
+		//send a message to the room with an other user using https request to matrix.
+		HttpsRequestsToMatrix.sendMessageInRoom(senderAccesToken, roomId, messageTest);
+		if(currentBadge==null)currentBadge=0;
+		//wait until message is received
+		riotRoomsList.waitForRoomToReceiveNewMessage(roomName, currentBadge);
+		//Assertion on the badge
+		Assert.assertEquals((int) riotRoomsList.getBadgeNumberByRoomName(roomName),currentBadge+1, "Badge number wasn't incremented after receiving the message");	
+		//Assertion on the message.
+		Assert.assertEquals(riotRoomsList.getReceivedMessageByRoomName(roomName), messageTest, "Received message on the room item isn't the same as sended by matrix.");
+	}
 
 	@BeforeGroups(groups="nointernet")
 	public void setWifiOffForNoConnectionTests(){

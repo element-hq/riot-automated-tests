@@ -2,6 +2,7 @@ package pom;
 
 import java.util.List;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
@@ -9,6 +10,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import utility.AppiumFactory;
 import utility.testUtilities;
 
 public class RiotMainPageObjects extends testUtilities {
@@ -34,8 +36,52 @@ public class RiotMainPageObjects extends testUtilities {
 	public List<WebElement> roomsList;
 	
 	public MobileElement getRoomByName(String myRommName){
-		return roomsExpandableListView.findElementByName(myRommName);
+		//return roomsExpandableListView.findElementByName(myRommName);
+		return AppiumFactory.getAppiumDriver().findElementByXPath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../../../..");
 	}
+	
+	/**
+	 * Send back the badge number of a room by his name.</br>
+	 * Return null if no badge.
+	 * @param myRommName
+	 * @return
+	 */
+	public Integer getBadgeNumberByRoomName(String myRommName){
+		try {
+			//MobileElement roomItem=getRoomByName(myRommName);
+			//String badgeNumber= roomItem.findElementById("im.vector.alpha:id/roomSummaryAdapter_unread_count").getText();
+			String badgeNumber= AppiumFactory.getAppiumDriver().findElement(By.xpath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_unread_count']")).getText();
+			return Integer.parseInt(badgeNumber);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	/**
+	 * Send back the last received message of a room by his name.</br>
+	 * Message can be text or event. </br>
+	 * Return null if no message found.
+	 * @param myRommName
+	 * @return
+	 */
+	public String getReceivedMessageByRoomName(String myRommName){
+		try {
+			String messageWithUsername =AppiumFactory.getAppiumDriver().findElement(By.xpath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../..//android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_roomMessage']")).getText();
+			return messageWithUsername.substring(messageWithUsername.indexOf(":")+2, messageWithUsername.length());
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Wait until badge of the room is incremented.
+	 * @param myRommName
+	 * @param currentBadge
+	 * @throws InterruptedException
+	 */
+	public void waitForRoomToReceiveNewMessage(String myRommName, int currentBadge) throws InterruptedException{
+		waitUntilDisplayed("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_unread_count' and @text='"+Integer.sum(currentBadge, 1)+"']", true, 5);
+	}
+	
 	/**
 	 * TOP MENU
 	 */

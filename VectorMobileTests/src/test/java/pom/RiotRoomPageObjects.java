@@ -148,7 +148,7 @@ public class RiotRoomPageObjects extends testUtilities{
 		cameraPreview.triggerCameraButton.click();//take a photo
 		waitUntilDisplayed("im.vector.alpha:id/medias_picker_preview", true, 5);
 		cameraPreview.confirmPickingPictureButton.click();
-		ExplicitWaitToBeVisible(AppiumFactory.getAppiumDriver(), cameraPreview.sendAsMenuLayout);
+		ExplicitWaitToBeVisible(cameraPreview.sendAsMenuLayout);
 		cameraPreview.getItemFromSendAsMenu(photoSize).click();
 	}
 }

@@ -11,6 +11,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import pom.RiotCaptchaPageObject;
 import pom.RiotLoginAndRegisterPageObjects;
 import pom.RiotMainPageObjects;
 import utility.AppiumFactory;
@@ -126,6 +127,28 @@ public class RiotRegisterTests extends testUtilities {
 		registerPage.identityServerEditText.sendKeys("");;
 		//Assert that the register button is not clickable
 		Assert.assertFalse(registerPage.registerButton.isEnabled(), "The register button is not disabled after clearing the custom server URLs");
+	}
+	
+	/**
+	 * Start a sign-in and enters a wrong captcha.</br>
+	 * Validate that the register can't go any further.
+	 * @throws InterruptedException 
+	 */
+	@Test(groups="captchaOn")
+	public void registerWithFailingCaptchaCheckingTest() throws InterruptedException{
+		//creation of a "unique" username by adding a randomize number to the username.
+		int userNamesuffix = 1 + (int)(Math.random() * ((10000 - 1) + 1));
+		String userNameTest=(new StringBuilder("riotuser").append(userNamesuffix)).toString();
+		String pwdTest="riotuser";
+		
+		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
+		registerPage.fillRegisterForm(null, userNameTest,pwdTest, pwdTest);
+		RiotCaptchaPageObject captchaPage = new RiotCaptchaPageObject(AppiumFactory.getAppiumDriver());
+		captchaPage.notARobotCheckBox.click();
+		captchaPage.selectAllImages();
+		captchaPage.verifyCaptchaButton.click();
+		ExplicitWait(captchaPage.tryAgainView);
+		Assert.assertTrue(captchaPage.tryAgainView.isDisplayed(), "The 'Please try again' view is not displayed");
 	}
 	
 	/**

@@ -7,5 +7,6 @@ public class Constant {
 	public static final String package_name = "im.vector.alpha";
 	public static final String defaultUserName="riotuser2";
 	public static final String defaultUserPwd="riotuser";
+	public static final String matrixServer="https://matrix.org";
 	//public static final String Path_TestData = "src/testData";
 }
