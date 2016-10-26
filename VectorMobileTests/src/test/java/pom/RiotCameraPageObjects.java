@@ -17,7 +17,6 @@ public class RiotCameraPageObjects extends testUtilities{
 		try {
 			waitUntilDisplayed("im.vector.alpha:id/medias_picker_preview_gallery_layout", true, 5);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

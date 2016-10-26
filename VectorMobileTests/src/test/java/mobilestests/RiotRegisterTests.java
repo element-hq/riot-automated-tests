@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 
 import pom.RiotCaptchaPageObject;
 import pom.RiotLoginAndRegisterPageObjects;
-import pom.RiotMainPageObjects;
+import pom.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
 import utility.Constant;
 import utility.DataproviderClass;
@@ -25,16 +25,16 @@ public class RiotRegisterTests extends testUtilities {
 	@BeforeClass
 	public void setUp() throws MalformedURLException{
 		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability("deviceName","a71011c8");
+		capabilities.setCapability("deviceName",Constant.DEVICE_NAME);
 		capabilities.setCapability("platformName","Android");
 		capabilities.setCapability("platformVersion", "4.4.2");
-		capabilities.setCapability("appPackage", Constant.package_name);
+		capabilities.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
 		capabilities.setCapability("appActivity", "im.vector.activity.LoginActivity");
 
 		//Create RemoteWebDriver instance and connect to the Appium server
 		//It will launch the Riot application in Android Device using the configurations specified in Desired Capabilities
 		AppiumFactory appiumFactory=new AppiumFactory();
-		appiumFactory.setDriver(new URL(Constant.Server_Adress), capabilities);
+		appiumFactory.setDriver(new URL(Constant.SERVER_ADRESS), capabilities);
 		System.out.println("setUp() done");
 	}
 
@@ -159,7 +159,7 @@ public class RiotRegisterTests extends testUtilities {
 	public void logoutForSetup() throws InterruptedException{
 		if(false==waitUntilDisplayed("im.vector.alpha:id/main_input_layout", true, 5)){
 			System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
-			RiotMainPageObjects mainPage = new RiotMainPageObjects(AppiumFactory.getAppiumDriver());
+			RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
 			mainPage.logOut();
 		}
 	}

@@ -288,7 +288,6 @@
 //
 //
 //	public static AppiumDriver getDriver() {
-//		// TODO Auto-generated method stub
 //		return driver;
 //	}
 //

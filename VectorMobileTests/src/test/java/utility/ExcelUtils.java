@@ -55,7 +55,7 @@ public class ExcelUtils {
 			}
 
 			// Constant variables Test Data path and Test Data file name
-			FileOutputStream fileOut = new FileOutputStream(Constant.Path_TestData + Constant.File_TestData);
+			FileOutputStream fileOut = new FileOutputStream(Constant.PATH_TESTDATA + Constant.FILE_TESTDATA);
 			ExcelWBook.write(fileOut);
 			fileOut.flush();
 			fileOut.close();

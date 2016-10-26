@@ -12,7 +12,7 @@ public class DataproviderClass {
 	 */
 	@DataProvider(name="SearchProvider")
 	public static Object[][] getDataFromDataprovider(Method m) throws Exception{
-		ExcelUtils.setExcelFile(Constant.Path_TestData + m.getName()+".xlsx","Sheet1");
+		ExcelUtils.setExcelFile(Constant.PATH_TESTDATA + m.getName()+".xlsx","Sheet1");
 		int maxRows=ExcelUtils.getNbRows();
 		int maxCol=ExcelUtils.getNbCol();
 		

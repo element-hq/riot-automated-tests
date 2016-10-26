@@ -15,7 +15,6 @@ public class RiotLoginAndRegisterPageObjects extends testUtilities{
 		try {
 			waitUntilDisplayed("im.vector.alpha:id/login_inputs_layout", true, 5);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

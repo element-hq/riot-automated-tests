@@ -69,7 +69,7 @@ public class testUtilities {
 			} catch (Exception e) {
 				isDisplayed=false;
 			}
-			Thread.sleep(500);
+			if(maxSecondsToWait!=0)Thread.sleep(500);
 			secondsWaited=(float) (secondsWaited+0.5);
 		} while (displayed!=isDisplayed && secondsWaited<maxSecondsToWait);
 		System.out.println("Seconds to wait "+idOrXpath+" to "+verb+": "+secondsWaited+". isXpath is "+isXpath.toString());

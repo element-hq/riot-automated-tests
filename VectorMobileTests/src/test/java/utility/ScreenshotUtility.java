@@ -21,37 +21,30 @@ import io.appium.java_client.android.AndroidDriver;
 public class ScreenshotUtility implements ITestListener {
 
 	public void onTestStart(ITestResult result) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void onTestSuccess(ITestResult result) {
-		// TODO Auto-generated method stub
 		captureScreenShot(result, "pass");
 	}
 
 	public void onTestFailure(ITestResult result) {
-		// TODO Auto-generated method stub
 		captureScreenShot(result, "fail");
 	}
 
 	public void onTestSkipped(ITestResult result) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void onStart(ITestContext context) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void onFinish(ITestContext context) {
-		// TODO Auto-generated method stub
 
 	}
 	// Function to capture screenshot.

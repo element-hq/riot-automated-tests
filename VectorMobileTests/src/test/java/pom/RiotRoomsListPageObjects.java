@@ -5,6 +5,7 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
@@ -13,18 +14,65 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import utility.AppiumFactory;
 import utility.testUtilities;
 
-public class RiotMainPageObjects extends testUtilities {
+public class RiotRoomsListPageObjects extends testUtilities {
 	
-	public RiotMainPageObjects(AppiumDriver<MobileElement> driver) throws InterruptedException{
+	public RiotRoomsListPageObjects(AppiumDriver<MobileElement> driver) throws InterruptedException{
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 		Thread.sleep(2000);
 		//ExplicitWait(driver,this.roomsExpandableListView);
 		try {
 			waitUntilDisplayed("im.vector.alpha:id/fragment_recents_list", true, 5);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * INVITES
+	 */
+	@AndroidFindBy(xpath="//android.widget.TextView[@resource-id='im.vector.alpha:id/heading' and @text='INVITES']/../..")//invites collapsing bar
+	public MobileElement invitesHeadingLayout;
+	
+	public MobileElement getInvitationLayoutByName(String roomName){
+		return AppiumFactory.getAppiumDriver().findElementByXPath("//android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_roomName' and@text='"+roomName+"']/../../../..");
+	}
+	/**
+	 * Check some properties on a room invitation layout.
+	 * @param roomName
+	 */
+	public void checkInvitationLayout(String roomName){
+		MobileElement roomInvitationLayout=getInvitationLayoutByName(roomName);
+		//room's avatar is not empty
+		org.openqa.selenium.Dimension roomAvatar=roomInvitationLayout.findElementById("im.vector.alpha:id/room_avatar_image_view").getSize();
+		Assert.assertTrue(roomAvatar.height!=0 && roomAvatar.width!=0, "Riot logo has null dimension");
+		//System.out.println(roomInvitationLayout.findElementById("im.vector.alpha:id/roomSummaryAdapter_roomName").getText());
+		//! warning is present
+		Assert.assertEquals(roomInvitationLayout.findElementById("im.vector.alpha:id/roomSummaryAdapter_unread_count").getText(), "!", "Unread count on the invitation layout isn't present");
+		//last message received is not empty
+		Assert.assertFalse(roomInvitationLayout.findElementById("im.vector.alpha:id/roomSummaryAdapter_roomMessage").getText().isEmpty(), "Last received message is empty");
+		//the 2 buttons are enabled
+		Assert.assertEquals(roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_reject_button").getText(), "Reject");
+		Assert.assertTrue(roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_reject_button").isEnabled(), "Reject button isn't enabled");
+		Assert.assertEquals(roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_preview_button").getText(), "Preview");
+		Assert.assertTrue(roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_preview_button").isEnabled(), "Preview button isn't enabled");
+	}
+	
+	/**
+	 * Hit the "preview" button on an invitation.
+	 * @param roomName
+	 */
+	public void previewInvitation(String roomName){
+		MobileElement roomInvitationLayout=getInvitationLayoutByName(roomName);
+		roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_preview_button").click();
+	}
+	
+	/**
+	 * Hit the "reject" button on an invitation.
+	 * @param roomName
+	 */
+	public void rejectInvitation(String roomName){
+		MobileElement roomInvitationLayout=getInvitationLayoutByName(roomName);
+		roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_reject_button").click();
 	}
 	
 	/**
@@ -38,6 +86,20 @@ public class RiotMainPageObjects extends testUtilities {
 	public MobileElement getRoomByName(String myRommName){
 		//return roomsExpandableListView.findElementByName(myRommName);
 		return AppiumFactory.getAppiumDriver().findElementByXPath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../../../..");
+	}
+	
+	/**
+	 * Click on the context menu on a room, then choose one of the item : Notifications, Favourite, De-prioritize, Leave Conversation
+	 * @param roomName
+	 * @param item
+	 * @throws InterruptedException 
+	 */
+	public void clickOnContextMenuOnRoom(String roomName, String item) throws InterruptedException{
+		//open contxt menu on a room item
+		getRoomByName(roomName).findElementById("im.vector.alpha:id/roomSummaryAdapter_action_click_area").click();
+		//hit the item on the options
+		AppiumFactory.getAppiumDriver().findElementByXPath("//android.widget.ListView//android.widget.TextView[@text='"+item+"']/../..").click();
+		Assert.assertFalse(waitUntilDisplayed("//android.widget.ListView[count(android.widget.LinearLayout)=4]", false, 0), "Option windows isn't closed");
 	}
 	
 	/**

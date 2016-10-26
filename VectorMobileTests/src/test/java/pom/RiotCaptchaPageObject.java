@@ -17,7 +17,6 @@ public class RiotCaptchaPageObject extends testUtilities{
 		try {
 			waitUntilDisplayed("im.vector.alpha:id/account_creation_message", true, 5);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
