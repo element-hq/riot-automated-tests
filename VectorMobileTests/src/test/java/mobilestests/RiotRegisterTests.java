@@ -47,7 +47,7 @@ public class RiotRegisterTests extends testUtilities {
 	 * Fill the register form without any email adress. </br>
 	 * Verifies that a confirmation messagebox pops up. 
 	 */
-	@Test
+	@Test(groups={"restartneeded","logout"})
 	public void fillRegisterFormWithoutEmail(){
 		String userNameTest="riotusername";
 		String pwdTest="riotuser";
@@ -55,9 +55,9 @@ public class RiotRegisterTests extends testUtilities {
 		
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
 		registerPage.registerButton.click();
-		registerPage.userNameRegisterEditText.sendKeys(userNameTest);
-		registerPage.pwd1EditRegisterText.sendKeys(pwdTest);
-		registerPage.pwd2EditRegisterText.sendKeys(pwdTest);
+		registerPage.userNameRegisterEditText.setValue(userNameTest);
+		registerPage.pwd1EditRegisterText.setValue(pwdTest);
+		registerPage.pwd2EditRegisterText.setValue(pwdTest);
 		registerPage.registerButton.click();
 		//Validation on the messagebox
 		Assert.assertTrue(registerPage.isPresentTryAndCatch(registerPage.msgboxConfirmationLayout), "The confirmation msgbox is not displayed when an email is not specified in the register form");
@@ -72,7 +72,7 @@ public class RiotRegisterTests extends testUtilities {
 	}
 	
 	/**
-	 * Fill the register form with differents passwords. </br>
+	 * Fill the register form with different passwords. </br>
 	 * Verifies that the form is not sent and a notification "Passwords don't mach" pops.</br>
 	 * 
 	 */
@@ -84,9 +84,9 @@ public class RiotRegisterTests extends testUtilities {
 		
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
 		registerPage.registerButton.click();
-		registerPage.userNameRegisterEditText.sendKeys(userNameTest);
-		registerPage.pwd1EditRegisterText.sendKeys(pwd1Test);
-		registerPage.pwd2EditRegisterText.sendKeys(pwd2Test);
+		registerPage.userNameRegisterEditText.setValue(userNameTest);
+		registerPage.pwd1EditRegisterText.setValue(pwd1Test);
+		registerPage.pwd2EditRegisterText.setValue(pwd2Test);
 		registerPage.registerButton.click();
 		//Validate the toast "Passwords don't match" : not possible with appium
 		//Validate that we are still on the register form
@@ -99,16 +99,18 @@ public class RiotRegisterTests extends testUtilities {
 	 * Verifies that the form is not sent.
 	 * @throws MalformedURLException 
 	 */
-	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
+	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class,groups={"restartneeded","logout"})
 	public void fillRegisterFormWithForbiddenCharacter(String mailTest,String userNameTest, String pwd1Test,String pwd2Test) throws MalformedURLException{
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
 		registerPage.registerButton.click();
-		registerPage.emailRegisterEditText.sendKeys(mailTest);
-		registerPage.userNameRegisterEditText.sendKeys(userNameTest);
-		registerPage.pwd1EditRegisterText.clear();
-		registerPage.pwd1EditRegisterText.sendKeys(pwd1Test);
-		registerPage.pwd2EditRegisterText.clear();
-		registerPage.pwd2EditRegisterText.sendKeys(pwd2Test);
+		if(registerPage.emailRegisterEditText.getText().length()>0)registerPage.emailRegisterEditText.clear();
+		registerPage.emailRegisterEditText.setValue(mailTest);
+		/*if(registerPage.userNameRegisterEditText.getText().length()>0)*/registerPage.userNameRegisterEditText.clear();
+		registerPage.userNameRegisterEditText.setValue(userNameTest);
+		/*registerPage.pwd1EditRegisterText.clear();*/
+		registerPage.pwd1EditRegisterText.setValue(pwd1Test);
+		/*registerPage.pwd2EditRegisterText.clear();*/
+		registerPage.pwd2EditRegisterText.setValue(pwd2Test);
 		registerPage.registerButton.click();
 		//Validate the toasts : not possible with appium
 		//Validate that we are still on the register form
@@ -118,13 +120,13 @@ public class RiotRegisterTests extends testUtilities {
 	/**
 	 * Empty the home server custom URLs then validates that the register button is not enabled.
 	 */
-	@Test
+	@Test(groups={"restartneeded","logout"})
 	public void registerWithEmptyCustomServerUrls(){
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
 		registerPage.registerButton.click();
 		registerPage.customServerOptionsCheckBox.click();
 		registerPage.homeServerEditText.clear();
-		registerPage.identityServerEditText.sendKeys("");;
+		registerPage.identityServerEditText.setValue("");;
 		//Assert that the register button is not clickable
 		Assert.assertFalse(registerPage.registerButton.isEnabled(), "The register button is not disabled after clearing the custom server URLs");
 	}
@@ -134,7 +136,7 @@ public class RiotRegisterTests extends testUtilities {
 	 * Validate that the register can't go any further.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="captchaOn")
+	@Test(groups={"restartneeded","logout"})
 	public void registerWithFailingCaptchaCheckingTest() throws InterruptedException{
 		//creation of a "unique" username by adding a randomize number to the username.
 		int userNamesuffix = 1 + (int)(Math.random() * ((10000 - 1) + 1));
@@ -142,7 +144,7 @@ public class RiotRegisterTests extends testUtilities {
 		String pwdTest="riotuser";
 		
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
-		registerPage.fillRegisterForm(null, userNameTest,pwdTest, pwdTest);
+		registerPage.fillRegisterForm("", userNameTest,pwdTest, pwdTest);
 		RiotCaptchaPageObject captchaPage = new RiotCaptchaPageObject(AppiumFactory.getAppiumDriver());
 		captchaPage.notARobotCheckBox.click();
 		captchaPage.selectAllImages();
@@ -151,12 +153,21 @@ public class RiotRegisterTests extends testUtilities {
 		Assert.assertTrue(captchaPage.tryAgainView.isDisplayed(), "The 'Please try again' view is not displayed");
 	}
 	
+	@BeforeMethod(groups="restartneeded")
+	public void restartRiot(){
+		//Restart the application
+		System.out.println("Restart the app");
+		AppiumFactory.getAppiumDriver().closeApp();
+		AppiumFactory.getAppiumDriver().launchApp();
+	}
+	
 	/**
 	 * Log-out the user if it can't see the login page.
 	 * @throws InterruptedException
 	 */
-	@BeforeMethod
+	@BeforeMethod(groups="logout")
 	public void logoutForSetup() throws InterruptedException{
+		System.out.println("Check if logout is needed for the test.");
 		if(false==waitUntilDisplayed("im.vector.alpha:id/main_input_layout", true, 5)){
 			System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
 			RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());

@@ -151,6 +151,15 @@ public class RiotRoomInvitationTests extends testUtilities{
 	}
 	
 	/**
+	 * Stress test on invitations.
+	 * Receive multiple (10) invitations from an other user. </br>
+	 * TODO write this test
+	 */
+	@Ignore
+	public void receiveMultipleInvitations(){
+		
+	}
+	/**
 	 * TODO write this test
 	 */
 	@Ignore
@@ -167,8 +176,8 @@ public class RiotRoomInvitationTests extends testUtilities{
 			System.out.println("Can't access to the rooms list page, none user must be logged. Forcing the log-in.");
 			forceWifiOnIfNeeded();
 			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
-			loginPage.emailOrUserNameEditText.sendKeys(Constant.DEFAULT_USERNAME);
-			loginPage.passwordEditText.sendKeys(Constant.DEFAULT_USERPWD);
+			loginPage.emailOrUserNameEditText.setValue(Constant.DEFAULT_USERNAME);
+			loginPage.passwordEditText.setValue(Constant.DEFAULT_USERPWD);
 			//Forcing the login button to be enabled : this bug should be corrected.
 			if(loginPage.loginButton.isEnabled()==false){
 				loginPage.registerButton.click();

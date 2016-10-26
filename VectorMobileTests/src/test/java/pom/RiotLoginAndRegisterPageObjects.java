@@ -117,10 +117,10 @@ public class RiotLoginAndRegisterPageObjects extends testUtilities{
 	 */
 	public void fillRegisterForm(String mail, String username, String pwd1, String pwd2) throws InterruptedException{
 		registerButton.click();
-		emailRegisterEditText.sendKeys(mail);
-		userNameRegisterEditText.sendKeys(username);
-		pwd1EditRegisterText.sendKeys(pwd1);
-		pwd2EditRegisterText.sendKeys(pwd2);
+		emailRegisterEditText.setValue(mail);
+		userNameRegisterEditText.setValue(username);
+		pwd1EditRegisterText.setValue(pwd1);
+		pwd2EditRegisterText.setValue(pwd2);
 		registerButton.click();
 		waitUntilDisplayed("android:id/parentPanel", true, 10);
 		msgboxConfirmationYesButton.click();

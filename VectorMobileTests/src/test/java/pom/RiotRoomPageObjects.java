@@ -90,7 +90,7 @@ public class RiotRoomPageObjects extends testUtilities{
 	
 	/**
 	 * Check the room page layout.
-	 * TODO write this function by inspirant of checkPreviewRoomLayout() 
+	 * TODO complete this function by inspirant of checkPreviewRoomLayout() 
 	 * @param roomName
 	 * @throws InterruptedException 
 	 */
@@ -208,7 +208,7 @@ public class RiotRoomPageObjects extends testUtilities{
 	 * @param message
 	 */
 	public void sendAMessage(String message){
-		messageZoneEditText.sendKeys(message);
+		messageZoneEditText.setValue(message);
 		sendMessageButton.click();
 		System.out.println("Message "+message+" sent in the room.");
 	}

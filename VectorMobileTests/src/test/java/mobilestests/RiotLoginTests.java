@@ -63,16 +63,19 @@ public class RiotLoginTests  extends testUtilities{
 		AppiumFactory.getAppiumDriver().quit();
 	}
 	
-	@Test(enabled=false)
+	@Test//(enabled=true)
 	public void simpleLogin() throws Exception {
 		String sUserName="riotuser2", sPassword="riotuser";
 		MobileElement emailOrUserNameEditText= (MobileElement) AppiumFactory.getAppiumDriver().findElement(By.id("im.vector.alpha:id/login_user_name"));
-		WebElement passwordEditText= AppiumFactory.getAppiumDriver().findElement(By.id("im.vector.alpha:id/login_password"));
-		WebElement loginButton= AppiumFactory.getAppiumDriver().findElement(By.id("im.vector.alpha:id/button_login"));
-		emailOrUserNameEditText.click();
-		AppiumFactory.getAppiumDriver().getKeyboard().sendKeys(sUserName);
-		passwordEditText.click();
-		AppiumFactory.getAppiumDriver().getKeyboard().sendKeys(sPassword);
+		MobileElement passwordEditText= AppiumFactory.getAppiumDriver().findElement(By.id("im.vector.alpha:id/login_password"));
+		MobileElement loginButton= AppiumFactory.getAppiumDriver().findElement(By.id("im.vector.alpha:id/button_login"));
+		emailOrUserNameEditText.setValue(sUserName);
+		passwordEditText.setValue(sPassword);
+		loginButton.click();
+		//		emailOrUserNameEditText.click();
+//		AppiumFactory.getAppiumDriver().getKeyboard().sendKeys(sUserName);
+//		passwordEditText.click();
+//		AppiumFactory.getAppiumDriver().getKeyboard().sendKeys(sPassword);
 		loginButton.click();
 	}
 
@@ -82,8 +85,8 @@ public class RiotLoginTests  extends testUtilities{
 	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void loginAndLogoutTest(String sUserName,String sPassword)  throws Exception {
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
-		loginPage.emailOrUserNameEditText.sendKeys(sUserName);
-		loginPage.passwordEditText.sendKeys(sPassword);
+		loginPage.emailOrUserNameEditText.setValue(sUserName);
+		loginPage.passwordEditText.setValue(sPassword);
 		loginPage.loginButton.click();
 
 		//Wait for the main page (rooms list) to be opened, and log out.
@@ -150,9 +153,9 @@ public class RiotLoginTests  extends testUtilities{
 	public void fillForgotFormPasswordWithForbiddenCharacter(String mailTest, String newPwdTest, String confirmPwdTest) throws InterruptedException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
 		loginPage.forgotPwdButton.click();
-		loginPage.mailResetPwdEditText.sendKeys(mailTest);
-		loginPage.newPwdResetPwdEditText.sendKeys(newPwdTest);
-		loginPage.confirmNewPwdResetPwdEditText.sendKeys(confirmPwdTest);
+		loginPage.mailResetPwdEditText.setValue(mailTest);
+		loginPage.newPwdResetPwdEditText.setValue(newPwdTest);
+		loginPage.confirmNewPwdResetPwdEditText.setValue(confirmPwdTest);
 		loginPage.sendResetEmailButton.click();
 		//wait in case that the reset pwd form is not displayed
 		waitUntilDisplayed("im.vector.alpha:id/forget_password_inputs_layout",false,1);
@@ -173,9 +176,9 @@ public class RiotLoginTests  extends testUtilities{
 		String confirmPwdTest="riotuser";
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
 		loginPage.forgotPwdButton.click();
-		loginPage.mailResetPwdEditText.sendKeys(mailTest);
-		loginPage.newPwdResetPwdEditText.sendKeys(newPwdTest);
-		loginPage.confirmNewPwdResetPwdEditText.sendKeys(confirmPwdTest);
+		loginPage.mailResetPwdEditText.setValue(mailTest);
+		loginPage.newPwdResetPwdEditText.setValue(newPwdTest);
+		loginPage.confirmNewPwdResetPwdEditText.setValue(confirmPwdTest);
 		loginPage.sendResetEmailButton.click();
 		Assert.assertTrue(loginPage.inputsLoginLayout.isDisplayed(), "The Riot login page is not displayed.");
 	}
