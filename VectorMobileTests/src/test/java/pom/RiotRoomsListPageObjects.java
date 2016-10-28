@@ -83,9 +83,20 @@ public class RiotRoomsListPageObjects extends testUtilities {
 	@AndroidFindBy(xpath="//android.widget.ExpandableListView[@resource-id='im.vector.alpha:id/fragment_recents_list']/android.widget.LinearLayout")
 	public List<WebElement> roomsList;
 	
+	/**
+	 * Return a room as a MobileElement. </br>
+	 * Return null if not found.
+	 * @param myRommName
+	 * @return
+	 */
 	public MobileElement getRoomByName(String myRommName){
 		//return roomsExpandableListView.findElementByName(myRommName);
-		return AppiumFactory.getAppiumDriver().findElementByXPath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../../../..");
+		try {
+			return AppiumFactory.getAppiumDriver().findElementByXPath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../../../..");	
+		} catch (Exception e) {
+			return null;
+		}
+		
 	}
 	
 	/**

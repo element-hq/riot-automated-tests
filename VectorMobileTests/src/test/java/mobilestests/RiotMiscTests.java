@@ -178,9 +178,9 @@ public class RiotMiscTests extends testUtilities{
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(driver);
 		mainPage.getRoomByName(testRoomName).click();
 		RiotRoomPageObjects myRoom = new RiotRoomPageObjects(driver);
-		MobileElement lastMessage = myRoom.lastMessage;
+		MobileElement lastMessage = myRoom.getLastPost();
 		lastMessage.click();
-		myRoom.getContextMenuByMessage(lastMessage).click();
+		myRoom.getContextMenuByPost(lastMessage).click();
 		myRoom.quoteItemFromMenu.click();
 	}
 

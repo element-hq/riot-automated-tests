@@ -56,8 +56,12 @@ public class RiotRoomInvitationTests extends testUtilities{
 	public void rejectInvitationToARoom() throws IOException, InterruptedException{
 		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 		String invitedUserAdress=Constant.DEFAULT_USERADRESS;
-		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0NzU1OTQxNjYwNTAKMDAyZnNpZ25hdHVyZSDofV-Ok8f6xSEPDNnKuZ9tM8YO_TXiwoKcfuvQrDLilwo";
+		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg2MTAyNjEKMDAyZnNpZ25hdHVyZSAMRHy3V2nt7jDJlDrhq1NkEBBiHH6umGQvaydgqLcYlQo";
 		String roomName="room tests Jean";
+		String leavingUserAdress=Constant.DEFAULT_USERADRESS;
+		String leavingUserAccessToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI4Y2lkIHVzZXJfaWQgPSBAcmlvdHVzZXIyOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg3NDI5OTgKMDAyZnNpZ25hdHVyZSBapU0beWNgBCwjIb0CT16LUNT0F2jr0pm6qPAm7t0CEAo";
+		
+		HttpsRequestsToMatrix.leaveRoom(leavingUserAccessToken, roomId, leavingUserAdress);
 		HttpsRequestsToMatrix.sendInvitationToUser(senderAccesToken, roomId, invitedUserAdress);
 		
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
@@ -87,8 +91,12 @@ public class RiotRoomInvitationTests extends testUtilities{
 	public void cancelInvitationToARoom() throws IOException, InterruptedException{
 		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 		String invitedUserAdress=Constant.DEFAULT_USERADRESS;
-		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0NzU1OTQxNjYwNTAKMDAyZnNpZ25hdHVyZSDofV-Ok8f6xSEPDNnKuZ9tM8YO_TXiwoKcfuvQrDLilwo";
+		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg2MTAyNjEKMDAyZnNpZ25hdHVyZSAMRHy3V2nt7jDJlDrhq1NkEBBiHH6umGQvaydgqLcYlQo";
 		String roomName="room tests Jean";
+		String leavingUserAdress=Constant.DEFAULT_USERADRESS;
+		String leavingUserAccessToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI4Y2lkIHVzZXJfaWQgPSBAcmlvdHVzZXIyOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg3NDI5OTgKMDAyZnNpZ25hdHVyZSBapU0beWNgBCwjIb0CT16LUNT0F2jr0pm6qPAm7t0CEAo";
+		
+		HttpsRequestsToMatrix.leaveRoom(leavingUserAccessToken, roomId, leavingUserAdress);
 		HttpsRequestsToMatrix.sendInvitationToUser(senderAccesToken, roomId, invitedUserAdress);
 		
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
@@ -117,7 +125,8 @@ public class RiotRoomInvitationTests extends testUtilities{
 	 * Check the preview layout.</br>
 	 * Join the room</br>
 	 * Check that the room is opened. </br>
-	 * Came back in the list and leave room.
+	 * Came back in the list and leave room.</br>
+	 * Check that room page is closed and not present in the rooms list.
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
@@ -125,8 +134,12 @@ public class RiotRoomInvitationTests extends testUtilities{
 	public void acceptInvitationToARoom() throws IOException, InterruptedException{
 		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 		String invitedUserAdress=Constant.DEFAULT_USERADRESS;
-		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0NzU1OTQxNjYwNTAKMDAyZnNpZ25hdHVyZSDofV-Ok8f6xSEPDNnKuZ9tM8YO_TXiwoKcfuvQrDLilwo";
+		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg2MTAyNjEKMDAyZnNpZ25hdHVyZSAMRHy3V2nt7jDJlDrhq1NkEBBiHH6umGQvaydgqLcYlQo";
 		String roomName="room tests Jean";
+		String leavingUserAdress=Constant.DEFAULT_USERADRESS;
+		String leavingUserAccessToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI4Y2lkIHVzZXJfaWQgPSBAcmlvdHVzZXIyOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg3NDI5OTgKMDAyZnNpZ25hdHVyZSBapU0beWNgBCwjIb0CT16LUNT0F2jr0pm6qPAm7t0CEAo";
+		
+		HttpsRequestsToMatrix.leaveRoom(leavingUserAccessToken, roomId, leavingUserAdress);
 		HttpsRequestsToMatrix.sendInvitationToUser(senderAccesToken, roomId, invitedUserAdress);
 		
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
@@ -148,6 +161,58 @@ public class RiotRoomInvitationTests extends testUtilities{
 		riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
 		//leave the room
 		riotRoomsList.clickOnContextMenuOnRoom(roomName, "Leave Conversation");
+		//check that room is closed and isn't in the rooms list page
+		newRoom.isDisplayed(false);
+		riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
+		Assert.assertNull(riotRoomsList.getRoomByName(roomName), "Room "+roomName+" is still in the rooms list after leaving it.");
+	}
+	
+	/**
+	 * Required : the test user hasn't received any invitation.
+	 * Receive an invitation to a room. </br>
+	 * Check that riot allows the user to accept or decline the invitation.</br>
+	 * Click preview to preview the room.</br>
+	 * Check the preview layout.</br>
+	 * Join the room</br>
+	 * Check that the room is opened. </br>
+	 * Came back in the list and leave room from the room menu.</br>
+	 * Check that room page is closed and not present in the rooms list.
+	 * @throws IOException 
+	 * @throws InterruptedException 
+	 */
+	@Test
+	public void acceptInvitationAndLeaveFromMenu() throws IOException, InterruptedException{
+		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
+		String invitedUserAdress=Constant.DEFAULT_USERADRESS;
+		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg2MTAyNjEKMDAyZnNpZ25hdHVyZSAMRHy3V2nt7jDJlDrhq1NkEBBiHH6umGQvaydgqLcYlQo";
+		String roomName="room tests Jean";
+		String leavingUserAdress=Constant.DEFAULT_USERADRESS;
+		String leavingUserAccessToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI4Y2lkIHVzZXJfaWQgPSBAcmlvdHVzZXIyOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg3NDI5OTgKMDAyZnNpZ25hdHVyZSBapU0beWNgBCwjIb0CT16LUNT0F2jr0pm6qPAm7t0CEAo";
+		
+		HttpsRequestsToMatrix.leaveRoom(leavingUserAccessToken, roomId, leavingUserAdress);
+		HttpsRequestsToMatrix.sendInvitationToUser(senderAccesToken, roomId, invitedUserAdress);
+		
+		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
+		ExplicitWait(riotRoomsList.invitesHeadingLayout);
+		Assert.assertTrue(riotRoomsList.invitesHeadingLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
+		//TODO check that invites layout is above rooms list
+		//check invite layout
+		riotRoomsList.checkInvitationLayout(roomName);
+		//preview invitation
+		riotRoomsList.previewInvitation(roomName);
+		//check the preview layout
+		RiotRoomPageObjects newRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver());
+		newRoom.checkPreviewRoomLayout(roomName);
+		newRoom.joinRoomButton.click();
+		newRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver());
+		newRoom.checkRoomLayout(roomName);
+		//leave room from room menu
+		newRoom.moreOptionsButton.click();
+		newRoom.leaveRoomMenuItem.click();
+		//check that room is closed and isn't in the rooms list page
+		newRoom.isDisplayed(false);
+		riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
+		Assert.assertNull(riotRoomsList.getRoomByName(roomName), "Room "+roomName+" is still in the rooms list after leaving it.");
 	}
 	
 	/**
@@ -164,6 +229,14 @@ public class RiotRoomInvitationTests extends testUtilities{
 	 */
 	@Ignore
 	public void sendInvitationOnRestrictedRoom(){
+		
+	}
+	
+	/**
+	 * TODO write this test
+	 */
+	@Ignore
+	public void leaveRoom(){
 		
 	}
 	/**

@@ -18,8 +18,6 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -30,7 +28,6 @@ import org.testng.annotations.Test;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDeviceActionShortcuts;
 import io.appium.java_client.android.AndroidKeyCode;
-import io.appium.java_client.android.Connection;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import pom.RiotLoginAndRegisterPageObjects;
 import pom.RiotRoomsListPageObjects;
@@ -183,21 +180,7 @@ public class RiotLoginTests  extends testUtilities{
 		Assert.assertTrue(loginPage.inputsLoginLayout.isDisplayed(), "The Riot login page is not displayed.");
 	}
 	
-	/**
-	 * Cut the wifi, launches Riot and asserts that the login button is disabled. </br>
-	 * Bring back the wifi and verifies that the login button become enabled.
-	 * @throws InterruptedException 
-	 */
-	@Test
-	public void logInWithoutInternetConnection() throws InterruptedException{
-		AppiumFactory.getAppiumDriver().setConnection(Connection.NONE);
-		System.out.println("wifi off");
-		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
-		Assert.assertFalse(loginPage.loginButton.isEnabled(), "The loginButton should be disabled.");
-		AppiumFactory.getAppiumDriver().setConnection(Connection.WIFI);
-		System.out.println("wifi on");
-		Assert.assertTrue(loginPage.loginButton.isEnabled(), "The loginButton should be enabled.");
-	}
+
 	
 	@Test
 	public void checkRiotLogoFromLoginPage() throws IOException{

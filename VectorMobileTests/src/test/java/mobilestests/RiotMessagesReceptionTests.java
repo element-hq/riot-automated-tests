@@ -8,16 +8,15 @@ import org.junit.Ignore;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import io.appium.java_client.android.Connection;
+import io.appium.java_client.MobileElement;
 import pom.RiotLoginAndRegisterPageObjects;
-import pom.RiotRoomsListPageObjects;
 import pom.RiotRoomPageObjects;
+import pom.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
@@ -49,19 +48,19 @@ public class RiotMessagesReceptionTests extends testUtilities{
 	
 	
 	/**
-	 * Required : user must be logged in room roomName </br>
+	 * Required : user must be logged in room </br>
 	 * Receive a message in a room from an other user. </br>
-	 * Asserts that badge is set to 1 or incremented on the room's item in the rooms list.
+	 * Asserts that badge is set to 1 or incremented on the room's item in the rooms list.</br>
 	 * @throws InterruptedException 
 	 * @throws IOException 
 	 */
-	@Test
+	@Test(groups="messageReceivedInList",priority=1)
 	public void checkBadgeAndMessageOnRoomItem() throws InterruptedException, IOException{
 		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 		String roomName="room tests Jean";
-		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0NzU1OTQxNjYwNTAKMDAyZnNpZ25hdHVyZSDofV-Ok8f6xSEPDNnKuZ9tM8YO_TXiwoKcfuvQrDLilwo";
+		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg2MTAyNjEKMDAyZnNpZ25hdHVyZSAMRHy3V2nt7jDJlDrhq1NkEBBiHH6umGQvaydgqLcYlQo";
 		String messageTest="coucou";
-
+		//TODO invite user in the room if room not present
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
 		//get the current badge on the room.
 		Integer currentBadge=riotRoomsList.getBadgeNumberByRoomName(roomName);
@@ -75,6 +74,76 @@ public class RiotMessagesReceptionTests extends testUtilities{
 		//Assertion on the message.
 		Assert.assertEquals(riotRoomsList.getReceivedMessageByRoomName(roomName), messageTest, "Received message on the room item isn't the same as sended by matrix.");
 	}
+	
+	/**
+	 * Required : user must be logged in room </br>
+	 * Receive a text message in a room from an other user. </br>
+	 * Asserts that badge is set to 1 or incremented on the room's item in the rooms list.</br>
+	 * Asserts that badge isn't displayed anymore on the room item when going back to rooms list.
+	 * @throws InterruptedException 
+	 * @throws IOException 
+	 */
+	@Test(dependsOnGroups="messageReceivedInList",priority=2,groups="roomOpenned")
+	public void checkTextMessageOnRoomPage() throws InterruptedException{
+		String roomName="room tests Jean";
+		String messageTest="coucou";
+		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
+		//open room
+		riotRoomsList.getRoomByName(roomName).click();
+		//check that lately sended message is the last displayed in the room
+		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver());
+		MobileElement lastPost= testRoom.getLastPost();
+		Assert.assertEquals(testRoom.getTextViewFromPost(lastPost).getText(), messageTest);
+	}
+	
+	/**
+	 * Send message in a room.</br>
+	 * Check that timestamp is only displayed on the last post.</br>
+	 * Check that when a post is selected, timestamp is displayed.
+	 * @throws InterruptedException 
+	 */
+	@Test(dependsOnGroups="roomOpenned",priority=3)
+	public void checkTimeStampPositionOnRoomPage() throws InterruptedException{
+		String message="test for timestamp display";
+		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver());
+		//send message
+		testRoom.sendAMessage(message);Thread.sleep(500);
+		//AppiumFactory.getAppiumDriver().hideKeyboard();
+		//check that timestamp is displayed on this message
+		MobileElement lastPost= testRoom.getLastPost();
+		Assert.assertNotNull(testRoom.getTimeStampByPost(lastPost), "Last message have no timestamp");
+		Assert.assertTrue(testRoom.getTimeStampByPost(lastPost).getText().length()>=5, "Last message timestamp seems bad.");
+		//check that before last message have not timestamp
+		int beforeLastPostPosition=testRoom.postsListLayout.size()-2;
+		MobileElement beforeLastPost=  testRoom.postsListLayout.get(beforeLastPostPosition);
+		Assert.assertNull(testRoom.getTimeStampByPost(beforeLastPost), "Before last message have timestamp and should not.");
+		//select before last message
+		beforeLastPost.click();
+		//check that the timestamp is displayed
+		Assert.assertNotNull(testRoom.getTimeStampByPost(lastPost), "Before last message have no timestamp");
+		Assert.assertTrue(testRoom.getTimeStampByPost(lastPost).getText().length()>=5, "Before last message timestamp seems bad.");
+	}
+	
+	/**
+	 * TODO write this test
+	 * Receive a message by an other user in a room.</br>
+	 * Send a first message. Check that avatar is displayed on the post.</br>
+	 * Send a second message. Check that avatar is not displayed on the post.
+	 */
+	@Ignore
+	public void checkAvatarDisplayInRoomPage(){
+		
+	}
+	
+	/**
+	 * TODO write this test
+	 * Open a room, and receive a image sent by an other user.</br>
+	 * Check that image is correctly uploaded.
+	 */
+	@Ignore
+	public void checkImageMessageOnRoomPage(){
+		
+	}
 
 	
 	/**
@@ -83,7 +152,7 @@ public class RiotMessagesReceptionTests extends testUtilities{
 	 */
 	@BeforeMethod
 	public void loginForSetup() throws InterruptedException{
-		if(false==waitUntilDisplayed("im.vector.alpha:id/fragment_recents_list", true, 5)){
+		if(true==waitUntilDisplayed("im.vector.alpha:id/login_inputs_layout", false, 5)){
 			System.out.println("Can't access to the rooms list page, none user must be logged. Forcing the log-in.");
 			forceWifiOnIfNeeded();
 			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
@@ -97,4 +166,6 @@ public class RiotMessagesReceptionTests extends testUtilities{
 			loginPage.loginButton.click();
 		}
 	}
+	
+	
 }

@@ -1,8 +1,12 @@
 package pom;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
+
+import com.google.common.collect.Iterables;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
@@ -22,7 +26,7 @@ public class RiotRoomPageObjects extends testUtilities{
 		}
 	}
 	
-	/**
+	/*
 	 * ACTION BAR
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/action_bar_header")//collapsed view. contains avatar, room name, and active members
@@ -44,7 +48,16 @@ public class RiotRoomPageObjects extends testUtilities{
 	public MobileElement searchInRoomButton;
 	@AndroidFindBy(xpath="//android.widget.TextView[@resource-id='im.vector.alpha:id/ic_action_search_in_room']/../android.widget.ImageView")
 	public MobileElement moreOptionsButton;
-	/**
+	
+	/*
+	 * ROOM MENU
+	 */
+	@AndroidFindBy(xpath="//android.widget.TextView[@resource-id='im.vector.alpha:id/title' and @text='Room Details']")
+	public MobileElement roomDetailsMenuItem;
+	@AndroidFindBy(xpath="//android.widget.TextView[@resource-id='im.vector.alpha:id/title' and @text='Leave']")
+	public MobileElement leaveRoomMenuItem;
+	
+	/*
 	 * PREVIEW LAYOUT
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/room_preview_info_layout")//preview info layout : contains join room and cancel buttons
@@ -96,7 +109,7 @@ public class RiotRoomPageObjects extends testUtilities{
 	 */
 	public void checkRoomLayout(String roomName) throws InterruptedException {
 		//check that preview layout isn't displayed
-		Assert.assertFalse(waitUntilDisplayed("im.vector.alpha:id/room_preview_info_layout", false, 0));
+		Assert.assertFalse(waitUntilDisplayed("im.vector.alpha:id/room_preview_info_layout", false, 3));
 		//check action bar
 		Assert.assertTrue(actionBarView.isDisplayed(), "Action bar isn't displayed");
 		Assert.assertTrue(menuBackButton.isDisplayed(), "Menu back button isn't displayed");
@@ -110,42 +123,110 @@ public class RiotRoomPageObjects extends testUtilities{
 	}
 	
 	/**
+	 * Return true or false if the room view is still displayed.</br>
+	 * Can be useful to test that the room page is closed after quitting it.
+	 * @param displayed
+	 * @throws InterruptedException
+	 */
+	public void isDisplayed(Boolean displayed) throws InterruptedException{
+		String messageFailed;
+		if(displayed){
+			messageFailed="Room page isn't displayed.";
+		}else{
+			messageFailed="Room page is displayed.";
+		}
+		Assert.assertEquals(waitUntilDisplayed("im.vector.alpha:id/listView_messages", displayed, 5),displayed, messageFailed);
+	}
+	
+	/*
 	 * MESSAGES
 	 */
-	@AndroidFindBy(id="im.vector.alpha:id/listView_messages")//messages list. Contains messages, days separators
-	public MobileElement messagesListView;
-	
-	@AndroidFindBy(xpath="//android.widget.ListView[@resource-id='im.vector.alpha:id/listView_messages']/android.widget.LinearLayout[last()]")//the last message
-	public MobileElement lastMessage;
-	
-	public MobileElement getContextMenuByMessage(MobileElement messageLinearLayout){
-		return messageLinearLayout.findElementById("im.vector.alpha:id/messagesAdapter_action_image");
-	}
 	
 	/**
-	 * Get the textView from a linearLayout object message (first children of the listView_messages).
+	 * Similar to messagesListView, but as a list and not just a MobileElement.
+	 */
+	@AndroidFindBy(xpath="//android.widget.ListView[@resource-id='im.vector.alpha:id/listView_messages']/android.widget.LinearLayout")//messages list. Contains messages, days separators
+	public List<MobileElement> postsListLayout;
+	
+	public MobileElement getLastPost(){
+		return Iterables.getLast(this.postsListLayout);
+	}
+	/**
+	 * TODO use xpath instead of id because of https://github.com/appium/appium/issues/6269 issue
+	 * @param postLinearLayout
+	 * @return
+	 */
+	public MobileElement getUserAvatarByPost(MobileElement postLinearLayout){
+		try {
+			return postLinearLayout.findElementById("im.vector.alpha:id/avatar_img");
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	/**
+	 * TODO use xpath instead of id because of https://github.com/appium/appium/issues/6269 issue
+	 * @param postLinearLayout
+	 * @return
+	 */
+	public MobileElement getSenderNameByPost(MobileElement postLinearLayout){
+		try {
+			return postLinearLayout.findElementById("im.vector.alpha:id/messagesAdapter_sender");
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	/**TODO use xpath instead of id because of https://github.com/appium/appium/issues/6269 issue
+	 * Get the imageview attached from a linearLayout object message (first children of the listView_messages). </br> Return null if not found.
 	 * @param message
 	 * @return
 	 */
-	public MobileElement getTextViewFromMessage(MobileElement message){
-		return message.findElement(By.id("im.vector.alpha:id/messagesAdapter_body"));
+	public MobileElement getAttachedImageByPost(MobileElement postLinearLayout){
+		try {
+			return postLinearLayout.findElement(By.id("im.vector.alpha:id/messagesAdapter_image"));
+		} catch (Exception e) {
+			return null;
+		}
 	}
-	
 	/**
-	 * Get the imageview attached from a linearLayout object message (first children of the listView_messages).
+	 * TODO use xpath instead of id because of https://github.com/appium/appium/issues/6269 issue
+	 * Return the timestamp, example : 15:12. </br> Return null if not found.
+	 * @param postLinearLayout
+	 * @return
+	 */
+	public MobileElement getTimeStampByPost(MobileElement postLinearLayout){	
+		try {
+//			return postLinearLayout.findElement(By.id("im.vector.alpha:id/messagesAdapter_timestamp"));
+			return postLinearLayout.findElement(By.xpath("//android.widget.TextView[@resource-id='im.vector.alpha:id/messagesAdapter_timestamp']"));
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	public MobileElement getContextMenuByPost(MobileElement postLinearLayout){
+		try {
+			return postLinearLayout.findElementById("im.vector.alpha:id/messagesAdapter_action_image");
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	/**
+	 * TODO use xpath instead of id because of https://github.com/appium/appium/issues/6269 issue
+	 * Get the textView from a post. </br> Return null if not found.
 	 * @param message
 	 * @return
 	 */
-	public MobileElement getImageFromMessage(MobileElement message){
-		return message.findElement(By.id("im.vector.alpha:id/messagesAdapter_image"));
+	public MobileElement getTextViewFromPost(MobileElement postLinearLayout){
+		try {
+			return postLinearLayout.findElement(By.id("im.vector.alpha:id/messagesAdapter_body"));
+		} catch (Exception e) {
+			return null;
+		}
 	}
-	
 	/**
-	 * Get the media upload failed icon on an attached image from a linearLayout object message (first children of the listView_messages).
+	 * Get the media upload failed icon on an attached image from a post. </br> Return null if not found.
 	 * @param message
 	 * @return
 	 */
-	public MobileElement getMediaUploadFailIconFromMessage(MobileElement message){
+	public MobileElement getMediaUploadFailIconFromPost(MobileElement message){
 		try {
 			return message.findElement(By.id("im.vector.alpha:id/media_upload_failed"));
 		} catch (Exception e) {
@@ -155,7 +236,7 @@ public class RiotRoomPageObjects extends testUtilities{
 	}
 	
 	
-	/**
+	/*
 	 * NOTIFICATION AREA
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/room_notifications_area")
@@ -166,10 +247,11 @@ public class RiotRoomPageObjects extends testUtilities{
 	public MobileElement notificationMessage;
 		//MobileElement lastMessage=(MobileElement) getDriver().findElementByXPath("//android.widget.ListView[@resource-id='im.vector.alpha:id/listView_messages']/android.widget.LinearLayout[last()]");
 	
-	/**
+	/*
 	 * BOTTOM BAR : send edittext, attachment button, callbutton
 	 */
-	@AndroidFindBy(xpath="//android.widget.RelativeLayout[@resource-id='im.vector.alpha:id/room_bottom_layout']//android.widget.EditText[@resource-id='im.vector.alpha:id/editText_messageBox']")
+	//@AndroidFindBy(xpath="//android.widget.RelativeLayout[@resource-id='im.vector.alpha:id/room_bottom_layout']//android.widget.EditText[@resource-id='im.vector.alpha:id/editText_messageBox']")
+	@AndroidFindBy(id="im.vector.alpha:id/room_sending_message_layout")
 	public MobileElement messageZoneEditText;
 	@AndroidFindBy(id="im.vector.alpha:id/room_send_layout")
 	public MobileElement sendMessageButton;
@@ -178,7 +260,7 @@ public class RiotRoomPageObjects extends testUtilities{
 	@AndroidFindBy(id="im.vector.alpha:id/room_end_call_layout")//end a call button
 	public MobileElement endCallButton;
 	
-	/**
+	/*
 	 * CONTEXT MENU ON MESSAGE
 	 */
 	@AndroidFindBy(className="android.widget.ListView")//list items menu
@@ -186,7 +268,7 @@ public class RiotRoomPageObjects extends testUtilities{
 	@AndroidFindBy(xpath="//android.widget.ListView//android.widget.TextView[@text='Quote']/../..")//quote item
 	public MobileElement quoteItemFromMenu;
 	
-	/**
+	/*
 	 * POPING MENU: CALL MENU (voice call, video call), or ATTACHMENT MENU (send files, take photo)
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/listView_icon_and_text")//call menu with voice and videos buttons
@@ -199,16 +281,16 @@ public class RiotRoomPageObjects extends testUtilities{
 	public MobileElement sendFilesFromMenuButton;
 	@AndroidFindBy(xpath="//android.widget.ListView//android.widget.TextView[@text='Take photo']/..")//take photo menu with send files and take photo buttons
 	public MobileElement takePhotoFromMenuButton;
-	/**
+	
+	/*
 	 * Functions
 	 */
-	
 	/**
 	 * Type and send a message.
 	 * @param message
 	 */
 	public void sendAMessage(String message){
-		messageZoneEditText.setValue(message);
+		messageZoneEditText.sendKeys(message);//messageZoneEditText.setValue(message); //<-- doesn't work on this edittext
 		sendMessageButton.click();
 		System.out.println("Message "+message+" sent in the room.");
 	}

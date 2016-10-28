@@ -59,6 +59,7 @@ public class testUtilities {
 		}
 		float secondsWaited=0;
 		do {
+			if(maxSecondsToWait!=0){Thread.sleep(500);secondsWaited=(float) (secondsWaited+0.5);}
 			try {
 				if(isXpath){
 					AppiumFactory.getAppiumDriver().findElement(By.xpath(idOrXpath));
@@ -69,8 +70,6 @@ public class testUtilities {
 			} catch (Exception e) {
 				isDisplayed=false;
 			}
-			if(maxSecondsToWait!=0)Thread.sleep(500);
-			secondsWaited=(float) (secondsWaited+0.5);
 		} while (displayed!=isDisplayed && secondsWaited<maxSecondsToWait);
 		System.out.println("Seconds to wait "+idOrXpath+" to "+verb+": "+secondsWaited+". isXpath is "+isXpath.toString());
 		return isDisplayed;

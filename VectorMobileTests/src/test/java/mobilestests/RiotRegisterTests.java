@@ -7,6 +7,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -153,7 +154,7 @@ public class RiotRegisterTests extends testUtilities {
 		Assert.assertTrue(captchaPage.tryAgainView.isDisplayed(), "The 'Please try again' view is not displayed");
 	}
 	
-	@BeforeMethod(groups="restartneeded")
+	@BeforeGroups(groups="restartneeded")
 	public void restartRiot(){
 		//Restart the application
 		System.out.println("Restart the app");

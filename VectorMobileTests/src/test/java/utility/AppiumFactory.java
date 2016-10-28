@@ -5,12 +5,13 @@ import java.net.URL;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 
 public class AppiumFactory {
 	//private static AppiumFactory instance = new AppiumFactory();
-	private static AndroidDriver<MobileElement> driver;
+	private static AppiumDriver<MobileElement> driver;
 
 //	private AppiumFactory() {
 //	}
@@ -26,6 +27,6 @@ public class AppiumFactory {
 	}
 
 	public static AndroidDriver<MobileElement> getAppiumDriver() {
-		return driver;
+		return (AndroidDriver<MobileElement>) driver;
 	}   
 }

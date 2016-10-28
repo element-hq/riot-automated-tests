@@ -47,6 +47,22 @@ public class RiotNoConnectionTests extends testUtilities{
 	}
 	
 	/**
+	 * Cut the wifi, launches Riot and asserts that the login button is disabled. </br>
+	 * Bring back the wifi and verifies that the login button become enabled.
+	 * @throws InterruptedException 
+	 */
+	@Test
+	public void logInWithoutInternetConnection() throws InterruptedException{
+		AppiumFactory.getAppiumDriver().setConnection(Connection.NONE);
+		System.out.println("wifi off");
+		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
+		Assert.assertFalse(loginPage.loginButton.isEnabled(), "The loginButton should be disabled.");
+		AppiumFactory.getAppiumDriver().setConnection(Connection.WIFI);
+		System.out.println("wifi on");
+		Assert.assertTrue(loginPage.loginButton.isEnabled(), "The loginButton should be enabled.");
+	}
+	
+	/**
 	 * Test that rooms are still accessible when internet connection is off. </br>
 	 * Verifies the connection lost notification in a room. </br>
 	 * Bring back the internet connection and verifies that the notification isn't displayed anymore.
@@ -98,7 +114,7 @@ public class RiotNoConnectionTests extends testUtilities{
 		RiotRoomPageObjects myRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver());
 		//send a message, then verifies that it's displayed in the message list
 		myRoom.sendAMessage(myMessage);
-		Assert.assertEquals(myRoom.getTextViewFromMessage(myRoom.lastMessage).getText(), myMessage,"The usent message isn't in the last message.");
+		Assert.assertEquals(myRoom.getTextViewFromPost(myRoom.getLastPost()).getText(), myMessage,"The usent message isn't in the last message.");
 		//Restart the application
 		AppiumFactory.getAppiumDriver().closeApp();
 		AppiumFactory.getAppiumDriver().launchApp();
@@ -117,7 +133,7 @@ public class RiotNoConnectionTests extends testUtilities{
 	    //Asserts that the room notification area isn't dispkayed anymore
 	    Assert.assertFalse(isPresentTryAndCatch(myRoom.roomNotificationArea),"The notification area is displayed");
 	    //The previously unsent message is still in the message list
-	    Assert.assertEquals(myRoom.getTextViewFromMessage(myRoom.lastMessage).getText(), myMessage, "The unsent message doesn't isn't in the last message.");
+	    Assert.assertEquals(myRoom.getTextViewFromPost(myRoom.getLastPost()).getText(), myMessage, "The unsent message doesn't isn't in the last message.");
 	    //teardown : going back to rooms list
 	    myRoom.menuBackButton.click();
 	}
@@ -144,7 +160,7 @@ public class RiotNoConnectionTests extends testUtilities{
 		myRoom.attachPhotoFromCamera("Small");
 		//verifies that it's displayed in the message list
 		waitUntilDisplayed("im.vector.alpha:id/messagesAdapter_image", true, 5);
-		org.openqa.selenium.Dimension takenPhoto=myRoom.getImageFromMessage(myRoom.lastMessage).getSize();
+		org.openqa.selenium.Dimension takenPhoto=myRoom.getAttachedImageByPost(myRoom.getLastPost()).getSize();
 	    Assert.assertTrue(takenPhoto.height!=0 && takenPhoto.width!=0, "The unsent photo has null dimension");
     
 		//Restart the application
@@ -156,7 +172,7 @@ public class RiotNoConnectionTests extends testUtilities{
 		//bring back internet
 		AppiumFactory.getAppiumDriver().setConnection(Connection.WIFI);
 		//verifies that the upload failed icon is present in the last message
-	    Assert.assertTrue(isPresentTryAndCatch(myRoom.getMediaUploadFailIconFromMessage(myRoom.lastMessage)),"The 'media upload failed' icon isn't displayed on the unsent photo");
+	    Assert.assertTrue(isPresentTryAndCatch(myRoom.getMediaUploadFailIconFromPost(myRoom.getLastPost())),"The 'media upload failed' icon isn't displayed on the unsent photo");
 		//Asserts that riot proposes to send the unsent message
 		Assert.assertTrue(isPresentTryAndCatch(myRoom.roomNotificationArea),"The notification area is not displayed");
 		org.openqa.selenium.Dimension riotLogoDim=myRoom.notificationIcon.getSize();
@@ -167,10 +183,10 @@ public class RiotNoConnectionTests extends testUtilities{
 	    //Asserts that the room notification area isn't dispkayed anymore
 	    Assert.assertFalse(isPresentTryAndCatch(myRoom.roomNotificationArea),"The notification area is displayed");
 	    //The previously unsent message is still in the message list
-	    takenPhoto=myRoom.getImageFromMessage(myRoom.lastMessage).getSize();
+	    takenPhoto=myRoom.getAttachedImageByPost(myRoom.getLastPost()).getSize();
 	    Assert.assertTrue(takenPhoto.height!=0 && takenPhoto.width!=0, "The unsent photo has null dimension");
 		//verifies that the upload failed icon is present in the last message
-	    Assert.assertFalse(isPresentTryAndCatch(myRoom.getMediaUploadFailIconFromMessage(myRoom.lastMessage)),"The 'media upload failed' icon is displayed on the sent photo");
+	    Assert.assertFalse(isPresentTryAndCatch(myRoom.getMediaUploadFailIconFromPost(myRoom.getLastPost())),"The 'media upload failed' icon is displayed on the sent photo");
 	    //teardown : going back to rooms list
 	    myRoom.menuBackButton.click();
 	}
