@@ -4,14 +4,15 @@ import org.openqa.selenium.support.PageFactory;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import utility.AppiumFactory;
 import utility.testUtilities;
 
 public class RiotCameraPageObjects extends testUtilities{
 	public RiotCameraPageObjects(AppiumDriver<MobileElement> driver) throws InterruptedException{
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+		super.actualDriver=(AndroidDriver<MobileElement>) driver;
 		Thread.sleep(2000);
 		//ExplicitWait(driver,this.roomsExpandableListView);
 		try {
@@ -73,7 +74,7 @@ public class RiotCameraPageObjects extends testUtilities{
 	 * @return
 	 */
 	public MobileElement getItemFromSendAsMenu(String size){
-		return AppiumFactory.getAppiumDriver().findElementByXPath("//android.widget.ListView/android.widget.CheckedTextView[contains(@text,'"+size+"')]");
+		return super.actualDriver.findElementByXPath("//android.widget.ListView/android.widget.CheckedTextView[contains(@text,'"+size+"')]");
 	}
 	
 	

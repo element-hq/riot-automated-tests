@@ -51,7 +51,7 @@ public class RiotMiscTests extends testUtilities{
 	@BeforeClass
 	public void setUp() throws MalformedURLException{
 		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability("deviceName",Constant.DEVICE_NAME);
+		capabilities.setCapability("deviceName",Constant.DEVICE1_NAME);
 		capabilities.setCapability("platformName","Android");
 		capabilities.setCapability("platformVersion", "4.4.2");
 		capabilities.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
@@ -60,19 +60,19 @@ public class RiotMiscTests extends testUtilities{
 		//Create RemoteWebDriver instance and connect to the Appium server
 		//It will launch the Riot application in Android Device using the configurations specified in Desired Capabilities
 		AppiumFactory appiumFactory=new AppiumFactory();
-		appiumFactory.setDriver(new URL(Constant.SERVER_ADRESS), capabilities);
+		appiumFactory.setDriver1(new URL(Constant.SERVER1_ADRESS), capabilities);
 		System.out.println("setUp() done");
 	}
 
 	@AfterClass
 	public void tearDown(){
-		driver.quit();
+		AppiumFactory.getAppiumDriver1().quit();
 	}
 
 	public void restardDriver() throws MalformedURLException{
 		System.out.println("teardown after test");
 		DesiredCapabilities capabilities = new DesiredCapabilities();
-		driver.quit();
+		AppiumFactory.getAppiumDriver1().quit();
 		capabilities.setCapability("deviceName","a71011c8");
 		capabilities.setCapability("platformName","Android");
 		capabilities.setCapability("platformVersion", "4.4.2");
@@ -103,13 +103,14 @@ public class RiotMiscTests extends testUtilities{
 	}
 	@Test
 	public void scrollRoomsList() throws Exception{
-		Dimension dimensions = driver.manage().window().getSize();
-		Double screenHeightStart = dimensions.getHeight() * 0.5;
+		//RiotRoomsListPageObjects mainPage=new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
+		Dimension dimensions = AppiumFactory.getAppiumDriver1().manage().window().getSize();
+		Double screenHeightStart = dimensions.getHeight() * 0.9;
 		int scrollStart = screenHeightStart.intValue();
 		System.out.println("s="+scrollStart);
 		Double screenHeightEnd = dimensions.getHeight() * 0.2;
 		int scrollEnd = screenHeightEnd.intValue();
-		driver.swipe(0,scrollStart,0,scrollEnd,2000);
+		AppiumFactory.getAppiumDriver1().swipe(0,scrollStart,0,scrollEnd,2000);
 	}
 
 

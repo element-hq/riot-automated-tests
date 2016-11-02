@@ -6,6 +6,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import utility.testUtilities;
@@ -14,6 +15,7 @@ public class RiotLegalStuffView extends testUtilities{
 	AppiumDriver<MobileElement> driver;
 	public RiotLegalStuffView(AppiumDriver<MobileElement> driver2){
 		PageFactory.initElements(new AppiumFieldDecorator(driver2), this);
+		super.actualDriver=(AndroidDriver<MobileElement>) driver;
 		ExplicitWait(this.parentPanel);
 		driver=driver2;
 	}

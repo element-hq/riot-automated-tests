@@ -3,9 +3,7 @@ package mobilestests;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 
-import org.junit.Ignore;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -29,7 +27,7 @@ public class RiotMessagesReceptionTests extends testUtilities{
 	@BeforeSuite
 	public void setUp() throws MalformedURLException{
 		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability("deviceName",Constant.DEVICE_NAME);
+		capabilities.setCapability("deviceName",Constant.DEVICE1_NAME);
 		capabilities.setCapability("platformName","Android");
 		capabilities.setCapability("platformVersion", "4.4.2");
 		capabilities.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
@@ -38,13 +36,13 @@ public class RiotMessagesReceptionTests extends testUtilities{
 		//Create RemoteWebDriver instance and connect to the Appium server
 		//It will launch the Riot application in Android Device using the configurations specified in Desired Capabilities
 		AppiumFactory appiumFactory=new AppiumFactory();
-		appiumFactory.setDriver(new URL(Constant.SERVER_ADRESS), capabilities);
+		appiumFactory.setDriver1(new URL(Constant.SERVER1_ADRESS), capabilities);
 		System.out.println("setUp() done");
 	}
 
 	@AfterClass
 	public void tearDown(){
-		AppiumFactory.getAppiumDriver().quit();
+		AppiumFactory.getAppiumDriver1().quit();
 	}
 	
 	
@@ -62,7 +60,7 @@ public class RiotMessagesReceptionTests extends testUtilities{
 		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg2MTAyNjEKMDAyZnNpZ25hdHVyZSAMRHy3V2nt7jDJlDrhq1NkEBBiHH6umGQvaydgqLcYlQo";
 		String messageTest="coucou";
 		//TODO invite user in the room if room not present
-		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
+		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
 		//get the current badge on the room.
 		Integer currentBadge=riotRoomsList.getBadgeNumberByRoomName(roomName);
 		//send a message to the room with an other user using https request to matrix.
@@ -88,11 +86,11 @@ public class RiotMessagesReceptionTests extends testUtilities{
 	public void checkTextMessageOnRoomPage() throws InterruptedException{
 		String roomName="room tests Jean";
 		String messageTest="coucou";
-		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
+		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
 		//open room
 		riotRoomsList.getRoomByName(roomName).click();
 		//check that lately sended message is the last displayed in the room
-		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver());
+		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
 		MobileElement lastPost= testRoom.getLastPost();
 		Assert.assertEquals(testRoom.getTextViewFromPost(lastPost).getText(), messageTest);
 	}
@@ -106,7 +104,7 @@ public class RiotMessagesReceptionTests extends testUtilities{
 	@Test(dependsOnGroups="roomOpenned",priority=3)
 	public void checkTimeStampPositionOnRoomPage() throws InterruptedException{
 		String message="test for timestamp display";
-		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver());
+		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
 		//send message
 		testRoom.sendAMessage(message);Thread.sleep(500);
 		//AppiumFactory.getAppiumDriver().hideKeyboard();
@@ -142,7 +140,7 @@ public class RiotMessagesReceptionTests extends testUtilities{
 		String messageTest3="this message doesn't have an avatar";
 		//send a message to the room with an other user using https request to matrix.
 		HttpsRequestsToMatrix.sendMessageInRoom(senderAccesToken, roomId, messageTest);
-		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver());
+		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
 		testRoom.sendAMessage(messageTest2);Thread.sleep(500);
 		Assert.assertNotNull(testRoom.getUserAvatarByPost(testRoom.getLastPost()), "The last post doesn't have an avatar and should because it's the first post from the user");
 		testRoom.sendAMessage(messageTest3);
@@ -163,7 +161,7 @@ public class RiotMessagesReceptionTests extends testUtilities{
 		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg2MTAyNjEKMDAyZnNpZ25hdHVyZSAMRHy3V2nt7jDJlDrhq1NkEBBiHH6umGQvaydgqLcYlQo";
 		//send picture of already uploaded picture
 		HttpsRequestsToMatrix.sendPicture(senderAccesToken, roomId, pictureURL);
-		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver());
+		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
 		Thread.sleep(500);
 		MobileElement lastPost=testRoom.getLastPost();
 		MobileElement uploadPicture = testRoom.getAttachedImageByPost(lastPost);
@@ -183,13 +181,14 @@ public class RiotMessagesReceptionTests extends testUtilities{
 	@Test
 	public void addRoomInFavorites() throws InterruptedException{
 		String roomNameTest="room tests Jean";
-		RiotRoomsListPageObjects roomslist= new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
+		RiotRoomsListPageObjects roomslist= new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
 		//add room in favourites
 		roomslist.clickOnContextMenuOnRoom(roomNameTest, "Favourite");
 		Assert.assertTrue(roomslist.checkRoomInCategory(roomNameTest, "FAVORITES"), "Room "+roomNameTest+" isn't added in the FAVORITES category");
 		roomslist.clickOnContextMenuOnRoom(roomNameTest, "Favourite");
 		Assert.assertFalse(roomslist.checkRoomInCategory(roomNameTest, "FAVORITES"), "Room "+roomNameTest+" is in the FAVORITES category and should not");
 	}
+	
 	/**
 	 * Log-in the user if it can't see the login page.
 	 * @throws InterruptedException
@@ -199,7 +198,7 @@ public class RiotMessagesReceptionTests extends testUtilities{
 		if(true==waitUntilDisplayed("im.vector.alpha:id/login_inputs_layout", false, 5)){
 			System.out.println("Can't access to the rooms list page, none user must be logged. Forcing the log-in.");
 			forceWifiOnIfNeeded();
-			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
+			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 			loginPage.emailOrUserNameEditText.setValue(Constant.DEFAULT_USERNAME);
 			loginPage.passwordEditText.setValue(Constant.DEFAULT_USERPWD);
 			//Forcing the login button to be enabled : this bug should be corrected.

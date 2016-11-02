@@ -10,14 +10,15 @@ import com.google.common.collect.Iterables;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import utility.AppiumFactory;
 import utility.testUtilities;
 
 public class RiotRoomPageObjects extends testUtilities{
 	public RiotRoomPageObjects(AppiumDriver<MobileElement> driver){
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+		super.actualDriver=(AndroidDriver<MobileElement>) driver;
 		//ExplicitWait(driver,this.messagesListView);
 		try {
 			waitUntilDisplayed("im.vector.alpha:id/listView_messages", true, 5);
@@ -302,7 +303,7 @@ public class RiotRoomPageObjects extends testUtilities{
 	public void attachPhotoFromCamera(String photoSize) throws InterruptedException{
 		sendMessageButton.click(); //(this button id is for both attachment files and send message buttons)
 		takePhotoFromMenuButton.click();
-		RiotCameraPageObjects cameraPreview = new RiotCameraPageObjects(AppiumFactory.getAppiumDriver());
+		RiotCameraPageObjects cameraPreview = new RiotCameraPageObjects(super.actualDriver);
 		cameraPreview.triggerCameraButton.click();//take a photo
 		waitUntilDisplayed("im.vector.alpha:id/medias_picker_preview", true, 5);
 		cameraPreview.confirmPickingPictureButton.click();

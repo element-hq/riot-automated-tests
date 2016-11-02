@@ -4,6 +4,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import utility.testUtilities;
@@ -11,6 +12,7 @@ import utility.testUtilities;
 public class RiotLoginAndRegisterPageObjects extends testUtilities{
 	public RiotLoginAndRegisterPageObjects(AppiumDriver<MobileElement> driver) {
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+		super.actualDriver=(AndroidDriver<MobileElement>) driver;
 		//ExplicitWaitToBeVisible(driver,this.inputsLoginLayout);
 		try {
 			waitUntilDisplayed("im.vector.alpha:id/login_inputs_layout", true, 5);
@@ -35,6 +37,17 @@ public class RiotLoginAndRegisterPageObjects extends testUtilities{
 	public MobileElement emailOrUserNameEditText;
 	@AndroidFindBy(id="im.vector.alpha:id/login_password")
 	public MobileElement passwordEditText;
+	
+	/**
+	 * Simple login without doing any verifications.
+	 * @param usernameOrEmail
+	 * @param password
+	 */
+	public void fillLoginForm(String usernameOrEmail, String password){
+		emailOrUserNameEditText.setValue(usernameOrEmail);
+		passwordEditText.setValue(password);
+		loginButton.click();
+	}
 	
 			/**
 			 * 		register part

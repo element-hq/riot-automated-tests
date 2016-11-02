@@ -7,16 +7,19 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.Connection;
 
 public class testUtilities {
-	public static void ExplicitWait(WebElement element){
-		(new WebDriverWait(AppiumFactory.getAppiumDriver(), 10)).until(ExpectedConditions.elementToBeClickable(element));
+	public AndroidDriver<MobileElement> actualDriver;
+	
+	public void ExplicitWait(WebElement element){
+		(new WebDriverWait(actualDriver, 10)).until(ExpectedConditions.elementToBeClickable(element));
 		System.out.println((Object) element.getTagName()+" clickable");
 	}
 	
-	public static void ExplicitWaitToBeVisible(WebElement element){
-		(new WebDriverWait(AppiumFactory.getAppiumDriver(), 10)).until(ExpectedConditions.visibilityOf(element));
+	public void ExplicitWaitToBeVisible(WebElement element){
+		(new WebDriverWait(actualDriver, 10)).until(ExpectedConditions.visibilityOf(element));
 		System.out.println((Object) element.getTagName()+" displayed");
 	}
 	
@@ -62,16 +65,16 @@ public class testUtilities {
 			if(maxSecondsToWait!=0){Thread.sleep(500);secondsWaited=(float) (secondsWaited+0.5);}
 			try {
 				if(isXpath){
-					AppiumFactory.getAppiumDriver().findElement(By.xpath(idOrXpath));
+					actualDriver.findElement(By.xpath(idOrXpath));
 				}else{
-					AppiumFactory.getAppiumDriver().findElement(By.id(idOrXpath));
+					actualDriver.findElement(By.id(idOrXpath));
 				}
 				isDisplayed=true;
 			} catch (Exception e) {
 				isDisplayed=false;
 			}
 		} while (displayed!=isDisplayed && secondsWaited<maxSecondsToWait);
-		System.out.println("Seconds to wait "+idOrXpath+" to "+verb+": "+secondsWaited+". isXpath is "+isXpath.toString());
+		System.out.println("Seconds to wait "+idOrXpath+" to "+verb+": "+secondsWaited+". isXpath is "+isXpath.toString()+ " with device "+actualDriver.getCapabilities().getCapability("deviceName"));
 		return isDisplayed;
 	}
 	
@@ -80,18 +83,18 @@ public class testUtilities {
 	 * Check if connection is NONE and swith to WIFI in that case.
 	 */
 	public void forceWifiOnIfNeeded(){
-		if(AppiumFactory.getAppiumDriver().getConnection().equals(Connection.NONE)){
-			System.out.println("Internet is NONE, switching to WIFI.");
-			AppiumFactory.getAppiumDriver().setConnection(Connection.WIFI);
+		if(actualDriver.getConnection().equals(Connection.NONE)){
+			System.out.println("Internet is NONE, switching to WIFI on device "+actualDriver.getCapabilities().getCapability("deviceName"));
+			actualDriver.setConnection(Connection.WIFI);
 		}
 	}
 	/**
 	 * Check if connection is NONE and swith to WIFI in that case.
 	 */
 	public void forceWifiOfIfNeeded(){
-		if(AppiumFactory.getAppiumDriver().getConnection().equals(Connection.WIFI)){
-			System.out.println("Internet is WIFI, switching to NONE.");
-			AppiumFactory.getAppiumDriver().setConnection(Connection.NONE);
+		if(actualDriver.getConnection().equals(Connection.WIFI)){
+			System.out.println("Internet is WIFI, switching to NONE on device "+actualDriver.getCapabilities().getCapability("deviceName"));
+			actualDriver.setConnection(Connection.NONE);
 		}
 	}
 }

@@ -10,23 +10,19 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 
 public class AppiumFactory {
-	//private static AppiumFactory instance = new AppiumFactory();
-	private static AppiumDriver<MobileElement> driver;
-
-//	private AppiumFactory() {
-//	}
-
-//	// Get the only object available
-//	public static AppiumFactory getInstance() {
-//		return instance;
-//	}
-
+	private static AppiumDriver<MobileElement> driver1;
+	private static AppiumDriver<MobileElement> driver2;
 	// Get the only object available
-	public void setDriver(URL url,DesiredCapabilities capabilities) throws MalformedURLException {
-		driver = new AndroidDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);          
+	public void setDriver1(URL url,DesiredCapabilities capabilities) throws MalformedURLException {
+		driver1 = new AndroidDriver<MobileElement>(url, capabilities);          
 	}
-
-	public static AndroidDriver<MobileElement> getAppiumDriver() {
-		return (AndroidDriver<MobileElement>) driver;
+	public void setDriver2(URL url,DesiredCapabilities capabilities) throws MalformedURLException {
+		driver2 = new AndroidDriver<MobileElement>(url, capabilities);          
+	}
+	public static AndroidDriver<MobileElement> getAppiumDriver1() {
+		return (AndroidDriver<MobileElement>) driver1;
 	}   
+	public static AndroidDriver<MobileElement> getAppiumDriver2() {
+		return (AndroidDriver<MobileElement>) driver2;
+	}  
 }

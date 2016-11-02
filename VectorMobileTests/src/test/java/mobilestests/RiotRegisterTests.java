@@ -26,7 +26,7 @@ public class RiotRegisterTests extends testUtilities {
 	@BeforeClass
 	public void setUp() throws MalformedURLException{
 		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability("deviceName",Constant.DEVICE_NAME);
+		capabilities.setCapability("deviceName",Constant.DEVICE1_NAME);
 		capabilities.setCapability("platformName","Android");
 		capabilities.setCapability("platformVersion", "4.4.2");
 		capabilities.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
@@ -35,13 +35,13 @@ public class RiotRegisterTests extends testUtilities {
 		//Create RemoteWebDriver instance and connect to the Appium server
 		//It will launch the Riot application in Android Device using the configurations specified in Desired Capabilities
 		AppiumFactory appiumFactory=new AppiumFactory();
-		appiumFactory.setDriver(new URL(Constant.SERVER_ADRESS), capabilities);
+		appiumFactory.setDriver1(new URL(Constant.SERVER1_ADRESS), capabilities);
 		System.out.println("setUp() done");
 	}
 
 	@AfterClass
 	public void tearDown(){
-		AppiumFactory.getAppiumDriver().quit();
+		AppiumFactory.getAppiumDriver1().quit();
 	}
 	
 	/**
@@ -54,7 +54,7 @@ public class RiotRegisterTests extends testUtilities {
 		String pwdTest="riotuser";
 		String expectedConfirmationText="If you don't specify an email address, you won't be able to reset your password. Are you sure?";
 		
-		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
+		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 		registerPage.registerButton.click();
 		registerPage.userNameRegisterEditText.setValue(userNameTest);
 		registerPage.pwd1EditRegisterText.setValue(pwdTest);
@@ -83,7 +83,7 @@ public class RiotRegisterTests extends testUtilities {
 		String pwd1Test="riotuser";
 		String pwd2Test="riotuserdifferent";
 		
-		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
+		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 		registerPage.registerButton.click();
 		registerPage.userNameRegisterEditText.setValue(userNameTest);
 		registerPage.pwd1EditRegisterText.setValue(pwd1Test);
@@ -102,7 +102,7 @@ public class RiotRegisterTests extends testUtilities {
 	 */
 	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class,groups={"restartneeded","logout"})
 	public void fillRegisterFormWithForbiddenCharacter(String mailTest,String userNameTest, String pwd1Test,String pwd2Test) throws MalformedURLException{
-		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
+		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 		registerPage.registerButton.click();
 		if(registerPage.emailRegisterEditText.getText().length()>0)registerPage.emailRegisterEditText.clear();
 		registerPage.emailRegisterEditText.setValue(mailTest);
@@ -123,7 +123,7 @@ public class RiotRegisterTests extends testUtilities {
 	 */
 	@Test(groups={"restartneeded","logout"})
 	public void registerWithEmptyCustomServerUrls(){
-		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
+		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 		registerPage.registerButton.click();
 		registerPage.customServerOptionsCheckBox.click();
 		registerPage.homeServerEditText.clear();
@@ -144,9 +144,9 @@ public class RiotRegisterTests extends testUtilities {
 		String userNameTest=(new StringBuilder("riotuser").append(userNamesuffix)).toString();
 		String pwdTest="riotuser";
 		
-		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver());
+		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 		registerPage.fillRegisterForm("", userNameTest,pwdTest, pwdTest);
-		RiotCaptchaPageObject captchaPage = new RiotCaptchaPageObject(AppiumFactory.getAppiumDriver());
+		RiotCaptchaPageObject captchaPage = new RiotCaptchaPageObject(AppiumFactory.getAppiumDriver1());
 		captchaPage.notARobotCheckBox.click();
 		captchaPage.selectAllImages();
 		captchaPage.verifyCaptchaButton.click();
@@ -158,8 +158,8 @@ public class RiotRegisterTests extends testUtilities {
 	public void restartRiot(){
 		//Restart the application
 		System.out.println("Restart the app");
-		AppiumFactory.getAppiumDriver().closeApp();
-		AppiumFactory.getAppiumDriver().launchApp();
+		AppiumFactory.getAppiumDriver1().closeApp();
+		AppiumFactory.getAppiumDriver1().launchApp();
 	}
 	
 	/**
@@ -171,7 +171,7 @@ public class RiotRegisterTests extends testUtilities {
 		System.out.println("Check if logout is needed for the test.");
 		if(false==waitUntilDisplayed("im.vector.alpha:id/main_input_layout", true, 5)){
 			System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
-			RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
+			RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
 			mainPage.logOut();
 		}
 	}

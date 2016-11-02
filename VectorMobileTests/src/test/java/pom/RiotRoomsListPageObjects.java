@@ -9,15 +9,16 @@ import org.testng.Assert;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import utility.AppiumFactory;
 import utility.testUtilities;
 
 public class RiotRoomsListPageObjects extends testUtilities {
 	
 	public RiotRoomsListPageObjects(AppiumDriver<MobileElement> driver) throws InterruptedException{
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+		super.actualDriver=(AndroidDriver<MobileElement>) driver;
 		Thread.sleep(2000);
 		//ExplicitWait(driver,this.roomsExpandableListView);
 		try {
@@ -34,7 +35,7 @@ public class RiotRoomsListPageObjects extends testUtilities {
 	public MobileElement invitesHeadingLayout;
 	
 	public MobileElement getInvitationLayoutByName(String roomName){
-		return AppiumFactory.getAppiumDriver().findElementByXPath("//android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_roomName' and@text='"+roomName+"']/../../../..");
+		return super.actualDriver.findElementByXPath("//android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_roomName' and@text='"+roomName+"']/../../../..");
 	}
 	/**
 	 * Check some properties on a room invitation layout.
@@ -113,7 +114,6 @@ public class RiotRoomsListPageObjects extends testUtilities {
 			index++;
 		} while (index<=roomsAndCategoriesList.size()-1 && categoryFound==false);
 		if(categoryFound==false)return false;
-		
 		//looking for room name
 		index=indexCategory+1;
 		do {
@@ -139,7 +139,7 @@ public class RiotRoomsListPageObjects extends testUtilities {
 	public MobileElement getRoomByName(String myRommName){
 		//return roomsExpandableListView.findElementByName(myRommName);
 		try {
-			return AppiumFactory.getAppiumDriver().findElementByXPath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../../../..");	
+			return super.actualDriver.findElementByXPath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../../../..");	
 		} catch (Exception e) {
 			return null;
 		}
@@ -156,7 +156,7 @@ public class RiotRoomsListPageObjects extends testUtilities {
 		//open contxt menu on a room item
 		getRoomByName(roomName).findElementById("im.vector.alpha:id/roomSummaryAdapter_action_click_area").click();
 		//hit the item on the options
-		AppiumFactory.getAppiumDriver().findElementByXPath("//android.widget.ListView//android.widget.TextView[@text='"+item+"']/../..").click();
+		super.actualDriver.findElementByXPath("//android.widget.ListView//android.widget.TextView[@text='"+item+"']/../..").click();
 		Assert.assertFalse(waitUntilDisplayed("//android.widget.ListView[count(android.widget.LinearLayout)=4]", false, 0), "Option windows isn't closed");
 	}
 	
@@ -170,7 +170,7 @@ public class RiotRoomsListPageObjects extends testUtilities {
 		try {
 			//MobileElement roomItem=getRoomByName(myRommName);
 			//String badgeNumber= roomItem.findElementById("im.vector.alpha:id/roomSummaryAdapter_unread_count").getText();
-			String badgeNumber= AppiumFactory.getAppiumDriver().findElement(By.xpath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_unread_count']")).getText();
+			String badgeNumber= super.actualDriver.findElement(By.xpath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_unread_count']")).getText();
 			return Integer.parseInt(badgeNumber);
 		} catch (Exception e) {
 			return null;
@@ -185,7 +185,7 @@ public class RiotRoomsListPageObjects extends testUtilities {
 	 */
 	public String getReceivedMessageByRoomName(String myRommName){
 		try {
-			String messageWithUsername =AppiumFactory.getAppiumDriver().findElement(By.xpath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../..//android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_roomMessage']")).getText();
+			String messageWithUsername =super.actualDriver.findElement(By.xpath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../..//android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_roomMessage']")).getText();
 			return messageWithUsername.substring(messageWithUsername.indexOf(":")+2, messageWithUsername.length());
 		} catch (Exception e) {
 			return null;
