@@ -3,6 +3,7 @@ package mobilestests;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import org.junit.Ignore;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -172,7 +173,23 @@ public class RiotMessagesReceptionTests extends testUtilities{
 	    Assert.assertNotNull(testRoom.getTimeStampByPost(lastPost), "Last post doesn't have a timestamp");
 	}
 
-	
+	/**
+	 * Add a room in favorites from the rooms list. </br>
+	 * Check that the room is added in the favorites category. </br>
+	 * Remove the room from the favorites </br>
+	 * Check that the room is no more in the favorites.
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void addRoomInFavorites() throws InterruptedException{
+		String roomNameTest="room tests Jean";
+		RiotRoomsListPageObjects roomslist= new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
+		//add room in favourites
+		roomslist.clickOnContextMenuOnRoom(roomNameTest, "Favourite");
+		Assert.assertTrue(roomslist.checkRoomInCategory(roomNameTest, "FAVORITES"), "Room "+roomNameTest+" isn't added in the FAVORITES category");
+		roomslist.clickOnContextMenuOnRoom(roomNameTest, "Favourite");
+		Assert.assertFalse(roomslist.checkRoomInCategory(roomNameTest, "FAVORITES"), "Room "+roomNameTest+" is in the FAVORITES category and should not");
+	}
 	/**
 	 * Log-in the user if it can't see the login page.
 	 * @throws InterruptedException

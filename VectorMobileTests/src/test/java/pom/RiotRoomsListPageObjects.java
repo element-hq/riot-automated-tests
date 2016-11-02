@@ -80,8 +80,55 @@ public class RiotRoomsListPageObjects extends testUtilities {
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/fragment_recents_list")//expandable view containing all the rooms lists (favorites, rooms, low priority, etc).
 	public MobileElement roomsExpandableListView;
+	/**
+	 * Contains only the rooms.
+	 */
 	@AndroidFindBy(xpath="//android.widget.ExpandableListView[@resource-id='im.vector.alpha:id/fragment_recents_list']/android.widget.LinearLayout")
 	public List<WebElement> roomsList;
+	/**
+	 * Contains rooms and categories (favorites, people, rooms ...)
+	 */
+	@AndroidFindBy(xpath="//android.widget.ExpandableListView[@resource-id='im.vector.alpha:id/fragment_recents_list']/*")
+	public List<MobileElement> roomsAndCategoriesList;
+	
+	/**
+	 * Check that room is in a room category (favorites, people, rooms, etc). </br>
+	 * TODO maybe scroll to the end of the list to check the room ?
+	 * @param roomNameTest
+	 * @param category
+	 */
+	public Boolean checkRoomInCategory(String roomNameTest, String category) {
+		Boolean categoryFound=false, roomFound=false, otherCategoryFound=false;int indexCategory=0;
+		System.out.println("Looking for room "+roomNameTest+" in the category "+category);
+		//looking for the category
+		int index=0;
+		do {
+			//is the mobilelement a category ?
+			if(roomsAndCategoriesList.get(index).getTagName().equals("android.widget.RelativeLayout")){
+				//is this the searched category ?
+				if(roomsAndCategoriesList.get(index).findElementById("im.vector.alpha:id/heading").getText().equals(category)){
+					indexCategory=index;categoryFound=true;
+				}
+			}
+			index++;
+		} while (index<=roomsAndCategoriesList.size()-1 && categoryFound==false);
+		if(categoryFound==false)return false;
+		
+		//looking for room name
+		index=indexCategory+1;
+		do {
+			//is the mobilelement a room ?
+			if(roomsAndCategoriesList.get(index).getTagName().equals("android.widget.LinearLayout")){
+				if(roomsAndCategoriesList.get(index).findElementById("im.vector.alpha:id/roomSummaryAdapter_roomName").getText().equals(roomNameTest)){
+					roomFound=true;
+				}
+			}else if(roomsAndCategoriesList.get(index).getTagName().equals("android.widget.RelativeLayout")){//is this a category ?
+				otherCategoryFound=true;
+			}
+			index++;
+		} while (index<=roomsAndCategoriesList.size()-1 && roomFound==false && otherCategoryFound==false);
+		return roomFound;
+	}
 	
 	/**
 	 * Return a room as a MobileElement. </br>
@@ -195,6 +242,7 @@ public class RiotRoomsListPageObjects extends testUtilities {
 		this.contextMenuButton.click();
 		this.logOutButton.click();
 	}
+
 	
 
 	
