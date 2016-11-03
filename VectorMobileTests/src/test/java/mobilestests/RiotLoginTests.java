@@ -5,22 +5,16 @@ import java.awt.image.DataBuffer;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -28,58 +22,27 @@ import org.testng.annotations.Test;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDeviceActionShortcuts;
 import io.appium.java_client.android.AndroidKeyCode;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import pom.RiotLoginAndRegisterPageObjects;
 import pom.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
-import utility.Constant;
 import utility.DataproviderClass;
+import utility.RiotParentTest;
 import utility.ScreenshotUtility;
-import utility.testUtilities;
 
 @Listeners({ ScreenshotUtility.class })
-public class RiotLoginTests  extends testUtilities{
-	@BeforeClass
-	public void setUp() throws MalformedURLException{
-		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability("deviceName",Constant.DEVICE1_NAME);
-		capabilities.setCapability("platformName","Android");
-		capabilities.setCapability("platformVersion", "4.4.2");
-		capabilities.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
-		capabilities.setCapability("appActivity", "im.vector.activity.LoginActivity");
-
-		//Create RemoteWebDriver instance and connect to the Appium server
-		//It will launch the Riot application in Android Device using the configurations specified in Desired Capabilities
-		AppiumFactory appiumFactory=new AppiumFactory();
-		appiumFactory.setDriver1(new URL(Constant.SERVER1_ADRESS), capabilities);
-		System.out.println("setUp() done");
-	}
-
-	@AfterClass
-	public void tearDown(){
-		AppiumFactory.getAppiumDriver1().quit();
-	}
+public class RiotLoginTests extends RiotParentTest{
 	
-	@Test//(enabled=true)
+	@Test(groups={"1driver","loginpage"})
 	public void simpleLogin() throws Exception {
 		String sUserName="riotuser2", sPassword="riotuser";
-		MobileElement emailOrUserNameEditText= (MobileElement) AppiumFactory.getAppiumDriver1().findElement(By.id("im.vector.alpha:id/login_user_name"));
-		MobileElement passwordEditText= AppiumFactory.getAppiumDriver1().findElement(By.id("im.vector.alpha:id/login_password"));
-		MobileElement loginButton= AppiumFactory.getAppiumDriver1().findElement(By.id("im.vector.alpha:id/button_login"));
-		emailOrUserNameEditText.setValue(sUserName);
-		passwordEditText.setValue(sPassword);
-		loginButton.click();
-		//		emailOrUserNameEditText.click();
-//		AppiumFactory.getAppiumDriver().getKeyboard().sendKeys(sUserName);
-//		passwordEditText.click();
-//		AppiumFactory.getAppiumDriver().getKeyboard().sendKeys(sPassword);
-		loginButton.click();
+		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
+		loginPage.fillLoginForm(sUserName, sPassword);
 	}
 
 	/**
 	 * Log and logout and iterate on several datas from excel file.
 	 */
-	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
+	@Test(groups={"1driver","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void loginAndLogoutTest(String sUserName,String sPassword)  throws Exception {
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 		loginPage.emailOrUserNameEditText.setValue(sUserName);
@@ -97,7 +60,7 @@ public class RiotLoginTests  extends testUtilities{
 	/**
 	 * Check the custom server options and verify the form.
 	 */
-	@Test
+	@Test(groups={"1driver","loginpage"})
 	public void customServerOptionsCheck(){
 		String homeServerTextView="Home Server:";
 		String identityServerTextView="Identity Server:";
@@ -117,7 +80,7 @@ public class RiotLoginTests  extends testUtilities{
 	 * Check the reset password form.
 	 * Doesn't verifies the reset password function.
 	 */
-	@Test
+	@Test(groups={"1driver","loginpage"})
 	public void forgotPasswordFormTest(){
 		String expectedResetPwdMessage="To reset your password, enter the email address linked to your account:";
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
@@ -146,7 +109,7 @@ public class RiotLoginTests  extends testUtilities{
 	 * @throws InterruptedException 
 	 * @throws MalformedURLException 
 	 */
-	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
+	@Test(groups={"1driver","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void fillForgotFormPasswordWithForbiddenCharacter(String mailTest, String newPwdTest, String confirmPwdTest) throws InterruptedException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 		loginPage.forgotPwdButton.click();
@@ -155,7 +118,7 @@ public class RiotLoginTests  extends testUtilities{
 		loginPage.confirmNewPwdResetPwdEditText.setValue(confirmPwdTest);
 		loginPage.sendResetEmailButton.click();
 		//wait in case that the reset pwd form is not displayed
-		waitUntilDisplayed("im.vector.alpha:id/forget_password_inputs_layout",false,1);
+		waitUntilDisplayed(AppiumFactory.getAppiumDriver1(),"im.vector.alpha:id/forget_password_inputs_layout",false,1);
 		Assert.assertTrue(isPresentTryAndCatch(loginPage.inputsForgetPasswordLayout), "The forget pwd form is not displayed");
 		//Since that is an iterative test, we need to setup the next iteration : going back to the login page.
 		((AndroidDeviceActionShortcuts) AppiumFactory.getAppiumDriver1()).pressKeyCode(AndroidKeyCode.BACK);
@@ -166,7 +129,7 @@ public class RiotLoginTests  extends testUtilities{
 	 * Fill the forgot password form with corrects (but with fake mail) characters. </br>
 	 * Check that the login form is displayed then.
 	 */
-	@Test
+	@Test(groups={"1driver","loginpage"})
 	public void fillForgotPasswordWithAllowedCharacters(){
 		String mailTest="riot@gmail.com";
 		String newPwdTest="riotuser";
@@ -182,7 +145,7 @@ public class RiotLoginTests  extends testUtilities{
 	
 
 	
-	@Test
+	@Test(groups={"1driver","loginpage"})
 	public void checkRiotLogoFromLoginPage() throws IOException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 		boolean status = false;
@@ -225,6 +188,7 @@ public class RiotLoginTests  extends testUtilities{
 //	    verifyImage(destDir + "/"+"riotActualLogo.png", pathToExpectedRiotLogo );
 //	    Assert.assertTrue(status, "FAIL Event doesn't match");
 	}
+	
 	public void verifyImage(String image1, String image2) throws IOException{
 //	    File fileInput = new File(image1);
 //	    File fileOutPut = new File(image2);
@@ -256,36 +220,13 @@ public class RiotLoginTests  extends testUtilities{
 	    BufferedImage bufileOutPut = ImageIO.read(fileOutPut);
 	    //Finder finder = new Finder("path/to/image", new Region(0, 0, <imgwidth>, <imgheight>));
 	 }
-
-	@Ignore
-	@Test
-	public void logoutTest() throws Exception {
-		if(AppiumFactory.getAppiumDriver1()!=null){
-			System.out.println("driver does not == null");
-			AppiumFactory.getAppiumDriver1().findElement(By.xpath("//android.widget.ImageButton"));
-		} else {
-			System.out.println("driver == null");
-		}
-		MobileElement mainMenuBis=(MobileElement) AppiumFactory.getAppiumDriver1().findElementByXPath("//android.widget.ImageButton");
-
-		//WebElement mainMenuBis=driver.findElementByClassName("android.widget.ImageButton");
-		mainMenuBis.click();
-
-		//touch the logout button
-		WebElement logOutButton= AppiumFactory.getAppiumDriver1().findElement(By.name("Logout"));
-		logOutButton.click();
-		//validate that we are on the log-in page
-		WebElement riotLoginLogo= AppiumFactory.getAppiumDriver1().findElement(By.id("im.vector.alpha:id/login_large_logo"));
-		Assert.assertTrue(riotLoginLogo.isDisplayed(), "Riot Logo isn't displayed");
-	}
-	
 	/**
 	 * Log-out the user if it can't see the login page.
 	 * @throws InterruptedException
 	 */
-	@BeforeMethod
-	public void logoutForSetup() throws InterruptedException{
-		if(false==waitUntilDisplayed("im.vector.alpha:id/main_input_layout", true, 5)){
+	@BeforeMethod(groups="loginpage")
+	public void logOutIfNecessary() throws InterruptedException{
+		if(false==waitUntilDisplayed(AppiumFactory.getAppiumDriver1(),"im.vector.alpha:id/main_input_layout", true, 5)){
 			System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
 			RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
 			mainPage.logOut();

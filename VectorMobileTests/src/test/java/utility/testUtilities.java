@@ -5,21 +5,18 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.Connection;
 
 public class testUtilities {
-	public AndroidDriver<MobileElement> actualDriver;
 	
-	public void ExplicitWait(WebElement element){
-		(new WebDriverWait(actualDriver, 10)).until(ExpectedConditions.elementToBeClickable(element));
+	public void ExplicitWait(AndroidDriver<MobileElement> driver, WebElement element){
+		(new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(element));
 		System.out.println((Object) element.getTagName()+" clickable");
 	}
-	
-	public void ExplicitWaitToBeVisible(WebElement element){
-		(new WebDriverWait(actualDriver, 10)).until(ExpectedConditions.visibilityOf(element));
+	public void ExplicitWaitToBeVisible(AndroidDriver<MobileElement> driver,WebElement element){
+		(new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOf(element));
 		System.out.println((Object) element.getTagName()+" displayed");
 	}
 	
@@ -36,7 +33,7 @@ public class testUtilities {
 		}
 	}
 	
-	public static void ExplicitWaitToBeVisible(AppiumDriver<MobileElement> driver, MobileElement element, Integer timeToWait){
+	public static void ExplicitWaitToBeVisible(AndroidDriver<MobileElement> driver, MobileElement element, Integer timeToWait){
 		(new WebDriverWait(driver, timeToWait)).until(ExpectedConditions.visibilityOf(element));
 		System.out.println((Object) element.getTagName()+" displayed");
 	}
@@ -48,7 +45,7 @@ public class testUtilities {
 	 * @param maxSecondsToWait
 	 * @throws InterruptedException 
 	 */
-	public Boolean waitUntilDisplayed(String idOrXpath, Boolean displayed,int maxSecondsToWait) throws InterruptedException {
+	public Boolean waitUntilDisplayed(AndroidDriver<MobileElement> driver,String idOrXpath, Boolean displayed,int maxSecondsToWait) throws InterruptedException {
 		Boolean isDisplayed = false;
 		Boolean isXpath=false;
 		if(idOrXpath.contains("//")){
@@ -65,16 +62,16 @@ public class testUtilities {
 			if(maxSecondsToWait!=0){Thread.sleep(500);secondsWaited=(float) (secondsWaited+0.5);}
 			try {
 				if(isXpath){
-					actualDriver.findElement(By.xpath(idOrXpath));
+					driver.findElement(By.xpath(idOrXpath));
 				}else{
-					actualDriver.findElement(By.id(idOrXpath));
+					driver.findElement(By.id(idOrXpath));
 				}
 				isDisplayed=true;
 			} catch (Exception e) {
 				isDisplayed=false;
 			}
 		} while (displayed!=isDisplayed && secondsWaited<maxSecondsToWait);
-		System.out.println("Seconds to wait "+idOrXpath+" to "+verb+": "+secondsWaited+". isXpath is "+isXpath.toString()+ " with device "+actualDriver.getCapabilities().getCapability("deviceName"));
+		System.out.println("Seconds to wait "+idOrXpath+" to "+verb+": "+secondsWaited+". isXpath is "+isXpath.toString()+ " with device "+driver.getCapabilities().getCapability("deviceName"));
 		return isDisplayed;
 	}
 	
@@ -82,19 +79,19 @@ public class testUtilities {
 	/**
 	 * Check if connection is NONE and swith to WIFI in that case.
 	 */
-	public void forceWifiOnIfNeeded(){
-		if(actualDriver.getConnection().equals(Connection.NONE)){
-			System.out.println("Internet is NONE, switching to WIFI on device "+actualDriver.getCapabilities().getCapability("deviceName"));
-			actualDriver.setConnection(Connection.WIFI);
+	public void forceWifiOnIfNeeded(AndroidDriver<MobileElement> driver){
+		if(driver.getConnection().equals(Connection.NONE)){
+			System.out.println("Internet is NONE, switching to WIFI on device "+driver.getCapabilities().getCapability("deviceName"));
+			driver.setConnection(Connection.WIFI);
 		}
 	}
 	/**
 	 * Check if connection is NONE and swith to WIFI in that case.
 	 */
-	public void forceWifiOfIfNeeded(){
-		if(actualDriver.getConnection().equals(Connection.WIFI)){
-			System.out.println("Internet is WIFI, switching to NONE on device "+actualDriver.getCapabilities().getCapability("deviceName"));
-			actualDriver.setConnection(Connection.NONE);
+	public void forceWifiOfIfNeeded(AndroidDriver<MobileElement> driver){
+		if(driver.getConnection().equals(Connection.WIFI)){
+			System.out.println("Internet is WIFI, switching to NONE on device "+driver.getCapabilities().getCapability("deviceName"));
+			driver.setConnection(Connection.NONE);
 		}
 	}
 }

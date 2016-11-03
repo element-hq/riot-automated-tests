@@ -1,14 +1,9 @@
 package mobilestests;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -19,41 +14,19 @@ import pom.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
+import utility.RiotParentTest;
 import utility.ScreenshotUtility;
-import utility.testUtilities;
 
 @Listeners({ ScreenshotUtility.class })
-public class RiotMessagesReceptionTests extends testUtilities{
-	@BeforeSuite
-	public void setUp() throws MalformedURLException{
-		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability("deviceName",Constant.DEVICE1_NAME);
-		capabilities.setCapability("platformName","Android");
-		capabilities.setCapability("platformVersion", "4.4.2");
-		capabilities.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
-		capabilities.setCapability("appActivity", "im.vector.activity.LoginActivity");
-
-		//Create RemoteWebDriver instance and connect to the Appium server
-		//It will launch the Riot application in Android Device using the configurations specified in Desired Capabilities
-		AppiumFactory appiumFactory=new AppiumFactory();
-		appiumFactory.setDriver1(new URL(Constant.SERVER1_ADRESS), capabilities);
-		System.out.println("setUp() done");
-	}
-
-	@AfterClass
-	public void tearDown(){
-		AppiumFactory.getAppiumDriver1().quit();
-	}
-	
-	
+public class RiotMessagesReceptionTests extends RiotParentTest{
 	/**
-	 * Required : user must be logged in room </br>
+	 * Required : user must be logged in room and notifications are On on this room </br>
 	 * Receive a message in a room from an other user. </br>
 	 * Asserts that badge is set to 1 or incremented on the room's item in the rooms list.</br>
 	 * @throws InterruptedException 
 	 * @throws IOException 
 	 */
-	@Test(groups="messageReceivedInList",priority=1)
+	@Test(groups={"messageReceivedInList","roomslist","1driver"},priority=1)
 	public void checkBadgeAndMessageOnRoomItem() throws InterruptedException, IOException{
 		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 		String roomName="room tests Jean";
@@ -69,11 +42,23 @@ public class RiotMessagesReceptionTests extends testUtilities{
 		//wait until message is received
 		riotRoomsList.waitForRoomToReceiveNewMessage(roomName, currentBadge);
 		//Assertion on the badge
-		Assert.assertEquals((int) riotRoomsList.getBadgeNumberByRoomName(roomName),currentBadge+1, "Badge number wasn't incremented after receiving the message");	
+		Assert.assertNotNull(riotRoomsList.getBadgeNumberByRoomName(roomName), "There is no badge on this room.");
+		Assert.assertEquals((int)riotRoomsList.getBadgeNumberByRoomName(roomName),currentBadge+1, "Badge number wasn't incremented after receiving the message");	
 		//Assertion on the message.
 		Assert.assertEquals(riotRoomsList.getReceivedMessageByRoomName(roomName), messageTest, "Received message on the room item isn't the same as sended by matrix.");
 	}
 	
+	/**
+	 * TODO : write this test
+	 * Required : user must be logged in room </br>
+	 * Set the notifications off on the room </br>
+	 * Receive a text message in a room from an other user. </br>
+	 * Asserts that no badge appears after receiving the message.</br>
+	 */
+	@Test(enabled=false)
+	public void checkNoBadgeOnMessageReceptionWithNootificationsOff(){
+		
+	}
 	/**
 	 * Required : user must be logged in room </br>
 	 * Receive a text message in a room from an other user. </br>
@@ -82,7 +67,7 @@ public class RiotMessagesReceptionTests extends testUtilities{
 	 * @throws InterruptedException 
 	 * @throws IOException 
 	 */
-	@Test(dependsOnGroups="messageReceivedInList",priority=2,groups="roomOpenned")
+	@Test(dependsOnGroups="messageReceivedInList",priority=2,groups={"roomOpenned","roomslist","1driver"})
 	public void checkTextMessageOnRoomPage() throws InterruptedException{
 		String roomName="room tests Jean";
 		String messageTest="coucou";
@@ -101,7 +86,7 @@ public class RiotMessagesReceptionTests extends testUtilities{
 	 * Check that when a post is selected, timestamp is displayed.
 	 * @throws InterruptedException 
 	 */
-	@Test(dependsOnGroups="roomOpenned",priority=3)
+	@Test(dependsOnGroups="roomOpenned",groups={"roomslist","1driver"},priority=3)
 	public void checkTimeStampPositionOnRoomPage() throws InterruptedException{
 		String message="test for timestamp display";
 		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
@@ -131,7 +116,7 @@ public class RiotMessagesReceptionTests extends testUtilities{
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	@Test(dependsOnGroups="roomOpenned",priority=4)
+	@Test(dependsOnGroups="roomOpenned",groups={"roomslist","1driver"},priority=4)
 	public void checkAvatarDisplayInRoomPage() throws IOException, InterruptedException{
 		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg2MTAyNjEKMDAyZnNpZ25hdHVyZSAMRHy3V2nt7jDJlDrhq1NkEBBiHH6umGQvaydgqLcYlQo";
@@ -154,7 +139,7 @@ public class RiotMessagesReceptionTests extends testUtilities{
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	@Test(dependsOnGroups="roomOpenned",priority=5)
+	@Test(dependsOnGroups="roomOpenned",groups={"roomslist","1driver"},priority=5)
 	public void checkImageMessageOnRoomPage() throws IOException, InterruptedException{
 		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 		String pictureURL="mxc://matrix.org/gpQYPbjoqVeTWCGivjRshIni";
@@ -178,7 +163,7 @@ public class RiotMessagesReceptionTests extends testUtilities{
 	 * Check that the room is no more in the favorites.
 	 * @throws InterruptedException
 	 */
-	@Test
+	@Test(groups={"roomslist","1driver"})
 	public void addRoomInFavorites() throws InterruptedException{
 		String roomNameTest="room tests Jean";
 		RiotRoomsListPageObjects roomslist= new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
@@ -189,15 +174,16 @@ public class RiotMessagesReceptionTests extends testUtilities{
 		Assert.assertFalse(roomslist.checkRoomInCategory(roomNameTest, "FAVORITES"), "Room "+roomNameTest+" is in the FAVORITES category and should not");
 	}
 	
+
 	/**
 	 * Log-in the user if it can't see the login page.
 	 * @throws InterruptedException
 	 */
-	@BeforeMethod
+	@BeforeMethod(groups="roomslist")
 	public void loginForSetup() throws InterruptedException{
-		if(true==waitUntilDisplayed("im.vector.alpha:id/login_inputs_layout", false, 5)){
+		if(true==waitUntilDisplayed(AppiumFactory.getAppiumDriver1(),"im.vector.alpha:id/login_inputs_layout", false, 5)){
 			System.out.println("Can't access to the rooms list page, none user must be logged. Forcing the log-in.");
-			forceWifiOnIfNeeded();
+			forceWifiOnIfNeeded(AppiumFactory.getAppiumDriver1());
 			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 			loginPage.emailOrUserNameEditText.setValue(Constant.DEFAULT_USERNAME);
 			loginPage.passwordEditText.setValue(Constant.DEFAULT_USERPWD);
@@ -209,6 +195,5 @@ public class RiotMessagesReceptionTests extends testUtilities{
 			loginPage.loginButton.click();
 		}
 	}
-	
 	
 }

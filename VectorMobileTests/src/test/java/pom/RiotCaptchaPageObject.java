@@ -10,13 +10,14 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import utility.testUtilities;
 
 public class RiotCaptchaPageObject extends testUtilities{
-	public RiotCaptchaPageObject(AppiumDriver<MobileElement> driver) throws InterruptedException{
+	private AndroidDriver<MobileElement> driver;
+	public RiotCaptchaPageObject(AppiumDriver<MobileElement> myDriver) throws InterruptedException{
+		driver=(AndroidDriver<MobileElement>) myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
-		super.actualDriver=(AndroidDriver<MobileElement>) driver;
 		Thread.sleep(2000);
 		//ExplicitWait(driver,this.roomsExpandableListView);
 		try {
-			waitUntilDisplayed("im.vector.alpha:id/account_creation_message", true, 5);
+			waitUntilDisplayed(driver,"im.vector.alpha:id/account_creation_message", true, 5);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -66,8 +67,8 @@ public class RiotCaptchaPageObject extends testUtilities{
 	 */
 	public void selectAllImages() throws InterruptedException{
 		//ExplicitWait(AppiumFactory.getAppiumDriver(), selectImageForCaptchaView);
-		if(waitUntilDisplayed("//android.view.View[count(android.view.View)>5]", true, 5)){
-			for (MobileElement image : super.actualDriver.findElementsByXPath("//android.view.View[count(android.view.View)>5]/android.view.View[@content-desc='']")) {
+		if(waitUntilDisplayed(driver,"//android.view.View[count(android.view.View)>5]", true, 5)){
+			for (MobileElement image : driver.findElementsByXPath("//android.view.View[count(android.view.View)>5]/android.view.View[@content-desc='']")) {
 				image.click();
 			}
 		}

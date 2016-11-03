@@ -10,12 +10,14 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import utility.testUtilities;
 
 public class RiotLoginAndRegisterPageObjects extends testUtilities{
-	public RiotLoginAndRegisterPageObjects(AppiumDriver<MobileElement> driver) {
+	private AndroidDriver<MobileElement> driver;
+	
+	public RiotLoginAndRegisterPageObjects(AppiumDriver<MobileElement> myDriver) {
+		driver=(AndroidDriver<MobileElement>) myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
-		super.actualDriver=(AndroidDriver<MobileElement>) driver;
 		//ExplicitWaitToBeVisible(driver,this.inputsLoginLayout);
 		try {
-			waitUntilDisplayed("im.vector.alpha:id/login_inputs_layout", true, 5);
+			waitUntilDisplayed((AndroidDriver<MobileElement>) driver,"im.vector.alpha:id/login_inputs_layout", true, 5);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -135,7 +137,7 @@ public class RiotLoginAndRegisterPageObjects extends testUtilities{
 		pwd1EditRegisterText.setValue(pwd1);
 		pwd2EditRegisterText.setValue(pwd2);
 		registerButton.click();
-		waitUntilDisplayed("android:id/parentPanel", true, 10);
+		waitUntilDisplayed(driver,"android:id/parentPanel", true, 10);
 		msgboxConfirmationYesButton.click();
 	}
 	/**

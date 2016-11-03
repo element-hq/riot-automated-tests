@@ -16,12 +16,13 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import utility.testUtilities;
 
 public class RiotRoomPageObjects extends testUtilities{
-	public RiotRoomPageObjects(AppiumDriver<MobileElement> driver){
-		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
-		super.actualDriver=(AndroidDriver<MobileElement>) driver;
+	private AndroidDriver<MobileElement> driver;
+	public RiotRoomPageObjects(AppiumDriver<MobileElement> myDriver){
+		PageFactory.initElements(new AppiumFieldDecorator(myDriver), this);
+		driver=(AndroidDriver<MobileElement>) myDriver;
 		//ExplicitWait(driver,this.messagesListView);
 		try {
-			waitUntilDisplayed("im.vector.alpha:id/listView_messages", true, 5);
+			waitUntilDisplayed(driver,"im.vector.alpha:id/listView_messages", true, 5);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -75,16 +76,16 @@ public class RiotRoomPageObjects extends testUtilities{
 	 * @throws InterruptedException 
 	 */
 	public void checkPreviewRoomLayout(String roomName) throws InterruptedException{
-		ExplicitWait(previewRoomLayout);
+		ExplicitWait(driver,previewRoomLayout);
 		//check invitation messsage
 		Assert.assertTrue(invitationMessageTextView.getText().contains("You have been invited to join this room by "));
 		//check buttons
 		Assert.assertEquals(joinRoomButton.getText(), "Join Room");
 		Assert.assertEquals(cancelInvitationButton.getText(), "Cancel");
 		//check more options button is not here
-		Assert.assertFalse(waitUntilDisplayed("//android.widget.TextView[@resource-id='im.vector.alpha:id/ic_action_search_in_room']/../android.widget.ImageView", false, 0));
+		Assert.assertFalse(waitUntilDisplayed(driver,"//android.widget.TextView[@resource-id='im.vector.alpha:id/ic_action_search_in_room']/../android.widget.ImageView", false, 0));
 		//check search button is not here
-		Assert.assertFalse(waitUntilDisplayed("im.vector.alpha:id/ic_action_search_in_room", false, 0));
+		Assert.assertFalse(waitUntilDisplayed(driver,"im.vector.alpha:id/ic_action_search_in_room", false, 0));
 		//check back button is displayed
 		Assert.assertTrue(menuBackButton.isDisplayed(),"Back button isn't displayed");
 		//check collapse button is displayed
@@ -96,10 +97,10 @@ public class RiotRoomPageObjects extends testUtilities{
 		Assert.assertTrue(roomAvatar.height!=0 && roomAvatar.width!=0, "Riot logo has null dimension");
 		//check that bottom bar isn't here
 		//send bar
-		Assert.assertFalse(waitUntilDisplayed("//android.widget.RelativeLayout[@resource-id='im.vector.alpha:id/room_bottom_layout']//android.widget.EditText[@resource-id='im.vector.alpha:id/editText_messageBox']", false, 0));
-		Assert.assertFalse(waitUntilDisplayed("im.vector.alpha:id/room_send_layout", false, 0));
-		Assert.assertFalse(waitUntilDisplayed("im.vector.alpha:id/room_start_call_layout", false, 0));
-		Assert.assertFalse(waitUntilDisplayed("im.vector.alpha:id/room_end_call_layout", false, 0));
+		Assert.assertFalse(waitUntilDisplayed(driver,"//android.widget.RelativeLayout[@resource-id='im.vector.alpha:id/room_bottom_layout']//android.widget.EditText[@resource-id='im.vector.alpha:id/editText_messageBox']", false, 0));
+		Assert.assertFalse(waitUntilDisplayed(driver,"im.vector.alpha:id/room_send_layout", false, 0));
+		Assert.assertFalse(waitUntilDisplayed(driver,"im.vector.alpha:id/room_start_call_layout", false, 0));
+		Assert.assertFalse(waitUntilDisplayed(driver,"im.vector.alpha:id/room_end_call_layout", false, 0));
 	}
 	
 	/**
@@ -110,7 +111,7 @@ public class RiotRoomPageObjects extends testUtilities{
 	 */
 	public void checkRoomLayout(String roomName) throws InterruptedException {
 		//check that preview layout isn't displayed
-		Assert.assertFalse(waitUntilDisplayed("im.vector.alpha:id/room_preview_info_layout", false, 3));
+		Assert.assertFalse(waitUntilDisplayed(driver,"im.vector.alpha:id/room_preview_info_layout", false, 3));
 		//check action bar
 		Assert.assertTrue(actionBarView.isDisplayed(), "Action bar isn't displayed");
 		Assert.assertTrue(menuBackButton.isDisplayed(), "Menu back button isn't displayed");
@@ -136,7 +137,7 @@ public class RiotRoomPageObjects extends testUtilities{
 		}else{
 			messageFailed="Room page is displayed.";
 		}
-		Assert.assertEquals(waitUntilDisplayed("im.vector.alpha:id/listView_messages", displayed, 5),displayed, messageFailed);
+		Assert.assertEquals(waitUntilDisplayed(driver,"im.vector.alpha:id/listView_messages", displayed, 5),displayed, messageFailed);
 	}
 	
 	/*
@@ -303,11 +304,11 @@ public class RiotRoomPageObjects extends testUtilities{
 	public void attachPhotoFromCamera(String photoSize) throws InterruptedException{
 		sendMessageButton.click(); //(this button id is for both attachment files and send message buttons)
 		takePhotoFromMenuButton.click();
-		RiotCameraPageObjects cameraPreview = new RiotCameraPageObjects(super.actualDriver);
+		RiotCameraPageObjects cameraPreview = new RiotCameraPageObjects(driver);
 		cameraPreview.triggerCameraButton.click();//take a photo
-		waitUntilDisplayed("im.vector.alpha:id/medias_picker_preview", true, 5);
+		waitUntilDisplayed(driver,"im.vector.alpha:id/medias_picker_preview", true, 5);
 		cameraPreview.confirmPickingPictureButton.click();
-		ExplicitWaitToBeVisible(cameraPreview.sendAsMenuLayout);
+		ExplicitWaitToBeVisible(driver,cameraPreview.sendAsMenuLayout);
 		cameraPreview.getItemFromSendAsMenu(photoSize).click();
 	}
 }

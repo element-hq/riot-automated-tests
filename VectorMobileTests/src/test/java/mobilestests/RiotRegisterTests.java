@@ -1,12 +1,8 @@
 package mobilestests;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -16,39 +12,18 @@ import pom.RiotCaptchaPageObject;
 import pom.RiotLoginAndRegisterPageObjects;
 import pom.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
-import utility.Constant;
 import utility.DataproviderClass;
+import utility.RiotParentTest;
 import utility.ScreenshotUtility;
-import utility.testUtilities;
 
 @Listeners({ ScreenshotUtility.class })
-public class RiotRegisterTests extends testUtilities {
-	@BeforeClass
-	public void setUp() throws MalformedURLException{
-		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability("deviceName",Constant.DEVICE1_NAME);
-		capabilities.setCapability("platformName","Android");
-		capabilities.setCapability("platformVersion", "4.4.2");
-		capabilities.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
-		capabilities.setCapability("appActivity", "im.vector.activity.LoginActivity");
+public class RiotRegisterTests extends RiotParentTest {
 
-		//Create RemoteWebDriver instance and connect to the Appium server
-		//It will launch the Riot application in Android Device using the configurations specified in Desired Capabilities
-		AppiumFactory appiumFactory=new AppiumFactory();
-		appiumFactory.setDriver1(new URL(Constant.SERVER1_ADRESS), capabilities);
-		System.out.println("setUp() done");
-	}
-
-	@AfterClass
-	public void tearDown(){
-		AppiumFactory.getAppiumDriver1().quit();
-	}
-	
 	/**
 	 * Fill the register form without any email adress. </br>
 	 * Verifies that a confirmation messagebox pops up. 
 	 */
-	@Test(groups={"restartneeded","logout"})
+	@Test(groups={"restartneeded","logout","1driver"})
 	public void fillRegisterFormWithoutEmail(){
 		String userNameTest="riotusername";
 		String pwdTest="riotuser";
@@ -77,7 +52,7 @@ public class RiotRegisterTests extends testUtilities {
 	 * Verifies that the form is not sent and a notification "Passwords don't mach" pops.</br>
 	 * 
 	 */
-	@Test
+	@Test(groups={"1driver"})
 	public void fillRegisterFormWithDifferentPwds(){
 		String userNameTest="riotusername";
 		String pwd1Test="riotuser";
@@ -100,7 +75,7 @@ public class RiotRegisterTests extends testUtilities {
 	 * Verifies that the form is not sent.
 	 * @throws MalformedURLException 
 	 */
-	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class,groups={"restartneeded","logout"})
+	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class,groups={"restartneeded","logout","1driver"})
 	public void fillRegisterFormWithForbiddenCharacter(String mailTest,String userNameTest, String pwd1Test,String pwd2Test) throws MalformedURLException{
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 		registerPage.registerButton.click();
@@ -121,7 +96,7 @@ public class RiotRegisterTests extends testUtilities {
 	/**
 	 * Empty the home server custom URLs then validates that the register button is not enabled.
 	 */
-	@Test(groups={"restartneeded","logout"})
+	@Test(groups={"restartneeded","logout","1driver"})
 	public void registerWithEmptyCustomServerUrls(){
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 		registerPage.registerButton.click();
@@ -137,7 +112,7 @@ public class RiotRegisterTests extends testUtilities {
 	 * Validate that the register can't go any further.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"restartneeded","logout"})
+	@Test(groups={"restartneeded","logout","1driver"})
 	public void registerWithFailingCaptchaCheckingTest() throws InterruptedException{
 		//creation of a "unique" username by adding a randomize number to the username.
 		int userNamesuffix = 1 + (int)(Math.random() * ((10000 - 1) + 1));
@@ -150,7 +125,7 @@ public class RiotRegisterTests extends testUtilities {
 		captchaPage.notARobotCheckBox.click();
 		captchaPage.selectAllImages();
 		captchaPage.verifyCaptchaButton.click();
-		ExplicitWait(captchaPage.tryAgainView);
+		ExplicitWait(AppiumFactory.getAppiumDriver1(),captchaPage.tryAgainView);
 		Assert.assertTrue(captchaPage.tryAgainView.isDisplayed(), "The 'Please try again' view is not displayed");
 	}
 	
@@ -169,7 +144,7 @@ public class RiotRegisterTests extends testUtilities {
 	@BeforeMethod(groups="logout")
 	public void logoutForSetup() throws InterruptedException{
 		System.out.println("Check if logout is needed for the test.");
-		if(false==waitUntilDisplayed("im.vector.alpha:id/main_input_layout", true, 5)){
+		if(false==waitUntilDisplayed(AppiumFactory.getAppiumDriver1(),"im.vector.alpha:id/main_input_layout", true, 5)){
 			System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
 			RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
 			mainPage.logOut();

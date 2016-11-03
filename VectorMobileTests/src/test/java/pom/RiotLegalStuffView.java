@@ -12,12 +12,11 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import utility.testUtilities;
 
 public class RiotLegalStuffView extends testUtilities{
-	AppiumDriver<MobileElement> driver;
-	public RiotLegalStuffView(AppiumDriver<MobileElement> driver2){
-		PageFactory.initElements(new AppiumFieldDecorator(driver2), this);
-		super.actualDriver=(AndroidDriver<MobileElement>) driver;
-		ExplicitWait(this.parentPanel);
-		driver=driver2;
+	private AndroidDriver<MobileElement> driver;
+	public RiotLegalStuffView(AppiumDriver<MobileElement> myDriver){
+		driver=(AndroidDriver<MobileElement>) myDriver;
+		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+		ExplicitWait(driver,this.parentPanel);
 	}
 	
 	@AndroidFindBy(id="android:id/parentPanel")//the main frame

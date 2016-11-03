@@ -11,11 +11,12 @@ import io.appium.java_client.pagefactory.iOSFindBy;
 import utility.testUtilities;
 
 public class RiotSearchFromRoomPageObjects extends testUtilities{
+	private AndroidDriver<MobileElement> driver;
 	
-	public RiotSearchFromRoomPageObjects(AppiumDriver<MobileElement> driver){
+	public RiotSearchFromRoomPageObjects(AppiumDriver<MobileElement> myDriver){
+		driver=(AndroidDriver<MobileElement>) myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
-		super.actualDriver=(AndroidDriver<MobileElement>) driver;
-		ExplicitWait(this.mainView);
+		ExplicitWait(driver,this.mainView);
 	}
 	
 	@AndroidFindBy(id="im.vector.alpha:id/decor_content_parent")//main view from the search page

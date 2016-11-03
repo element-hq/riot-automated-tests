@@ -1,14 +1,8 @@
 package mobilestests;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -18,40 +12,18 @@ import pom.RiotRoomPageObjects;
 import pom.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
 import utility.Constant;
+import utility.RiotParentTest;
 import utility.ScreenshotUtility;
-import utility.testUtilities;
 
 @Listeners({ ScreenshotUtility.class })
-public class RiotNoConnectionTests extends testUtilities{
-	
-
-	@BeforeSuite
-	public void setUp() throws MalformedURLException{
-		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability("deviceName",Constant.DEVICE1_NAME);
-		capabilities.setCapability("platformName","Android");
-		capabilities.setCapability("platformVersion", "4.4.2");
-		capabilities.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
-		capabilities.setCapability("appActivity", "im.vector.activity.LoginActivity");
-
-		//Create RemoteWebDriver instance and connect to the Appium server
-		//It will launch the Riot application in Android Device using the configurations specified in Desired Capabilities
-		AppiumFactory appiumFactory=new AppiumFactory();
-		appiumFactory.setDriver1(new URL(Constant.SERVER1_ADRESS), capabilities);
-		System.out.println("setUp() done");
-	}
-
-	@AfterClass
-	public void tearDown(){
-		AppiumFactory.getAppiumDriver1().quit();
-	}
+public class RiotNoConnectionTests extends RiotParentTest{
 	
 	/**
 	 * Cut the wifi, launches Riot and asserts that the login button is disabled. </br>
 	 * Bring back the wifi and verifies that the login button become enabled.
 	 * @throws InterruptedException 
 	 */
-	@Test
+	@Test(groups={"1driver"})
 	public void logInWithoutInternetConnection() throws InterruptedException{
 		AppiumFactory.getAppiumDriver1().setConnection(Connection.NONE);
 		System.out.println("wifi off");
@@ -68,7 +40,7 @@ public class RiotNoConnectionTests extends testUtilities{
 	 * Bring back the internet connection and verifies that the notification isn't displayed anymore.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="nointernet")
+	@Test(groups={"nointernet","1driver"})
 	public void roomsListWithoutConnectionTest() throws InterruptedException{
 		String roomNameTest="temp room";
 		String expectedNotificationMessage="Connectivity to the server has been lost.";
@@ -100,7 +72,7 @@ public class RiotNoConnectionTests extends testUtilities{
 	 * Bring back internet, verifies that Riot proposes to send the unsent message.
 	 * @throws InterruptedException 
 	 */
-	@Test
+	@Test(groups={"1driver"})
 	public void sendMessageWithoutConnectionTest() throws InterruptedException{
 		String myMessage="message sent without internet connection";
 		String expectedNotificationMessage="Messages not sent. Resend now?";
@@ -110,7 +82,7 @@ public class RiotNoConnectionTests extends testUtilities{
 		//Open the first room.
 		riotRoomsList.getRoomByName(roomNameTest).click();
 		//cut internet
-		forceWifiOfIfNeeded();
+		forceWifiOfIfNeeded(AppiumFactory.getAppiumDriver1());
 		RiotRoomPageObjects myRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
 		//send a message, then verifies that it's displayed in the message list
 		myRoom.sendAMessage(myMessage);
@@ -145,7 +117,7 @@ public class RiotNoConnectionTests extends testUtilities{
 	 * Bring back internet, verifies that Riot proposes to send the unsent photo.
 	 * @throws InterruptedException 
 	 */
-	@Test
+	@Test(groups={"1driver"})
 	public void sendPhotoWithoutConnectionTest() throws InterruptedException{
 		String expectedNotificationMessage="Messages not sent. Resend now?";
 		String roomNameTest="temp room";
@@ -154,12 +126,12 @@ public class RiotNoConnectionTests extends testUtilities{
 		//Open the first room.
 		riotRoomsList.getRoomByName(roomNameTest).click();
 		//cut internet
-		forceWifiOfIfNeeded();
+		forceWifiOfIfNeeded(AppiumFactory.getAppiumDriver1());
 		RiotRoomPageObjects myRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
 		//send a picture from the camera
 		myRoom.attachPhotoFromCamera("Small");
 		//verifies that it's displayed in the message list
-		waitUntilDisplayed("im.vector.alpha:id/messagesAdapter_image", true, 5);
+		waitUntilDisplayed(AppiumFactory.getAppiumDriver1(),"im.vector.alpha:id/messagesAdapter_image", true, 5);
 		org.openqa.selenium.Dimension takenPhoto=myRoom.getAttachedImageByPost(myRoom.getLastPost()).getSize();
 	    Assert.assertTrue(takenPhoto.height!=0 && takenPhoto.width!=0, "The unsent photo has null dimension");
     
@@ -190,6 +162,7 @@ public class RiotNoConnectionTests extends testUtilities{
 	    //teardown : going back to rooms list
 	    myRoom.menuBackButton.click();
 	}
+	
 	@BeforeGroups(groups="nointernet")
 	public void setWifiOffForNoConnectionTests(){
 		if(!AppiumFactory.getAppiumDriver1().getConnection().equals(Connection.NONE)){
@@ -204,9 +177,9 @@ public class RiotNoConnectionTests extends testUtilities{
 	 */
 	@BeforeMethod
 	public void loginForSetup() throws InterruptedException{
-		if(false==waitUntilDisplayed("im.vector.alpha:id/fragment_recents_list", true, 5)){
+		if(false==waitUntilDisplayed(AppiumFactory.getAppiumDriver1(),"im.vector.alpha:id/fragment_recents_list", true, 5)){
 			System.out.println("Can't access to the rooms list page, none user must be logged. Forcing the log-in.");
-			forceWifiOnIfNeeded();
+			forceWifiOnIfNeeded(AppiumFactory.getAppiumDriver1());
 			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 			loginPage.emailOrUserNameEditText.setValue(Constant.DEFAULT_USERNAME);
 			loginPage.passwordEditText.setValue(Constant.DEFAULT_USERPWD);

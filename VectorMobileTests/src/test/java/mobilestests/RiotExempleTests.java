@@ -1,6 +1,5 @@
 package mobilestests;
 
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import pom.RiotLoginAndRegisterPageObjects;
@@ -8,12 +7,20 @@ import pom.RiotRoomPageObjects;
 import pom.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
 import utility.RiotParentTest;
-import utility.ScreenshotUtility;
 
-@Listeners({ ScreenshotUtility.class })
-public class RiotVoipTests extends RiotParentTest{
+public class RiotExempleTests extends RiotParentTest{
+
+	@Test(groups="2drivers", suiteName="")
+	public void test() throws InterruptedException{
+		System.out.println("running test 1");
+	}
 	
-	@Test(groups="2drivers", description="Plays with 2 devices")
+	@Test(groups="2drivers")
+	public void test2(){
+		System.out.println("running test 2");
+	}
+	
+	@Test(groups="2drivers")
 	public void twoDevices() throws InterruptedException{
 		RiotRoomsListPageObjects mainPageDevice1 = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
 		RiotLoginAndRegisterPageObjects loginViewDevice2 = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver2());
