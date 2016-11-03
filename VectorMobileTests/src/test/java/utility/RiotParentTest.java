@@ -7,7 +7,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeGroups;
 
-public class RiotParentTest extends testUtilities{
+public class RiotParentTest extends TestUtilities{
 	@BeforeGroups(groups="1driver")
 	public void setUp1Driver() throws MalformedURLException{
 		DesiredCapabilities capabilities = new DesiredCapabilities();

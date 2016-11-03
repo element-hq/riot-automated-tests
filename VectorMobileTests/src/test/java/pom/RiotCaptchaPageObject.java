@@ -7,9 +7,9 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import utility.testUtilities;
+import utility.TestUtilities;
 
-public class RiotCaptchaPageObject extends testUtilities{
+public class RiotCaptchaPageObject extends TestUtilities{
 	private AndroidDriver<MobileElement> driver;
 	public RiotCaptchaPageObject(AppiumDriver<MobileElement> myDriver) throws InterruptedException{
 		driver=(AndroidDriver<MobileElement>) myDriver;

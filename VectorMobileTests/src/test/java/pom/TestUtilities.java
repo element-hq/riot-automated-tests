@@ -9,7 +9,7 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.Connection;
 
-public class testUtilities {
+public class TestUtilities {
 	
 	public void ExplicitWait(AndroidDriver<MobileElement> driver, WebElement element){
 		(new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(element));
