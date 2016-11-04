@@ -141,9 +141,34 @@ public class RiotRoomPageObjects extends TestUtilities{
 	}
 	
 	/*
+	 * PENDING CALL VIEW
+	 */
+	@AndroidFindBy(id="im.vector.alpha:id/room_pending_call_view")
+	public MobileElement roomPendingCallLayout;
+	@AndroidFindBy(id="im.vector.alpha:id/call_icon")
+	public MobileElement callIconImageView;
+	@AndroidFindBy(id="im.vector.alpha:id/pending_call_room_name_textview")
+	public MobileElement calledRoomNameTextView;
+	@AndroidFindBy(id="im.vector.alpha:id/pending_call_status_textview")
+	public MobileElement callStatusTextView;
+	
+	public void checkPendingCallView(Boolean displayed,String status) throws InterruptedException{
+		String messagePendingViewPresent;
+		if(displayed){
+			messagePendingViewPresent="Pending view isn't displayed";
+		}else{
+			messagePendingViewPresent="Pending view is displayed";
+		}
+		Assert.assertTrue(waitUntilDisplayed(driver, "im.vector.alpha:id/room_pending_call_view", displayed, 5)==displayed, messagePendingViewPresent);
+		if(displayed){
+			waitUntilDisplayed(driver, "im.vector.alpha:id/pending_call_status_textview", true, 5);
+			Assert.assertEquals(callStatusTextView.getText(), status);
+		}
+	}
+	
+	/*
 	 * MESSAGES
 	 */
-	
 	/**
 	 * Similar to messagesListView, but as a list and not just a MobileElement.
 	 */

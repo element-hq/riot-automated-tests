@@ -184,7 +184,12 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	public String getReceivedMessageByRoomName(String myRommName){
 		try {
 			String messageWithUsername =driver.findElement(By.xpath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../..//android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_roomMessage']")).getText();
-			return messageWithUsername.substring(messageWithUsername.indexOf(":")+2, messageWithUsername.length());
+			if(messageWithUsername.indexOf(":")!=-1){
+				return messageWithUsername.substring(messageWithUsername.indexOf(":")+2, messageWithUsername.length());
+			}else{
+				return messageWithUsername;
+			}
+			
 		} catch (Exception e) {
 			return null;
 		}

@@ -8,6 +8,7 @@ public class Constant {
 	public static final String DEVICE2_NAME = "4df1a0ee7bf25fa3";
 	public static final String PATH_TESTDATA = "src//test//resources//testDatas//";
 	public static final String PACKAGE_APP_NAME = "im.vector.alpha";
+	public static final String APPLICATION_LOGIN_ACTIVITY="im.vector.activity.LoginActivity";
 	public static final String APPLICATION_NAME = "RIOT";
 	public static final String DEFAULT_USERNAME="riotuser2";
 	public static final String DEFAULT_USERPWD="riotuser";

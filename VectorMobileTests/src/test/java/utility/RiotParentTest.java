@@ -15,11 +15,11 @@ public class RiotParentTest extends TestUtilities{
 		capabilities.setCapability("platformName","Android");
 		capabilities.setCapability("platformVersion", "4.4.2");
 		capabilities.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
-		capabilities.setCapability("appActivity", "im.vector.activity.LoginActivity");
+		capabilities.setCapability("appActivity", Constant.APPLICATION_LOGIN_ACTIVITY);
 
 		AppiumFactory appiumFactory=new AppiumFactory();
 		appiumFactory.setDriver1(new URL(Constant.SERVER1_ADRESS), capabilities);
-		System.out.println("Application "+Constant.PACKAGE_APP_NAME+"started on device "+Constant.DEVICE1_NAME +" with AppiumDriver 1.");
+		System.out.println("Application "+Constant.PACKAGE_APP_NAME+" started on device "+Constant.DEVICE1_NAME +" with AppiumDriver 1.");
 	}
 	
 	@BeforeGroups(groups="2drivers")
@@ -29,14 +29,14 @@ public class RiotParentTest extends TestUtilities{
 		capabilities.setCapability("platformName","Android");
 		capabilities.setCapability("platformVersion", "4.4.2");
 		capabilities.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
-		capabilities.setCapability("appActivity", "im.vector.activity.LoginActivity");
+		capabilities.setCapability("appActivity", Constant.APPLICATION_LOGIN_ACTIVITY);
 		
 		DesiredCapabilities capabilities2 = new DesiredCapabilities();
 		capabilities2.setCapability("deviceName",Constant.DEVICE2_NAME);
 		capabilities2.setCapability("platformName","Android");
 		capabilities2.setCapability("platformVersion", "4.3");
 		capabilities2.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
-		capabilities2.setCapability("appActivity", "im.vector.activity.LoginActivity");
+		capabilities2.setCapability("appActivity", Constant.APPLICATION_LOGIN_ACTIVITY);
 
 		AppiumFactory appiumFactory=new AppiumFactory();
 		appiumFactory.setDriver1(new URL(Constant.SERVER1_ADRESS), capabilities);
