@@ -1,5 +1,7 @@
 package mobilestests;
 
+import java.io.IOException;
+
 import org.testng.Assert;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -128,7 +130,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * From device 1, check that the calling view is closed.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="2drivers", description="call form device 1 answered by device 2")
+	@Test(groups="2drivers", description="call from device 1 answered by device 2")
 	public void cancelIncommingAudioCall() throws InterruptedException{
 		String callingUser="riotuser2";
 		String calledUser="riotuser3";
@@ -168,7 +170,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * Check that "[user] ended the call" event is displayed on room view and room list view.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="2drivers", description="call form device 1 answered by device 2")
+	@Test(groups="2drivers", description="call from device 1 answered by device 2")
 	public void acceptIncommingAudioCall() throws InterruptedException{
 		String callingUser="riotuser2";
 		String calledUser="riotuser3";
@@ -193,7 +195,7 @@ public class RiotVoipTests extends RiotParentTest{
 		incomingCallDevice2.checkIncomingCallView(true, callingUser, "Incoming Call");
 		incomingCallDevice2.acceptCallButton.click();
 		//check that call layout is diplayed on device 2
-		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAppiumDriver1());
+		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAppiumDriver2());
 		callingViewDevice2.isDisplayed(true);
 		//TODO check the calling layout
 		//hangout from device 2
@@ -217,7 +219,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * Check that "[user] ended the call" event is displayed on room view and room list view.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="2drivers", description="call form device 1 answered by device 2")
+	@Test(groups="2drivers", description="call from device 1 answered by device 2")
 	public void acceptIncommingVideoCall() throws InterruptedException{
 		String callingUser="riotuser2";
 		String calledUser="riotuser3";
@@ -243,7 +245,7 @@ public class RiotVoipTests extends RiotParentTest{
 		incomingCallDevice2.acceptCallButton.click();
 		callingViewDevice1.waitUntilCallTook();
 		//check that call layout is diplayed on device 2
-		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAppiumDriver1());
+		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAppiumDriver2());
 		callingViewDevice2.isDisplayed(true);
 		//TODO check the calling layout
 		//hangout from device 2
@@ -258,6 +260,64 @@ public class RiotVoipTests extends RiotParentTest{
 		//come back in rooms list on device 1
 		voipRoomDevice1.menuBackButton.click();
 	}
+	
+	/**
+	 * Cover this issue https://github.com/vector-im/vector-android/issues/684 </br>
+	 * Required : both devices have an user logged.</br>
+	 * Launch an audio call in a 1to1 room. </br>
+	 * On the called device, hit on mute button on the call layout. </br>
+	 * Come back on the room layout, then on the call layout again.</br>
+	 * Check that mute button is still active.
+	 * @throws InterruptedException 
+	 * @throws IOException 
+	 */
+	@Test(groups="2drivers", description="during a call desactivate mic")
+	public void disableMicrophoneDuringCall() throws InterruptedException, IOException{
+		String callingUser="riotuser2";
+		String calledUser="riotuser3";
+		String pwd="riotuser";
+		String roomNameTest="voip room test";
+		
+		//TODO maybe use a different option than checkIfUserLogged.
+		checkIfUserLogged(AppiumFactory.getAppiumDriver1(), callingUser, pwd);
+		checkIfUserLogged(AppiumFactory.getAppiumDriver2(), calledUser, pwd);
+		//call from device 1
+		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
+		riotListDevice1.getRoomByName(roomNameTest).click();
+		RiotRoomPageObjects voipRoomDevice1 = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
+		voipRoomDevice1.startCallButton.click();
+		voipRoomDevice1.voiceCallFromMenuButton.click();
+		//check that call layout is diplayed on device 1
+		RiotCallingPageObject callingViewDevice1= new RiotCallingPageObject(AppiumFactory.getAppiumDriver1());
+		callingViewDevice1.isDisplayed(true);
+		//check call from device 2
+		RiotIncomingCallPageObjects incomingCallDevice2= new RiotIncomingCallPageObjects(AppiumFactory.getAppiumDriver2());
+		incomingCallDevice2.checkIncomingCallView(true, callingUser, "Incoming Call");
+		incomingCallDevice2.acceptCallButton.click();
+		callingViewDevice1.waitUntilCallTook();
+		//check that call layout is diplayed on device 2
+		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAppiumDriver2());
+		callingViewDevice2.isDisplayed(true);
+		//get image before button touched
+		captureImage("screenshots\\comparison\\muteAudioButtonNonPressed.png", callingViewDevice2.muteAudioButton);
+		//hit on mute button
+		callingViewDevice2.muteAudioButton.click();
+		//verify that mute audio is touched
+		captureImage("screenshots\\comparison\\muteAudioButtonPressed.png", callingViewDevice2.muteAudioButton);
+		Assert.assertFalse(compareImages("screenshots\\comparison\\muteAudioButtonNonPressed.png", "screenshots\\comparison\\muteAudioButtonPressed.png"), "Mute button not pressed");
+		//going back on room page then calling layout again
+		callingViewDevice2.chatLinkButton.click();
+		RiotRoomPageObjects voipRoomDevice2 = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver2());
+		voipRoomDevice2.roomPendingCallLayout.click();
+		//verify that mute audio is still touched
+		captureImage("screenshots\\comparison\\muteAudioButtonPressed.png", callingViewDevice2.muteAudioButton);
+		Assert.assertFalse(compareImages("screenshots\\comparison\\muteAudioButtonNonPressed.png", "screenshots\\comparison\\muteAudioButtonPressed.png"), "Mute button not pressed");
+		//hangout
+		callingViewDevice2.hangUpButton.click();
+		voipRoomDevice1.menuBackButton.click();
+	}
+
+
 	/**
 	 * Log the good user if not.</br> Securised the test.
 	 * @param myDriver

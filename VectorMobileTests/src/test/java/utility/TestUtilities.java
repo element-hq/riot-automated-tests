@@ -1,6 +1,17 @@
 package utility;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -94,4 +105,46 @@ public class TestUtilities {
 			driver.setConnection(Connection.NONE);
 		}
 	}
+	
+	public void captureImage(String imgUrl,MobileElement element) throws IOException{
+		new File(imgUrl).delete();
+		File screen = ((TakesScreenshot) AppiumFactory.getAppiumDriver2())
+                .getScreenshotAs(OutputType.FILE);
+	    Point point = element.getLocation();
+
+	    //get element dimension
+	    int width = element.getSize().getWidth();
+	    int height = element.getSize().getHeight();
+
+	    BufferedImage img = ImageIO.read(screen);
+	    BufferedImage dest = img.getSubimage(point.getX(), point.getY(), width,
+	                                                                 height);
+	    ImageIO.write(dest, "png", screen);
+	    File file = new File(imgUrl);
+	    FileUtils.copyFile(screen, file);
+	}
+	
+	public Boolean compareImages(String image1, String image2) throws IOException{
+	    File fileInput = new File(image1);
+	    File fileOutPut = new File(image2);
+
+	    BufferedImage bufileInput = ImageIO.read(fileInput);
+	    DataBuffer dafileInput = bufileInput.getData().getDataBuffer();
+	    int sizefileInput = dafileInput.getSize();                     
+	    BufferedImage bufileOutPut = ImageIO.read(fileOutPut);
+	    DataBuffer dafileOutPut = bufileOutPut.getData().getDataBuffer();
+	    int sizefileOutPut = dafileOutPut.getSize();
+	    Boolean matchFlag = true;
+	    if(sizefileInput == sizefileOutPut) {                         
+	       for(int j=0; j<sizefileInput; j++) {
+	             if(dafileInput.getElem(j) != dafileOutPut.getElem(j)) {
+	                   matchFlag = false;
+	                   break;
+	             }
+	        }
+	    }
+	    else                            
+	       matchFlag = false;
+	    return matchFlag;
+	 }
 }
