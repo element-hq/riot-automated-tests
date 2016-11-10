@@ -3,6 +3,7 @@ package mobilestests;
 import java.io.IOException;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -16,6 +17,7 @@ import pom.RiotRoomPageObjects;
 import pom.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
 import utility.Constant;
+import utility.HttpsRequestsToMatrix;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
@@ -32,7 +34,7 @@ public class RiotVoipTests extends RiotParentTest{
 		RiotRoomsListPageObjects mainPageDevice2 = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver2());
 		mainPageDevice2.logOut();//logout with device2
 	}
-	
+
 	/**
 	 * Launch an audio call from a room </br>
 	 * From the call layout, hit the room link button </br>
@@ -68,7 +70,7 @@ public class RiotVoipTests extends RiotParentTest{
 		//come back in rooms list
 		voipRoom.menuBackButton.click();
 	}
-	
+
 	/**
 	 * Launch an video call from a room </br>
 	 * From the call layout, hit the room link button </br>
@@ -104,7 +106,7 @@ public class RiotVoipTests extends RiotParentTest{
 		//come back in rooms list
 		voipRoom.menuBackButton.click();
 	}
-	
+
 	@Test(groups="1driver", description="restart Riot during call", enabled=false)
 	public void restartAppDuringCall() throws InterruptedException{
 		String roomNameTest="voip room test";
@@ -117,11 +119,11 @@ public class RiotVoipTests extends RiotParentTest{
 		AppiumFactory.getAppiumDriver1().pressKeyCode(AndroidKeyCode.HOME);
 		AppiumFactory.getAppiumDriver1().startActivity(Constant.PACKAGE_APP_NAME, "im.vector.activity.LoginActivity");
 		//AppiumFactory.getAppiumDriver1().runAppInBackground(5);
-//		AppiumFactory.getAppiumDriver1().closeApp();
-//		AppiumFactory.getAppiumDriver1().launchApp();
+		//		AppiumFactory.getAppiumDriver1().closeApp();
+		//		AppiumFactory.getAppiumDriver1().launchApp();
 		Thread.sleep(10000);
 	}
-	
+
 	/**
 	 * Required : both devices have an user logged.
 	 * Open a room, launch a voice call.</br>
@@ -136,7 +138,7 @@ public class RiotVoipTests extends RiotParentTest{
 		String calledUser="riotuser3";
 		String pwd="riotuser";
 		String roomNameTest="voip room test";
-		
+
 		//TODO maybe use a different option than checkIfUserLogged.
 		checkIfUserLogged(AppiumFactory.getAppiumDriver1(), callingUser, pwd);
 		checkIfUserLogged(AppiumFactory.getAppiumDriver2(), calledUser, pwd);
@@ -176,7 +178,7 @@ public class RiotVoipTests extends RiotParentTest{
 		String calledUser="riotuser3";
 		String pwd="riotuser";
 		String roomNameTest="voip room test";
-		
+
 		//TODO maybe use a different option than checkIfUserLogged.
 		checkIfUserLogged(AppiumFactory.getAppiumDriver1(), callingUser, pwd);
 		checkIfUserLogged(AppiumFactory.getAppiumDriver2(), calledUser, pwd);
@@ -225,7 +227,7 @@ public class RiotVoipTests extends RiotParentTest{
 		String calledUser="riotuser3";
 		String pwd="riotuser";
 		String roomNameTest="voip room test";
-		
+
 		//TODO maybe use a different option than checkIfUserLogged.
 		checkIfUserLogged(AppiumFactory.getAppiumDriver1(), callingUser, pwd);
 		checkIfUserLogged(AppiumFactory.getAppiumDriver2(), calledUser, pwd);
@@ -260,7 +262,7 @@ public class RiotVoipTests extends RiotParentTest{
 		//come back in rooms list on device 1
 		voipRoomDevice1.menuBackButton.click();
 	}
-	
+
 	/**
 	 * Cover this issue https://github.com/vector-im/vector-android/issues/684 </br>
 	 * Required : both devices have an user logged.</br>
@@ -277,7 +279,7 @@ public class RiotVoipTests extends RiotParentTest{
 		String calledUser="riotuser3";
 		String pwd="riotuser";
 		String roomNameTest="voip room test";
-		
+
 		//TODO maybe use a different option than checkIfUserLogged.
 		checkIfUserLogged(AppiumFactory.getAppiumDriver1(), callingUser, pwd);
 		checkIfUserLogged(AppiumFactory.getAppiumDriver2(), calledUser, pwd);
@@ -317,6 +319,69 @@ public class RiotVoipTests extends RiotParentTest{
 		voipRoomDevice1.menuBackButton.click();
 	}
 
+	/**
+	 * Cover this issue https://github.com/vector-im/vector-android/issues/685 </br>
+	 * Required : both devices have an user logged.</br>
+	 * Launch an audio call with device 1 in a 1to1 room. </br>
+	 * Accept the call with device 2</br>
+	 * During the call, go on the room page and leave room with device 2.</br>
+	 * Check that call is ended on both devices.</br>
+	 * @throws InterruptedException 
+	 */
+	@Test(groups={"2drivers","invitationneeded"}, description="leave room during a call")
+	public void leaveRoomDuringCall() throws InterruptedException{
+		String callingUser="riotuser2";
+		String calledUser="riotuser3";
+		String pwd="riotuser";
+		String roomNameTest="voip room test";
+		
+		//TODO maybe use a different option than checkIfUserLogged.
+		checkIfUserLogged(AppiumFactory.getAppiumDriver1(), callingUser, pwd);
+		checkIfUserLogged(AppiumFactory.getAppiumDriver2(), calledUser, pwd);
+		//go on 1to1 room with device 1
+		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
+		riotListDevice1.getRoomByName(roomNameTest).click();
+		RiotRoomPageObjects voipRoomDevice1 = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
+		//go on 1to1 room with device 2
+		RiotRoomsListPageObjects riotListDevice2=new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver2());
+		riotListDevice2.getRoomByName(roomNameTest).click();
+		RiotRoomPageObjects voipRoomDevice2 = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver2());
+		
+		//call from device 1
+		voipRoomDevice1.startCallButton.click();
+		voipRoomDevice1.voiceCallFromMenuButton.click();
+		//check that call layout is diplayed on device 1
+		RiotCallingPageObject callingViewDevice1= new RiotCallingPageObject(AppiumFactory.getAppiumDriver1());
+		//callingViewDevice1.isDisplayed(true);
+		//check call from device 2
+		RiotIncomingCallPageObjects incomingCallDevice2= new RiotIncomingCallPageObjects(AppiumFactory.getAppiumDriver2());
+		//incomingCallDevice2.checkIncomingCallView(true, callingUser, "Incoming Call");
+		incomingCallDevice2.acceptCallButton.click();
+		callingViewDevice1.waitUntilCallTook();
+		//check that call layout is diplayed on device 2
+		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAppiumDriver2());
+		//callingViewDevice2.isDisplayed(true);
+		//go back in room page and leave the room
+		callingViewDevice2.chatLinkButton.click();
+		voipRoomDevice2.moreOptionsButton.click();
+		voipRoomDevice2.leaveRoomMenuItem.click();
+		//check that call is ended on device 2
+		Assert.assertFalse(callingViewDevice2.isDisplayed(false), "Call isn't ended on device 2 after leaving the room.");
+		//check that call is ended on device 1
+		Assert.assertFalse(callingViewDevice1.isDisplayed(false), "Call isn't ended on device 1 after leaving the room.");
+	}
+
+	/**
+	 * Invite riotuser3 by riotuser2 on room voiptest.
+	 * Accept invitation with riotuser2.
+	 * @throws IOException 
+	 */
+	@AfterGroups("invitationneeded")
+	private void inviteUser2ToRoom() throws IOException{
+		String accessTokenDevice2="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI4Y2lkIHVzZXJfaWQgPSBAcmlvdHVzZXIzOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzg3NzkwMjM2ODcKMDAyZnNpZ25hdHVyZSC8Xnf2FrXx45wz9isY2objlIVMQ0BR0mwDwP0ucxBb6wo";
+		String roomId="!AcqGzXlGcDgpUAUTvS:matrix.org";
+		HttpsRequestsToMatrix.joinRoom(accessTokenDevice2, roomId);
+	}
 
 	/**
 	 * Log the good user if not.</br> Securised the test.
@@ -345,7 +410,7 @@ public class RiotVoipTests extends RiotParentTest{
 			}else{
 				//close lateral menu
 				System.out.println("User "+username+" is logged.");
-			myDriver.navigate().back();
+				myDriver.navigate().back();
 			}
 		}
 	}
