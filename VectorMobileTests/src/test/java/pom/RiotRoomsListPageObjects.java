@@ -20,7 +20,7 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	public RiotRoomsListPageObjects(AppiumDriver<MobileElement> myDriver) throws InterruptedException{
 		driver=(AndroidDriver<MobileElement>) myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(myDriver), this);
-		Thread.sleep(2000);
+		//Thread.sleep(2000);
 		//ExplicitWait(driver,this.roomsExpandableListView);
 		try {
 			waitUntilDisplayed((AndroidDriver<MobileElement>) driver,"im.vector.alpha:id/fragment_recents_list", true, 5);
@@ -29,7 +29,7 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 		}
 	}
 	
-	/**
+	/*
 	 * INVITES
 	 */
 	@AndroidFindBy(xpath="//android.widget.TextView[@resource-id='im.vector.alpha:id/heading' and @text='INVITES']/../..")//invites collapsing bar
@@ -38,6 +38,7 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	public MobileElement getInvitationLayoutByName(String roomName){
 		return driver.findElementByXPath("//android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_roomName' and@text='"+roomName+"']/../../../..");
 	}
+	
 	/**
 	 * Check some properties on a room invitation layout.
 	 * @param roomName
@@ -62,8 +63,10 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	/**
 	 * Hit the "preview" button on an invitation.
 	 * @param roomName
+	 * @throws InterruptedException 
 	 */
-	public void previewInvitation(String roomName){
+	public void previewInvitation(String roomName) throws InterruptedException{
+		waitUntilDisplayed(driver, "im.vector.alpha:id/recents_groups_invitation_group", true, 5);
 		MobileElement roomInvitationLayout=getInvitationLayoutByName(roomName);
 		roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_preview_button").click();
 	}
@@ -77,7 +80,7 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 		roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_reject_button").click();
 	}
 	
-	/**
+	/*
 	 * ROOMS
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/fragment_recents_list")//expandable view containing all the rooms lists (favorites, rooms, low priority, etc).
@@ -194,6 +197,15 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 			return null;
 		}
 	}
+	public Boolean isDirectMessageByRoomName(String myRommName){
+		try {
+			if(getRoomByName(myRommName).findElementById("im.vector.alpha:id/room_avatar_direct_chat_icon")!=null)return true;
+				
+		} catch (Exception e) {
+			return false;
+		}
+		return false;
+	}
 	
 	/**
 	 * Wait until badge of the room is incremented.
@@ -205,7 +217,7 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 		waitUntilDisplayed(driver,"//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_unread_count' and @text='"+Integer.sum(currentBadge, 1)+"']", true, 5);
 	}
 	
-	/**
+	/*
 	 * TOP MENU
 	 */
 	@AndroidFindBy(xpath="//android.widget.ImageButton")//Menu button (opens the lateral menu)
@@ -214,7 +226,7 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	@AndroidFindBy(id="im.vector.alpha:id/ic_action_search_room") //Open the search for rooms page
 	public MobileElement searchButton;
 	
-	/**
+	/*
 	 * LATERAL MENU
 	 */
 	//Logout button
@@ -239,15 +251,40 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	}
 	
 	/**
+	 * '+' button at the bottom.</br> Open a listview with 'start chat' and 'create room'.
+	 */
+	@AndroidFindBy(id="im.vector.alpha:id/listView_create_room_view")
+	public MobileElement plusRoomButton;
+	
+	/*
+	 * START CHAT / CREATE ROOM
+	 */
+	@AndroidFindBy(id="android:id/select_dialog_listview")
+	public MobileElement selectRoomTypeCreationListView;
+	@AndroidFindBy(xpath="//android.widget.CheckedTextView[@text='Start chat']")
+	public MobileElement startChatCheckedTextView;
+	@AndroidFindBy(xpath="//android.widget.CheckedTextView[@text='Create room']")
+	public MobileElement createRoomCheckedTextView;
+	@AndroidFindBy(xpath="//android.widget.Button[@text='Cancel']")
+	public MobileElement cancelCreationListButton;
+	@AndroidFindBy(xpath="//android.widget.Button[@text='OK']")
+	public MobileElement okCreationListButton;
+	
+	
+	/**
 	 * Log-out from Riot with the lateral menu.
 	 */
 	public void logOut(){
 		this.contextMenuButton.click();
 		this.logOutButton.click();
 	}
-
 	
-
-	
-
+	/**
+	 * Wait until the spinner isn't displayed anymore.
+	 * @param secondsToWait
+	 * @throws InterruptedException 
+	 */
+	public void waitUntilSpinnerDone(int secondsToWait) throws InterruptedException{
+		waitUntilDisplayed(driver, "im.vector.alpha:id/listView_spinner", false, secondsToWait);
+	}
 }

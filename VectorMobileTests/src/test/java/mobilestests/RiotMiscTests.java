@@ -96,16 +96,16 @@ public class RiotMiscTests extends RiotParentTest{
 	 */
 	@Test(groups="1driver")
 	public void chatInTempRoom() throws Exception{
-		String testRoomName = "temp room";
+		String testRoomName = "#dm16:matrix.org";
 		String testMessage1 = "this is an automated test on 1 line";
 		String testMessage2 = "this is an automated test on 2 lines: \n here's the second line";
 
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(driver);
+		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
 		mainPage.getRoomByName(testRoomName).click();
-		RiotRoomPageObjects roomPage = new RiotRoomPageObjects(driver);
-		roomPage.messageZoneEditText.setValue(testMessage1);
+		RiotRoomPageObjects roomPage = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
+		roomPage.messageZoneEditText.sendKeys(testMessage1);
 		roomPage.sendMessageButton.click();
-		roomPage.messageZoneEditText.setValue(testMessage2);
+		roomPage.messageZoneEditText.sendKeys(testMessage2);
 		roomPage.sendMessageButton.click();
 		roomPage.menuBackButton.click();
 	}
@@ -241,10 +241,6 @@ public class RiotMiscTests extends RiotParentTest{
 		driver.rotate(ScreenOrientation.PORTRAIT);
 	}
 
-	@Test(groups="1driver")
-	public void testWith2Devices(){
-
-	}
 	private void scrollWindowDown(){
 		Dimension dimensions = driver.manage().window().getSize();
 		Double screenHeightStart = dimensions.getHeight() * 0.5;

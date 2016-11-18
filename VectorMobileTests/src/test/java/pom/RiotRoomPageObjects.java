@@ -31,19 +31,25 @@ public class RiotRoomPageObjects extends TestUtilities{
 	/*
 	 * ACTION BAR
 	 */
-	@AndroidFindBy(id="im.vector.alpha:id/action_bar_header")//collapsed view. contains avatar, room name, and active members
+	@AndroidFindBy(id="im.vector.alpha:id/action_bar_header")//collapsed view. contains avatar, room name, topic and active members
 	public MobileElement actionBarCollapsedLayout;
 	@AndroidFindBy(id="im.vector.alpha:id/avatar_img")
 	public MobileElement avatarImageView;
 	@AndroidFindBy(id="im.vector.alpha:id/action_bar_header_room_title")
-	public MobileElement roomNameTextView;
+	public MobileElement roomNameTextViewCollapsed;
 	@AndroidFindBy(id="im.vector.alpha:id/action_bar_header_room_members")
 	public MobileElement activeMembersTextView;
+	@AndroidFindBy(id="im.vector.alpha:id/action_bar_header_invite_members")
+	public MobileElement inviteMembersButton;
 	
-	@AndroidFindBy(id="im.vector.alpha:id/room_toolbar")//action bar : contains back, search, collapse and more options buttons.
+	@AndroidFindBy(id="im.vector.alpha:id/room_toolbar")//action bar : contains back, room name, topic,search, collapse and more options buttons.
 	public MobileElement actionBarView;
 	@AndroidFindBy(xpath="//android.widget.ImageButton[@content-desc='Navigate up']")
 	public MobileElement menuBackButton;
+	@AndroidFindBy(id="im.vector.alpha:id/room_action_bar_title")
+	public MobileElement roomNameTextView;
+	@AndroidFindBy(id="im.vector.alpha:id/room_action_bar_topic")
+	public MobileElement roomTopicTextView;
 	@AndroidFindBy(id="im.vector.alpha:id/open_chat_header_arrow")// ^ button
 	public MobileElement collapseChatButton;
 	@AndroidFindBy(id="im.vector.alpha:id/ic_action_search_in_room")
@@ -51,6 +57,31 @@ public class RiotRoomPageObjects extends TestUtilities{
 	@AndroidFindBy(xpath="//android.widget.TextView[@resource-id='im.vector.alpha:id/ic_action_search_in_room']/../android.widget.ImageView")
 	public MobileElement moreOptionsButton;
 	
+	/*
+	 * ROOM NAME DIALOG : opened after hit on room name from collapsed action bar.
+	 */
+	@AndroidFindBy(id="android:id/parentPanel")
+	public MobileElement roomNameDialogLayout;//contains cancel and ok buttons, and room name
+	@AndroidFindBy(id="im.vector.alpha:id/dialog_title")
+	public MobileElement roomNameFromChangeDialogTextView;
+	@AndroidFindBy(id="im.vector.alpha:id/dialog_edit_text")
+	public MobileElement roomNameFromChangeDialogEditText;
+	@AndroidFindBy(xpath="//android.widget.LinearLayout[@resource-id='android:id/buttonPanel']//android.widget.Button[@text='OK']")
+	public MobileElement okFromChangeRoomNameButton;
+	@AndroidFindBy(xpath="//android.widget.LinearLayout[@resource-id='android:id/buttonPanel']//android.widget.Button[@text='Cancel']")
+	public MobileElement cancelFromChangeRoomNameButton;
+	
+	/**
+	 * Change the room name. Action bar must be collapsed first.
+	 * @param roomName
+	 */
+	public void changeRoomName(String roomName) {
+		roomNameTextViewCollapsed.click();
+		roomNameFromChangeDialogEditText.sendKeys(roomName);
+		okFromChangeRoomNameButton.click();
+		ExplicitWait(driver, roomNameTextViewCollapsed);
+		Assert.assertEquals(roomNameTextViewCollapsed.getText(), roomName, "Room name haven't be changed.");
+	}
 	/*
 	 * ROOM MENU
 	 */
@@ -91,7 +122,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 		//check collapse button is displayed
 		Assert.assertTrue(collapseChatButton.isDisplayed(),"Collapse button isn't displayed");
 		//room name is displayed
-		Assert.assertEquals(roomNameTextView.getText(), roomName);
+		Assert.assertEquals(roomNameTextViewCollapsed.getText(), roomName);
 		//avatar isn't empty
 		org.openqa.selenium.Dimension roomAvatar=avatarImageView.getSize();
 		Assert.assertTrue(roomAvatar.height!=0 && roomAvatar.width!=0, "Riot logo has null dimension");
@@ -278,7 +309,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	 * BOTTOM BAR : send edittext, attachment button, callbutton
 	 */
 	//@AndroidFindBy(xpath="//android.widget.RelativeLayout[@resource-id='im.vector.alpha:id/room_bottom_layout']//android.widget.EditText[@resource-id='im.vector.alpha:id/editText_messageBox']")
-	@AndroidFindBy(id="im.vector.alpha:id/room_sending_message_layout")
+	@AndroidFindBy(id="im.vector.alpha:id/editText_messageBox")
 	public MobileElement messageZoneEditText;
 	@AndroidFindBy(id="im.vector.alpha:id/room_send_layout")
 	public MobileElement sendMessageButton;
@@ -317,6 +348,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	 * @param message
 	 */
 	public void sendAMessage(String message){
+		ExplicitWait(driver, messageZoneEditText);
 		messageZoneEditText.sendKeys(message);//messageZoneEditText.setValue(message); //<-- doesn't work on this edittext
 		sendMessageButton.click();
 		System.out.println("Message "+message+" sent in the room.");

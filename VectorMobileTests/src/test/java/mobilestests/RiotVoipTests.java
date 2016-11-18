@@ -384,7 +384,7 @@ public class RiotVoipTests extends RiotParentTest{
 	}
 
 	/**
-	 * Log the good user if not.</br> Securised the test.
+	 * Log the good user if not.</br> Secure the test.
 	 * @param myDriver
 	 * @param username
 	 * @param pwd
