@@ -15,6 +15,10 @@ public class Constant {
 	public static final String DEFAULT_USERADRESS="@riotuser2:matrix.org";
 	
 	public static final String MATRIX_SERVER="https://matrix.org";
-	//public static final String Path_TestData = "src/testData";
 	
+	/*
+	 * E2E ENCRYPTION
+	 */
+	public static final String ENCRYPTION_TURNEDON_EVENT="turned on end-to-end encryption";
+	public static final String ENCRYPTION_UNKNOWN_SESSION_ID_MSG="**Unknown inbound session id**";
 }

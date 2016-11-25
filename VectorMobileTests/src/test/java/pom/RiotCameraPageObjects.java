@@ -54,9 +54,9 @@ public class RiotCameraPageObjects extends TestUtilities{
 	public MobileElement mainMediaPickerLayout;
 	@AndroidFindBy(id="im.vector.alpha:id/medias_picker_preview_image_view")
 	public MobileElement previewImage;
-	@AndroidFindBy(id="im.vector.alpha:id/medias_picker_attach_take_picture_imageview")
+	@AndroidFindBy(id="im.vector.alpha:id/medias_picker_attach_text_view")
 	public MobileElement confirmPickingPictureButton;
-	@AndroidFindBy(id="im.vector.alpha:id/medias_picker_cancel_take_picture_imageview")
+	@AndroidFindBy(id="im.vector.alpha:id/medias_picker_redo_text_view")
 	public MobileElement cancelPickingPictureButton;
 	
 	/**

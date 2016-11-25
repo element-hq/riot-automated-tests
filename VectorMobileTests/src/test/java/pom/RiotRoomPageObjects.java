@@ -6,8 +6,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
-import com.google.common.collect.Iterables;
-
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
@@ -54,7 +52,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public MobileElement collapseChatButton;
 	@AndroidFindBy(id="im.vector.alpha:id/ic_action_search_in_room")
 	public MobileElement searchInRoomButton;
-	@AndroidFindBy(xpath="//android.widget.TextView[@resource-id='im.vector.alpha:id/ic_action_search_in_room']/../android.widget.ImageView")
+	@AndroidFindBy(xpath="//android.view.View[@resource-id='im.vector.alpha:id/room_toolbar']//android.widget.ImageView[@content-desc='More options']")
 	public MobileElement moreOptionsButton;
 	
 	/*
@@ -90,6 +88,10 @@ public class RiotRoomPageObjects extends TestUtilities{
 	@AndroidFindBy(xpath="//android.widget.TextView[@resource-id='im.vector.alpha:id/title' and @text='Leave']")
 	public MobileElement leaveRoomMenuItem;
 	
+	public void leaveRoom(){
+		moreOptionsButton.click();
+		leaveRoomMenuItem.click();
+	}
 	/*
 	 * PREVIEW LAYOUT
 	 */
@@ -207,8 +209,17 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public List<MobileElement> postsListLayout;
 	
 	public MobileElement getLastPost(){
-		return Iterables.getLast(this.postsListLayout);
+		//return Iterables.getLast(this.postsListLayout);
+		return postsListLayout.get(postsListLayout.size()-1);
 	}
+	
+	/**
+	 * Return a post by his index.
+	 */
+	public MobileElement getPostByIndex(int indexPost){
+		return postsListLayout.get(indexPost);
+	}
+	
 	/**
 	 * TODO use xpath instead of id because of https://github.com/appium/appium/issues/6269 issue
 	 * @param postLinearLayout
@@ -284,15 +295,39 @@ public class RiotRoomPageObjects extends TestUtilities{
 	 * @param message
 	 * @return
 	 */
-	public MobileElement getMediaUploadFailIconFromPost(MobileElement message){
+	public MobileElement getMediaUploadFailIconFromPost(MobileElement postLinearLayout){
 		try {
-			return message.findElement(By.id("im.vector.alpha:id/media_upload_failed"));
+			return postLinearLayout.findElement(By.id("im.vector.alpha:id/media_upload_failed"));
 		} catch (Exception e) {
 			return null;
 		}
-		
 	}
 	
+	/**
+	 * Get the progress bar displayed when a photo or video is uploaded.</br> Return null if not found.
+	 * @param message
+	 * @return
+	 */
+	public MobileElement getProgressionBarFromPost(MobileElement postLinearLayout){
+		try {
+			return postLinearLayout.findElement(By.xpath("//android.widget.ProgressBar[@resource-id='im.vector.alpha:id/media_progress_view']"));
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Get the "X" imageview to stop the upload of a photo or video.</br> Return null if not found.
+	 * @param postLinearLayout
+	 * @return
+	 */
+	public MobileElement getCancelMediaProgressFromPost(MobileElement postLinearLayout){
+		try {
+			return postLinearLayout.findElement(By.xpath("//android.widget.ProgressBar[@resource-id='im.vector.alpha:id/media_progress_view']"));
+		} catch (Exception e) {
+			return null;
+		}
+	}
 	
 	/*
 	 * NOTIFICATION AREA
@@ -337,7 +372,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public MobileElement videoCallFromMenuButton;
 	@AndroidFindBy(xpath="//android.widget.ListView//android.widget.TextView[@text='Send files']/..")//send files menu with send files and take photo buttons
 	public MobileElement sendFilesFromMenuButton;
-	@AndroidFindBy(xpath="//android.widget.ListView//android.widget.TextView[@text='Take photo']/..")//take photo menu with send files and take photo buttons
+	@AndroidFindBy(xpath="//android.widget.ListView//android.widget.TextView[@text='Take photo or video']/..")//take photo menu with send files and take photo buttons
 	public MobileElement takePhotoFromMenuButton;
 	
 	/*
@@ -353,6 +388,51 @@ public class RiotRoomPageObjects extends TestUtilities{
 		sendMessageButton.click();
 		System.out.println("Message "+message+" sent in the room.");
 	}
+	
+	/**
+	 * Wait for a new post to arrive in the room.
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws InterruptedException
+	 */
+	public void waitForReceivingNewMessage(int maxSecondsToWait) throws InstantiationException, IllegalAccessException, InterruptedException{
+		int sizeAtBegining=postsListLayout.size();
+		float secondsWaited=0;
+		while (postsListLayout.size()==sizeAtBegining && secondsWaited<maxSecondsToWait) {
+			Thread.sleep(500);secondsWaited=(float) (secondsWaited+0.5);
+		}
+	}
+	
+	/**
+	 * Wait for the posts lists to be not empty.
+	 * @throws InterruptedException
+	 */
+	public void waitForPostsToBeDisplayed() throws InterruptedException{
+		int maxSecondsToWait=5;
+		float secondsWaited=0;
+		while (postsListLayout.size()==0 && secondsWaited<maxSecondsToWait) {
+			Thread.sleep(500);secondsWaited=(float) (secondsWaited+0.5);
+		}
+	}
+	
+	/**
+	 * Wait until progress bar in the post is still displayed.
+	 * @param postLinearLayout
+	 * @param maxToWait
+	 * @throws InterruptedException
+	 */
+	public Boolean waitAndCheckForMediaToBeUploaded(MobileElement postLinearLayout, int maxToWait) throws InterruptedException {
+		float secondsWaited=0;Boolean uploaded=false;
+		while (getProgressionBarFromPost(postLinearLayout)!=null && secondsWaited<maxToWait) {
+			Thread.sleep(500);secondsWaited=(float) (secondsWaited+0.5);
+		}
+		if(getProgressionBarFromPost(postLinearLayout)==null){
+			uploaded=true;
+			System.out.println("Media uploaded after "+secondsWaited+" s.");
+		}
+		return uploaded;
+	}
+	
 	/**
 	 * From a room, take a photo and attach it to the messages.
 	 * @param photoSize : choose between Original, Large, Medium, Small.
@@ -363,7 +443,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 		takePhotoFromMenuButton.click();
 		RiotCameraPageObjects cameraPreview = new RiotCameraPageObjects(driver);
 		cameraPreview.triggerCameraButton.click();//take a photo
-		waitUntilDisplayed(driver,"im.vector.alpha:id/medias_picker_preview", true, 5);
+		waitUntilDisplayed(driver,"im.vector.alpha:id/medias_picker_preview_layout", true, 5);
 		cameraPreview.confirmPickingPictureButton.click();
 		ExplicitWaitToBeVisible(driver,cameraPreview.sendAsMenuLayout);
 		cameraPreview.getItemFromSendAsMenu(photoSize).click();

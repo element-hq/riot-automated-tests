@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
@@ -147,4 +148,14 @@ public class TestUtilities {
 	       matchFlag = false;
 	    return matchFlag;
 	 }
+	
+	public void scrollToBottom(AndroidDriver<MobileElement> driver){
+		Dimension dimensions = driver.manage().window().getSize();
+		Double screenHeightStart = dimensions.getHeight() * 0.9;
+		int scrollStart = screenHeightStart.intValue();
+		System.out.println("s="+scrollStart);
+		Double screenHeightEnd = dimensions.getHeight() * 0.2;
+		int scrollEnd = screenHeightEnd.intValue();
+		AppiumFactory.getAppiumDriver1().swipe(0,scrollStart,0,scrollEnd,2000);
+	}
 }

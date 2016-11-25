@@ -8,7 +8,7 @@ import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeGroups;
 
 public class RiotParentTest extends TestUtilities{
-	@BeforeGroups(groups="1driver")
+	@BeforeGroups(alwaysRun=false,groups="1driver")
 	public void setUp1Driver() throws MalformedURLException{
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability("deviceName",Constant.DEVICE1_NAME);
@@ -46,7 +46,7 @@ public class RiotParentTest extends TestUtilities{
 		System.out.println("Application "+Constant.APPLICATION_NAME+" started on ANDROID device "+Constant.DEVICE2_NAME +" with DRIVER 2.");
 	}
 	
-	@AfterGroups(groups="1driver")
+	@AfterGroups(alwaysRun=false,groups="1driver")
 	public void tearDown1Driver(){
 		AppiumFactory.getAppiumDriver1().quit();
 		System.out.println("DRIVER 1 quitted, closing application "+Constant.APPLICATION_NAME+".");

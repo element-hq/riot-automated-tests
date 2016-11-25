@@ -3,6 +3,7 @@ package pom;
 import java.util.List;
 
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
@@ -13,10 +14,15 @@ import utility.TestUtilities;
 
 public class RiotRoomDetailsPageObject extends TestUtilities{
 	private AndroidDriver<MobileElement> driver;
-	public RiotRoomDetailsPageObject(AppiumDriver<MobileElement> myDriver){
+	public RiotRoomDetailsPageObject(AppiumDriver<MobileElement> myDriver) throws InterruptedException{
 		PageFactory.initElements(new AppiumFieldDecorator(myDriver), this);
 		driver=(AndroidDriver<MobileElement>) myDriver;
 		//ExplicitWait(driver,this.messagesListView);
+		//if 'Riot permissions .... Allow Riot to access your contacts' pops up, close it.
+		if(waitUntilDisplayed(driver, "//android.widget.TextView[@resource-id='android:id/alertTitle' and @text='Riot permissions']", true, 2)){
+			driver.findElementById("android:id/button2").click();
+		}
+		
 		try {
 			waitUntilDisplayed(driver,"//android.widget.HorizontalScrollView", true, 5);
 		} catch (InterruptedException e) {
@@ -34,13 +40,15 @@ public class RiotRoomDetailsPageObject extends TestUtilities{
 	@AndroidFindBy(xpath="//android.view.View[@resource-id='im.vector.alpha:id/action_bar']/android.widget.TextView[@index='1']")
 	public MobileElement roomDetailsTextView;
 	
-	@AndroidFindBy(xpath="//android.widget.TextView[@text='People']/../")
+	@AndroidFindBy(xpath="//android.widget.TextView[@text='People']/../*")
 	public MobileElement peopleTab;
-	@AndroidFindBy(xpath="//android.widget.TextView[@text='Files']/../")
+	@AndroidFindBy(xpath="//android.widget.TextView[@text='Files']/../*")
 	public MobileElement filesTab;
-	@AndroidFindBy(xpath="//android.widget.TextView[@text='Settings']/../")
+	@AndroidFindBy(xpath="//android.widget.TextView[@text='Settings']/../*")
 	public MobileElement settingsTab;
-	
+	/*
+	 * 				PEOPLE TAB
+	 */
 	/*
 	 * SEARCH BAR
 	 */
@@ -66,4 +74,50 @@ public class RiotRoomDetailsPageObject extends TestUtilities{
 		
 	}
 	
+	/*
+	 * 				FILES TAB
+	 */
+	
+	/*
+	 * 				SETTINGS TAB
+	 */
+	/*
+	 * INPUT DIALOG BOX
+	 */
+	@AndroidFindBy(id="android:id/alertTitle")
+	public MobileElement inputDialogNameTextView;
+	@AndroidFindBy(id="android:id/edit")
+	public MobileElement inputDialogEditText;
+	@AndroidFindBy(id="android:id/button1")
+	public MobileElement inputDialogOkButton;
+	
+	@AndroidFindBy(id="android:id/list")
+	public MobileElement listItemSettings;
+	
+	@AndroidFindBy(xpath="//android.widget.ListView//android.widget.TextView")
+	public MobileElement roomNameListItem;
+	
+	public void changeRoomName(String roomName){
+		listItemSettings.findElementByXPath("//*[@text='Room Name']").click();
+		ExplicitWait(driver, inputDialogEditText);
+		inputDialogEditText.sendKeys(roomName);
+		inputDialogOkButton.click();
+		ExplicitWait(driver, listItemSettings.findElementByXPath("//*[@text='Room Name']"));
+	}
+	/*
+	 * ADVANCED SECTION
+	 */
+	@AndroidFindBy(xpath="//android.widget.TextView[contains(@text,'Enable encryption')]")
+	public MobileElement enableEncryptionSwitch;
+	/**
+	 * Switch off encryption on a room. The switch need to be focused.
+	 * </br> Assert that the dialog have a warning title.
+	 * </br> Click on Yes Button.
+	 */
+	
+	public void enableEncryption(){
+		enableEncryptionSwitch.click();
+		Assert.assertEquals(inputDialogNameTextView.getText(), "Warning!");
+		inputDialogOkButton.click();
+	}
 }

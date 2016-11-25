@@ -227,18 +227,18 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 
 	@AfterGroups(groups="dmcreated")
 	public void leaveRoomAfterTest1() throws InterruptedException{
-		leaveRoomAfterTest("riotuser9","Empty room");
+		leaveRoomFromRoomsListAfterTest("riotuser9","Empty room");
 	}
 	@AfterGroups(groups="dmcreated2")
 	public void leaveRoomAfterTest2() throws InterruptedException{
-		leaveRoomAfterTest("riotuser10 and riotuser9","riotuser10");
+		leaveRoomFromRoomsListAfterTest("riotuser10 and riotuser9","riotuser10");
 	}
 	@AfterGroups(groups="dmcreated3")
 	public void leaveRoomAfterTest3() throws InterruptedException{
-		leaveRoomAfterTest("tmp room DM","tmp room DM");
+		leaveRoomFromRoomsListAfterTest("tmp room DM","tmp room DM");
 	}
 	
-	public void leaveRoomAfterTest(String roomNameFromDevice1, String roomNameFromDevice2) throws InterruptedException{
+	public void leaveRoomFromRoomsListAfterTest(String roomNameFromDevice1, String roomNameFromDevice2) throws InterruptedException{
 		RiotRoomsListPageObjects roomsListDevice1=new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
 		RiotRoomsListPageObjects roomsListDevice2=new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver2());
 		System.out.println("Leave room "+roomNameFromDevice1+ " with device 1");
