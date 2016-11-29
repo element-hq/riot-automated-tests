@@ -5,9 +5,13 @@ import org.testng.annotations.AfterGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import pom.RiotCallingPageObject;
+import pom.RiotIncomingCallPageObjects;
+import pom.RiotNewChatPageObjects;
 import pom.RiotRoomDetailsPageObject;
 import pom.RiotRoomPageObjects;
 import pom.RiotRoomsListPageObjects;
+import pom.RiotSearchInvitePageObjects;
 import utility.AppiumFactory;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -18,7 +22,9 @@ public class RiotE2eEncryptionTest extends RiotParentTest{
 	private String encrypted_msg_1="msg sent in encrypted room";
 	private String encrypted_msg_2="this msg will be decrypted";
 	private String participant2Adress="@riotuser9:matrix.org";
-
+	private String participant1DisplayName="riotuser6";
+	private String participant2DisplayName="riotuser9";
+	
 	/**
 	 * 1. Create room with Device 1 and enable encryption.
 	 * Check that the last event in the room is about turning e2e encryption
@@ -55,7 +61,7 @@ public class RiotE2eEncryptionTest extends RiotParentTest{
 		System.out.println(newRoomDevice1.getTextViewFromPost(newRoomDevice1.getLastPost()).getText());
 		waitUntilDisplayed(AppiumFactory.getAppiumDriver1(), "//android.widget.TextView[contains(@text,'"+ utility.Constant.ENCRYPTION_TURNEDON_EVENT +"')]", true, 5);
 		Assert.assertTrue(newRoomDevice1.getTextViewFromPost(newRoomDevice1.getLastPost()).getText().contains(utility.Constant.ENCRYPTION_TURNEDON_EVENT));
-		//in the meaning take care of device 2
+		//in the meantime take care of device 2
 		RiotRoomsListPageObjects roomsListDevice2 = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver2());
 
 		//2. Sent a message.
@@ -95,7 +101,7 @@ public class RiotE2eEncryptionTest extends RiotParentTest{
 	 * Check that the photo is correctly uploaded. 
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"roomcreated1","1driver"}, description="upload a photo in encrypted room")
+	@Test(groups={"1driver","roomcreated"}, description="upload a photo in encrypted room")
 	public void sendPhotoInEncryptedRoom() throws InterruptedException{
 		//1. Create room with Device 1 and enable encryption.
 		RiotRoomsListPageObjects roomsListDevice1 = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
@@ -121,14 +127,82 @@ public class RiotE2eEncryptionTest extends RiotParentTest{
 		org.openqa.selenium.Dimension takenPhoto=newRoomDevice1.getAttachedImageByPost(newRoomDevice1.getLastPost()).getSize();
 		Assert.assertTrue(takenPhoto.height!=0 && takenPhoto.width!=0, "The unsent photo has null dimension");
 	}
-	
+
+	/**
+	 * 1. Create DM room with Device 1 and invite device 2.
+	 * 2. Enable encryption.
+	 * 3. Start a voice call with Device 2.
+	 * Check that an incoming layout is displayed on device 1.
+	 * 4. Accept call with device 1.
+	 * 5. Hang-out after a few seconds.
+	 * Check that calling layout is closed on both devices.
+	 * @throws InterruptedException 
+	 */
+	@Test(groups={"2drivers","roomcreated2bis"}, description="start a voice call in encrypted room")
+	public void startVoiceCallInEncryptedRoom() throws InterruptedException{
+		//1. Create DM room with Device 1 and enable encryption.
+		RiotRoomsListPageObjects roomsListDevice1 = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotRoomsListPageObjects roomsListDevice2 = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver2());
+		roomsListDevice1.plusRoomButton.click();
+		roomsListDevice1.startChatCheckedTextView.click();
+		RiotSearchInvitePageObjects inviteViewDevice1=new RiotSearchInvitePageObjects(AppiumFactory.getAppiumDriver1());
+		inviteViewDevice1.searchAndSelectMember(participant2Adress);
+		RiotNewChatPageObjects newChatViewDevice1= new RiotNewChatPageObjects(AppiumFactory.getAppiumDriver1());
+		newChatViewDevice1.confirmRoomCreationButton.click();
+		RiotRoomPageObjects newRoomDevice1= new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
+		//Open room details
+		newRoomDevice1.moreOptionsButton.click();
+		newRoomDevice1.roomDetailsMenuItem.click();
+		RiotRoomDetailsPageObject newRoomDetailsDevice1 = new RiotRoomDetailsPageObject(AppiumFactory.getAppiumDriver1());
+
+		//2. Enable encryption.
+		newRoomDetailsDevice1.settingsTab.click();
+		scrollToBottom(AppiumFactory.getAppiumDriver1());ExplicitWait(AppiumFactory.getAppiumDriver1(), newRoomDetailsDevice1.listItemSettings);
+		newRoomDetailsDevice1.enableEncryption();
+		//come back on the room page
+		ExplicitWait(AppiumFactory.getAppiumDriver1(), newRoomDetailsDevice1.menuBackButton);newRoomDetailsDevice1.menuBackButton.click();
+		//accepts invitation with device 2
+		roomsListDevice2.previewInvitation(participant1DisplayName);
+		RiotRoomPageObjects newRoomDevice2 = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver2());
+		newRoomDevice2.joinRoomButton.click();
+		//newRoomDevice2 = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver2());
+		
+		//3. Start a voice call with Device 2.
+		newRoomDevice2.startVoiceCall();
+		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAppiumDriver2());
+		callingViewDevice2.isDisplayed(true);
+		//Check that an incoming layout is displayed on device 1.
+		RiotIncomingCallPageObjects incomingCallDevice1= new RiotIncomingCallPageObjects(AppiumFactory.getAppiumDriver1());
+		incomingCallDevice1.checkIncomingCallView(true, participant2DisplayName, "Incoming Call");
+		
+		//4. Accept call with device 1.
+		incomingCallDevice1.acceptCallButton.click();
+		//check that call layout is diplayed on device 1
+		RiotCallingPageObject callingViewDevice1= new RiotCallingPageObject(AppiumFactory.getAppiumDriver1());
+		callingViewDevice1.isDisplayed(true);
+		
+		//5. Hang-out after a few seconds.
+		callingViewDevice1.hangUpButton.click();
+		//Check that calling layout is closed on both devices.
+		callingViewDevice1.isDisplayed(false);
+		callingViewDevice2.isDisplayed(false);
+		//check end call events on messages
+		Assert.assertEquals(newRoomDevice1.getTextViewFromPost(newRoomDevice1.getLastPost()).getText(),participant1DisplayName+" ended the call.");
+		Assert.assertEquals(newRoomDevice2.getTextViewFromPost(newRoomDevice2.getLastPost()).getText(),participant1DisplayName+" ended the call.");
+	}
+
 	@AfterGroups(groups="roomcreated2")
 	private void leaveRoomAfterTest1() throws InterruptedException{
 		leaveRoomOn2DevicesFromRoomPageAfterTest(roomWithEncryption,roomWithEncryption);
 	}
-
-	@AfterGroups(groups="roomcreated1")
+	
+	@AfterGroups(groups="roomcreated2bis")
 	private void leaveRoomAfterTest2() throws InterruptedException{
+		leaveRoomOn2DevicesFromRoomPageAfterTest(null,null);
+	}
+
+	@AfterGroups(groups="roomcreated")
+	private void leaveRoomAfterTest3() throws InterruptedException{
 		leaveRoomOn1DeviceFromRoomPageAfterTest("Empty room");
 	}
 
@@ -151,9 +225,15 @@ public class RiotE2eEncryptionTest extends RiotParentTest{
 		RiotRoomsListPageObjects roomsListDevice1=new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
 		RiotRoomsListPageObjects roomsListDevice2=new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver2());
 		//asserts that the DM rooms are really left
-		roomsListDevice1.waitUntilSpinnerDone(5);
-		roomsListDevice2.waitUntilSpinnerDone(5);
-		Assert.assertNull(roomsListDevice1.getRoomByName(roomNameFromDevice1), "Room "+roomNameFromDevice1+" is still displayed in the list in device 1.");
-		Assert.assertNull(roomsListDevice2.getRoomByName(roomNameFromDevice2), "Room "+roomNameFromDevice2+" is still displayed in the list in device 2.");
+		if(roomNameFromDevice1!=null){
+			roomsListDevice1.waitUntilSpinnerDone(5);
+			Assert.assertNull(roomsListDevice1.getRoomByName(roomNameFromDevice1), "Room "+roomNameFromDevice1+" is still displayed in the list in device 1.");
+		}
+		
+		if(roomNameFromDevice1!=null){
+			roomsListDevice2.waitUntilSpinnerDone(5);
+			Assert.assertNull(roomsListDevice2.getRoomByName(roomNameFromDevice2), "Room "+roomNameFromDevice2+" is still displayed in the list in device 2.");
+		}
+
 	}
 }

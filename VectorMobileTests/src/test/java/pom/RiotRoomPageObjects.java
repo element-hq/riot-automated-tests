@@ -11,6 +11,7 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import utility.AppiumFactory;
 import utility.TestUtilities;
 
 public class RiotRoomPageObjects extends TestUtilities{
@@ -408,7 +409,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	 * @throws InterruptedException
 	 */
 	public void waitForPostsToBeDisplayed() throws InterruptedException{
-		int maxSecondsToWait=5;
+		int maxSecondsToWait=10;
 		float secondsWaited=0;
 		while (postsListLayout.size()==0 && secondsWaited<maxSecondsToWait) {
 			Thread.sleep(500);secondsWaited=(float) (secondsWaited+0.5);
@@ -447,5 +448,18 @@ public class RiotRoomPageObjects extends TestUtilities{
 		cameraPreview.confirmPickingPictureButton.click();
 		ExplicitWaitToBeVisible(driver,cameraPreview.sendAsMenuLayout);
 		cameraPreview.getItemFromSendAsMenu(photoSize).click();
+	}
+
+	/**
+	 * Start a voice call from the room page.
+	 * @throws InterruptedException 
+	 */
+	public void startVoiceCall() throws InterruptedException {
+		waitForPostsToBeDisplayed();
+		startCallButton.click();
+		voiceCallFromMenuButton.click();
+		//check that call layout is diplayed on device 2
+//		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAppiumDriver2());
+//		callingViewDevice2.isDisplayed(true);
 	}
 }

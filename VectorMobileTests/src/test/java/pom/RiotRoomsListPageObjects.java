@@ -2,6 +2,7 @@ package pom;
 
 import java.util.List;
 
+import org.junit.internal.runners.statements.Fail;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -67,8 +68,13 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	 */
 	public void previewInvitation(String roomName) throws InterruptedException{
 		waitUntilDisplayed(driver, "im.vector.alpha:id/recents_groups_invitation_group", true, 5);
-		MobileElement roomInvitationLayout=getInvitationLayoutByName(roomName);
-		roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_preview_button").click();
+		try {
+			MobileElement roomInvitationLayout=getInvitationLayoutByName(roomName);
+			roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_preview_button").click();
+		} catch (Exception e) {
+			Assert.fail("No invitaion found with room "+roomName);
+		}
+		
 	}
 	
 	/**
