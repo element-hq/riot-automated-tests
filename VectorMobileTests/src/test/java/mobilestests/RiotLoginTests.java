@@ -11,6 +11,7 @@ import java.util.Date;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
@@ -19,12 +20,16 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import com.thoughtworks.selenium.Selenium;
+
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDeviceActionShortcuts;
+import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
 import pom.RiotLoginAndRegisterPageObjects;
 import pom.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
+import utility.Constant;
 import utility.DataproviderClass;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -64,16 +69,14 @@ public class RiotLoginTests extends RiotParentTest{
 	public void customServerOptionsCheck(){
 		String homeServerTextView="Home Server:";
 		String identityServerTextView="Identity Server:";
-		String defaultHomeServerTextEdit="https://matrix.org";
-		String defaultIdentityServerTextEdit="https://vector.im";
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 		//hide the keyboard
 		AppiumFactory.getAppiumDriver1().hideKeyboard();
 		loginPage.customServerOptionsCheckBox.click();
 		Assert.assertEquals(loginPage.homeServerTextView.getText(), homeServerTextView);
 		Assert.assertEquals(loginPage.identityServerTextView.getText(), identityServerTextView);
-		Assert.assertEquals(loginPage.homeServerEditText.getText(), defaultHomeServerTextEdit);
-		Assert.assertEquals(loginPage.identityServerEditText.getText(), defaultIdentityServerTextEdit);
+		Assert.assertEquals(loginPage.homeServerEditText.getText(), Constant.DEFAULT_MATRIX_SERVER);
+		Assert.assertEquals(loginPage.identityServerEditText.getText(), Constant.DEFAULT_IDENTITY_SERVER);
 	}
 	
 	/**
@@ -113,16 +116,15 @@ public class RiotLoginTests extends RiotParentTest{
 	public void fillForgotFormPasswordWithForbiddenCharacter(String mailTest, String newPwdTest, String confirmPwdTest) throws InterruptedException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 		loginPage.forgotPwdButton.click();
-		loginPage.mailResetPwdEditText.setValue(mailTest);
-		loginPage.newPwdResetPwdEditText.setValue(newPwdTest);
-		loginPage.confirmNewPwdResetPwdEditText.setValue(confirmPwdTest);
+		loginPage.mailResetPwdEditText.sendKeys(mailTest);
+		loginPage.newPwdResetPwdEditText.sendKeys(newPwdTest);
+		loginPage.confirmNewPwdResetPwdEditText.sendKeys(confirmPwdTest);
 		loginPage.sendResetEmailButton.click();
 		//wait in case that the reset pwd form is not displayed
 		waitUntilDisplayed(AppiumFactory.getAppiumDriver1(),"im.vector.alpha:id/forget_password_inputs_layout",false,1);
 		Assert.assertTrue(isPresentTryAndCatch(loginPage.inputsForgetPasswordLayout), "The forget pwd form is not displayed");
-		//Since that is an iterative test, we need to setup the next iteration : going back to the login page.
-		((AndroidDeviceActionShortcuts) AppiumFactory.getAppiumDriver1()).pressKeyCode(AndroidKeyCode.BACK);
-		((AndroidDeviceActionShortcuts) AppiumFactory.getAppiumDriver1()).pressKeyCode(AndroidKeyCode.BACK);
+		//Since that is an iterative test, we need to setup the next iteration : form must be cleared, fort it app is reset.
+		AppiumFactory.getAppiumDriver1().resetApp();
 	}
 	
 	/**
@@ -136,9 +138,9 @@ public class RiotLoginTests extends RiotParentTest{
 		String confirmPwdTest="riotuser";
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 		loginPage.forgotPwdButton.click();
-		loginPage.mailResetPwdEditText.setValue(mailTest);
-		loginPage.newPwdResetPwdEditText.setValue(newPwdTest);
-		loginPage.confirmNewPwdResetPwdEditText.setValue(confirmPwdTest);
+		loginPage.mailResetPwdEditText.sendKeys(mailTest);
+		loginPage.newPwdResetPwdEditText.sendKeys(newPwdTest);
+		loginPage.confirmNewPwdResetPwdEditText.sendKeys(confirmPwdTest);
 		loginPage.sendResetEmailButton.click();
 		Assert.assertTrue(loginPage.inputsLoginLayout.isDisplayed(), "The Riot login page is not displayed.");
 	}
@@ -189,7 +191,7 @@ public class RiotLoginTests extends RiotParentTest{
 //	    Assert.assertTrue(status, "FAIL Event doesn't match");
 	}
 	
-	public void verifyImage(String image1, String image2) throws IOException{
+	private void verifyImage(String image1, String image2) throws IOException{
 //	    File fileInput = new File(image1);
 //	    File fileOutPut = new File(image2);
 //
@@ -220,12 +222,20 @@ public class RiotLoginTests extends RiotParentTest{
 	    BufferedImage bufileOutPut = ImageIO.read(fileOutPut);
 	    //Finder finder = new Finder("path/to/image", new Region(0, 0, <imgwidth>, <imgheight>));
 	 }
+	
+	private void clearFiled(AndroidDriver driver,MobileElement textFieldToClear){
+		textFieldToClear.click();
+		for (int i = 0;i<=textFieldToClear.getText().length();i++){
+			driver.pressKeyCode(AndroidKeyCode.DEL );
+		}
+
+	}
 	/**
 	 * Log-out the user if it can't see the login page.
 	 * @throws InterruptedException
 	 */
 	@BeforeMethod(groups="loginpage")
-	public void logOutIfNecessary() throws InterruptedException{
+	private void logOutIfNecessary() throws InterruptedException{
 		if(false==waitUntilDisplayed(AppiumFactory.getAppiumDriver1(),"im.vector.alpha:id/main_input_layout", true, 5)){
 			System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
 			RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
