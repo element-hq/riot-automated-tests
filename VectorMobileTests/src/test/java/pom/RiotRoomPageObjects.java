@@ -462,4 +462,11 @@ public class RiotRoomPageObjects extends TestUtilities{
 //		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAppiumDriver2());
 //		callingViewDevice2.isDisplayed(true);
 	}
+
+	public void startVideoCall() throws InterruptedException{
+		waitForPostsToBeDisplayed();
+		startCallButton.click();
+		videoCallFromMenuButton.click();
+		
+	}
 }

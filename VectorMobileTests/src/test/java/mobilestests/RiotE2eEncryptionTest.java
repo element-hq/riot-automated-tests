@@ -24,7 +24,7 @@ public class RiotE2eEncryptionTest extends RiotParentTest{
 	private String participant2Adress="@riotuser9:matrix.org";
 	private String participant1DisplayName="riotuser6";
 	private String participant2DisplayName="riotuser9";
-	
+
 	/**
 	 * 1. Create room with Device 1 and enable encryption.
 	 * Check that the last event in the room is about turning e2e encryption
@@ -131,15 +131,20 @@ public class RiotE2eEncryptionTest extends RiotParentTest{
 	/**
 	 * 1. Create DM room with Device 1 and invite device 2.
 	 * 2. Enable encryption.
-	 * 3. Start a voice call with Device 2.
+	 * 3. Start a VOICE call with Device 2.
 	 * Check that an incoming layout is displayed on device 1.
 	 * 4. Accept call with device 1.
 	 * 5. Hang-out after a few seconds.
 	 * Check that calling layout is closed on both devices.
+	 * 6. Start a VIDEO call with Device 2.
+	 * Check that an incoming layout is displayed on device 1.
+	 * 7. Accept call with device 1.
+	 * 8. Hang-out after a few seconds.
+	 * Check that calling layout is closed on both devices.
 	 * @throws InterruptedException 
 	 */
 	@Test(groups={"2drivers","roomcreated2bis"}, description="start a voice call in encrypted room")
-	public void startVoiceCallInEncryptedRoom() throws InterruptedException{
+	public void startVoiceAndVideoCallInEncryptedRoom() throws InterruptedException{
 		//1. Create DM room with Device 1 and enable encryption.
 		RiotRoomsListPageObjects roomsListDevice1 = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
 		RiotRoomsListPageObjects roomsListDevice2 = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver2());
@@ -166,7 +171,7 @@ public class RiotE2eEncryptionTest extends RiotParentTest{
 		RiotRoomPageObjects newRoomDevice2 = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver2());
 		newRoomDevice2.joinRoomButton.click();
 		//newRoomDevice2 = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver2());
-		
+
 		//3. Start a voice call with Device 2.
 		newRoomDevice2.startVoiceCall();
 		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAppiumDriver2());
@@ -174,14 +179,39 @@ public class RiotE2eEncryptionTest extends RiotParentTest{
 		//Check that an incoming layout is displayed on device 1.
 		RiotIncomingCallPageObjects incomingCallDevice1= new RiotIncomingCallPageObjects(AppiumFactory.getAppiumDriver1());
 		incomingCallDevice1.checkIncomingCallView(true, participant2DisplayName, "Incoming Call");
-		
+
 		//4. Accept call with device 1.
 		incomingCallDevice1.acceptCallButton.click();
 		//check that call layout is diplayed on device 1
 		RiotCallingPageObject callingViewDevice1= new RiotCallingPageObject(AppiumFactory.getAppiumDriver1());
 		callingViewDevice1.isDisplayed(true);
-		
+
 		//5. Hang-out after a few seconds.
+		callingViewDevice1.hangUpButton.click();
+		//Check that calling layout is closed on both devices.
+		callingViewDevice1.isDisplayed(false);
+		callingViewDevice2.isDisplayed(false);
+		//check end call events on messages
+		Assert.assertEquals(newRoomDevice1.getTextViewFromPost(newRoomDevice1.getLastPost()).getText(),participant1DisplayName+" ended the call.");
+		Assert.assertEquals(newRoomDevice2.getTextViewFromPost(newRoomDevice2.getLastPost()).getText(),participant1DisplayName+" ended the call.");
+
+		//6. Start a video call with Device 2.
+		newRoomDevice2.startVideoCall();
+		callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAppiumDriver2());
+		callingViewDevice2.isDisplayed(true);
+		//Check that an incoming layout is displayed on device 1.
+		incomingCallDevice1= new RiotIncomingCallPageObjects(AppiumFactory.getAppiumDriver1());
+		incomingCallDevice1.checkIncomingCallView(true, participant2DisplayName, "Incoming Call");
+
+		//7. Accept call with device 1.
+		incomingCallDevice1.acceptCallButton.click();
+		callingViewDevice2.waitUntilCallTook();
+		//check that call layout is diplayed on device 1
+		callingViewDevice1= new RiotCallingPageObject(AppiumFactory.getAppiumDriver1());
+		callingViewDevice1.isDisplayed(true);
+
+		//8. Hang-out after a few seconds.
+		callingViewDevice1.mainCallLayout.click();//display the controls if they had fade out.
 		callingViewDevice1.hangUpButton.click();
 		//Check that calling layout is closed on both devices.
 		callingViewDevice1.isDisplayed(false);
@@ -195,7 +225,7 @@ public class RiotE2eEncryptionTest extends RiotParentTest{
 	private void leaveRoomAfterTest1() throws InterruptedException{
 		leaveRoomOn2DevicesFromRoomPageAfterTest(roomWithEncryption,roomWithEncryption);
 	}
-	
+
 	@AfterGroups(groups="roomcreated2bis")
 	private void leaveRoomAfterTest2() throws InterruptedException{
 		leaveRoomOn2DevicesFromRoomPageAfterTest(null,null);
@@ -220,6 +250,7 @@ public class RiotE2eEncryptionTest extends RiotParentTest{
 		RiotRoomPageObjects newRoomDevice2 = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver2());
 		System.out.println("Leave room "+roomNameFromDevice1+ " with device 1");
 		newRoomDevice1.leaveRoom();
+		System.out.println("Leave room "+roomNameFromDevice1+ " with device 2");
 		newRoomDevice2.leaveRoom();
 
 		RiotRoomsListPageObjects roomsListDevice1=new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
@@ -229,7 +260,7 @@ public class RiotE2eEncryptionTest extends RiotParentTest{
 			roomsListDevice1.waitUntilSpinnerDone(5);
 			Assert.assertNull(roomsListDevice1.getRoomByName(roomNameFromDevice1), "Room "+roomNameFromDevice1+" is still displayed in the list in device 1.");
 		}
-		
+
 		if(roomNameFromDevice1!=null){
 			roomsListDevice2.waitUntilSpinnerDone(5);
 			Assert.assertNull(roomsListDevice2.getRoomByName(roomNameFromDevice2), "Room "+roomNameFromDevice2+" is still displayed in the list in device 2.");
