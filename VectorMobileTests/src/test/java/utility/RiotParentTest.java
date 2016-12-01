@@ -16,6 +16,7 @@ public class RiotParentTest extends TestUtilities{
 		capabilities.setCapability("platformVersion", "4.4.2");
 		capabilities.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
 		capabilities.setCapability("appActivity", Constant.APPLICATION_LOGIN_ACTIVITY);
+		capabilities.setCapability("noReset", true);
 
 		AppiumFactory appiumFactory=new AppiumFactory();
 		appiumFactory.setDriver1(new URL(Constant.SERVER1_ADRESS), capabilities);
@@ -30,6 +31,7 @@ public class RiotParentTest extends TestUtilities{
 		capabilities.setCapability("platformVersion", "4.4.2");
 		capabilities.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
 		capabilities.setCapability("appActivity", Constant.APPLICATION_LOGIN_ACTIVITY);
+		capabilities.setCapability("noReset", true);
 		
 		DesiredCapabilities capabilities2 = new DesiredCapabilities();
 		capabilities2.setCapability("deviceName",Constant.DEVICE2_NAME);
@@ -37,6 +39,7 @@ public class RiotParentTest extends TestUtilities{
 		capabilities2.setCapability("platformVersion", "4.3");
 		capabilities2.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
 		capabilities2.setCapability("appActivity", Constant.APPLICATION_LOGIN_ACTIVITY);
+		capabilities.setCapability("noReset", true);
 
 		AppiumFactory appiumFactory=new AppiumFactory();
 		appiumFactory.setDriver1(new URL(Constant.SERVER1_ADRESS), capabilities);

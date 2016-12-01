@@ -11,7 +11,6 @@ import java.util.Date;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
@@ -20,10 +19,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import com.thoughtworks.selenium.Selenium;
-
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.AndroidDeviceActionShortcuts;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
 import pom.RiotLoginAndRegisterPageObjects;
@@ -116,9 +112,9 @@ public class RiotLoginTests extends RiotParentTest{
 	public void fillForgotFormPasswordWithForbiddenCharacter(String mailTest, String newPwdTest, String confirmPwdTest) throws InterruptedException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 		loginPage.forgotPwdButton.click();
-		loginPage.mailResetPwdEditText.sendKeys(mailTest);
-		loginPage.newPwdResetPwdEditText.sendKeys(newPwdTest);
-		loginPage.confirmNewPwdResetPwdEditText.sendKeys(confirmPwdTest);
+		loginPage.mailResetPwdEditText.setValue(mailTest);
+		loginPage.newPwdResetPwdEditText.setValue(newPwdTest);
+		loginPage.confirmNewPwdResetPwdEditText.setValue(confirmPwdTest);
 		loginPage.sendResetEmailButton.click();
 		//wait in case that the reset pwd form is not displayed
 		waitUntilDisplayed(AppiumFactory.getAppiumDriver1(),"im.vector.alpha:id/forget_password_inputs_layout",false,1);
@@ -138,14 +134,12 @@ public class RiotLoginTests extends RiotParentTest{
 		String confirmPwdTest="riotuser";
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
 		loginPage.forgotPwdButton.click();
-		loginPage.mailResetPwdEditText.sendKeys(mailTest);
-		loginPage.newPwdResetPwdEditText.sendKeys(newPwdTest);
-		loginPage.confirmNewPwdResetPwdEditText.sendKeys(confirmPwdTest);
+		loginPage.mailResetPwdEditText.setValue(mailTest);
+		loginPage.newPwdResetPwdEditText.setValue(newPwdTest);
+		loginPage.confirmNewPwdResetPwdEditText.setValue(confirmPwdTest);
 		loginPage.sendResetEmailButton.click();
 		Assert.assertTrue(loginPage.inputsLoginLayout.isDisplayed(), "The Riot login page is not displayed.");
 	}
-	
-
 	
 	@Test(groups={"1driver","loginpage"})
 	public void checkRiotLogoFromLoginPage() throws IOException{

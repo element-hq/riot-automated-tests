@@ -2,7 +2,6 @@ package mobilestests;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeGroups;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -25,6 +24,7 @@ public class RiotNoConnectionTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver"})
 	public void logInWithoutInternetConnection() throws InterruptedException{
+		logoutForSetup();
 		AppiumFactory.getAppiumDriver1().setConnection(Connection.NONE);
 		System.out.println("wifi off");
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
@@ -45,6 +45,7 @@ public class RiotNoConnectionTests extends RiotParentTest{
 		String roomNameTest="temp room";
 		String expectedNotificationMessage="Connectivity to the server has been lost.";
 		
+		loginForSetup();
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
 		//Verifies that messages are still here : there is more than one.
 		Assert.assertFalse(riotRoomsList.roomsList.isEmpty(), "None room displayed in the rooms list.");
@@ -78,6 +79,7 @@ public class RiotNoConnectionTests extends RiotParentTest{
 		String expectedNotificationMessage="Messages not sent. Resend now?";
 		String roomNameTest="temp room";
 		
+		loginForSetup();
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
 		//Open the first room.
 		riotRoomsList.getRoomByName(roomNameTest).click();
@@ -122,6 +124,7 @@ public class RiotNoConnectionTests extends RiotParentTest{
 		String expectedNotificationMessage="Messages not sent. Resend now?";
 		String roomNameTest="temp room";
 		
+		loginForSetup();
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
 		//Open the first room.
 		riotRoomsList.getRoomByName(roomNameTest).click();
@@ -164,7 +167,7 @@ public class RiotNoConnectionTests extends RiotParentTest{
 	}
 	
 	@BeforeGroups(groups="nointernet")
-	public void setWifiOffForNoConnectionTests(){
+	private void setWifiOffForNoConnectionTests(){
 		if(!AppiumFactory.getAppiumDriver1().getConnection().equals(Connection.NONE)){
 			System.out.println("Setting up the connection to NONE for the tests without internet connection.");
 			AppiumFactory.getAppiumDriver1().setConnection(Connection.NONE);
@@ -175,8 +178,7 @@ public class RiotNoConnectionTests extends RiotParentTest{
 	 * Log-in the user if it can't see the login page.
 	 * @throws InterruptedException
 	 */
-	@BeforeMethod
-	public void loginForSetup() throws InterruptedException{
+	private void loginForSetup() throws InterruptedException{
 		if(false==waitUntilDisplayed(AppiumFactory.getAppiumDriver1(),"im.vector.alpha:id/fragment_recents_list", true, 5)){
 			System.out.println("Can't access to the rooms list page, none user must be logged. Forcing the log-in.");
 			forceWifiOnIfNeeded(AppiumFactory.getAppiumDriver1());
@@ -189,6 +191,13 @@ public class RiotNoConnectionTests extends RiotParentTest{
 				loginPage.loginButton.click();
 			}
 			loginPage.loginButton.click();
+		}
+	}
+	
+	private void logoutForSetup() throws InterruptedException{
+		if (!waitUntilDisplayed(AppiumFactory.getAppiumDriver1(), "im.vector.alpha:id/login_inputs_layout", true, 5)){
+			RiotRoomsListPageObjects mainPage= new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
+			mainPage.logOut();
 		}
 	}
 }
