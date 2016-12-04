@@ -22,6 +22,13 @@ Developing
 ==========
 TODO
 
+Install on Mac OS
+=================
+- Install JDK
+- Install Eclipse IDE for developper
+- Install Maven
+- Install Android SDK
+
 Copyright & License
 ==================
 
