@@ -29,17 +29,19 @@ Install on Mac OS
 - Install Maven
 
 Appium Server
+-------------
 
 - Install Node.js for Mac OS (https://nodejs.org/en/download/). After installation, verify that node.js is set up by sending npm -version in terminal.
 - Install Appium Server with sudo npm install -g appium. Verify that appium is installed by sending "appium" in terminal : a server with default port must start.
-- Some tests support 2 devices, so 2 appium server are needed, on 2 differents ports.
-You can create two .sh file to open those quickly: For the first one: "appium -p 4723" and the second one: "appium -p 4724". Change the permission to make those executable "chmod 755 file.sh".
+- Some tests support two devices, so two appium servers are needed. You can create two .sh file to open those quickly: For the first one: "appium -p 4723" and the second one: "appium -p 4724". Change the permission to make those executable "chmod 755 file.sh".
 
 Test environnement for Android
+------------------------------
 
 - Install Android SDK (https://developer.android.com/studio/index.html?hl=sk). Make sure environnement variables are set with: "echo export "PATH=$home/Library/Android/sdk/platform-tools:${PATH}" >> ~/.bash_profile" and "echo export "PATH=$home/Library/Android/sdk/tools:${PATH}" >> ~/.bash_profile". Send "adb version" in terminal to make sure installation is correct.
 - 
 Test environnement for iOS
+--------------------------
 
 - 
 Copyright & License
