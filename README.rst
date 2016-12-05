@@ -30,11 +30,12 @@ Install on Mac OS
 
 Appium Server
 
-- Install Node.js for Mac OS
+- Install Node.js for Mac OS (https://nodejs.org/en/download/). After installation, verify that node.js is set up by sending npm -version in terminal.
+- Install Appium Server with sudo npm install -g appium. Verify that appium is installed by sending "appium" in terminal : a server with default port must start.
 
 Test environnement for Android
 
-- Install Android SDK (https://developer.android.com/studio/index.html?hl=sk)
+- Install Android SDK (https://developer.android.com/studio/index.html?hl=sk). Make sure environnement variables are set with: "echo export "PATH=$home/Library/Android/sdk/platform-tools:${PATH}" >> ~/.bash_profile" and "echo export "PATH=$home/Library/Android/sdk/tools:${PATH}" >> ~/.bash_profile"
 - 
 Test environnement for iOS
 
