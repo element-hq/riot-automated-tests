@@ -29,12 +29,15 @@ Install on Mac OS
 - Install Maven
 
 Appium Server
+
 - Install Node.js for Mac OS
 
 Test environnement for Android
+
 - Install Android SDK (https://developer.android.com/studio/index.html?hl=sk)
 - 
 Test environnement for iOS
+
 - 
 Copyright & License
 ==================
