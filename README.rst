@@ -27,8 +27,15 @@ Install on Mac OS
 - Install JDK
 - Install Eclipse IDE for developper
 - Install Maven
-- Install Android SDK
 
+Appium Server
+- Install Node.js for Mac OS
+
+Test environnement for Android
+- Install Android SDK (https://developer.android.com/studio/index.html?hl=sk)
+- 
+Test environnement for iOS
+- 
 Copyright & License
 ==================
 
