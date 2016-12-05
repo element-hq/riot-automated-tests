@@ -24,8 +24,13 @@ TODO
 
 Install on Mac OS
 =================
+
+Test development
+----------------
+
 - Install JDK
 - Install Eclipse IDE for developper
+- Install TestNG Eclipse plugin (http://testng.org/doc/download.html)
 - Install Maven
 
 Appium Server
