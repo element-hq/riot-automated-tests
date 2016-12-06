@@ -57,6 +57,8 @@ npm install -g authorize-ios
 sudo authorize-ios
 - Install ideviceinstaller
 brew install ideviceinstaller
+- Install ios-deploy (not sure if necessary)
+which ios-deploy
 
 
 Copyright & License
