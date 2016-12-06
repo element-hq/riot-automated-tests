@@ -30,8 +30,10 @@ Test development
 
 - Install JDK
 - Install Eclipse IDE for developper
-- Install TestNG Eclipse plugin (http://testng.org/doc/download.html)
+- Install TestNG Eclipse plugin (http://testng.org/doc/download.html). Usefull to launch tests from Eclipse.
 - Install Maven
+- Get the sources from github, then use maven install to recover the dependencies.
+- If you want to explore the application under test UI in real time (mandatory to develop automated tests), launch UIAutomatorViewer in $ANDROID_HOME/tools/uiautomatorviewer
 
 Appium Server
 -------------
@@ -48,7 +50,15 @@ Test environnement for Android
 Test environnement for iOS
 --------------------------
 
-- 
+- Install XCode Command Line Tools
+- Enable UI Automation on the device(s) under test. On the iPhone Settings -> Developer -> check Enable UI Automation
+- Authorize ios for testing
+npm install -g authorize-ios
+sudo authorize-ios
+- Install ideviceinstaller
+brew install ideviceinstaller
+
+
 Copyright & License
 ==================
 
