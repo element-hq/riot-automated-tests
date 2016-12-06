@@ -59,6 +59,7 @@ sudo authorize-ios
 brew install ideviceinstaller
 - Install ios-deploy (not sure if necessary)
 which ios-deploy
+- workaround for start app issue: sudo chmod -R 777 /var/db/lockdown/
 
 
 Copyright & License
