@@ -13,6 +13,8 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
+import io.appium.java_client.android.AndroidDriver;
+
 public class ScreenshotUtility implements ITestListener {
 
 	public void onTestStart(ITestResult result) {
@@ -20,11 +22,11 @@ public class ScreenshotUtility implements ITestListener {
 	}
 
 	public void onTestSuccess(ITestResult result) {
-		if(AppiumFactory.getAppiumDriver1()!=null)captureScreenShot(result, "pass");
+		if(AppiumFactory.getCurrentDriver()!=null)captureScreenShot(result, "pass");
 	}
 
 	public void onTestFailure(ITestResult result) {
-		if(AppiumFactory.getAppiumDriver1()!=null)captureScreenShot(result, "fail");
+		if(AppiumFactory.getCurrentDriver()!=null)captureScreenShot(result, "fail");
 	}
 
 	public void onTestSkipped(ITestResult result) {
@@ -44,19 +46,27 @@ public class ScreenshotUtility implements ITestListener {
 	}
 	// Function to capture screenshot.
 	public void captureScreenShot(ITestResult result, String status) {
-		System.out.println("Screenshot taken");
+		//choice of output screenshot according to the sut
+		String os="";
+		if(AppiumFactory.getCurrentDriver() instanceof AndroidDriver<?>){
+			os="android";
+		}else{
+			os="ios";
+		}
+		System.out.println("Screenshot taken on "+os);
 		String destDir = "";
 		String passfailMethod = result.getMethod().getRealClass().getSimpleName() + "." + result.getMethod().getMethodName();
 		// To capture screenshot.
-		File scrFile = ((TakesScreenshot) AppiumFactory.getAppiumDriver1()).getScreenshotAs(OutputType.FILE);
+		File scrFile = ((TakesScreenshot) AppiumFactory.getCurrentDriver()).getScreenshotAs(OutputType.FILE);
 		DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy__hh_mm_ssaa");
+
 		// If status = fail then set folder name "screenshots/Failures"
 		if (status.equalsIgnoreCase("fail")) {
-			destDir = "screenshots/Failures";
+			destDir = "screenshots_"+os+"/Failures";
 		}
 		// If status = pass then set folder name "screenshots/Success"
 		else if (status.equalsIgnoreCase("pass")) {
-			destDir = "screenshots/Success";
+			destDir = "screenshots_"+os+"/Success";
 		}
 
 		// To create folder to store screenshots

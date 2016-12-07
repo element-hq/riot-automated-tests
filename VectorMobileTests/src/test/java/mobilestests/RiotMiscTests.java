@@ -49,7 +49,7 @@ public class RiotMiscTests extends RiotParentTest{
 	public void restardDriver() throws MalformedURLException{
 		System.out.println("teardown after test");
 		DesiredCapabilities capabilities = new DesiredCapabilities();
-		AppiumFactory.getAppiumDriver1().quit();
+		AppiumFactory.getAndroidDriver1().quit();
 		capabilities.setCapability("deviceName","a71011c8");
 		capabilities.setCapability("platformName","Android");
 		capabilities.setCapability("platformVersion", "4.4.2");
@@ -79,13 +79,13 @@ public class RiotMiscTests extends RiotParentTest{
 	@Test(groups="1driver")
 	public void scrollRoomsList() throws Exception{
 		//RiotRoomsListPageObjects mainPage=new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
-		Dimension dimensions = AppiumFactory.getAppiumDriver1().manage().window().getSize();
+		Dimension dimensions = AppiumFactory.getAndroidDriver1().manage().window().getSize();
 		Double screenHeightStart = dimensions.getHeight() * 0.9;
 		int scrollStart = screenHeightStart.intValue();
 		System.out.println("s="+scrollStart);
 		Double screenHeightEnd = dimensions.getHeight() * 0.2;
 		int scrollEnd = screenHeightEnd.intValue();
-		AppiumFactory.getAppiumDriver1().swipe(0,scrollStart,0,scrollEnd,2000);
+		AppiumFactory.getAndroidDriver1().swipe(0,scrollStart,0,scrollEnd,2000);
 	}
 
 
@@ -100,9 +100,9 @@ public class RiotMiscTests extends RiotParentTest{
 		String testMessage1 = "this is an automated test on 1 line";
 		String testMessage2 = "this is an automated test on 2 lines: \n here's the second line";
 
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		mainPage.getRoomByName(testRoomName).click();
-		RiotRoomPageObjects roomPage = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotRoomPageObjects roomPage = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
 		roomPage.messageZoneEditText.sendKeys(testMessage1);
 		roomPage.sendMessageButton.click();
 		roomPage.messageZoneEditText.sendKeys(testMessage2);

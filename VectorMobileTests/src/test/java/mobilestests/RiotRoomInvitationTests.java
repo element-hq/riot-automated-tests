@@ -39,8 +39,8 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		HttpsRequestsToMatrix.leaveRoom(leavingUserAccessToken, roomId, leavingUserAdress);
 		HttpsRequestsToMatrix.sendInvitationToUser(senderAccesToken, roomId, invitedUserAdress);
 		
-		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
-		ExplicitWait(AppiumFactory.getAppiumDriver1(),riotRoomsList.invitesHeadingLayout);
+		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		ExplicitWait(AppiumFactory.getAndroidDriver1(),riotRoomsList.invitesHeadingLayout);
 		Assert.assertTrue(riotRoomsList.invitesHeadingLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
 		//TODO check that invites layout is above rooms list
 		//check invite layout
@@ -48,7 +48,7 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		//reject invitation
 		riotRoomsList.rejectInvitation(roomName);
 		//check that the invite bar is closed
-		Assert.assertFalse(waitUntilDisplayed(AppiumFactory.getAppiumDriver1(),"//android.widget.TextView[@resource-id='im.vector.alpha:id/heading' and @text='INVITES']/../..", false, 5),"The INVITES bar isn't closed after rejecting the invitation");
+		Assert.assertFalse(waitUntilDisplayed(AppiumFactory.getAndroidDriver1(),"//android.widget.TextView[@resource-id='im.vector.alpha:id/heading' and @text='INVITES']/../..", false, 5),"The INVITES bar isn't closed after rejecting the invitation");
 	}
 	
 	/**
@@ -74,8 +74,8 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		HttpsRequestsToMatrix.leaveRoom(leavingUserAccessToken, roomId, leavingUserAdress);
 		HttpsRequestsToMatrix.sendInvitationToUser(senderAccesToken, roomId, invitedUserAdress);
 		
-		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
-		ExplicitWait(AppiumFactory.getAppiumDriver1(),riotRoomsList.invitesHeadingLayout);
+		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		ExplicitWait(AppiumFactory.getAndroidDriver1(),riotRoomsList.invitesHeadingLayout);
 		Assert.assertTrue(riotRoomsList.invitesHeadingLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
 		//TODO check that invites layout is above rooms list
 		//check invite layout
@@ -83,13 +83,13 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		//preview invitation
 		riotRoomsList.previewInvitation(roomName);
 		//check the preview layout
-		RiotRoomPageObjects newRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotRoomPageObjects newRoom = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
 		newRoom.checkPreviewRoomLayout(roomName);
 		//cancel invitation
 		newRoom.cancelInvitationButton.click();
-		riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
+		riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		//check that the invite bar is closed
-		Assert.assertFalse(waitUntilDisplayed(AppiumFactory.getAppiumDriver1(),"//android.widget.TextView[@resource-id='im.vector.alpha:id/heading' and @text='INVITES']/../..", false, 5),"The INVITES bar isn't closed after rejecting the invitation");
+		Assert.assertFalse(waitUntilDisplayed(AppiumFactory.getAndroidDriver1(),"//android.widget.TextView[@resource-id='im.vector.alpha:id/heading' and @text='INVITES']/../..", false, 5),"The INVITES bar isn't closed after rejecting the invitation");
 	}
 
 	/**
@@ -117,8 +117,8 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		HttpsRequestsToMatrix.leaveRoom(leavingUserAccessToken, roomId, leavingUserAdress);
 		HttpsRequestsToMatrix.sendInvitationToUser(senderAccesToken, roomId, invitedUserAdress);
 		
-		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
-		ExplicitWait(AppiumFactory.getAppiumDriver1(),riotRoomsList.invitesHeadingLayout);
+		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		ExplicitWait(AppiumFactory.getAndroidDriver1(),riotRoomsList.invitesHeadingLayout);
 		Assert.assertTrue(riotRoomsList.invitesHeadingLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
 		//TODO check that invites layout is above rooms list
 		//check invite layout
@@ -126,19 +126,19 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		//preview invitation
 		riotRoomsList.previewInvitation(roomName);
 		//check the preview layout
-		RiotRoomPageObjects newRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotRoomPageObjects newRoom = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
 		newRoom.checkPreviewRoomLayout(roomName);
 		newRoom.joinRoomButton.click();
-		newRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
+		newRoom = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
 		newRoom.checkRoomLayout(roomName);
 		//come back in roomslist
 		newRoom.menuBackButton.click();
-		riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
+		riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		//leave the room
 		riotRoomsList.clickOnContextMenuOnRoom(roomName, "Leave Conversation");
 		//check that room is closed and isn't in the rooms list page
 		newRoom.isDisplayed(false);
-		riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
+		riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		Assert.assertNull(riotRoomsList.getRoomByName(roomName), "Room "+roomName+" is still in the rooms list after leaving it.");
 	}
 	
@@ -167,8 +167,8 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		HttpsRequestsToMatrix.leaveRoom(leavingUserAccessToken, roomId, leavingUserAdress);
 		HttpsRequestsToMatrix.sendInvitationToUser(senderAccesToken, roomId, invitedUserAdress);
 		
-		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
-		ExplicitWait(AppiumFactory.getAppiumDriver1(),riotRoomsList.invitesHeadingLayout);
+		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		ExplicitWait(AppiumFactory.getAndroidDriver1(),riotRoomsList.invitesHeadingLayout);
 		Assert.assertTrue(riotRoomsList.invitesHeadingLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
 		//TODO check that invites layout is above rooms list
 		//check invite layout
@@ -176,17 +176,17 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		//preview invitation
 		riotRoomsList.previewInvitation(roomName);
 		//check the preview layout
-		RiotRoomPageObjects newRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotRoomPageObjects newRoom = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
 		newRoom.checkPreviewRoomLayout(roomName);
 		newRoom.joinRoomButton.click();
-		newRoom = new RiotRoomPageObjects(AppiumFactory.getAppiumDriver1());
+		newRoom = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
 		newRoom.checkRoomLayout(roomName);
 		//leave room from room menu
 		newRoom.moreOptionsButton.click();
 		newRoom.leaveRoomMenuItem.click();
 		//check that room is closed and isn't in the rooms list page
 		newRoom.isDisplayed(false);
-		riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
+		riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		Assert.assertNull(riotRoomsList.getRoomByName(roomName), "Room "+roomName+" is still in the rooms list after leaving it.");
 	}
 	
@@ -220,10 +220,10 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	 */
 	@BeforeMethod
 	public void loginForSetup() throws InterruptedException{
-		if(false==waitUntilDisplayed(AppiumFactory.getAppiumDriver1(),"im.vector.alpha:id/fragment_recents_list", true, 5)){
+		if(false==waitUntilDisplayed(AppiumFactory.getAndroidDriver1(),"im.vector.alpha:id/fragment_recents_list", true, 5)){
 			System.out.println("Can't access to the rooms list page, none user must be logged. Forcing the log-in.");
-			forceWifiOnIfNeeded(AppiumFactory.getAppiumDriver1());
-			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
+			forceWifiOnIfNeeded(AppiumFactory.getAndroidDriver1());
+			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 			loginPage.emailOrUserNameEditText.setValue(Constant.DEFAULT_USERNAME);
 			loginPage.passwordEditText.setValue(Constant.DEFAULT_USERPWD);
 			//Forcing the login button to be enabled : this bug should be corrected.

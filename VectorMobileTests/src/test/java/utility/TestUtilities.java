@@ -17,17 +17,18 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.Connection;
 
 public class TestUtilities {
 	
-	public void ExplicitWait(AndroidDriver<MobileElement> driver, WebElement element){
+	public void ExplicitWait(AppiumDriver<MobileElement> driver, WebElement element){
 		(new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(element));
 		System.out.println((Object) element.getTagName()+" clickable");
 	}
-	public void ExplicitWaitToBeVisible(AndroidDriver<MobileElement> driver,WebElement element){
+	public void ExplicitWaitToBeVisible(AppiumDriver<MobileElement> driver,WebElement element){
 		(new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOf(element));
 		System.out.println((Object) element.getTagName()+" displayed");
 	}
@@ -57,7 +58,7 @@ public class TestUtilities {
 	 * @param maxSecondsToWait
 	 * @throws InterruptedException 
 	 */
-	public Boolean waitUntilDisplayed(AndroidDriver<MobileElement> driver,String idOrXpath, Boolean displayed,int maxSecondsToWait) throws InterruptedException {
+	public Boolean waitUntilDisplayed(AppiumDriver<MobileElement> driver,String idOrXpath, Boolean displayed,int maxSecondsToWait) throws InterruptedException {
 		Boolean isDisplayed = false;
 		Boolean isXpath=false;
 		if(idOrXpath.contains("//")){
@@ -109,7 +110,7 @@ public class TestUtilities {
 	
 	public void captureImage(String imgUrl,MobileElement element) throws IOException{
 		new File(imgUrl).delete();
-		File screen = ((TakesScreenshot) AppiumFactory.getAppiumDriver2())
+		File screen = ((TakesScreenshot) AppiumFactory.getAndroidDriver2())
                 .getScreenshotAs(OutputType.FILE);
 	    Point point = element.getLocation();
 
@@ -149,13 +150,13 @@ public class TestUtilities {
 	    return matchFlag;
 	 }
 	
-	public void scrollToBottom(AndroidDriver<MobileElement> driver){
+	public void scrollToBottom(AppiumDriver<MobileElement> driver){
 		Dimension dimensions = driver.manage().window().getSize();
 		Double screenHeightStart = dimensions.getHeight() * 0.9;
 		int scrollStart = screenHeightStart.intValue();
 		System.out.println("s="+scrollStart);
 		Double screenHeightEnd = dimensions.getHeight() * 0.2;
 		int scrollEnd = screenHeightEnd.intValue();
-		AppiumFactory.getAppiumDriver1().swipe(0,scrollStart,0,scrollEnd,2000);
+		AppiumFactory.getAndroidDriver1().swipe(0,scrollStart,0,scrollEnd,2000);
 	}
 }

@@ -29,7 +29,7 @@ public class RiotRegisterTests extends RiotParentTest {
 		String pwdTest="riotuser";
 		String expectedConfirmationText="If you don't specify an email address, you won't be able to reset your password. Are you sure?";
 		
-		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		registerPage.registerButton.click();
 		registerPage.userNameRegisterEditText.setValue(userNameTest);
 		registerPage.pwd1EditRegisterText.setValue(pwdTest);
@@ -58,7 +58,7 @@ public class RiotRegisterTests extends RiotParentTest {
 		String pwd1Test="riotuser";
 		String pwd2Test="riotuserdifferent";
 		
-		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		registerPage.registerButton.click();
 		registerPage.userNameRegisterEditText.setValue(userNameTest);
 		registerPage.pwd1EditRegisterText.setValue(pwd1Test);
@@ -77,7 +77,7 @@ public class RiotRegisterTests extends RiotParentTest {
 	 */
 	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class,groups={"restartneeded","logout","1driver"})
 	public void fillRegisterFormWithForbiddenCharacter(String mailTest,String userNameTest, String pwd1Test,String pwd2Test) throws MalformedURLException{
-		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		registerPage.registerButton.click();
 		if(registerPage.emailRegisterEditText.getText().length()>0)registerPage.emailRegisterEditText.clear();
 		registerPage.emailRegisterEditText.setValue(mailTest);
@@ -98,7 +98,7 @@ public class RiotRegisterTests extends RiotParentTest {
 	 */
 	@Test(groups={"restartneeded","logout","1driver"})
 	public void registerWithEmptyCustomServerUrls(){
-		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		registerPage.registerButton.click();
 		registerPage.customServerOptionsCheckBox.click();
 		registerPage.homeServerEditText.clear();
@@ -119,13 +119,13 @@ public class RiotRegisterTests extends RiotParentTest {
 		String userNameTest=(new StringBuilder("riotuser").append(userNamesuffix)).toString();
 		String pwdTest="riotuser";
 		
-		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		registerPage.fillRegisterForm("", userNameTest,pwdTest, pwdTest);
-		RiotCaptchaPageObject captchaPage = new RiotCaptchaPageObject(AppiumFactory.getAppiumDriver1());
+		RiotCaptchaPageObject captchaPage = new RiotCaptchaPageObject(AppiumFactory.getAndroidDriver1());
 		captchaPage.notARobotCheckBox.click();
 		captchaPage.selectAllImages();
 		captchaPage.verifyCaptchaButton.click();
-		ExplicitWait(AppiumFactory.getAppiumDriver1(),captchaPage.tryAgainView);
+		ExplicitWait(AppiumFactory.getAndroidDriver1(),captchaPage.tryAgainView);
 		Assert.assertTrue(captchaPage.tryAgainView.isDisplayed(), "The 'Please try again' view is not displayed");
 	}
 	
@@ -133,8 +133,8 @@ public class RiotRegisterTests extends RiotParentTest {
 	public void restartRiot(){
 		//Restart the application
 		System.out.println("Restart the app");
-		AppiumFactory.getAppiumDriver1().closeApp();
-		AppiumFactory.getAppiumDriver1().launchApp();
+		AppiumFactory.getAndroidDriver1().closeApp();
+		AppiumFactory.getAndroidDriver1().launchApp();
 	}
 	
 	/**
@@ -144,9 +144,9 @@ public class RiotRegisterTests extends RiotParentTest {
 	@BeforeMethod(groups="logout")
 	public void logoutForSetup() throws InterruptedException{
 		System.out.println("Check if logout is needed for the test.");
-		if(false==waitUntilDisplayed(AppiumFactory.getAppiumDriver1(),"im.vector.alpha:id/main_input_layout", true, 5)){
+		if(false==waitUntilDisplayed(AppiumFactory.getAndroidDriver1(),"im.vector.alpha:id/main_input_layout", true, 5)){
 			System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
-			RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
+			RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 			mainPage.logOut();
 		}
 	}

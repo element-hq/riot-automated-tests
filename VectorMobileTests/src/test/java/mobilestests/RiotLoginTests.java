@@ -36,7 +36,7 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver","loginpage"})
 	public void simpleLogin() throws Exception {
 		String sUserName="riotuser2", sPassword="riotuser";
-		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		loginPage.fillLoginForm(sUserName, sPassword);
 	}
 
@@ -45,13 +45,13 @@ public class RiotLoginTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void loginAndLogoutTest(String sUserName,String sPassword)  throws Exception {
-		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		loginPage.emailOrUserNameEditText.setValue(sUserName);
 		loginPage.passwordEditText.setValue(sPassword);
 		loginPage.loginButton.click();
 
 		//Wait for the main page (rooms list) to be opened, and log out.
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		//Thread.sleep(5000);
 		mainPage.contextMenuButton.click();
 		mainPage.logOutButton.click();
@@ -65,9 +65,9 @@ public class RiotLoginTests extends RiotParentTest{
 	public void customServerOptionsCheck(){
 		String homeServerTextView="Home Server:";
 		String identityServerTextView="Identity Server:";
-		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		//hide the keyboard
-		AppiumFactory.getAppiumDriver1().hideKeyboard();
+		AppiumFactory.getAndroidDriver1().hideKeyboard();
 		loginPage.customServerOptionsCheckBox.click();
 		Assert.assertEquals(loginPage.homeServerTextView.getText(), homeServerTextView);
 		Assert.assertEquals(loginPage.identityServerTextView.getText(), identityServerTextView);
@@ -82,10 +82,10 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver","loginpage"})
 	public void forgotPasswordFormTest(){
 		String expectedResetPwdMessage="To reset your password, enter the email address linked to your account:";
-		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		loginPage.forgotPwdButton.click();
 		//hide the keyboard
-		AppiumFactory.getAppiumDriver1().hideKeyboard();
+		AppiumFactory.getAndroidDriver1().hideKeyboard();
 		//assertions on the form
 		Assert.assertEquals(loginPage.resetPasswordTextView.getText(), expectedResetPwdMessage);
 		Assert.assertTrue(isPresentTryAndCatch(loginPage.mailResetPwdEditText), "The email address  edittext is not present");
@@ -110,17 +110,17 @@ public class RiotLoginTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void fillForgotFormPasswordWithForbiddenCharacter(String mailTest, String newPwdTest, String confirmPwdTest) throws InterruptedException{
-		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		loginPage.forgotPwdButton.click();
 		loginPage.mailResetPwdEditText.setValue(mailTest);
 		loginPage.newPwdResetPwdEditText.setValue(newPwdTest);
 		loginPage.confirmNewPwdResetPwdEditText.setValue(confirmPwdTest);
 		loginPage.sendResetEmailButton.click();
 		//wait in case that the reset pwd form is not displayed
-		waitUntilDisplayed(AppiumFactory.getAppiumDriver1(),"im.vector.alpha:id/forget_password_inputs_layout",false,1);
+		waitUntilDisplayed(AppiumFactory.getAndroidDriver1(),"im.vector.alpha:id/forget_password_inputs_layout",false,1);
 		Assert.assertTrue(isPresentTryAndCatch(loginPage.inputsForgetPasswordLayout), "The forget pwd form is not displayed");
 		//Since that is an iterative test, we need to setup the next iteration : form must be cleared, fort it app is reset.
-		AppiumFactory.getAppiumDriver1().resetApp();
+		AppiumFactory.getAndroidDriver1().resetApp();
 	}
 	
 	/**
@@ -132,7 +132,7 @@ public class RiotLoginTests extends RiotParentTest{
 		String mailTest="riot@gmail.com";
 		String newPwdTest="riotuser";
 		String confirmPwdTest="riotuser";
-		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		loginPage.forgotPwdButton.click();
 		loginPage.mailResetPwdEditText.setValue(mailTest);
 		loginPage.newPwdResetPwdEditText.setValue(newPwdTest);
@@ -143,12 +143,12 @@ public class RiotLoginTests extends RiotParentTest{
 	
 	@Test(groups={"1driver","loginpage"})
 	public void checkRiotLogoFromLoginPage() throws IOException{
-		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAppiumDriver1());
+		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		boolean status = false;
 	    //take screen shot
 		String destDir = "screenshots\\comparison";
 		// Capture screenshot.
-		File scrLoginPageFile = ((TakesScreenshot) AppiumFactory.getAppiumDriver1()).getScreenshotAs(OutputType.FILE);
+		File scrLoginPageFile = ((TakesScreenshot) AppiumFactory.getAndroidDriver1()).getScreenshotAs(OutputType.FILE);
 		// Set date format to set It as screenshot file name.
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy__hh_mm_ssaa");
 		// Create folder under project with name "screenshots" provided to destDir.
@@ -185,6 +185,31 @@ public class RiotLoginTests extends RiotParentTest{
 //	    Assert.assertTrue(status, "FAIL Event doesn't match");
 	}
 	
+	@Test(groups={"1driver_ios"})
+	public void loginIos(){
+		pom.RiotLoginAndRegisterPageObjects loginPage=new pom.RiotLoginAndRegisterPageObjects(AppiumFactory.getiOsDriver1());
+		loginPage.emailOrUserNameEditText.setValue("riotuser2");
+		loginPage.passwordEditText.setValue("riotuser");
+		loginPage.loginButton.click();
+	}
+	
+	/**
+	 * Log and logout and iterate on several datas from excel file.
+	 */
+	@Test(groups={"1driver_ios","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
+	public void loginAndLogoutiOsTest(String sUserName,String sPassword)  throws Exception {
+		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
+		loginPage.emailOrUserNameEditText.setValue(sUserName);
+		loginPage.passwordEditText.setValue(sPassword);
+		loginPage.loginButton.click();
+
+		//Wait for the main page (rooms list) to be opened, and log out.
+		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		//Thread.sleep(5000);
+		mainPage.contextMenuButton.click();
+		mainPage.logOutButton.click();
+		Assert.assertTrue(loginPage.inputsLoginLayout.isDisplayed(), "The login page isn't displayed after the log-out.");
+	}
 	private void verifyImage(String image1, String image2) throws IOException{
 //	    File fileInput = new File(image1);
 //	    File fileOutPut = new File(image2);
@@ -230,10 +255,12 @@ public class RiotLoginTests extends RiotParentTest{
 	 */
 	@BeforeMethod(groups="loginpage")
 	private void logOutIfNecessary() throws InterruptedException{
-		if(false==waitUntilDisplayed(AppiumFactory.getAppiumDriver1(),"im.vector.alpha:id/main_input_layout", true, 5)){
-			System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
-			RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver1());
-			mainPage.logOut();
+		if (AppiumFactory.getAndroidDriver1() instanceof AndroidDriver){
+			if(false==waitUntilDisplayed(AppiumFactory.getAndroidDriver1(),"im.vector.alpha:id/main_input_layout", true, 5)){
+				System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
+				RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+				mainPage.logOut();
+			}
 		}
 	}
 }

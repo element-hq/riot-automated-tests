@@ -5,19 +5,25 @@ import org.openqa.selenium.support.PageFactory;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import io.appium.java_client.pagefactory.iOSFindBy;
 import utility.TestUtilities;
 
 public class RiotLoginAndRegisterPageObjects extends TestUtilities{
-	private AndroidDriver<MobileElement> driver;
+	private AppiumDriver<MobileElement> driver;
 	
 	public RiotLoginAndRegisterPageObjects(AppiumDriver<MobileElement> myDriver) {
-		driver=(AndroidDriver<MobileElement>) myDriver;
+		driver= myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 		//ExplicitWaitToBeVisible(driver,this.inputsLoginLayout);
 		try {
-			waitUntilDisplayed((AndroidDriver<MobileElement>) driver,"im.vector.alpha:id/login_inputs_layout", true, 5);
+			if(driver instanceof AndroidDriver<?>){
+				waitUntilDisplayed((AndroidDriver<MobileElement>) driver,"im.vector.alpha:id/login_inputs_layout", true, 5);
+			}else if(driver instanceof IOSDriver<?>){
+				waitUntilDisplayed((IOSDriver<MobileElement>) driver,"//UIAApplication[1]/UIAWindow[1]/UIAScrollView[2]/UIATextField[1]", true, 5);
+			}		
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -35,8 +41,12 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 			 */
 	@AndroidFindBy(id="im.vector.alpha:id/main_input_layout")
 	public MobileElement inputsLoginLayout;
+	
+	@iOSFindBy(xpath="//UIAApplication[1]/UIAWindow[1]/UIAScrollView[2]/UIATextField[1]")
 	@AndroidFindBy(id="im.vector.alpha:id/login_user_name")
 	public MobileElement emailOrUserNameEditText;
+	
+	@iOSFindBy(xpath="//UIAApplication[1]/UIAWindow[1]/UIAScrollView[2]/UIASecureTextField[1]")
 	@AndroidFindBy(id="im.vector.alpha:id/login_password")
 	public MobileElement passwordEditText;
 	
@@ -109,6 +119,8 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/login_actions_bar")
 	public MobileElement loginActionBar;
+	
+	@iOSFindBy(xpath="//UIAApplication[1]/UIAWindow[1]/UIAScrollView[2]/UIAButton[@label='Log in']")
 	@AndroidFindBy(id="im.vector.alpha:id/button_login")
 	public MobileElement loginButton;
 	@AndroidFindBy(id="im.vector.alpha:id/button_register")
