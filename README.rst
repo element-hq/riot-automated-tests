@@ -50,6 +50,7 @@ Test environnement for Android
 Test environnement for iOS
 --------------------------
 
+- Install XCode
 - Install XCode Command Line Tools
 - Enable UI Automation on the device(s) under test. On the iPhone Settings -> Developer -> check Enable UI Automation
 - Authorize ios for testing
@@ -60,6 +61,7 @@ brew install ideviceinstaller
 - Install ios-deploy (not sure if necessary)
 which ios-deploy
 - workaround for start app issue: sudo chmod -R 777 /var/db/lockdown/
+- An IPA with developer provisionning profile is needed in order to launch the tests on iOS
 
 
 Copyright & License
