@@ -56,10 +56,13 @@ Test environnement for iOS
 - Authorize ios for testing
 npm install -g authorize-ios
 sudo authorize-ios
+
 - Install ideviceinstaller
 brew install ideviceinstaller
+
 - Install ios-deploy (not sure if necessary)
 which ios-deploy
+
 - workaround for start app issue: sudo chmod -R 777 /var/db/lockdown/
 - An IPA with developer provisionning profile is needed in order to launch the tests on iOS
 
