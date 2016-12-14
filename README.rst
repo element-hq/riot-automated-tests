@@ -57,6 +57,9 @@ Test environnement for iOS
 npm install -g authorize-ios
 sudo authorize-ios
 
+- Install deviceconsole
+sudo npm install deviceconsole
+
 - Install ideviceinstaller
 brew install ideviceinstaller
 
