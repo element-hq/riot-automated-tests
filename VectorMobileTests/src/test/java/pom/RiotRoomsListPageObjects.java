@@ -223,11 +223,12 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	}
 	
 	/*
-	 * TOP MENU
+	 * TOOL BAR 
 	 */
-	@AndroidFindBy(xpath="//android.widget.ImageButton")//Menu button (opens the lateral menu)
+	@AndroidFindBy(id="im.vector.alpha:id/home_toolbar")
+	public MobileElement toolBarView;
+	@AndroidFindBy(xpath="//android.view.View/android.widget.ImageButton[@content-desc='Navigate up']")//Menu button (opens the lateral menu)
 	public MobileElement contextMenuButton;
-	
 	@AndroidFindBy(id="im.vector.alpha:id/ic_action_search_room") //Open the search for rooms page
 	public MobileElement searchButton;
 	
@@ -238,13 +239,27 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	
 	@AndroidFindBy(id="im.vector.alpha:id/navigation_view")
 	public MobileElement lateralMenuLayout;
-	@AndroidFindBy(xpath="//android.widget.CheckedTextView[@text='Logout']")
-	public MobileElement logOutButton;
+	@AndroidFindBy(xpath="//android.widget.FrameLayout//android.widget.CheckedTextView[@text='Sign out']")////android.widget.CheckedTextView[@text='Logout']
+	public MobileElement signOutButton;
 	@AndroidFindBy(id="im.vector.alpha:id/home_menu_main_displayname")
 	public MobileElement displayedUserMain;
 	
 	@AndroidFindBy(xpath="//android.widget.FrameLayout//android.widget.CheckedTextView[@text='Copyright']")//copyright button
 	public MobileElement openCopyrightButton;
+	
+	/*
+	 * SIGN OUT pop-up
+	 */
+	@AndroidFindBy(id="android:id/parentPanel")
+	public MobileElement signOutPopUpPanel;
+	@AndroidFindBy(id="android:id/message")
+	public MobileElement signOutTitleTextView;
+	@AndroidFindBy(id="android:id/button1")
+	public MobileElement signOutOkButton;
+	@AndroidFindBy(id="android:id/button2")
+	public MobileElement signOutCancelButton;
+	
+	
 	
 	/**
 	 * Get an item from the lateral menu.
@@ -281,7 +296,12 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	 */
 	public void logOut(){
 		this.contextMenuButton.click();
-		this.logOutButton.click();
+		this.signOutButton.click();
+		//verifies that sign out pop up is displayed and correct
+		Assert.assertEquals(signOutTitleTextView.getText(), "Sign out ?");
+		Assert.assertTrue(signOutCancelButton.isDisplayed(),"Cancel button isn't displayed");
+		Assert.assertTrue(signOutOkButton.isDisplayed(),"OK button isn't displayed");
+		signOutOkButton.click();
 	}
 	
 	/**

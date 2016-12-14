@@ -46,15 +46,11 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void loginAndLogoutTest(String sUserName,String sPassword)  throws Exception {
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
-		loginPage.emailOrUserNameEditText.setValue(sUserName);
-		loginPage.passwordEditText.setValue(sPassword);
-		loginPage.loginButton.click();
-
+		loginPage.fillLoginForm(sUserName, sPassword);
 		//Wait for the main page (rooms list) to be opened, and log out.
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
-		//Thread.sleep(5000);
-		mainPage.contextMenuButton.click();
-		mainPage.logOutButton.click();
+		Assert.assertTrue(mainPage.roomsExpandableListView.isDisplayed(), "Rooms list ins't displayed after login.");
+		mainPage.logOut();
 		Assert.assertTrue(loginPage.inputsLoginLayout.isDisplayed(), "The login page isn't displayed after the log-out.");
 	}
 	
@@ -183,32 +179,6 @@ public class RiotLoginTests extends RiotParentTest{
 	    File fileOutPut = new File(pathToExpectedRiotLogo);
 //	    verifyImage(destDir + "/"+"riotActualLogo.png", pathToExpectedRiotLogo );
 //	    Assert.assertTrue(status, "FAIL Event doesn't match");
-	}
-	
-	@Test(groups={"1driver_ios"})
-	public void loginIos(){
-		pom.RiotLoginAndRegisterPageObjects loginPage=new pom.RiotLoginAndRegisterPageObjects(AppiumFactory.getiOsDriver1());
-		loginPage.emailOrUserNameEditText.setValue("riotuser2");
-		loginPage.passwordEditText.setValue("riotuser");
-		loginPage.loginButton.click();
-	}
-	
-	/**
-	 * Log and logout and iterate on several datas from excel file.
-	 */
-	@Test(groups={"1driver_ios","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
-	public void loginAndLogoutiOsTest(String sUserName,String sPassword)  throws Exception {
-		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
-		loginPage.emailOrUserNameEditText.setValue(sUserName);
-		loginPage.passwordEditText.setValue(sPassword);
-		loginPage.loginButton.click();
-
-		//Wait for the main page (rooms list) to be opened, and log out.
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
-		//Thread.sleep(5000);
-		mainPage.contextMenuButton.click();
-		mainPage.logOutButton.click();
-		Assert.assertTrue(loginPage.inputsLoginLayout.isDisplayed(), "The login page isn't displayed after the log-out.");
 	}
 	private void verifyImage(String image1, String image2) throws IOException{
 //	    File fileInput = new File(image1);

@@ -21,13 +21,26 @@ private AppiumDriver<MobileElement> driver;
 			e.printStackTrace();
 		}
 	}
-	/**
+	/*
+	 * NAVIGATION BAR
+	 */
+	@iOSFindBy(xpath="//UIAApplication[1]/UIAWindow[1]/UIANavigationBar[1]")
+	public MobileElement navigationBar;
+	@iOSFindBy(xpath="//UIANavigationBar[1]/UIAButton[@name='Register']")
+	public MobileElement registerButton;
+	
+	/*
 	 * Riot logo
 	 */
-	//TODO
-	/**
+	@iOSFindBy(xpath="//UIAApplication[1]/UIAWindow[1]/UIAScrollView[2]/UIAImage[@name='logo']")
+	public MobileElement riotLogoImage;
+	
+	
+	/*
 	 * MAIN LOGIN FORM
 	 */
+	@iOSFindBy(xpath="//UIAApplication[1]/UIAWindow[1]/UIAScrollView")
+	public MobileElement loginScrollView;
 			/**
 			 * 		login part
 			 */
@@ -35,6 +48,12 @@ private AppiumDriver<MobileElement> driver;
 	public MobileElement emailOrUserNameEditText;
 	@iOSFindBy(xpath="//UIAApplication[1]/UIAWindow[1]/UIAScrollView[2]/UIASecureTextField[1]")
 	public MobileElement passwordEditText;
+	
+	
+	
+	/*
+	 * BOTTOM: Forgot password, login
+	 */
 	@iOSFindBy(xpath="//UIAApplication[1]/UIAWindow[1]/UIAScrollView[2]/UIAButton[@label='Log in']")
 	public MobileElement loginButton;
 

@@ -404,7 +404,7 @@ public class RiotVoipTests extends RiotParentTest{
 			String actualLoggedUser=listRoom.displayedUserMain.getText();
 			if(!actualLoggedUser.equals(username)){
 				System.out.println("User "+username+" isn't logged. An other user is logged ("+actualLoggedUser+"), login with "+username+".");
-				listRoom.logOutButton.click();
+				listRoom.signOutButton.click();
 				RiotLoginAndRegisterPageObjects loginView = new RiotLoginAndRegisterPageObjects(myDriver);
 				loginView.fillLoginForm(username, pwd);
 			}else{
