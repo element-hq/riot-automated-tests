@@ -1,17 +1,17 @@
-package mobilestests;
+package mobilestests_android;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import pom.RiotCallingPageObject;
-import pom.RiotIncomingCallPageObjects;
-import pom.RiotNewChatPageObjects;
-import pom.RiotRoomDetailsPageObject;
-import pom.RiotRoomPageObjects;
-import pom.RiotRoomsListPageObjects;
-import pom.RiotSearchInvitePageObjects;
+import pom_android.RiotCallingPageObject;
+import pom_android.RiotIncomingCallPageObjects;
+import pom_android.RiotNewChatPageObjects;
+import pom_android.RiotRoomDetailsPageObject;
+import pom_android.RiotRoomPageObjects;
+import pom_android.RiotRoomsListPageObjects;
+import pom_android.RiotSearchInvitePageObjects;
 import utility.AppiumFactory;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;

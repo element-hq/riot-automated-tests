@@ -1,4 +1,4 @@
-package pom;
+package pom_android;
 
 import java.util.List;
 
@@ -147,7 +147,7 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	 */
 	public MobileElement getRoomByName(String myRommName){
 		try {
-			return (MobileElement) driver.findElementByXPath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../../../*");	
+			return (MobileElement) driver.findElementByXPath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../../..");	
 		} catch (Exception e) {
 			return null;
 		}

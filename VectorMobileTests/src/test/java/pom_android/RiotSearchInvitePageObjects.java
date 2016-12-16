@@ -1,4 +1,4 @@
-package pom;
+package pom_android;
 
 import java.util.List;
 

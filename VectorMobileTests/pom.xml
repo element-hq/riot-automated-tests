@@ -15,7 +15,7 @@
   	<dependency>
   		<groupId>org.testng</groupId>
   		<artifactId>testng</artifactId>
-  		<version>6.8</version>
+  		<version>LATEST</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.poi</groupId>

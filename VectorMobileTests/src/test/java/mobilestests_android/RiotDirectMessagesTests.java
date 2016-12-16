@@ -1,15 +1,18 @@
-package mobilestests;
+package mobilestests_android;
+
+import java.lang.reflect.Method;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterGroups;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import pom.RiotNewChatPageObjects;
-import pom.RiotRoomDetailsPageObject;
-import pom.RiotRoomPageObjects;
-import pom.RiotRoomsListPageObjects;
-import pom.RiotSearchInvitePageObjects;
+import pom_android.RiotNewChatPageObjects;
+import pom_android.RiotRoomDetailsPageObject;
+import pom_android.RiotRoomPageObjects;
+import pom_android.RiotRoomsListPageObjects;
+import pom_android.RiotSearchInvitePageObjects;
 import utility.AppiumFactory;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -29,7 +32,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Try to start a newt chat with this same member : check that the previous room is opened instead.
 	 * @throws InterruptedException
 	 */
-	@Test(groups={"2drivers","dmcreated"}, description="direct message test")
+	@Test(groups={"2drivers"}, description="direct message test")
 	public void startChatWithOneUserTwice() throws InterruptedException{
 		String roomNameFromDevice1="riotuser9";
 		String roomNameFromDevice2="riotuser6";
@@ -181,7 +184,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Check that the DM tag is changed on device 1.</br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers","dmcreated3"}, description="direct message test")
+	@Test(groups={"2dmcreated3","2drivers"})
 	public void tagAndUntagDirectMessageRoom() throws InterruptedException{
 		String inviteeAddress="@riotuser9:matrix.org";
 		String roomName="tmp room DM";
@@ -225,17 +228,30 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		Assert.assertFalse(roomsListDevice2.isDirectMessageByRoomName(roomName),"Room "+roomName+" have a little green man on invitee device.");
 	}
 
-	@AfterGroups(groups="dmcreated")
-	private void leaveRoomAfterTest1() throws InterruptedException{
-		leaveRoomFromRoomsListAfterTest("riotuser9","Empty room");
-	}
 	@AfterGroups(groups="dmcreated2")
 	private void leaveRoomAfterTest2() throws InterruptedException{
 		leaveRoomFromRoomsListAfterTest("riotuser10 and riotuser9","riotuser10");
 	}
-	@AfterGroups(groups="dmcreated3")
-	private void leaveRoomAfterTest3() throws InterruptedException{
-		leaveRoomFromRoomsListAfterTest("tmp room DM","tmp room DM");
+	
+	//@AfterGroups(groups={"2dmcreated3"})
+	@AfterMethod(alwaysRun=true)
+	private void leaveRoomAfterTest3(Method m) throws InterruptedException{
+		switch (m.getName()) {
+		case "startChatWithOneUserTwice":
+			leaveRoomFromRoomsListAfterTest("riotuser9","Empty room");
+			break;
+		case "startChatWithMoreThanTwoUsers":
+			leaveRoomFromRoomsListAfterTest("riotuser10 and riotuser9","riotuser10");
+			break;
+		case "createRoomWithOneUser":
+			leaveRoomFromRoomsListAfterTest("riotuser9","Empty room");
+			break;
+		case "tagAndUntagDirectMessageRoom":
+			leaveRoomFromRoomsListAfterTest("tmp room DM","tmp room DM");
+			break;
+		default:
+			break;
+		}
 	}
 	
 	private void leaveRoomFromRoomsListAfterTest(String roomNameFromDevice1, String roomNameFromDevice2) throws InterruptedException{
@@ -243,13 +259,12 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		RiotRoomsListPageObjects roomsListDevice2=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver2());
 		System.out.println("Leave room "+roomNameFromDevice1+ " with device 1");
 		roomsListDevice1.clickOnContextMenuOnRoom(roomNameFromDevice1, "Leave Conversation");
-		Thread.sleep(1000);
+		roomsListDevice1.waitUntilSpinnerDone(5);
 		System.out.println("Leave room "+roomNameFromDevice2+ " with device 2");
 		roomsListDevice2.clickOnContextMenuOnRoom(roomNameFromDevice2, "Leave Conversation");
-		//asserts that the DM rooms are really left
-		roomsListDevice1.waitUntilSpinnerDone(5);
 		roomsListDevice2.waitUntilSpinnerDone(5);
 		Assert.assertNull(roomsListDevice1.getRoomByName(roomNameFromDevice1), "Room "+roomNameFromDevice1+" is still displayed in the list in device 1.");
 		Assert.assertNull(roomsListDevice2.getRoomByName(roomNameFromDevice2), "Room "+roomNameFromDevice2+" is still displayed in the list in device 2.");
 	}
+	
 }

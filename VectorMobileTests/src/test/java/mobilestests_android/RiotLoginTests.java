@@ -1,4 +1,4 @@
-package mobilestests;
+package mobilestests_android;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
@@ -22,8 +22,8 @@ import org.testng.annotations.Test;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
-import pom.RiotLoginAndRegisterPageObjects;
-import pom.RiotRoomsListPageObjects;
+import pom_android.RiotLoginAndRegisterPageObjects;
+import pom_android.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
 import utility.Constant;
 import utility.DataproviderClass;

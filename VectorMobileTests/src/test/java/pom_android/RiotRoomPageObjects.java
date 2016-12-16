@@ -1,4 +1,4 @@
-package pom;
+package pom_android;
 
 import java.util.List;
 
@@ -72,14 +72,17 @@ public class RiotRoomPageObjects extends TestUtilities{
 	/**
 	 * Change the room name. Action bar must be collapsed first.
 	 * @param roomName
+	 * @throws InterruptedException 
 	 */
-	public void changeRoomName(String roomName) {
+	public void changeRoomName(String roomName) throws InterruptedException {
 		roomNameTextViewCollapsed.click();
 		roomNameFromChangeDialogEditText.sendKeys(roomName);
 		okFromChangeRoomNameButton.click();
-		ExplicitWait(driver, roomNameTextViewCollapsed);
+		//ExplicitWait(driver, roomNameTextViewCollapsed);
+		waitUntilDisplayed(driver, "im.vector.alpha:id/listView_spinner", false, 4);
 		Assert.assertEquals(roomNameTextViewCollapsed.getText(), roomName, "Room name haven't be changed.");
 	}
+	
 	/*
 	 * ROOM MENU
 	 */
@@ -92,6 +95,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 		moreOptionsButton.click();
 		leaveRoomMenuItem.click();
 	}
+	
 	/*
 	 * PREVIEW LAYOUT
 	 */

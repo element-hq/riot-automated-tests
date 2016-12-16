@@ -1,16 +1,15 @@
-package mobilestests;
+package mobilestests_android;
 
 import java.io.IOException;
 
-import org.junit.Ignore;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import pom.RiotLoginAndRegisterPageObjects;
-import pom.RiotRoomPageObjects;
-import pom.RiotRoomsListPageObjects;
+import pom_android.RiotLoginAndRegisterPageObjects;
+import pom_android.RiotRoomPageObjects;
+import pom_android.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
@@ -195,14 +194,14 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	 * Receive multiple (10) invitations from an other user. </br>
 	 * TODO write this test
 	 */
-	@Ignore
+	@Test(enabled=false)
 	public void receiveMultipleInvitations(){
 		
 	}
 	/**
 	 * TODO write this test
 	 */
-	@Ignore
+	@Test(enabled=false)
 	public void sendInvitationOnRestrictedRoom(){
 		
 	}
@@ -210,7 +209,7 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	/**
 	 * TODO write this test
 	 */
-	@Ignore
+	@Test(enabled=false)
 	public void leaveRoom(){
 		
 	}

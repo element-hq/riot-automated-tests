@@ -1,4 +1,4 @@
-package mobilestests;
+package mobilestests_android;
 
 import java.net.MalformedURLException;
 
@@ -8,9 +8,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import pom.RiotCaptchaPageObject;
-import pom.RiotLoginAndRegisterPageObjects;
-import pom.RiotRoomsListPageObjects;
+import pom_android.RiotCaptchaPageObject;
+import pom_android.RiotLoginAndRegisterPageObjects;
+import pom_android.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
 import utility.DataproviderClass;
 import utility.RiotParentTest;

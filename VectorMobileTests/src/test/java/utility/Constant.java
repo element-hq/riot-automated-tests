@@ -21,5 +21,5 @@ public class Constant {
 	 * E2E ENCRYPTION
 	 */
 	public static final String ENCRYPTION_TURNEDON_EVENT="turned on end-to-end encryption";
-	public static final String ENCRYPTION_UNKNOWN_SESSION_ID_MSG="**Unknown inbound session id**";
+	public static final String ENCRYPTION_UNKNOWN_SESSION_ID_MSG="** Unable to decrypt: The sender's device has not sent us the keys for this message. **";
 }

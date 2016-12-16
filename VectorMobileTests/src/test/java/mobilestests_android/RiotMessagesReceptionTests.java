@@ -1,4 +1,4 @@
-package mobilestests;
+package mobilestests_android;
 
 import java.io.IOException;
 
@@ -9,9 +9,9 @@ import org.testng.annotations.Test;
 
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
-import pom.RiotLoginAndRegisterPageObjects;
-import pom.RiotRoomPageObjects;
-import pom.RiotRoomsListPageObjects;
+import pom_android.RiotLoginAndRegisterPageObjects;
+import pom_android.RiotRoomPageObjects;
+import pom_android.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;

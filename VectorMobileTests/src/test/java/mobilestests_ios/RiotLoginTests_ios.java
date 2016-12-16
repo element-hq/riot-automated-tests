@@ -30,4 +30,5 @@ public class RiotLoginTests_ios extends RiotParentTest{
 		mainPage.logOut();
 		Assert.assertTrue(loginPage.loginScrollView.isDisplayed(), "The login page isn't displayed after the log-out.");
 	}
+
 }

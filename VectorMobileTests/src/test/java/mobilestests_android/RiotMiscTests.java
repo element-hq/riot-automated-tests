@@ -1,4 +1,4 @@
-package mobilestests;
+package mobilestests_android;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,10 +27,10 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDeviceActionShortcuts;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
-import pom.RiotLegalStuffView;
-import pom.RiotRoomPageObjects;
-import pom.RiotRoomsListPageObjects;
-import pom.RiotSearchFromRoomPageObjects;
+import pom_android.RiotLegalStuffView;
+import pom_android.RiotRoomPageObjects;
+import pom_android.RiotRoomsListPageObjects;
+import pom_android.RiotSearchFromRoomPageObjects;
 import utility.AppiumFactory;
 import utility.Constant;
 import utility.DataproviderClass;

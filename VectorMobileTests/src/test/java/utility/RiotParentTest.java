@@ -10,7 +10,7 @@ import org.testng.annotations.BeforeGroups;
 
 import io.appium.java_client.remote.MobileCapabilityType;
 
-public class RiotParentTest extends TestUtilities{
+public abstract class RiotParentTest extends TestUtilities {
 	@BeforeGroups(groups="1driver")
 	public void setUp1Driver() throws MalformedURLException{
 		DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -36,6 +36,7 @@ public class RiotParentTest extends TestUtilities{
 		capabilities.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
 		capabilities.setCapability("appActivity", Constant.APPLICATION_LOGIN_ACTIVITY);
 		capabilities.setCapability("noReset", true);
+		capabilities.setCapability(MobileCapabilityType.FULL_RESET, false);
 		
 		DesiredCapabilities capabilities2 = new DesiredCapabilities();
 		capabilities2.setCapability("deviceName",Constant.DEVICE2_NAME);
@@ -43,8 +44,9 @@ public class RiotParentTest extends TestUtilities{
 		capabilities2.setCapability("platformVersion", "4.3");
 		capabilities2.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
 		capabilities2.setCapability("appActivity", Constant.APPLICATION_LOGIN_ACTIVITY);
-		capabilities.setCapability("noReset", true);
-
+		capabilities2.setCapability("noReset", true);
+		capabilities2.setCapability(MobileCapabilityType.FULL_RESET, false);
+		
 		AppiumFactory appiumFactory=new AppiumFactory();
 		appiumFactory.setAndroidDriver1(new URL(Constant.SERVER1_ADRESS), capabilities);
 		System.out.println("Application "+Constant.APPLICATION_NAME+" started on ANDROID device "+Constant.DEVICE1_NAME +" with DRIVER 1.");
@@ -59,8 +61,8 @@ public class RiotParentTest extends TestUtilities{
 		System.out.println("DRIVER 1 quitted, closing application "+Constant.APPLICATION_NAME+".");
 	}
 	
-	@AfterGroups(groups="2drivers")
-	public void tearDown2Drivers(){
+	@AfterGroups(groups={"2drivers"}, alwaysRun=true)
+	public void tearDown2Drivers() throws InterruptedException{
 		AppiumFactory.getAndroidDriver1().quit();
 		System.out.println("Android DRIVER 1 quitted on ANDROID device "+Constant.DEVICE1_NAME +", closing application "+Constant.APPLICATION_NAME+".");
 		AppiumFactory.getAndroidDriver2().quit();
@@ -81,7 +83,7 @@ public class RiotParentTest extends TestUtilities{
 		//capabilities.setCapability("realDeviceLogger", "/usr/local/lib/node_modules/deviceconsole/deviceconsole");
 		capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
 		capabilities.setCapability(MobileCapabilityType.FULL_RESET, false);
-		capabilities.setCapability("xcodeConfigfile", "/usr/local/lib/node_modules/appium/node_modules/appium-xcuitest-driver/WebDriverAgent/Configurations/ProjectSettings.xcconfig");
+		capabilities.setCapability("xcodeConfigFile", "/usr/local/lib/node_modules/appium/node_modules/appium-xcuitest-driver/WebDriverAgent/Configurations/ProjectSettings.xcconfig");
 		capabilities.setCapability("keychainPath","/Users/matrix/Library/Keychains/appiumKeychain.keychain");
 		capabilities.setCapability("keychainPassword","appium6754");
 		//capabilities.setCapability("autoDismissAlerts", false);
