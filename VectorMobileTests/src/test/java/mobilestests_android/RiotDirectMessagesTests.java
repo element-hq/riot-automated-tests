@@ -3,7 +3,6 @@ package mobilestests_android;
 import java.lang.reflect.Method;
 
 import org.testng.Assert;
-import org.testng.annotations.AfterGroups;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -94,7 +93,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Check that the new room doesn't have a little green man on both devices.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers","dmcreated2"}, description="direct message test")
+	@Test(groups={"2drivers"}, description="direct message test")
 	public void startChatWithMoreThanTwoUsers() throws InterruptedException{
 		String roomNameFromDevice1="riotuser9 and riotuser10";
 		String roomNameFromDevice2="riotuser6";
@@ -137,7 +136,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Check that the new room doesn't have a little green man.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers","dmcreated"}, description="direct message test")
+	@Test(groups={"2drivers"}, description="direct message test")
 	public void createRoomWithOneUser() throws InterruptedException{
 		String roomNameFromDevice1="riotuser9";
 		String roomNameFromDevice2="riotuser6";
@@ -184,7 +183,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Check that the DM tag is changed on device 1.</br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2dmcreated3","2drivers"})
+	@Test(groups={"2drivers"})
 	public void tagAndUntagDirectMessageRoom() throws InterruptedException{
 		String inviteeAddress="@riotuser9:matrix.org";
 		String roomName="tmp room DM";
@@ -228,14 +227,9 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		Assert.assertFalse(roomsListDevice2.isDirectMessageByRoomName(roomName),"Room "+roomName+" have a little green man on invitee device.");
 	}
 
-	@AfterGroups(groups="dmcreated2")
-	private void leaveRoomAfterTest2() throws InterruptedException{
-		leaveRoomFromRoomsListAfterTest("riotuser10 and riotuser9","riotuser10");
-	}
 	
-	//@AfterGroups(groups={"2dmcreated3"})
 	@AfterMethod(alwaysRun=true)
-	private void leaveRoomAfterTest3(Method m) throws InterruptedException{
+	private void leaveRoomAfterTest(Method m) throws InterruptedException{
 		switch (m.getName()) {
 		case "startChatWithOneUserTwice":
 			leaveRoomFromRoomsListAfterTest("riotuser9","Empty room");
