@@ -7,6 +7,7 @@ import org.testng.annotations.AfterGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
@@ -206,8 +207,8 @@ public class RiotVoipTests extends RiotParentTest{
 		callingViewDevice1.isDisplayed(false);
 		callingViewDevice2.isDisplayed(false);
 		//check end call events on messages
-		Assert.assertEquals(voipRoomDevice1.getTextViewFromPost(voipRoomDevice1.getLastPost()).getText(),callingUser+" ended the call.");
-		Assert.assertEquals(riotListDevice2.getReceivedMessageByRoomName(roomNameTest),callingUser+" ended the call.");
+		Assert.assertEquals(voipRoomDevice1.getTextViewFromPost(voipRoomDevice1.getLastPost()).getText(),calledUser+" ended the call.");
+		Assert.assertEquals(riotListDevice2.getReceivedMessageByRoomName(roomNameTest),calledUser+" ended the call.");
 		//come back in rooms list on device 1
 		voipRoomDevice1.menuBackButton.click();
 	}
@@ -257,8 +258,8 @@ public class RiotVoipTests extends RiotParentTest{
 		callingViewDevice1.isDisplayed(false);
 		callingViewDevice2.isDisplayed(false);
 		//check end call events on messages
-		Assert.assertEquals(voipRoomDevice1.getTextViewFromPost(voipRoomDevice1.getLastPost()).getText(),callingUser+" ended the call.");
-		Assert.assertEquals(riotListDevice2.getReceivedMessageByRoomName(roomNameTest),callingUser+" ended the call.");
+		Assert.assertEquals(voipRoomDevice1.getTextViewFromPost(voipRoomDevice1.getLastPost()).getText(),calledUser+" ended the call.");
+		Assert.assertEquals(riotListDevice2.getReceivedMessageByRoomName(roomNameTest),calledUser+" ended the call.");
 		//come back in rooms list on device 1
 		voipRoomDevice1.menuBackButton.click();
 	}
@@ -371,6 +372,57 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertFalse(callingViewDevice1.isDisplayed(false), "Call isn't ended on device 1 after leaving the room.");
 	}
 
+	/**
+	 * Cover this issue https://github.com/vector-im/riot-android/issues/784 </br>
+	 * Required : both devices have an user logged.</br>
+	 * 1. Launch a voice call in 1:1 room.
+	 * 2. Callee accepts call
+	 * 3. Callee goes in the room from call layout by hitting the chatlink button
+	 * 4. Caller hang out the call
+	 * Check that call is really hung up.
+	 * @throws InterruptedException 
+	 * 
+	 */
+	@Test(groups={"2drivers"})
+	public void hangUpWhenCalleeInRoomView() throws InterruptedException{
+		String callingUser="riotuser2";
+		String calledUser="riotuser3";
+		String pwd="riotuser";
+		String roomNameTest="voip room test";
+		
+		//TODO maybe use a different option than checkIfUserLogged.
+//		checkIfUserLogged(AppiumFactory.getAndroidDriver1(), callingUser, pwd);
+//		checkIfUserLogged(AppiumFactory.getAndroidDriver2(), calledUser, pwd);
+		
+		//Go in room voip test with both devices
+		RiotRoomsListPageObjects roomsListDevice1 = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomsListPageObjects roomsListDevice2 = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver2());
+		roomsListDevice1.getRoomByName(roomNameTest).click();
+		roomsListDevice2.getRoomByName(roomNameTest).click();
+		RiotRoomPageObjects roomDevice2 = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver2());
+		//1. Launch a voice call in 1:1 room.
+		RiotRoomPageObjects roomDevice1 = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
+		roomDevice1.startVoiceCall();
+		RiotCallingPageObject callingViewDevice1 = new RiotCallingPageObject(AppiumFactory.getAndroidDriver1());
+		//2. Callee accepts call
+		RiotIncomingCallPageObjects incomingCallDevice2 = new RiotIncomingCallPageObjects(AppiumFactory.getAndroidDriver2());
+		incomingCallDevice2.acceptCallButton.click();
+		RiotCallingPageObject callingViewDevice2 = new RiotCallingPageObject(AppiumFactory.getAndroidDriver2());
+		//3. Callee goes in the room from call layout by hitting the chatlink button
+		callingViewDevice2.chatLinkButton.click();
+		//4. Caller hang out the call
+		callingViewDevice1.hangUpButton.click();
+		//check that call is really ended.
+		Assert.assertTrue(roomDevice2.startCallButton.isDisplayed(), "Start call button on the callee device isn't displayed after the end of the call");
+		//check that callee can receive a new call
+		roomDevice1.startVoiceCall();
+		incomingCallDevice2.checkIncomingCallView(true, callingUser, "Incoming Call");
+		incomingCallDevice2.ignoreCallButton.click();
+		//go back to the room
+		roomDevice1.menuBackButton.click();
+		roomDevice2.menuBackButton.click();
+	}
+	
 	/**
 	 * Invite riotuser3 by riotuser2 on room voiptest.
 	 * Accept invitation with riotuser2.

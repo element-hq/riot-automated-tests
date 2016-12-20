@@ -30,7 +30,7 @@ public class RiotIncomingCallPageObjects extends TestUtilities{
 	@AndroidFindBy(id="im.vector.alpha:id/avatar_img")
 	public MobileElement incomingCallAvatarImageView;
 	@AndroidFindBy(id="im.vector.alpha:id/room_name")
-	public MobileElement incomingCallRoomName;
+	public MobileElement incomingCallerName;
 	@AndroidFindBy(id="im.vector.alpha:id/incoming_call_title")
 	public MobileElement incomingCallStatus;
 	@AndroidFindBy(id="im.vector.alpha:id/button_incoming_call_accept")
@@ -41,11 +41,11 @@ public class RiotIncomingCallPageObjects extends TestUtilities{
 	 * Check the incoming call view. Put isDisplayed at false to ckeck that is not displayed.</br>
 	 * Check that the 2 buttons are displayed.
 	 * @param isDisplayed
-	 * @param roomName
+	 * @param callerName
 	 * @param status
 	 * @throws InterruptedException 
 	 */
-	public void checkIncomingCallView(Boolean isDisplayed, String roomName, String status) throws InterruptedException{
+	public void checkIncomingCallView(Boolean isDisplayed, String callerName, String status) throws InterruptedException{
 		String messagePendingViewPresent;
 		if(isDisplayed){
 			messagePendingViewPresent="Incoming call view isn't displayed";
@@ -54,7 +54,7 @@ public class RiotIncomingCallPageObjects extends TestUtilities{
 		}
 		Assert.assertTrue(waitUntilDisplayed(driver, "//android.widget.TextView[@resource-id='im.vector.alpha:id/room_name']/../android.widget.RelativeLayout", isDisplayed, 5)==isDisplayed, messagePendingViewPresent);
 		if(isDisplayed){
-			Assert.assertEquals(incomingCallRoomName.getText(), roomName);
+			Assert.assertEquals(incomingCallerName.getText(), callerName);
 			Assert.assertEquals(incomingCallStatus.getText(), status);
 			Assert.assertTrue(acceptCallButton.isEnabled(), "Accept button in incoming call container isn't enabled");
 			Assert.assertTrue(ignoreCallButton.isEnabled(), "Ignore button in incoming call container isn't enabled");
