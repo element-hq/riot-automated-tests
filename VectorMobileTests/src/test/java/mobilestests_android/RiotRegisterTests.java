@@ -75,13 +75,13 @@ public class RiotRegisterTests extends RiotParentTest {
 	 * Verifies that the form is not sent.
 	 * @throws MalformedURLException 
 	 */
-	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class,groups={"restartneeded","logout","1driver"})
+	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class,groups={"1driver"})//groups={"restartneeded","logout","1driver"})
 	public void fillRegisterFormWithForbiddenCharacter(String mailTest,String userNameTest, String pwd1Test,String pwd2Test) throws MalformedURLException{
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		registerPage.registerButton.click();
-		if(registerPage.emailRegisterEditText.getText().length()>0)registerPage.emailRegisterEditText.clear();
+		//if(registerPage.emailRegisterEditText.getText().length()>0)registerPage.emailRegisterEditText.clear();
 		registerPage.emailRegisterEditText.setValue(mailTest);
-		/*if(registerPage.userNameRegisterEditText.getText().length()>0)*/registerPage.userNameRegisterEditText.clear();
+		/*if(registerPage.userNameRegisterEditText.getText().length()>0)*///registerPage.userNameRegisterEditText.clear();
 		registerPage.userNameRegisterEditText.setValue(userNameTest);
 		/*registerPage.pwd1EditRegisterText.clear();*/
 		registerPage.pwd1EditRegisterText.setValue(pwd1Test);
@@ -91,6 +91,7 @@ public class RiotRegisterTests extends RiotParentTest {
 		//Validate the toasts : not possible with appium
 		//Validate that we are still on the register form
 		Assert.assertTrue(registerPage.isPresentTryAndCatch(registerPage.inputsRegisteringLayout), "The register form is not displayed");
+		restartRiot();
 	}
 	
 	/**
@@ -108,11 +109,12 @@ public class RiotRegisterTests extends RiotParentTest {
 	}
 	
 	/**
+	 * UIAUTOMATOR VIEW don't see the mosaic anymore.
 	 * Start a sign-in and enters a wrong captcha.</br>
 	 * Validate that the register can't go any further.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"restartneeded","logout","1driver"})
+	@Test(groups={"restartneeded","logout","1driver"}, enabled=false)
 	public void registerWithFailingCaptchaCheckingTest() throws InterruptedException{
 		//creation of a "unique" username by adding a randomize number to the username.
 		int userNamesuffix = 1 + (int)(Math.random() * ((10000 - 1) + 1));
@@ -130,7 +132,7 @@ public class RiotRegisterTests extends RiotParentTest {
 	}
 	
 	@BeforeGroups(groups="restartneeded")
-	public void restartRiot(){
+	private void restartRiot(){
 		//Restart the application
 		System.out.println("Restart the app");
 		AppiumFactory.getAndroidDriver1().closeApp();
@@ -142,9 +144,9 @@ public class RiotRegisterTests extends RiotParentTest {
 	 * @throws InterruptedException
 	 */
 	@BeforeMethod(groups="logout")
-	public void logoutForSetup() throws InterruptedException{
+	private void logoutForSetup() throws InterruptedException{
 		System.out.println("Check if logout is needed for the test.");
-		if(false==waitUntilDisplayed(AppiumFactory.getAndroidDriver1(),"im.vector.alpha:id/main_input_layout", true, 5)){
+		if(false==waitUntilDisplayed(AppiumFactory.getAndroidDriver1(),"im.vector.alpha:id/main_input_layout", true, 3)){
 			System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
 			RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 			mainPage.logOut();

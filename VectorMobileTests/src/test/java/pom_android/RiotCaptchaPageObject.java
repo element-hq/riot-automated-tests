@@ -42,7 +42,7 @@ public class RiotCaptchaPageObject extends TestUtilities{
 	 */
 	@AndroidFindBy(xpath="//android.view.View[@content-desc=\"I'm not a robot\"]")//"I'm not a robot" text
 	public MobileElement notARobotView;
-	@AndroidFindBy(xpath="//android.view.View[@content-desc=\"I'm not a robot\"]/../android.view.View/android.widget.CheckBox")//
+	@AndroidFindBy(xpath="//android.widget.CheckBox[@content-desc=\"I'm not a robot\"]")//
 	public MobileElement notARobotCheckBox;
 
 	/**

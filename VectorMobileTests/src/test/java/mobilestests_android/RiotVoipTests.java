@@ -24,18 +24,6 @@ import utility.ScreenshotUtility;
 
 @Listeners({ ScreenshotUtility.class })
 public class RiotVoipTests extends RiotParentTest{
-	@Test(groups="2drivers", description="Plays with 2 devices",enabled=false)
-	public void twoDevices() throws InterruptedException{
-		RiotRoomsListPageObjects mainPageDevice1 = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
-		RiotLoginAndRegisterPageObjects loginViewDevice2 = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver2());
-		mainPageDevice1.getRoomByName("temp room").click();//clic on a room with device 1
-		loginViewDevice2.fillLoginForm("riotuser3","riotuser"); //login on device 2
-		RiotRoomPageObjects roomDevice1=new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
-		roomDevice1.menuBackButton.click();//come back in rooms list with device 1
-		RiotRoomsListPageObjects mainPageDevice2 = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver2());
-		mainPageDevice2.logOut();//logout with device2
-	}
-
 	/**
 	 * Launch an audio call from a room </br>
 	 * From the call layout, hit the room link button </br>
@@ -318,6 +306,8 @@ public class RiotVoipTests extends RiotParentTest{
 		//hangout
 		callingViewDevice2.hangUpButton.click();
 		voipRoomDevice1.menuBackButton.click();
+		voipRoomDevice2.menuBackButton.click();
+		
 	}
 
 	/**
@@ -413,6 +403,7 @@ public class RiotVoipTests extends RiotParentTest{
 		//4. Caller hang out the call
 		callingViewDevice1.hangUpButton.click();
 		//check that call is really ended.
+		waitUntilDisplayed(AppiumFactory.getAndroidDriver2(), "im.vector.alpha:id/room_start_call_layout", true, 5);
 		Assert.assertTrue(roomDevice2.startCallButton.isDisplayed(), "Start call button on the callee device isn't displayed after the end of the call");
 		//check that callee can receive a new call
 		roomDevice1.startVoiceCall();
