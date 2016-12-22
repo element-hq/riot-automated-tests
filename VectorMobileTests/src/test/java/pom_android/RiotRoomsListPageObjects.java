@@ -290,6 +290,16 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	@AndroidFindBy(xpath="//android.widget.Button[@text='OK']")
 	public MobileElement okCreationListButton;
 	
+	/**
+	 * Create a new room : click on plus button, then create room item. </br>
+	 * Return a RiotRoomPageObjects object.
+	 * @return
+	 */
+	public RiotRoomPageObjects createRoom(){
+		plusRoomButton.click();
+		createRoomCheckedTextView.click();
+		return new RiotRoomPageObjects(driver);
+	}
 	
 	/**
 	 * Log-out from Riot with the lateral menu.
