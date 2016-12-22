@@ -61,8 +61,10 @@ public class TestUtilities {
 	public Boolean waitUntilDisplayed(AppiumDriver<MobileElement> driver,String idOrXpath, Boolean displayed,int maxSecondsToWait) throws InterruptedException {
 		Boolean isDisplayed = false;
 		Boolean isXpath=false;
+		String methodUsed="Method used : byId";
 		if(idOrXpath.contains("//")){
 			isXpath=true;
+			methodUsed="Method used : byXpath";
 		}
 		String verb;
 		if(displayed){
@@ -84,10 +86,32 @@ public class TestUtilities {
 				isDisplayed=false;
 			}
 		} while (displayed!=isDisplayed && secondsWaited<maxSecondsToWait);
-		System.out.println("Seconds to wait "+idOrXpath+" to "+verb+": "+secondsWaited+". isXpath is "+isXpath.toString()+ " with device "+driver.getCapabilities().getCapability("deviceName"));
+		System.out.println("Seconds to wait "+idOrXpath+" to "+verb+": "+secondsWaited+". "+methodUsed+ ". Device "+driver.getCapabilities().getCapability("deviceName"));
 		return isDisplayed;
 	}
 	
+	/**
+	 * Wait until @param propertyValue of @param propertyName is @param set.
+	 * @param driver
+	 * @param element
+	 * @param propertyName
+	 * @param propertyValue
+	 * @param set
+	 * @return 
+	 * @throws InterruptedException 
+	 */
+	public boolean waitUntilPropertyIsSet(MobileElement element, String propertyName, String propertyValue, Boolean set,int maxSecondsToWait) throws InterruptedException{
+		float secondsWaited=0;
+		String msgFound="have";
+		while ((element.getAttribute(propertyName).equals(propertyValue))!=set && secondsWaited<maxSecondsToWait) {
+			System.out.println(element.getAttribute(propertyName));
+			if(maxSecondsToWait!=0){Thread.sleep(500);secondsWaited=(float) (secondsWaited+0.5);}
+		}
+		Boolean found=(element.getAttribute(propertyName).equals(propertyValue));
+		if (!found)msgFound="don't have";
+		System.out.println("Seconds to wait element property '"+propertyName+ "' to "+msgFound+" value "+propertyValue+": "+secondsWaited);
+		return found;
+	}
 	
 	/**
 	 * Check if connection is NONE and swith to WIFI in that case.
