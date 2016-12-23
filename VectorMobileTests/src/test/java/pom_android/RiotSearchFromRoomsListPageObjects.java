@@ -53,7 +53,7 @@ private AndroidDriver<MobileElement> driver;
 	@AndroidFindBy(xpath="//android.widget.TextView[@text='PEOPLE']/../*")
 	public MobileElement peopleTab;
 	@AndroidFindBy(xpath="//android.widget.TextView[@text='FILES']/../*")
-	public MobileElement filesab;
+	public MobileElement filesTab;
 	
 	/**
 	 * Hit ROOMS tab, then launch a search with @param  searchedText.
@@ -64,11 +64,11 @@ private AndroidDriver<MobileElement> driver;
 		searchEditText.clear();
 		searchEditText.setValue(searchedText);
 		driver.pressKeyCode(AndroidKeyCode.KEYCODE_ENTER);
-		if(waitSearchFinished)	waitSearchFinished();
+		if(waitSearchFinished)	waitUntilSearchFinished();
 		driver.hideKeyboard();
 	}
 	
-	public Boolean waitSearchFinished() throws InterruptedException {
+	public Boolean waitUntilSearchFinished() throws InterruptedException {
 		return waitUntilDisplayed(driver, "im.vector.alpha:id/search_in_progress_view", false, 10);
 	}
 
@@ -77,6 +77,9 @@ private AndroidDriver<MobileElement> driver;
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/search_in_progress_view")
 	public List<MobileElement> searchProgressView;
+	@AndroidFindBy(id="im.vector.alpha:id/search_no_result_textview")
+	public MobileElement noResultTextView;
+	
 	/**
 	 * Gets all the children (relative layout and linearlayout of the expandablelistview). For the ROOMS results it's categories and rooms.
 	 */

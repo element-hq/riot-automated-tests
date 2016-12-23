@@ -104,7 +104,6 @@ public class TestUtilities {
 		float secondsWaited=0;
 		String msgFound="have";
 		while ((element.getAttribute(propertyName).equals(propertyValue))!=set && secondsWaited<maxSecondsToWait) {
-			System.out.println(element.getAttribute(propertyName));
 			if(maxSecondsToWait!=0){Thread.sleep(500);secondsWaited=(float) (secondsWaited+0.5);}
 		}
 		Boolean found=(element.getAttribute(propertyName).equals(propertyValue));
