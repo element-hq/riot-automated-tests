@@ -62,7 +62,7 @@ private AndroidDriver<MobileElement> driver;
 	 */
 	public void launchASearch(String searchedText, Boolean waitSearchFinished) throws InterruptedException{
 		searchEditText.clear();
-		searchEditText.setValue(searchedText);
+		/*if(searchEditText.getText().length()>0)*/searchEditText.setValue(searchedText);
 		driver.pressKeyCode(AndroidKeyCode.KEYCODE_ENTER);
 		if(waitSearchFinished)	waitUntilSearchFinished();
 		driver.hideKeyboard();
@@ -121,8 +121,8 @@ private AndroidDriver<MobileElement> driver;
 	 * @return
 	 * @throws InterruptedException 
 	 */
-	public List<MobileElement> getRoomsLayout() throws InterruptedException{
-		waitUntilDisplayed(driver, "//android.widget.ExpandableListView[@resource-id='im.vector.alpha:id/fragment_recents_list']/android.widget.RelativeLayout[@index=2]", true, 5);
+	public List<MobileElement> getRoomsLayout(Boolean waitRoomCategorieToShowUp) throws InterruptedException{
+		if(waitRoomCategorieToShowUp)waitUntilDisplayed(driver, "//android.widget.ExpandableListView[@resource-id='im.vector.alpha:id/fragment_recents_list']/android.widget.RelativeLayout[@index=2]", true, 5);
 		return roomswithBrowseDirectoryLayouts.subList(0, roomswithBrowseDirectoryLayouts.size()-1);
 	}
 	/*

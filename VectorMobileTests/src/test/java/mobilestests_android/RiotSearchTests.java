@@ -25,7 +25,7 @@ public class RiotSearchTests extends RiotParentTest{
 	 * Check that the random msg is shown up.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="1driver", description="test on the search from the rooms list")
+	@Test(groups="1driver", priority=0,description="test on the search from the rooms list")
 	public void searchRoomsAndMessages() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		int randInt2 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
@@ -50,7 +50,7 @@ public class RiotSearchTests extends RiotParentTest{
 		searchInRoomsList.launchASearch(randomRoomName,true);
 		
 		//Check that only 1 result shown up and Check that the room previously created shown up
-		Assert.assertEquals(searchInRoomsList.getRoomsLayout().size(), 1);
+		Assert.assertEquals(searchInRoomsList.getRoomsLayout(true).size(), 1);
 		searchInRoomsList.checkRoomItemFromResult(1,randomRoomName,randomMsg);
 		//Check that the room previously created doesn't appears in browse directory
 		waitUntilPropertyIsSet(searchInRoomsList.getBrowseDirectory().findElementById("im.vector.alpha:id/roomSummaryAdapter_roomMessage"), "text", "Searching directory..", false, 20);
@@ -80,7 +80,7 @@ public class RiotSearchTests extends RiotParentTest{
 	 * Check that "No results" is displayed after search finished.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="1driver", description="test on the search from the rooms list with non existent searches")
+	@Test(groups="1driver", priority=1,description="test on the search from the rooms list with non existent searches")
 	public void searchForNonExistentMsgAndRoom() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomName=(new StringBuilder("randomsearch_").append(randInt1)).toString();
@@ -96,7 +96,7 @@ public class RiotSearchTests extends RiotParentTest{
 		//Check that none room is found and the search doesn't appears in browse directory
 		waitUntilPropertyIsSet(searchInRoomsList.getBrowseDirectory().findElementById("im.vector.alpha:id/roomSummaryAdapter_roomMessage"), "text", "Searching directory..", false, 20);
 		Assert.assertEquals(searchInRoomsList.getBrowseDirectory().findElementById("im.vector.alpha:id/roomSummaryAdapter_roomMessage").getText(), "0 room found for "+randomName);
-		Assert.assertEquals(searchInRoomsList.getRoomsLayout().size(), 0,"Room(s) in results and it shouldn't be with search "+randomName);
+		Assert.assertEquals(searchInRoomsList.getRoomsLayout(false).size(), 0,"Room(s) in results and it shouldn't be with search "+randomName);
 		
 		//3. Search in MESSAGES tab a random name
 		searchInRoomsList.messagesTab.click();
