@@ -114,7 +114,6 @@ public class RiotRoomDetailsPageObject extends TestUtilities{
 	 * </br> Assert that the dialog have a warning title.
 	 * </br> Click on Yes Button.
 	 */
-	
 	public void enableEncryption(){
 		enableEncryptionSwitch.click();
 		Assert.assertEquals(inputDialogNameTextView.getText(), "Warning!");

@@ -77,7 +77,7 @@ public class TestUtilities {
 			if(maxSecondsToWait!=0){Thread.sleep(500);secondsWaited=(float) (secondsWaited+0.5);}
 			try {
 				if(isXpath){
-					driver.findElement(By.xpath(idOrXpath));
+					driver.findElementByXPath(idOrXpath);
 				}else{
 					driver.findElement(By.id(idOrXpath));
 				}
@@ -180,6 +180,7 @@ public class TestUtilities {
 		System.out.println("s="+scrollStart);
 		Double screenHeightEnd = dimensions.getHeight() * 0.2;
 		int scrollEnd = screenHeightEnd.intValue();
-		AppiumFactory.getAndroidDriver1().swipe(0,scrollStart,0,scrollEnd,2000);
+		//AppiumFactory.getAndroidDriver1().swipe(0,scrollStart,0,scrollEnd,2000);
+		driver.swipe(0,scrollStart,0,scrollEnd,2000);
 	}
 }

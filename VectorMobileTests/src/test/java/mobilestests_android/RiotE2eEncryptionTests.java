@@ -19,7 +19,7 @@ import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
 @Listeners({ ScreenshotUtility.class })
-public class RiotE2eEncryptionTest extends RiotParentTest{
+public class RiotE2eEncryptionTests extends RiotParentTest{
 	private String roomWithEncryption="auto test encryption";
 	private String encrypted_msg_1="msg sent in encrypted room";
 	private String encrypted_msg_2="this msg will be decrypted";

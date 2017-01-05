@@ -11,6 +11,11 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
 import utility.TestUtilities;
 
+/**
+ * ANDROID LOGIN AND REGISTER PAGE
+ * @author jeang
+ *
+ */
 public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	private AppiumDriver<MobileElement> driver;
 	

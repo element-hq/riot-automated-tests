@@ -3,15 +3,18 @@
 <suite name="Suite">
   <test name="Test">
     <classes>
-      <class name="mobilestests.RiotMiscTests"/>
-      <class name="mobilestests.RiotDirectMessagesTests"/>
-      <class name="mobilestests.RiotMessagesReceptionTests"/>
-      <class name="mobilestests.RiotVoipTests"/>
-      <class name="mobilestests.RiotLoginTests"/>
-      <class name="mobilestests.RiotRoomInvitationTests"/>
-      <class name="mobilestests.RiotRegisterTests"/>
-      <class name="mobilestests.RiotE2eEncryptionTest"/>
-      <class name="mobilestests.RiotNoConnectionTests"/>
+      <class name="mobilestests_android.RiotLoginTests"/>
+      <class name="mobilestests_ios.RiotLoginTests_ios"/>
+      <class name="mobilestests_android.RiotDirectMessagesTests"/>
+      <class name="mobilestests_ios.RiotE2eEncryptionTests_ios"/>
+      <class name="mobilestests_android.RiotSearchTests"/>
+      <class name="mobilestests_android.RiotNoConnectionTests"/>
+      <class name="mobilestests_android.RiotRoomInvitationTests"/>
+      <class name="mobilestests_android.RiotE2eEncryptionTests"/>
+      <class name="mobilestests_android.RiotMessagesReceptionTests"/>
+      <class name="mobilestests_android.RiotMiscTests"/>
+      <class name="mobilestests_android.RiotVoipTests"/>
+      <class name="mobilestests_android.RiotRegisterTests"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

@@ -1,12 +1,12 @@
 package mobilestests_android;
 
+import org.testng.annotations.Test;
 import java.net.MalformedURLException;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
-import org.testng.annotations.Test;
 
 import pom_android.RiotCaptchaPageObject;
 import pom_android.RiotLoginAndRegisterPageObjects;

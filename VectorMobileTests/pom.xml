@@ -35,6 +35,8 @@
 </dependency>
   </dependencies>
   <build>
+            <sourceDirectory>${basedir}/src</sourceDirectory>
+            <testSourceDirectory>${basedir}/test</testSourceDirectory>
   	<plugins>
   		<plugin>
   			<groupId>org.testng</groupId>
