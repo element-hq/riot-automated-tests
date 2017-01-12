@@ -62,6 +62,9 @@ public class TestUtilities {
 		Boolean isDisplayed = false;
 		Boolean isXpath=false;
 		String methodUsed="Method used : byId";
+		if(driver.getCapabilities().getPlatform().name().equals("MAC")){
+			methodUsed="Method used : by AccessibilityId";
+		}
 		if(idOrXpath.contains("//")){
 			isXpath=true;
 			methodUsed="Method used : byXpath";
@@ -79,7 +82,12 @@ public class TestUtilities {
 				if(isXpath){
 					driver.findElementByXPath(idOrXpath);
 				}else{
-					driver.findElement(By.id(idOrXpath));
+					if(driver.getCapabilities().getPlatform().name().equals("MAC")){
+						driver.findElementsByAccessibilityId((idOrXpath));
+					}else{
+						driver.findElement(By.id(idOrXpath));
+					}
+					
 				}
 				isDisplayed=true;
 			} catch (Exception e) {
