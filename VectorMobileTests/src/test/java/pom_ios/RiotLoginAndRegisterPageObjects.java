@@ -22,45 +22,56 @@ private IOSDriver<MobileElement> driver;
 		PageFactory.initElements(new AppiumFieldDecorator(myDriver), this);
 		driver= (IOSDriver<MobileElement>) myDriver;
 		try {
-			waitUntilDisplayed(driver,"//XCUIElementTypeApplication/XCUIElementTypeWindow/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView[1]", true, 5);
+			waitUntilDisplayed(driver,"AuthenticationVCAuthenticationScrollContentView", true, 5);
 					} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		//ExplicitWait(driver, loginScrollView);
 	}
+	/**
+	 * Authentication view : contains auth nav bar, and auth forms.
+	 */
+	@iOSFindBy(accessibility="AuthenticationVCView")
+	public MobileElement authenticationView;
+	
 	/*
 	 * NAVIGATION BAR
 	 */
-	@iOSFindBy(xpath="//XCUIElementTypeApplication/XCUIElementTypeWindow/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeNavigationBar")
+	@iOSFindBy(accessibility="AuthenticationVCNavigationBar")
 	public MobileElement navigationBar;
-	//@iOSFindBy(xpath="//XCUIElementTypeApplication/XCUIElementTypeWindow/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeNavigationBar/XCUIElementTypeButton[2]")
 	@iOSFindBy(accessibility="Register")
 	public MobileElement registerButton;
-	@iOSFindBy(accessibility="Cancel")
+	@iOSFindBy(accessibility="AuthenticationVCCancelAuthFallbackButton")
 	public MobileElement cancelButton;
 	
 	/*
-	 * Riot logo
+	 * AUTHENTICATION VIEW : auth forms, forgot password forms...
 	 */
-	//@iOSFindBy(xpath="//XCUIElementTypeApplication/XCUIElementTypeWindow/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeImage")
-	@iOSFindBy(accessibility="logo")
+	@iOSFindBy(accessibility="AuthenticationVCSrcollView")
+	public MobileElement authenticationScrollView;
+	@iOSFindBy(accessibility="AuthenticationVCWelcomeImageView")
 	public MobileElement riotLogoImage;
-	
-	
 	/*
-	 * MAIN LOGIN FORM
+	 *  Forms
 	 */
-	@iOSFindBy(xpath="//XCUIElementTypeApplication/XCUIElementTypeWindow/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther")
-	public MobileElement loginScrollView;
-			/**
+	@iOSFindBy(accessibility="AuthenticationVCInputContainerView")
+	public MobileElement authenticationInputContainer;
+			/*
 			 * 		login part
 			 */
-	//
-	@iOSFindBy(xpath="//XCUIElementTypeTextField[1]")
-	public MobileElement emailOrUserNameEditText;
-	//
-	@iOSFindBy(xpath="//XCUIElementTypeSecureTextField[1]")
-	public MobileElement passwordEditText;
+	@iOSFindBy(accessibility="AuthInputsViewUserLoginTextField")
+	public MobileElement emailOrUserNameTextField;
+	@iOSFindBy(accessibility="AuthInputsViewPasswordTextField")
+	public MobileElement passwordTextField;
+	
+		/*
+		 * 		register part
+		 */
+	@iOSFindBy(accessibility="AuthInputsViewUserLoginTextField")
+	public MobileElement emailTextField;
+	@iOSFindBy(accessibility="AuthInputsVRepeatPasswordTextField")
+	public MobileElement repeatPasswordTextField;
+	
 	
 	@iOSFindBy(accessibility="In progress")
 	public MobileElement loadingWheel;
@@ -68,41 +79,43 @@ private IOSDriver<MobileElement> driver;
 	/*
 	 * BOTTOM: Forgot password, login
 	 */
-	@iOSFindBy(accessibility="Forgot password?")
+	@iOSFindBy(accessibility="AuthenticationVCForgotPasswordButton")
 	public MobileElement forgotPwdButton;
-	@iOSFindBy(accessibility="Log in")
+	@iOSFindBy(accessibility="AuthenticationVCLoginButton")
 	public MobileElement loginButton;
-	@iOSFindBy(accessibility="Use custom server options (advanced)")
+	@iOSFindBy(accessibility="AuthenticationVCOptionTickButton")
 	public MobileElement customServerOptionsCheckBox;
 	
 	/*
 	 * FORGOT PASSWORD FORM
 	 */
-	@iOSFindBy(xpath="//XCUIElementTypeApplication/XCUIElementTypeWindow//XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther")
+	@iOSFindBy(accessibility="ForgotPasswordInputView")
 	public MobileElement inputsForgetPasswordLayout;
-	@iOSFindBy(accessibility="To reset your password, enter the email address linked to your account:")
-	public MobileElement resetPasswordTextView;
-	@iOSFindBy(xpath="//XCUIElementTypeStaticText[@name='To reset your password, enter the email address linked to your account:']/../XCUIElementTypeOther[1]/XCUIElementTypeTextField[1]")
+	@iOSFindBy(accessibility="ForgotPasswordInputViewMessageLabel")
+	public MobileElement forgetPasswordMessageLabel;
+	@iOSFindBy(accessibility="ForgotPasswordInputViewEmailTextField")
 	public MobileElement mailResetPwdEditText;
-	@iOSFindBy(xpath="//XCUIElementTypeStaticText[@name='To reset your password, enter the email address linked to your account:']/../XCUIElementTypeOther[2]/XCUIElementTypeSecureTextField[1]")
+	@iOSFindBy(accessibility="ForgotPasswordInputViewPasswordTextField")
 	public MobileElement newPwdResetPwdEditText;
-	@iOSFindBy(xpath="//XCUIElementTypeStaticText[@name='To reset your password, enter the email address linked to your account:']/../XCUIElementTypeOther[3]/XCUIElementTypeSecureTextField[1]")
+	@iOSFindBy(accessibility="ForgotPasswordInputViewTextField")
 	public MobileElement confirmNewPwdResetPwdEditText;
-	@iOSFindBy(accessibility="Send Reset Email")
+	@iOSFindBy(accessibility="AuthenticationVCLoginButton")
 	public MobileElement sendResetEmailButton;
 	
 	/*
 	 * CUSTOM SERVER FORM
 	 */
-	@iOSFindBy(accessibility="Home Server:")
+	@iOSFindBy(accessibility="AuthenticationVCServerOptionsContainer")
+	public MobileElement authenticationOptionContainer;
+	@iOSFindBy(accessibility="AuthenticationVCHSLabel")
 	public MobileElement homeServerStaticText;
-	@iOSFindBy(xpath="//XCUIElementTypeStaticText[@name='Home Server:']/../XCUIElementTypeTextField[1]")
-	public MobileElement homeServerEditText;
+	@iOSFindBy(accessibility="AuthenticationVCHSTextField")
+	public MobileElement homeServerTextField;
 	//identity server
-	@iOSFindBy(accessibility="Identity Server:")
+	@iOSFindBy(accessibility="AuthenticationVCISLabel")
 	public MobileElement identityServerStaticText;
-	@iOSFindBy(xpath="//XCUIElementTypeStaticText[@name='Identity Server:']/../XCUIElementTypeTextField[1]")
-	public MobileElement identityServerEditText;
+	@iOSFindBy(accessibility="AuthenticationVCISTextField")
+	public MobileElement identityServerTextField;
 	
 	/*
 	 * DIALOG ALERT
@@ -114,5 +127,10 @@ private IOSDriver<MobileElement> driver;
 	@iOSFindBy(accessibility="OK")
 	public MobileElement dialogOkButton;
 	
+	/*
+	 * CAPTCHA
+	 */
+	@iOSFindBy(accessibility="AuthInputsVRecaptchaWebView")
+	public MobileElement captchaWebView;
 	
 }

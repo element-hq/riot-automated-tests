@@ -2,6 +2,7 @@ package mobilestests_android;
 
 import org.testng.annotations.Test;
 import java.net.MalformedURLException;
+import java.util.Set;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeGroups;
@@ -129,6 +130,16 @@ public class RiotRegisterTests extends RiotParentTest {
 		captchaPage.verifyCaptchaButton.click();
 		ExplicitWait(AppiumFactory.getAndroidDriver1(),captchaPage.tryAgainView);
 		Assert.assertTrue(captchaPage.tryAgainView.isDisplayed(), "The 'Please try again' view is not displayed");
+	}
+	
+	@Test(groups={"1driver"}, enabled=false)
+	public void registerTestWebView() throws InterruptedException{
+		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
+		registerPage.fillRegisterForm("", "riotuser16","riotuser", "riotuser");
+		RiotCaptchaPageObject captchaPage = new RiotCaptchaPageObject(AppiumFactory.getAndroidDriver1());
+		captchaPage.notARobotCheckBox.click();
+		captchaPage.handleCaptchaWebView();
+
 	}
 	
 	@BeforeGroups(groups="restartneeded")

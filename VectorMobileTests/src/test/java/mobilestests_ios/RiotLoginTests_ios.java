@@ -2,6 +2,8 @@ package mobilestests_ios;
 
 import java.net.MalformedURLException;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -28,30 +30,65 @@ public class RiotLoginTests_ios extends RiotParentTest{
 	@Test(groups={"1driver_ios"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void loginAndLogoutiOsTest(String sUserName,String sPassword)  throws Exception {
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getiOsDriver1());
-		loginPage.emailOrUserNameEditText.setValue(sUserName);
-		loginPage.passwordEditText.setValue(sPassword);
+		loginPage.emailOrUserNameTextField.setValue(sUserName);
+		loginPage.passwordTextField.setValue(sPassword);
 		loginPage.loginButton.click();
 
 		//Wait for the main page (rooms list) to be opened, and log out.
+		Thread.sleep(5000);
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
-		//Thread.sleep(5000);
 		mainPage.logOut();
-		waitUntilDisplayed(AppiumFactory.getiOsDriver1(), "//XCUIElementTypeApplication/XCUIElementTypeWindow/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther", true, 5);
-		Assert.assertTrue(loginPage.loginScrollView.isEnabled(), "The login page isn't displayed after the log-out.");
+		Assert.assertTrue(loginPage.authenticationView.isEnabled(), "The login page isn't displayed after the log-out.");
 	}
 	
+	@Test(groups={"2driver_ios"})
+	public void doubleLogin(){
+String sUserName="riotuser1";
+String sPassword ="riotuser";
+		RiotLoginAndRegisterPageObjects loginPage1 = new RiotLoginAndRegisterPageObjects(AppiumFactory.getiOsDriver1());
+		RiotLoginAndRegisterPageObjects loginPage2 = new RiotLoginAndRegisterPageObjects(AppiumFactory.getiOsDriver2());
+		loginPage1.emailOrUserNameTextField.setValue(sUserName);
+		loginPage1.passwordTextField.setValue(sPassword);
+		loginPage1.loginButton.click();
+		loginPage2.emailOrUserNameTextField.setValue(sUserName);
+		loginPage2.passwordTextField.setValue(sPassword);
+		loginPage2.loginButton.click();
+	}
 	
 	@Test(groups={"1driver_ios"})
 	public void simpleLogin(){
-//		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getiOsDriver1());
-//		loginPage.emailOrUserNameEditText.setValue("riotuser2");
-//		loginPage.passwordEditText.setValue("riotuser");
-//		loginPage.loginButton.click();
+		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getiOsDriver1());
+		loginPage.emailOrUserNameTextField.setValue("riotuser2");
+		loginPage.passwordTextField.setValue("riotuser");
+		loginPage.loginButton.click();
 		
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
 		mainPage.settingsButton.click();
 		mainPage.signOutButton.click();
 		//mainPage.navigationBar.click();
+	}
+	
+	@Test(groups={"1driver_ios"})
+	public void checkCancelButtonNotDisplayed(){
+		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getiOsDriver1());
+		Assert.assertTrue(loginPage.registerButton.isDisplayed());
+		//loginPage.cancelButton.click();
+		//Assert.assertEquals(loginPage.cancelButton.getAttribute("Is Visible"),"false");
+	//	IsElementPresent sd=new IsElementPresent(ByAccessibilityId);
+		//IsElementPresent(ByAccessibilityId("ss"));
+		//loginPage.cancelButton.
+	
+//		Assert.assertTrue(ExpectedConditions.elementToBeClickable(loginPage.registerButton) != null);
+//		Assert.assertFalse(ExpectedConditions.elementToBeClickable(loginPage.cancelButton) != null);
+		System.out.println(loginPage.cancelButton.getSize());
+		System.out.println(loginPage.cancelButton.getAttribute("userInteractionEnabled"));
+		System.out.println(ExpectedConditions.elementToBeClickable(loginPage.cancelButton));
+		System.out.println(ExpectedConditions.invisibilityOfElementLocated(By.name("AuthenticationVCCancelAuthFallbackButton")).toString());
+		System.out.println(ExpectedConditions.elementToBeClickable(loginPage.registerButton));
+		
+//		System.out.println(AppiumFactory.getiOsDriver1().findElementsByAccessibilityId("Register").isEmpty());
+//		System.out.println(AppiumFactory.getiOsDriver1().findElementsByAccessibilityId("AuthenticationVCCancelAuthFallbackButton").isEmpty());
+		
 	}
 	
 	/**
@@ -66,8 +103,8 @@ public class RiotLoginTests_ios extends RiotParentTest{
 		loginPage.customServerOptionsCheckBox.click();
 		Assert.assertEquals(loginPage.homeServerStaticText.getText(), homeServerTextView);
 		Assert.assertEquals(loginPage.identityServerStaticText.getText(), identityServerTextView);
-		Assert.assertEquals(loginPage.homeServerEditText.getText(), Constant.DEFAULT_MATRIX_SERVER);
-		Assert.assertEquals(loginPage.identityServerEditText.getText(), Constant.DEFAULT_IDENTITY_SERVER);
+		Assert.assertEquals(loginPage.homeServerTextField.getText(), Constant.DEFAULT_MATRIX_SERVER);
+		Assert.assertEquals(loginPage.identityServerTextField.getText(), Constant.DEFAULT_IDENTITY_SERVER);
 	}
 
 	/**
@@ -79,13 +116,13 @@ public class RiotLoginTests_ios extends RiotParentTest{
 		String expectedResetPwdMessage="To reset your password, enter the email address linked to your account:";
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getiOsDriver1());
 		loginPage.forgotPwdButton.click();
-		Assert.assertEquals(loginPage.resetPasswordTextView.getText(), expectedResetPwdMessage);
+		Assert.assertEquals(loginPage.forgetPasswordMessageLabel.getText(), expectedResetPwdMessage);
 		Assert.assertTrue(isPresentTryAndCatch(loginPage.mailResetPwdEditText), "The email address  edittext is not present");
 		Assert.assertTrue(isPresentTryAndCatch(loginPage.newPwdResetPwdEditText), "The new password edittext is not present");
 		Assert.assertTrue(isPresentTryAndCatch(loginPage.confirmNewPwdResetPwdEditText), "The confirm your new pwd edittext is not present");
 		Assert.assertTrue(loginPage.sendResetEmailButton.isEnabled(), "The send reset email button is not enabled");
 		//verifies that the login and register button are hidden
-		Assert.assertFalse(isPresentTryAndCatch(loginPage.loginButton), "The login button is displayed");
+		Assert.assertEquals(loginPage.loginButton.getText(), "Send Reset Email");
 		Assert.assertFalse(isPresentTryAndCatch(loginPage.registerButton), "The register button is displayed");
 		//riot logo is still displayed
 		Assert.assertTrue(isPresentTryAndCatch(loginPage.riotLogoImage), "The riot logo isn't displayed");
@@ -140,7 +177,7 @@ public class RiotLoginTests_ios extends RiotParentTest{
 		loginPage.confirmNewPwdResetPwdEditText.setValue(confirmPwdTest);
 		loginPage.sendResetEmailButton.click();
 		//Assert.assertTrue(loginPage.loginScrollView.isDisplayed(), "The Riot login page is not displayed.");
-		Assert.assertTrue(loginPage.loginScrollView.getSize().width>0, "The Riot login page is not displayed.");
+		Assert.assertTrue(loginPage.authenticationInputContainer.getSize().width>0, "The Riot login page is not displayed.");
 		//Assert.assertTrue(waitUntilDisplayed(AppiumFactory.getiOsDriver1(), "//XCUIElementTypeApplication/XCUIElementTypeWindow/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther", true, 2), "The Riot login page is not displayed");
 	}
 }
