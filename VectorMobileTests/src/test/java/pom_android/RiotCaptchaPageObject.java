@@ -1,5 +1,8 @@
 package pom_android;
 
+import java.util.Set;
+
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
 import io.appium.java_client.AppiumDriver;
@@ -7,10 +10,11 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import utility.AppiumFactory;
 import utility.TestUtilities;
 
 public class RiotCaptchaPageObject extends TestUtilities{
-	private AndroidDriver<MobileElement> driver;
+	private AppiumDriver<MobileElement> driver;
 	public RiotCaptchaPageObject(AppiumDriver<MobileElement> myDriver) throws InterruptedException{
 		driver=(AndroidDriver<MobileElement>) myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
@@ -48,6 +52,9 @@ public class RiotCaptchaPageObject extends TestUtilities{
 	/**
 	 * CAPTCHA SELECT IMAGE VIEW
 	 */
+	//@AndroidFindBy(xpath="//android.webkit.WebView")
+	@AndroidFindBy(xpath="//android.view.View")
+	public WebElement newCaptchaWebView;
 	@AndroidFindBy(xpath="//android.view.View[count(android.view.View)>5]")//main view containing the images to select in order to validate the captcha
 	public MobileElement selectImageForCaptchaView;
 	@AndroidFindBy(xpath="//android.widget.Button[@content-desc='VERIFY']")
@@ -73,6 +80,21 @@ public class RiotCaptchaPageObject extends TestUtilities{
 			}
 		}
 
+	}
+	
+	public void handleCaptchaWebView() throws InterruptedException{
+		Thread.sleep(15000);
+		//Set<String> contextNames = AppiumFactory.getAndroidDriver1().getContextHandles();
+		Set<String> contextNames = ( AppiumFactory.getAndroidDriver1()).getContextHandles();
+		for (String contextName : contextNames) {
+
+			      System.out.println(contextName);
+			  }
+		System.out.println(AppiumFactory.getAndroidDriver1().getCurrentUrl());
+		AppiumFactory.getAndroidDriver1().context("WEBVIEW");
+		//captchaPage.newCaptchaWebView.
+		newCaptchaWebView.submit();
+		newCaptchaWebView.click();
 	}
 }
 

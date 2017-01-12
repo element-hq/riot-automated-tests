@@ -3,6 +3,7 @@ package mobilestests_ios;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import pom_ios.RiotCameraPageObjects;
 import pom_ios.RiotRoomPageObjects;
 import pom_ios.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
@@ -17,6 +18,24 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 	private String roomWithEncryption="auto test encryption";
 	private String encrypted_msg_1="msg sent in encrypted room";
 	
+	
+	
+	/**
+	 * 1. Create a room and enable encryption.
+	 * 2. Send a photo
+	 * Check that the photo is correctly uploaded. 
+	 * @throws InterruptedException 
+	 */
+	@Test(groups={"1driver_ios"}, description="upload a photo in encrypted room")
+	public void sendPhotoInEncryptedRoom() throws InterruptedException{
+		//1. Create room with Device 1 and enable encryption.
+		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
+		//RiotRoomPageObjects newRoom= roomsList.createRoom();
+		roomsList.getRoomByName("a encryption").click();//TEMP
+		RiotRoomPageObjects roomPage = new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		roomPage.attachPhotoFromCamera("Actual Size");//Small
+		roomPage.menuBackButton.click();
+	}
 	/**
 	 * 1. Create room with Device 1 and enable encryption.
 	 * Check that the last event in the room is about turning e2e encryption
@@ -32,9 +51,10 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 		//1. Create room with Device 1 and enable encryption.
 		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
 		//RiotRoomPageObjects newRoom= roomsList.createRoom();
-		
+		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver2());//TMP
 		roomsList.getRoomByName("a encryption").click();//TEMP
 		RiotRoomPageObjects roomPage = new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		
 //		//Open room details
 //		waitUntilDisplayed(AppiumFactory.getiOsDriver1(), "//XCUIElementTypeApplication/XCUIElementTypeWindow//XCUIElementTypeNavigationBar[@name='Messages']/XCUIElementTypeOther[2]//XCUIElementTypeImage", true, 2);
 //		roomPage.openRoomDetails.click();
@@ -50,9 +70,16 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 		////Check that the last event in the room is about turning e2e encryption
 //		roomPage.menuBackButton.click();
 		//utility.Constant.ENCRYPTION_TURNEDON_EVENT
-		Assert.assertTrue(roomPage.getTextViewFromBubble(roomPage.getLastBubble()).getText().contains("Mais"), "The last message isn't about encryption turned on.");
+		//TODO Assert.assertTrue(roomPage.getTextViewFromBubble(roomPage.getLastBubble()).getText().contains("Hi"), "The last message isn't about encryption turned on.");
 		
 		//2. Sent a message.
-		roomPage.sendAMessage(encrypted_msg_1);
+		//TODO roomPage.sendAMessage(encrypted_msg_1);
+		
+		//tmp: with device2, open the room
+		
+		roomsList2.getRoomByName("a encryption").click();
+		RiotRoomPageObjects roomPage2 = new RiotRoomPageObjects(AppiumFactory.getiOsDriver2());
+		roomPage2.sendAMessage("coucou");
+
 	}
 }

@@ -9,6 +9,7 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
+import utility.AppiumFactory;
 import utility.TestUtilities;
 
 public class RiotRoomPageObjects extends TestUtilities{
@@ -50,11 +51,27 @@ public class RiotRoomPageObjects extends TestUtilities{
 	 * Return the last bubble as a mobileElement.
 	 */
 	public MobileElement getLastBubble(){
-		return bubblesList.get(bubblesList.size()-1);
+		if (bubblesList.size()>0){
+			return bubblesList.get(bubblesList.size()-1);
+		}
+		else{
+			return null;
+		}
 	}
 	public MobileElement getTextViewFromBubble(MobileElement bubble){
 		return bubble.findElementByXPath("//XCUIElementTypeTextView");
 	}
+	/*
+	 * SELECT MEDIA SIZE MENU
+	 */
+	@iOSFindBy(accessibility="Do you want to send as:")
+	public MobileElement selectSizeMenuSheet;
+	/**
+	 * 'Send' as item list. Contains small -> actual size items + cancel item.
+	 */
+	@iOSFindBy(xpath="//XCUIElementTypeApplication/XCUIElementTypeWindow//XCUIElementTypeSheet//XCUIElementTypeCollectionView/XCUIElementTypeCell")
+	public MobileElement sendAsItemList;
+	
 	
 	/*
 	 * BOTTOM
@@ -74,9 +91,22 @@ public class RiotRoomPageObjects extends TestUtilities{
 
 	
 	
-	public void attachPhotoFromCamera(String string) {
-		// TODO Auto-generated method stub
-		
+	public void attachPhotoFromCamera(String size) {
+		uploadButton.click();
+		RiotCameraPageObjects cameraPage = new RiotCameraPageObjects(AppiumFactory.getiOsDriver1());
+		cameraPage.cameraCaptureButton.click();
+		ExplicitWait(AppiumFactory.getiOsDriver1(), cameraPage.okButton);
+		cameraPage.okButton.click();
+		getItemFromSendAsMenu(size).click();;
+	}
+	/**
+	 * Return item from the "Send as menu"
+	 * @param size : Original, Large, Medium, Small
+	 * @return
+	 */
+	public MobileElement getItemFromSendAsMenu(String size){
+		ExplicitWait(driver, selectSizeMenuSheet);
+		return driver.findElementByXPath("//XCUIElementTypeApplication/XCUIElementTypeWindow//XCUIElementTypeSheet//XCUIElementTypeCollectionView/XCUIElementTypeCell/XCUIElementTypeButton[contains(@name,'"+size+"')]");
 	}
 
 

@@ -107,7 +107,7 @@ private AppiumDriver<MobileElement> driver;
 	//@iOSFindBy(xpath="///XCUIElementTypeWindow[1]//XCUIElementTypeTableView[1]//XCUIElementTypeTableCell[1]//XCUIElementTypeButton[@value='Sign Out']")
 	//@iOSFindBy()
 	//@iOSFindBy(xpath="//XCUIElementTypeButton[@name='Sign Out']")
-	@iOSFindBy(accessibility="Sign Out")
+	@iOSFindBy(accessibility="SettingsVCSignOutButton")
 	public MobileElement signOutButton;
 	
 	/**
