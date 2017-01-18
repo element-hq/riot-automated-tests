@@ -18,6 +18,9 @@ import utility.ScreenshotUtility;
 
 @Listeners({ ScreenshotUtility.class })
 public class RiotRoomInvitationTests extends RiotParentTest{
+	private String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMjFjaWQgbm9uY2UgPSAqaUcwOVFzc2w4PUB0OixkCjAwMmZzaWduYXR1cmUgTz8fR2UypyIHa-uKum3e60I7oxIg087S4LQw4kM_R9kK";  
+	private String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
+	
 	/**
 	 * Required : the test user hasn't received any invitation.
 	 * Receive an invitation to a room. </br>
@@ -28,7 +31,6 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver"})
 	public void rejectInvitationToARoom() throws IOException, InterruptedException{
-		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 		String invitedUserAdress=Constant.DEFAULT_USERADRESS;
 		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg2MTAyNjEKMDAyZnNpZ25hdHVyZSAMRHy3V2nt7jDJlDrhq1NkEBBiHH6umGQvaydgqLcYlQo";
 		String roomName="room tests Jean";

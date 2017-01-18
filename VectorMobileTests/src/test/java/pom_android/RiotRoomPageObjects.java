@@ -75,6 +75,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	 * @throws InterruptedException 
 	 */
 	public void changeRoomName(String roomName) throws InterruptedException {
+		waitUntilDisplayed(driver, "im.vector.alpha:id/action_bar_header", true, 10);
 		roomNameTextViewCollapsed.click();
 		roomNameFromChangeDialogEditText.sendKeys(roomName);
 		okFromChangeRoomNameButton.click();

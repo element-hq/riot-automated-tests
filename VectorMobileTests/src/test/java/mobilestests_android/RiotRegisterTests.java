@@ -1,13 +1,12 @@
 package mobilestests_android;
 
-import org.testng.annotations.Test;
 import java.net.MalformedURLException;
-import java.util.Set;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
 
 import pom_android.RiotCaptchaPageObject;
 import pom_android.RiotLoginAndRegisterPageObjects;
@@ -104,7 +103,8 @@ public class RiotRegisterTests extends RiotParentTest {
 		registerPage.registerButton.click();
 		registerPage.customServerOptionsCheckBox.click();
 		registerPage.homeServerEditText.clear();
-		registerPage.identityServerEditText.setValue("");;
+		AppiumFactory.getAndroidDriver1().hideKeyboard();
+		registerPage.identityServerEditText.clear();
 		//Assert that the register button is not clickable
 		Assert.assertFalse(registerPage.registerButton.isEnabled(), "The register button is not disabled after clearing the custom server URLs");
 	}
@@ -139,7 +139,6 @@ public class RiotRegisterTests extends RiotParentTest {
 		RiotCaptchaPageObject captchaPage = new RiotCaptchaPageObject(AppiumFactory.getAndroidDriver1());
 		captchaPage.notARobotCheckBox.click();
 		captchaPage.handleCaptchaWebView();
-
 	}
 	
 	@BeforeGroups(groups="restartneeded")

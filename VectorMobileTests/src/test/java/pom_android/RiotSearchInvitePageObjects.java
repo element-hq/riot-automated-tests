@@ -50,6 +50,7 @@ public class RiotSearchInvitePageObjects extends TestUtilities{
 		try {
 			//click on the status because clinking on the center of the item doesn't work
 			detailsMemberListView.get(0).findElementById("im.vector.alpha:id/filtered_list_status").click();
+			waitUntilDisplayed(driver, "im.vector.alpha:id/room_creation_spinner_views", false, 10);
 		} catch (Exception e) {
 			System.out.println("No members was found with '"+nameOrEmailMember+"'");
 		}

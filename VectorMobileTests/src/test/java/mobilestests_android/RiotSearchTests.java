@@ -107,8 +107,9 @@ public class RiotSearchTests extends RiotParentTest{
 		//4. Search in PEOPLE tab a random name
 		searchInRoomsList.peopleTab.click();
 		searchInRoomsList.waitUntilSearchFinished();
-		//Check that "No results" is displayed after search finished.
-		Assert.assertEquals(searchInRoomsList.noResultTextView.getText(), "No Results");
+		//Check that the searched people is in the first and unique item of the results list
+		Assert.assertEquals(searchInRoomsList.listPeopleResultWithCategorie.size(),1, "There is more than 1 item in the people result.");
+		searchInRoomsList.checkPeopleItemFromResult(0, randomName,"");
 		
 		//5. Search in FILES tab a random name
 		searchInRoomsList.filesTab.click();

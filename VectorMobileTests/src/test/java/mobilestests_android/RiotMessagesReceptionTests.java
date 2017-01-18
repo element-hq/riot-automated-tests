@@ -20,6 +20,8 @@ import utility.ScreenshotUtility;
 
 @Listeners({ ScreenshotUtility.class })
 public class RiotMessagesReceptionTests extends RiotParentTest{
+	private String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMjFjaWQgbm9uY2UgPSAqaUcwOVFzc2w4PUB0OixkCjAwMmZzaWduYXR1cmUgTz8fR2UypyIHa-uKum3e60I7oxIg087S4LQw4kM_R9kK";  
+	private String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 	/**
 	 * Required : user must be logged in room and notifications are On on this room </br>
 	 * Receive a message in a room from an other user. </br>
@@ -29,9 +31,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 */
 	@Test(groups={"messageReceivedInList","roomslist","1driver"},priority=1)
 	public void checkBadgeAndMessageOnRoomItem() throws InterruptedException, IOException{
-		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 		String roomName="room tests Jean";
-		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg2MTAyNjEKMDAyZnNpZ25hdHVyZSAMRHy3V2nt7jDJlDrhq1NkEBBiHH6umGQvaydgqLcYlQo";
 		String messageTest="coucou";
 		//TODO invite user in the room if room not present
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
@@ -119,8 +119,6 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 */
 	@Test(dependsOnGroups="roomOpenned",groups={"roomslist","1driver"},priority=4)
 	public void checkAvatarDisplayInRoomPage() throws IOException, InterruptedException{
-		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
-		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg2MTAyNjEKMDAyZnNpZ25hdHVyZSAMRHy3V2nt7jDJlDrhq1NkEBBiHH6umGQvaydgqLcYlQo";
 		String messageTest="hello from sender";
 		String messageTest2="this message have an avatar";
 		String messageTest3="this message doesn't have an avatar";
@@ -142,9 +140,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 */
 	@Test(dependsOnGroups="roomOpenned",groups={"roomslist","1driver"},priority=5)
 	public void checkImageMessageOnRoomPage() throws IOException, InterruptedException{
-		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 		String pictureURL="mxc://matrix.org/gpQYPbjoqVeTWCGivjRshIni";
-		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg2MTAyNjEKMDAyZnNpZ25hdHVyZSAMRHy3V2nt7jDJlDrhq1NkEBBiHH6umGQvaydgqLcYlQo";
 		//send picture of already uploaded picture
 		HttpsRequestsToMatrix.sendPicture(senderAccesToken, roomId, pictureURL);
 		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());

@@ -149,8 +149,26 @@ private AndroidDriver<MobileElement> driver;
 		Assert.assertTrue(roomAvatar.height!=0 && roomAvatar.width!=0, "Avatar of the searched messages at index "+index+"  has null dimension");
 	}
 	
+	/*
+	 *	PEOPLE RESULTS 
+	 */
 	
-
+	/**
+	 * List of people found and categorie(s) (KNOWN CONTACTS (X).
+	 */
+	@AndroidFindBy(xpath="//android.widget.ExpandableListView[@resource-id='im.vector.alpha:id/search_people_list']/android.widget.RelativeLayout")
+	public List<MobileElement> listPeopleResultWithCategorie;
+	
+	/**
+	 * Check a people item from the PEOPLE results.
+	 */
+	public void checkPeopleItemFromResult(int index, String displayNameAndMatrixId, String status){
+		MobileElement peopleToCheck=listPeopleResultWithCategorie.get(index);
+		org.openqa.selenium.Dimension roomAvatar=peopleToCheck.findElementById("im.vector.alpha:id/filtered_list_avatar").getSize();
+		Assert.assertTrue(roomAvatar.height!=0 && roomAvatar.width!=0, "Avatar of the searched people at index "+index+"  has null dimension");
+		if(displayNameAndMatrixId!=null)Assert.assertEquals(peopleToCheck.findElementById("im.vector.alpha:id/filtered_list_name").getText(), displayNameAndMatrixId);
+		if(status!=null)Assert.assertEquals(peopleToCheck.findElementById("im.vector.alpha:id/filtered_list_status").getText(), status);
+	}
 
 
 	

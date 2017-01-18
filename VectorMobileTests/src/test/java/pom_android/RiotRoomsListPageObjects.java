@@ -66,7 +66,7 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	 * @throws InterruptedException 
 	 */
 	public void previewInvitation(String roomName) throws InterruptedException{
-		waitUntilDisplayed(driver, "im.vector.alpha:id/recents_groups_invitation_group", true, 5);
+		waitUntilDisplayed(driver, "im.vector.alpha:id/recents_groups_invitation_group", true, 30);
 		try {
 			MobileElement roomInvitationLayout=getInvitationLayoutByName(roomName);
 			roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_preview_button").click();
