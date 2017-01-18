@@ -61,7 +61,7 @@ public class RiotRoomDetailsPageObject extends TestUtilities{
 	@AndroidFindBy(id="im.vector.alpha:id/room_details_members_exp_list_view")
 	public List<MobileElement> membersList;
 	
-	/*
+	/**
 	 * ADD BUTTON
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/add_participants_create_view")
@@ -71,8 +71,23 @@ public class RiotRoomDetailsPageObject extends TestUtilities{
 		addParticipantButton.click();
 		RiotSearchInvitePageObjects inviteMember = new RiotSearchInvitePageObjects(driver);
 		inviteMember.searchAndSelectMember(inviteeAddress);
-		
+		checkInviteConfirmationMsgBox(inviteeAddress);
+		inputDialogOkButton.click();
 	}
+	/**
+	 * Check texts of the invite confirmation msgbox.
+	 * @throws InterruptedException 
+	 */
+	public void checkInviteConfirmationMsgBox(String memberAddress) throws InterruptedException{
+		waitUntilDisplayed(driver, "im.vector.alpha:id/parentPanel", true, 5);
+		Assert.assertEquals(inputDialogNameTextView.getText(), "Invite?");
+		Assert.assertTrue(inputDialogTextView.getText().matches("^Are you sure you want to invite (\\S+) to this chat\\?$"));
+	}
+	
+	/*
+	 * INVITE MSGBOX CONFIRMATION.
+	 * Contains "Are you sure you want to invite ... to this chat ?".
+	 */
 	
 	/*
 	 * 				FILES TAB
@@ -81,16 +96,6 @@ public class RiotRoomDetailsPageObject extends TestUtilities{
 	/*
 	 * 				SETTINGS TAB
 	 */
-	/*
-	 * INPUT DIALOG BOX
-	 */
-	@AndroidFindBy(id="android:id/alertTitle")
-	public MobileElement inputDialogNameTextView;
-	@AndroidFindBy(id="android:id/edit")
-	public MobileElement inputDialogEditText;
-	@AndroidFindBy(id="android:id/button1")
-	public MobileElement inputDialogOkButton;
-	
 	@AndroidFindBy(id="android:id/list")
 	public MobileElement listItemSettings;
 	
@@ -116,7 +121,28 @@ public class RiotRoomDetailsPageObject extends TestUtilities{
 	 */
 	public void enableEncryption(){
 		enableEncryptionSwitch.click();
-		Assert.assertEquals(inputDialogNameTextView.getText(), "Warning!");
+		Assert.assertEquals(inputAndroidDialogNameTextView.getText(), "Warning!");
 		inputDialogOkButton.click();
 	}
+	
+	/*
+	 * 		MISC
+	 */
+	/*
+	 * INPUT DIALOG BOX
+	 */
+	@AndroidFindBy(id="im.vector.alpha:id/parentPanel")
+	public MobileElement inputDialogMainLayout;
+	@AndroidFindBy(id="im.vector.alpha:id/alertTitle")
+	public MobileElement inputDialogNameTextView;
+	@AndroidFindBy(id="android:id/alertTitle")
+	public MobileElement inputAndroidDialogNameTextView;
+	@AndroidFindBy(id="android:id/message")
+	public MobileElement inputDialogTextView;
+	@AndroidFindBy(id="android:id/edit")
+	public MobileElement inputDialogEditText;
+	@AndroidFindBy(id="android:id/button2")
+	public MobileElement inputDialogCancelButton;
+	@AndroidFindBy(id="android:id/button1")
+	public MobileElement inputDialogOkButton;
 }
