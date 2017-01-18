@@ -83,12 +83,7 @@ public class RiotRoomDetailsPageObject extends TestUtilities{
 		Assert.assertEquals(inputDialogNameTextView.getText(), "Invite?");
 		Assert.assertTrue(inputDialogTextView.getText().matches("^Are you sure you want to invite (\\S+) to this chat\\?$"));
 	}
-	
-	/*
-	 * INVITE MSGBOX CONFIRMATION.
-	 * Contains "Are you sure you want to invite ... to this chat ?".
-	 */
-	
+		
 	/*
 	 * 				FILES TAB
 	 */
