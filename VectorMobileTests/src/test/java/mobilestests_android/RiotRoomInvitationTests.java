@@ -18,7 +18,8 @@ import utility.ScreenshotUtility;
 
 @Listeners({ ScreenshotUtility.class })
 public class RiotRoomInvitationTests extends RiotParentTest{
-	private String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMjFjaWQgbm9uY2UgPSAqaUcwOVFzc2w4PUB0OixkCjAwMmZzaWduYXR1cmUgTz8fR2UypyIHa-uKum3e60I7oxIg087S4LQw4kM_R9kK";  
+	String inviterUserAccessToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMjFjaWQgbm9uY2UgPSAqaUcwOVFzc2w4PUB0OixkCjAwMmZzaWduYXR1cmUgTz8fR2UypyIHa-uKum3e60I7oxIg087S4LQw4kM_R9kK";  
+	String invitedUserAccessToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI4Y2lkIHVzZXJfaWQgPSBAcmlvdHVzZXIyOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMjFjaWQgbm9uY2UgPSA2bSNGLHM3dFcwMlA1JlFCCjAwMmZzaWduYXR1cmUgiOIVBX5WRFIpop8OHyq2uN8601NHMqG1e9eg1txWkqwK";
 	private String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 	
 	/**
@@ -32,13 +33,11 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	@Test(groups={"1driver"})
 	public void rejectInvitationToARoom() throws IOException, InterruptedException{
 		String invitedUserAdress=Constant.DEFAULT_USERADRESS;
-		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg2MTAyNjEKMDAyZnNpZ25hdHVyZSAMRHy3V2nt7jDJlDrhq1NkEBBiHH6umGQvaydgqLcYlQo";
 		String roomName="room tests Jean";
 		String leavingUserAdress=Constant.DEFAULT_USERADRESS;
-		String leavingUserAccessToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI4Y2lkIHVzZXJfaWQgPSBAcmlvdHVzZXIyOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg3NDI5OTgKMDAyZnNpZ25hdHVyZSBapU0beWNgBCwjIb0CT16LUNT0F2jr0pm6qPAm7t0CEAo";
 		
-		HttpsRequestsToMatrix.leaveRoom(leavingUserAccessToken, roomId, leavingUserAdress);
-		HttpsRequestsToMatrix.sendInvitationToUser(senderAccesToken, roomId, invitedUserAdress);
+		HttpsRequestsToMatrix.leaveRoom(invitedUserAccessToken, roomId, leavingUserAdress);
+		HttpsRequestsToMatrix.sendInvitationToUser(inviterUserAccessToken, roomId, invitedUserAdress);
 		
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		ExplicitWait(AppiumFactory.getAndroidDriver1(),riotRoomsList.invitesHeadingLayout);
@@ -67,13 +66,11 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	public void cancelInvitationToARoom() throws IOException, InterruptedException{
 		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 		String invitedUserAdress=Constant.DEFAULT_USERADRESS;
-		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg2MTAyNjEKMDAyZnNpZ25hdHVyZSAMRHy3V2nt7jDJlDrhq1NkEBBiHH6umGQvaydgqLcYlQo";
 		String roomName="room tests Jean";
 		String leavingUserAdress=Constant.DEFAULT_USERADRESS;
-		String leavingUserAccessToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI4Y2lkIHVzZXJfaWQgPSBAcmlvdHVzZXIyOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg3NDI5OTgKMDAyZnNpZ25hdHVyZSBapU0beWNgBCwjIb0CT16LUNT0F2jr0pm6qPAm7t0CEAo";
 		
-		HttpsRequestsToMatrix.leaveRoom(leavingUserAccessToken, roomId, leavingUserAdress);
-		HttpsRequestsToMatrix.sendInvitationToUser(senderAccesToken, roomId, invitedUserAdress);
+		HttpsRequestsToMatrix.leaveRoom(invitedUserAccessToken, roomId, leavingUserAdress);
+		HttpsRequestsToMatrix.sendInvitationToUser(inviterUserAccessToken, roomId, invitedUserAdress);
 		
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		ExplicitWait(AppiumFactory.getAndroidDriver1(),riotRoomsList.invitesHeadingLayout);
@@ -110,13 +107,11 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	public void acceptInvitationToARoom() throws IOException, InterruptedException{
 		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 		String invitedUserAdress=Constant.DEFAULT_USERADRESS;
-		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg2MTAyNjEKMDAyZnNpZ25hdHVyZSAMRHy3V2nt7jDJlDrhq1NkEBBiHH6umGQvaydgqLcYlQo";
 		String roomName="room tests Jean";
 		String leavingUserAdress=Constant.DEFAULT_USERADRESS;
-		String leavingUserAccessToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI4Y2lkIHVzZXJfaWQgPSBAcmlvdHVzZXIyOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg3NDI5OTgKMDAyZnNpZ25hdHVyZSBapU0beWNgBCwjIb0CT16LUNT0F2jr0pm6qPAm7t0CEAo";
 		
-		HttpsRequestsToMatrix.leaveRoom(leavingUserAccessToken, roomId, leavingUserAdress);
-		HttpsRequestsToMatrix.sendInvitationToUser(senderAccesToken, roomId, invitedUserAdress);
+		HttpsRequestsToMatrix.leaveRoom(invitedUserAccessToken, roomId, leavingUserAdress);
+		HttpsRequestsToMatrix.sendInvitationToUser(inviterUserAccessToken, roomId, invitedUserAdress);
 		
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		ExplicitWait(AppiumFactory.getAndroidDriver1(),riotRoomsList.invitesHeadingLayout);
@@ -160,13 +155,11 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	public void acceptInvitationAndLeaveFromMenu() throws IOException, InterruptedException{
 		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 		String invitedUserAdress=Constant.DEFAULT_USERADRESS;
-		String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg2MTAyNjEKMDAyZnNpZ25hdHVyZSAMRHy3V2nt7jDJlDrhq1NkEBBiHH6umGQvaydgqLcYlQo";
 		String roomName="room tests Jean";
 		String leavingUserAdress=Constant.DEFAULT_USERADRESS;
-		String leavingUserAccessToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI4Y2lkIHVzZXJfaWQgPSBAcmlvdHVzZXIyOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg3NDI5OTgKMDAyZnNpZ25hdHVyZSBapU0beWNgBCwjIb0CT16LUNT0F2jr0pm6qPAm7t0CEAo";
 		
-		HttpsRequestsToMatrix.leaveRoom(leavingUserAccessToken, roomId, leavingUserAdress);
-		HttpsRequestsToMatrix.sendInvitationToUser(senderAccesToken, roomId, invitedUserAdress);
+		HttpsRequestsToMatrix.leaveRoom(invitedUserAccessToken, roomId, leavingUserAdress);
+		HttpsRequestsToMatrix.sendInvitationToUser(inviterUserAccessToken, roomId, invitedUserAdress);
 		
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		ExplicitWait(AppiumFactory.getAndroidDriver1(),riotRoomsList.invitesHeadingLayout);
