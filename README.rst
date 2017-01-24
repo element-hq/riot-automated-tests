@@ -69,6 +69,17 @@ which ios-deploy
 - workaround for start app issue: sudo chmod -R 777 /var/db/lockdown/
 - An IPA with developer provisionning profile is needed in order to launch the tests on iOS
 
+Test execution
+==============
+iOS
+---
+Make sure iOs devices used for automated test:
+- Have the developer mode enabled
+- Have UI Automation enabled: Settings -> Developer -> Enable UI Automation
+- Have auto-correction disabled: Settings -> General -> Keyboard -> Auto-Correction
+Android
+-------
+
 
 Copyright & License
 ==================
