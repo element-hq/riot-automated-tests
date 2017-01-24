@@ -71,12 +71,15 @@ which ios-deploy
 
 Test execution
 ==============
+
 iOS
 ---
-Make sure iOs devices used for automated test:
-- Have the developer mode enabled
-- Have UI Automation enabled: Settings -> Developer -> Enable UI Automation
-- Have auto-correction disabled: Settings -> General -> Keyboard -> Auto-Correction
+Make sure iOs devices used for automated test have:
+
+- the developer mode enabled
+- UI Automation enabled: Settings -> Developer -> Enable UI Automation
+- auto-correction disabled: Settings -> General -> Keyboard -> Auto-Correction
+
 Android
 -------
 
