@@ -15,23 +15,39 @@ private AppiumDriver<MobileElement> driver;
 	public RiotCameraPageObjects(AppiumDriver<MobileElement> myDriver) {
 		driver= myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
-//		try {
-//			//TODO waitUntilDisplayed((IOSDriver<MobileElement>) driver,"//", true, 5);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			waitUntilDisplayed((IOSDriver<MobileElement>) driver,"accessibilityIdentifierCaptureView", true, 5);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}		
 	/*
 	 * TOP
 	 */
-	@iOSFindBy(accessibility="camera_switch.png")
+	@iOSFindBy(accessibility="MediaPickerVCCameraSwitchButton")
 	public MobileElement cameraSwitchButton;
+	@iOSFindBy(accessibility="MediaPickerVCCloseButton")
+	public MobileElement cameraCloseButton;
 	
 	/*
 	 * CAMERA
 	 */
-	@iOSFindBy(accessibility="camera capture")
+	@iOSFindBy(accessibility="MediaPickerVCPreviewContainerView")
+	public MobileElement previewCameraContainerView;
+	@iOSFindBy(accessibility="MediaPickerVCCaptureButton")
 	public MobileElement cameraCaptureButton;
+	
+	/*
+	 * RECENT MEDIA. Below the camera, the recent taken pictures and movies.
+	 */
+	@iOSFindBy(accessibility="MediaPickerVCRecentCapturesCollectionView")
+	public MobileElement recentMediasCollection;
+	
+	/*
+	 * ALBUMS.
+	 */
+	@iOSFindBy(accessibility="MediaPickerVCAlbumsTableView")
+	public MobileElement albumsTable;
 	
 	/*
 	 * CONFIRMATION LAYOUT

@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
-import pom_android.RiotCallingPageObject;
+import pom_android.RiotCallingPageObjects;
 import pom_android.RiotIncomingCallPageObjects;
 import pom_android.RiotLoginAndRegisterPageObjects;
 import pom_android.RiotRoomPageObjects;
@@ -41,7 +41,7 @@ public class RiotVoipTests extends RiotParentTest{
 		RiotRoomPageObjects voipRoom = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
 		voipRoom.startCallButton.click();
 		voipRoom.voiceCallFromMenuButton.click();
-		RiotCallingPageObject callingView= new RiotCallingPageObject(AppiumFactory.getAndroidDriver1());
+		RiotCallingPageObjects callingView= new RiotCallingPageObjects(AppiumFactory.getAndroidDriver1());
 		callingView.chatLinkButton.click();
 		//asserts on pending view
 		voipRoom.checkPendingCallView(true, "Calling...");
@@ -77,7 +77,7 @@ public class RiotVoipTests extends RiotParentTest{
 		RiotRoomPageObjects voipRoom = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
 		voipRoom.startCallButton.click();
 		voipRoom.videoCallFromMenuButton.click();
-		RiotCallingPageObject callingView= new RiotCallingPageObject(AppiumFactory.getAndroidDriver1());
+		RiotCallingPageObjects callingView= new RiotCallingPageObjects(AppiumFactory.getAndroidDriver1());
 		callingView.chatLinkButton.click();
 		//asserts on pending view
 		voipRoom.checkPendingCallView(true, "Calling...");
@@ -137,7 +137,7 @@ public class RiotVoipTests extends RiotParentTest{
 		voipRoomDevice1.startCallButton.click();
 		voipRoomDevice1.voiceCallFromMenuButton.click();
 		//check that call layout is diplayed on device 1
-		RiotCallingPageObject callingView= new RiotCallingPageObject(AppiumFactory.getAndroidDriver1());
+		RiotCallingPageObjects callingView= new RiotCallingPageObjects(AppiumFactory.getAndroidDriver1());
 		callingView.isDisplayed(true);
 		//check call from device 2
 		RiotIncomingCallPageObjects incomingCallDevice2= new RiotIncomingCallPageObjects(AppiumFactory.getAndroidDriver2());
@@ -178,14 +178,14 @@ public class RiotVoipTests extends RiotParentTest{
 		voipRoomDevice1.startCallButton.click();
 		voipRoomDevice1.voiceCallFromMenuButton.click();
 		//check that call layout is diplayed on device 1
-		RiotCallingPageObject callingViewDevice1= new RiotCallingPageObject(AppiumFactory.getAndroidDriver1());
+		RiotCallingPageObjects callingViewDevice1= new RiotCallingPageObjects(AppiumFactory.getAndroidDriver1());
 		callingViewDevice1.isDisplayed(true);
 		//check call from device 2
 		RiotIncomingCallPageObjects incomingCallDevice2= new RiotIncomingCallPageObjects(AppiumFactory.getAndroidDriver2());
 		incomingCallDevice2.checkIncomingCallView(true, callingUser, "Incoming Call");
 		incomingCallDevice2.acceptCallButton.click();
 		//check that call layout is diplayed on device 2
-		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAndroidDriver2());
+		RiotCallingPageObjects callingViewDevice2= new RiotCallingPageObjects(AppiumFactory.getAndroidDriver2());
 		callingViewDevice2.isDisplayed(true);
 		//TODO check the calling layout
 		//hangout from device 2
@@ -227,7 +227,7 @@ public class RiotVoipTests extends RiotParentTest{
 		voipRoomDevice1.startCallButton.click();
 		voipRoomDevice1.videoCallFromMenuButton.click();
 		//check that call layout is diplayed on device 1
-		RiotCallingPageObject callingViewDevice1= new RiotCallingPageObject(AppiumFactory.getAndroidDriver1());
+		RiotCallingPageObjects callingViewDevice1= new RiotCallingPageObjects(AppiumFactory.getAndroidDriver1());
 		callingViewDevice1.isDisplayed(true);
 		//check call from device 2
 		RiotIncomingCallPageObjects incomingCallDevice2= new RiotIncomingCallPageObjects(AppiumFactory.getAndroidDriver2());
@@ -235,7 +235,7 @@ public class RiotVoipTests extends RiotParentTest{
 		incomingCallDevice2.acceptCallButton.click();
 		callingViewDevice1.waitUntilCallTook();
 		//check that call layout is diplayed on device 2
-		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAndroidDriver2());
+		RiotCallingPageObjects callingViewDevice2= new RiotCallingPageObjects(AppiumFactory.getAndroidDriver2());
 		callingViewDevice2.isDisplayed(true);
 		//TODO check the calling layout
 		//hangout from device 2
@@ -278,7 +278,7 @@ public class RiotVoipTests extends RiotParentTest{
 		voipRoomDevice1.startCallButton.click();
 		voipRoomDevice1.voiceCallFromMenuButton.click();
 		//check that call layout is diplayed on device 1
-		RiotCallingPageObject callingViewDevice1= new RiotCallingPageObject(AppiumFactory.getAndroidDriver1());
+		RiotCallingPageObjects callingViewDevice1= new RiotCallingPageObjects(AppiumFactory.getAndroidDriver1());
 		callingViewDevice1.isDisplayed(true);
 		//check call from device 2
 		RiotIncomingCallPageObjects incomingCallDevice2= new RiotIncomingCallPageObjects(AppiumFactory.getAndroidDriver2());
@@ -286,7 +286,7 @@ public class RiotVoipTests extends RiotParentTest{
 		incomingCallDevice2.acceptCallButton.click();
 		callingViewDevice1.waitUntilCallTook();
 		//check that call layout is diplayed on device 2
-		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAndroidDriver2());
+		RiotCallingPageObjects callingViewDevice2= new RiotCallingPageObjects(AppiumFactory.getAndroidDriver2());
 		callingViewDevice2.isDisplayed(true);
 		//get image before button touched
 		captureImage("screenshots\\comparison\\muteAudioButtonNonPressed.png", callingViewDevice2.muteAudioButton);
@@ -341,7 +341,7 @@ public class RiotVoipTests extends RiotParentTest{
 		voipRoomDevice1.startCallButton.click();
 		voipRoomDevice1.voiceCallFromMenuButton.click();
 		//check that call layout is diplayed on device 1
-		RiotCallingPageObject callingViewDevice1= new RiotCallingPageObject(AppiumFactory.getAndroidDriver1());
+		RiotCallingPageObjects callingViewDevice1= new RiotCallingPageObjects(AppiumFactory.getAndroidDriver1());
 		//callingViewDevice1.isDisplayed(true);
 		//check call from device 2
 		RiotIncomingCallPageObjects incomingCallDevice2= new RiotIncomingCallPageObjects(AppiumFactory.getAndroidDriver2());
@@ -349,7 +349,7 @@ public class RiotVoipTests extends RiotParentTest{
 		incomingCallDevice2.acceptCallButton.click();
 		callingViewDevice1.waitUntilCallTook();
 		//check that call layout is diplayed on device 2
-		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAndroidDriver2());
+		RiotCallingPageObjects callingViewDevice2= new RiotCallingPageObjects(AppiumFactory.getAndroidDriver2());
 		//callingViewDevice2.isDisplayed(true);
 		//go back in room page and leave the room
 		callingViewDevice2.chatLinkButton.click();
@@ -392,11 +392,11 @@ public class RiotVoipTests extends RiotParentTest{
 		//1. Launch a voice call in 1:1 room.
 		RiotRoomPageObjects roomDevice1 = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
 		roomDevice1.startVoiceCall();
-		RiotCallingPageObject callingViewDevice1 = new RiotCallingPageObject(AppiumFactory.getAndroidDriver1());
+		RiotCallingPageObjects callingViewDevice1 = new RiotCallingPageObjects(AppiumFactory.getAndroidDriver1());
 		//2. Callee accepts call
 		RiotIncomingCallPageObjects incomingCallDevice2 = new RiotIncomingCallPageObjects(AppiumFactory.getAndroidDriver2());
 		incomingCallDevice2.acceptCallButton.click();
-		RiotCallingPageObject callingViewDevice2 = new RiotCallingPageObject(AppiumFactory.getAndroidDriver2());
+		RiotCallingPageObjects callingViewDevice2 = new RiotCallingPageObjects(AppiumFactory.getAndroidDriver2());
 		//3. Callee goes in the room from call layout by hitting the chatlink button
 		callingViewDevice2.chatLinkButton.click();
 		//4. Caller hang out the call

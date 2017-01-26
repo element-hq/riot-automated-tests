@@ -19,8 +19,9 @@ public abstract class RiotParentTest extends TestUtilities {
 		capabilities.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
 		capabilities.setCapability("appActivity", Constant.APPLICATION_LOGIN_ACTIVITY);
 		capabilities.setCapability("noReset", true);
+		capabilities.setCapability("newCommandTimeout", 1200);
 		//capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME,"Selendroid");
-		capabilities.setCapability("autoWebview", true);
+		//capabilities.setCapability("autoWebview", true);
 
 		AppiumFactory appiumFactory=new AppiumFactory();
 		appiumFactory.setAndroidDriver1(new URL(Constant.SERVER1_ADRESS), capabilities);
@@ -36,6 +37,7 @@ public abstract class RiotParentTest extends TestUtilities {
 		capabilities.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
 		capabilities.setCapability("appActivity", Constant.APPLICATION_LOGIN_ACTIVITY);
 		capabilities.setCapability("noReset", true);
+		capabilities.setCapability("newCommandTimeout", "1200");
 		capabilities.setCapability(MobileCapabilityType.FULL_RESET, false);
 		
 		DesiredCapabilities capabilities2 = new DesiredCapabilities();
@@ -45,6 +47,7 @@ public abstract class RiotParentTest extends TestUtilities {
 		capabilities2.setCapability("appPackage", Constant.PACKAGE_APP_NAME);
 		capabilities2.setCapability("appActivity", Constant.APPLICATION_LOGIN_ACTIVITY);
 		capabilities2.setCapability("noReset", true);
+		capabilities2.setCapability("newCommandTimeout", "1200");
 		capabilities2.setCapability(MobileCapabilityType.FULL_RESET, false);
 		
 		AppiumFactory appiumFactory=new AppiumFactory();
@@ -88,6 +91,7 @@ public abstract class RiotParentTest extends TestUtilities {
 		capabilities.setCapability("keychainPath","/Users/matrix/Library/Keychains/appiumKeychain.keychain");
 		capabilities.setCapability("keychainPassword","appium6754");
 		capabilities.setCapability("autoDismissAlerts", false);
+		capabilities.setCapability("newCommandTimeout", 1200);
 //		capabilities.setCapability("autoWebview", true);
 
 		AppiumFactory appiumFactory=new AppiumFactory();
@@ -113,11 +117,12 @@ public abstract class RiotParentTest extends TestUtilities {
 		capabilities1.setCapability("keychainPath","/Users/matrix/Library/Keychains/appiumKeychain.keychain");
 		capabilities1.setCapability("keychainPassword","appium6754");
 		capabilities1.setCapability("autoDismissAlerts", false);
+		capabilities1.setCapability("newCommandTimeout", 1200);
 		
 		DesiredCapabilities capabilities2 = new DesiredCapabilities();
 		capabilities2.setCapability(MobileCapabilityType.DEVICE_NAME,"iPhone");
 		capabilities2.setCapability(MobileCapabilityType.PLATFORM_NAME,"iOS");
-		capabilities2.setCapability(MobileCapabilityType.PLATFORM_VERSION, "10.0.2");//9.3.5
+		capabilities2.setCapability(MobileCapabilityType.PLATFORM_VERSION, "9.3.5");//9.3.5
 		capabilities2.setCapability(MobileCapabilityType.UDID, Constant.IOS_DEVICE2_UDID);//"2a418a9dbcd960d904a501bf558120625f96f409");//e75c0085c74a872846772a6b2ee56a86849a4d92	//1c7e0b4559589b57396a57f8eaa382c9bc42d8d7
 		capabilities2.setCapability("bundleId", "im.vector.app");//app
 		//capabilities.setCapability(MobileCapabilityType.APP,"/Users/matrix/Documents/apps/ipa/Vector-d5ce6ff019a3e6b06a20bcc849ab57074e31e773-build1399.ipa");
@@ -130,6 +135,7 @@ public abstract class RiotParentTest extends TestUtilities {
 		capabilities2.setCapability("keychainPath","/Users/matrix/Library/Keychains/appiumKeychain.keychain");
 		capabilities2.setCapability("keychainPassword","appium6754");
 		capabilities2.setCapability("autoDismissAlerts", false);
+		capabilities2.setCapability("newCommandTimeout", 1200);
 		
 		AppiumFactory appiumFactory=new AppiumFactory();
 		appiumFactory.setiOSDriver1(new URL(Constant.SERVER1_ADRESS), capabilities1);

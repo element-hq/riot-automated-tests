@@ -9,9 +9,9 @@ import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import utility.TestUtilities;
 
-public class RiotCallingPageObject extends TestUtilities{
+public class RiotCallingPageObjects extends TestUtilities{
 	private AndroidDriver<MobileElement> driver;
-	public RiotCallingPageObject(AppiumDriver<MobileElement> myDriver){
+	public RiotCallingPageObjects(AppiumDriver<MobileElement> myDriver){
 		PageFactory.initElements(new AppiumFieldDecorator(myDriver), this);
 		driver=(AndroidDriver<MobileElement>) myDriver;
 		try {

@@ -7,10 +7,10 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import pom_android.RiotCallingPageObject;
+import pom_android.RiotCallingPageObjects;
 import pom_android.RiotIncomingCallPageObjects;
 import pom_android.RiotNewChatPageObjects;
-import pom_android.RiotRoomDetailsPageObject;
+import pom_android.RiotRoomDetailsPageObjects;
 import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
 import pom_android.RiotSearchInvitePageObjects;
@@ -43,7 +43,7 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 		//Open room details
 		newRoomDevice1.moreOptionsButton.click();
 		newRoomDevice1.roomDetailsMenuItem.click();
-		RiotRoomDetailsPageObject newRoomDetailsDevice1 = new RiotRoomDetailsPageObject(AppiumFactory.getAndroidDriver1());
+		RiotRoomDetailsPageObjects newRoomDetailsDevice1 = new RiotRoomDetailsPageObjects(AppiumFactory.getAndroidDriver1());
 		newRoomDetailsDevice1.settingsTab.click();
 		ExplicitWait(AppiumFactory.getAndroidDriver1(), newRoomDetailsDevice1.listItemSettings);
 		scrollToBottom(AppiumFactory.getAndroidDriver1());
@@ -82,7 +82,7 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 		//Open room details
 		newRoomDevice1.moreOptionsButton.click();
 		newRoomDevice1.roomDetailsMenuItem.click();
-		RiotRoomDetailsPageObject newRoomDetailsDevice1 = new RiotRoomDetailsPageObject(AppiumFactory.getAndroidDriver1());
+		RiotRoomDetailsPageObjects newRoomDetailsDevice1 = new RiotRoomDetailsPageObjects(AppiumFactory.getAndroidDriver1());
 		newRoomDetailsDevice1.settingsTab.click();
 		//changing room name
 		newRoomDetailsDevice1.changeRoomName(roomWithEncryption);
@@ -99,7 +99,7 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 		//in the meantime take care of device 2
 		RiotRoomsListPageObjects roomsListDevice2 = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver2());
 
-		//2. Sent a message.
+		//2. Send a message.
 		newRoomDevice1.sendAMessage(encrypted_msg_1);
 		Assert.assertEquals(newRoomDevice1.getTextViewFromPost(newRoomDevice1.getLastPost()).getText(), encrypted_msg_1);
 
@@ -107,7 +107,7 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 		//Open room details
 		newRoomDevice1.moreOptionsButton.click();
 		newRoomDevice1.roomDetailsMenuItem.click();
-		newRoomDetailsDevice1 = new RiotRoomDetailsPageObject(AppiumFactory.getAndroidDriver1());
+		newRoomDetailsDevice1 = new RiotRoomDetailsPageObjects(AppiumFactory.getAndroidDriver1());
 		newRoomDetailsDevice1.addParticipant(participant2Adress);
 		ExplicitWait(AppiumFactory.getAndroidDriver1(), newRoomDetailsDevice1.menuBackButton);
 		newRoomDetailsDevice1.menuBackButton.click();
@@ -160,7 +160,7 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 		//Open room details
 		newRoomDevice1.moreOptionsButton.click();
 		newRoomDevice1.roomDetailsMenuItem.click();
-		RiotRoomDetailsPageObject newRoomDetailsDevice1 = new RiotRoomDetailsPageObject(AppiumFactory.getAndroidDriver1());
+		RiotRoomDetailsPageObjects newRoomDetailsDevice1 = new RiotRoomDetailsPageObjects(AppiumFactory.getAndroidDriver1());
 
 		//2. Enable encryption.
 		newRoomDetailsDevice1.settingsTab.click();
@@ -176,7 +176,7 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 
 		//3. Start a voice call with Device 2.
 		newRoomDevice2.startVoiceCall();
-		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAndroidDriver2());
+		RiotCallingPageObjects callingViewDevice2= new RiotCallingPageObjects(AppiumFactory.getAndroidDriver2());
 		callingViewDevice2.isDisplayed(true);
 		//Check that an incoming layout is displayed on device 1.
 		RiotIncomingCallPageObjects incomingCallDevice1= new RiotIncomingCallPageObjects(AppiumFactory.getAndroidDriver1());
@@ -185,7 +185,7 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 		//4. Accept call with device 1.
 		incomingCallDevice1.acceptCallButton.click();
 		//check that call layout is diplayed on device 1
-		RiotCallingPageObject callingViewDevice1= new RiotCallingPageObject(AppiumFactory.getAndroidDriver1());
+		RiotCallingPageObjects callingViewDevice1= new RiotCallingPageObjects(AppiumFactory.getAndroidDriver1());
 		callingViewDevice1.isDisplayed(true);
 
 		//5. Hang-out after a few seconds.
@@ -199,7 +199,7 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 
 		//6. Start a video call with Device 2.
 		newRoomDevice2.startVideoCall();
-		callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAndroidDriver2());
+		callingViewDevice2= new RiotCallingPageObjects(AppiumFactory.getAndroidDriver2());
 		callingViewDevice2.isDisplayed(true);
 		//Check that an incoming layout is displayed on device 1.
 		incomingCallDevice1= new RiotIncomingCallPageObjects(AppiumFactory.getAndroidDriver1());
@@ -209,7 +209,7 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 		incomingCallDevice1.acceptCallButton.click();
 		callingViewDevice2.waitUntilCallTook();
 		//check that call layout is diplayed on device 1
-		callingViewDevice1= new RiotCallingPageObject(AppiumFactory.getAndroidDriver1());
+		callingViewDevice1= new RiotCallingPageObjects(AppiumFactory.getAndroidDriver1());
 		callingViewDevice1.isDisplayed(true);
 
 		//8. Hang-out after a few seconds.

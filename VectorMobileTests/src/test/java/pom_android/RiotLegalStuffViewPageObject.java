@@ -11,9 +11,9 @@ import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import utility.TestUtilities;
 
-public class RiotLegalStuffView extends TestUtilities{
+public class RiotLegalStuffViewPageObject extends TestUtilities{
 	private AndroidDriver<MobileElement> driver;
-	public RiotLegalStuffView(AppiumDriver<MobileElement> myDriver){
+	public RiotLegalStuffViewPageObject(AppiumDriver<MobileElement> myDriver){
 		driver=(AndroidDriver<MobileElement>) myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 		ExplicitWait(driver,this.parentPanel);

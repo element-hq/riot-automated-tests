@@ -8,7 +8,7 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import pom_android.RiotNewChatPageObjects;
-import pom_android.RiotRoomDetailsPageObject;
+import pom_android.RiotRoomDetailsPageObjects;
 import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
 import pom_android.RiotSearchInvitePageObjects;
@@ -150,7 +150,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		RiotRoomPageObjects newRoomDevice1 = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
 		//invite 1 member
 		newRoomDevice1.inviteMembersButton.click();
-		RiotRoomDetailsPageObject roomDetailsDevice1 = new RiotRoomDetailsPageObject(AppiumFactory.getAndroidDriver1());
+		RiotRoomDetailsPageObjects roomDetailsDevice1 = new RiotRoomDetailsPageObjects(AppiumFactory.getAndroidDriver1());
 		//add a participant from the details
 		roomDetailsDevice1.addParticipant(inviteeAddress);
 		//go back to the rooms list
@@ -198,7 +198,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		newRoomDevice1.changeRoomName(roomName);
 		//invite 1 member
 		newRoomDevice1.inviteMembersButton.click();
-		RiotRoomDetailsPageObject roomDetailsDevice1 = new RiotRoomDetailsPageObject(AppiumFactory.getAndroidDriver1());
+		RiotRoomDetailsPageObjects roomDetailsDevice1 = new RiotRoomDetailsPageObjects(AppiumFactory.getAndroidDriver1());
 		//add a participant from the details
 		roomDetailsDevice1.addParticipant(inviteeAddress);
 		roomDetailsDevice1.menuBackButton.click();

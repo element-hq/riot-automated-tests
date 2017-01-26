@@ -83,7 +83,7 @@ public class TestUtilities {
 					driver.findElementByXPath(idOrXpath);
 				}else{
 					if(driver.getCapabilities().getPlatform().name().equals("MAC")){
-						driver.findElementsByAccessibilityId((idOrXpath));
+						driver.findElementByAccessibilityId((idOrXpath));
 					}else{
 						driver.findElement(By.id(idOrXpath));
 					}
@@ -185,7 +185,7 @@ public class TestUtilities {
 		Dimension dimensions = driver.manage().window().getSize();
 		Double screenHeightStart = dimensions.getHeight() * 0.9;
 		int scrollStart = screenHeightStart.intValue();
-		System.out.println("s="+scrollStart);
+		//System.out.println("s="+scrollStart);
 		Double screenHeightEnd = dimensions.getHeight() * 0.2;
 		int scrollEnd = screenHeightEnd.intValue();
 		//AppiumFactory.getAndroidDriver1().swipe(0,scrollStart,0,scrollEnd,2000);

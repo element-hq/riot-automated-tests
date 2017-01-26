@@ -9,7 +9,7 @@ public class Constant {
 	/*** iPhone 6+ STZ_DE_13243.*/
 	public static final String IOS_DEVICE1_UDID = "e75c0085c74a872846772a6b2ee56a86849a4d92";
 	/*** iPhone 5C STZ_DE_13208.*/
-	public static final String IOS_DEVICE2_UDID = "1c7e0b4559589b57396a57f8eaa382c9bc42d8d7";//1c7e0b4559589b57396a57f8eaa382c9bc42d8d7 //2a418a9dbcd960d904a501bf558120625f96f409 //99129ae17ce75bdc31f66f507725b2b98907a10d
+	public static final String IOS_DEVICE2_UDID = "2a418a9dbcd960d904a501bf558120625f96f409";//1c7e0b4559589b57396a57f8eaa382c9bc42d8d7 //2a418a9dbcd960d904a501bf558120625f96f409 //99129ae17ce75bdc31f66f507725b2b98907a10d
 	public static final String PATH_TESTDATA = "src//test//resources//testDatas//";
 	public static final String PACKAGE_APP_NAME = "im.vector.alpha";
 	public static final String APPLICATION_LOGIN_ACTIVITY="im.vector.activity.LoginActivity";

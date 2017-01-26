@@ -27,7 +27,7 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDeviceActionShortcuts;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
-import pom_android.RiotLegalStuffView;
+import pom_android.RiotLegalStuffViewPageObject;
 import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
 import pom_android.RiotSearchFromRoomPageObjects;
@@ -225,7 +225,7 @@ public class RiotMiscTests extends RiotParentTest{
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		mainPage.contextMenuButton.click();
 		mainPage.getItemMenuByName(items).click();
-		RiotLegalStuffView copyrightPolicyView= new RiotLegalStuffView(driver);
+		RiotLegalStuffViewPageObject copyrightPolicyView= new RiotLegalStuffViewPageObject(driver);
 		Assert.assertTrue(copyrightPolicyView.isPresentTryAndCatch(), "Copyright Policy view isn't open");
 		Assert.assertEquals(copyrightPolicyView.secondTitle.getAttribute("name"), expectedTitle);
 		copyrightPolicyView.okButton.click();
@@ -233,7 +233,7 @@ public class RiotMiscTests extends RiotParentTest{
 		//open it again and turn the device in landscape mode : the panel should be still displayed
 		mainPage.contextMenuButton.click();Thread.sleep(1000);
 		mainPage.openCopyrightButton.click();
-		copyrightPolicyView= new RiotLegalStuffView(driver);
+		copyrightPolicyView= new RiotLegalStuffViewPageObject(driver);
 		driver.rotate(ScreenOrientation.LANDSCAPE);
 		Thread.sleep(1500);
 		Assert.assertTrue(copyrightPolicyView.isPresentTryAndCatch(), items+" view isn't open");

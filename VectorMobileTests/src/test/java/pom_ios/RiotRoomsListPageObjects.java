@@ -3,6 +3,7 @@ package pom_ios;
 import java.util.List;
 
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
@@ -20,7 +21,7 @@ private AppiumDriver<MobileElement> driver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 		//ExplicitWait(driver,this.roomsAndCategoriesList);
 		try {
-			waitUntilDisplayed((IOSDriver<MobileElement>) driver,"//XCUIElementTypeApplication/XCUIElementTypeWindow//XCUIElementTypeOther[2]//XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTable", true, 5);
+			waitUntilDisplayed((IOSDriver<MobileElement>) driver,"RecentsVCTableView", true, 5);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -28,23 +29,66 @@ private AppiumDriver<MobileElement> driver;
 	/*
 	 * NAVIGATION BAR
 	 */
-	@iOSFindBy(xpath="//XCUIElementTypeApplication/XCUIElementTypeWindow//XCUIElementTypeNavigationBar")
+	@iOSFindBy(accessibility="Messages")
 	public MobileElement navigationBar;
 	@iOSFindBy(accessibility="settings icon")
 	public MobileElement settingsButton;
-	@iOSFindBy(accessibility="Messages")
+	@iOSFindBy(xpath="//XCUIElementTypeNavigationBar[@name='Messages']/XCUIElementTypeStaticText")
 	public MobileElement messagesStaticText;
 	@iOSFindBy(accessibility="search icon")
 	public MobileElement searchButton;
 	
+	/*
+	 * INVITES
+	 */
+	@iOSFindBy(accessibility="InviteRecentTableViewCell")
+	public List<MobileElement> invitationCells;
+	
+	public MobileElement getInvitationCellByName(String roomName){
+		for (MobileElement invitationCell : invitationCells) {
+			if(invitationCell.findElementByAccessibilityId("TitleLabel").getText().equals(roomName)){
+				return invitationCell;
+			}
+		}
+		System.out.println("No invitation cell of room: "+roomName);
+		return null;
+	}
+	/**
+	 * Hit the "preview" button on an invitation.
+	 * @param roomName
+	 * @throws InterruptedException 
+	 */
+	public void previewInvitation(String roomName) throws InterruptedException{
+		waitUntilDisplayed(driver, "InviteRecentTableViewCell", true, 30);
+		try {
+			MobileElement roomInvitationCell=getInvitationCellByName(roomName);
+			roomInvitationCell.findElementByAccessibilityId("RightButton").click();
+		} catch (Exception e) {
+			Assert.fail("No invitation found for room "+roomName);
+		}
+	}
+	
+	/**
+	 * Hit the "reject" button on an invitation.
+	 * @param roomName
+	 */
+	public void rejectInvitation(String roomName){
+		MobileElement roomInvitationLayout=getInvitationCellByName(roomName);
+		roomInvitationLayout.findElementByAccessibilityId("LeftButton").click();
+	}
 	
 	/*
 	 * ROOMS
 	 */
-	@iOSFindBy(xpath="//XCUIElementTypeApplication/XCUIElementTypeWindow//XCUIElementTypeOther[2]//XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTable")
+	@iOSFindBy(accessibility="RecentsVCTableView")
 	public MobileElement roomsAndCategoriesListTable;
-	@iOSFindBy(xpath="//XCUIElementTypeApplication/XCUIElementTypeWindow//XCUIElementTypeOther[2]//XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell")
+	@iOSFindBy(xpath="//XCUIElementTypeTable[@name='RecentsVCTableView']/XCUIElementTypeCell")
 	public List<MobileElement> roomsList;
+	/**
+	 * Faster than roomsList.
+	 */
+	@iOSFindBy(accessibility="RecentTableViewCell")
+	public List<MobileElement> roomsList_bis;
 	
 	/**
 	 * Wait until there is at least 1 room in the rooms list.
@@ -67,7 +111,7 @@ private AppiumDriver<MobileElement> driver;
 	 */
 	public MobileElement getRoomByName(String myRommName){
 		try {
-			return roomsAndCategoriesListTable.findElementByXPath("//XCUIElementTypeCell/XCUIElementTypeStaticText[@value='"+myRommName+"']");
+			return roomsAndCategoriesListTable.findElementByXPath("//XCUIElementTypeCell/XCUIElementTypeStaticText[@value='"+myRommName+"']/..");
 		} catch (Exception e) {
 			return null;
 		}
@@ -96,6 +140,9 @@ private AppiumDriver<MobileElement> driver;
 	 */
 	public RiotRoomPageObjects createRoom(){
 		 plusRoomButton.click();
+		 if(driver.findElementByClassName("XCUIElementTypeCollectionView")==null){
+			 plusRoomButton.click();
+		 }
 		 createRoomButton.click();
 		 return new RiotRoomPageObjects(driver);
 	 }
@@ -103,10 +150,6 @@ private AppiumDriver<MobileElement> driver;
 	/*
 	 * SETTINGS
 	 */
-	//@iOSFindBy(xpath="//UIAButton[@name='Sign Out']")
-	//@iOSFindBy(xpath="///XCUIElementTypeWindow[1]//XCUIElementTypeTableView[1]//XCUIElementTypeTableCell[1]//XCUIElementTypeButton[@value='Sign Out']")
-	//@iOSFindBy()
-	//@iOSFindBy(xpath="//XCUIElementTypeButton[@name='Sign Out']")
 	@iOSFindBy(accessibility="SettingsVCSignOutButton")
 	public MobileElement signOutButton;
 	
