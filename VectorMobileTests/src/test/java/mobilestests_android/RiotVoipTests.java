@@ -24,17 +24,18 @@ import utility.ScreenshotUtility;
 @Listeners({ ScreenshotUtility.class })
 public class RiotVoipTests extends RiotParentTest{
 	/**
-	 * Launch an audio call from a room </br>
-	 * From the call layout, hit the room link button </br>
+	 * 1. Launch an audio call from a room </br>
+	 * 2. From the call layout, hit the room link button </br>
 	 * Check the pending call view on the room view. </br>
-	 * Switch between call view and room view </br>
-	 * End the call from the room view. </br> 
+	 * 3. Switch between call view and room view </br>
+	 *	4. End the call from the room view. </br> 
 	 * Check that the call is ended.</br>
 	 * Check that events are logged in the messages.
 	 * @throws InterruptedException
 	 */
 	@Test(groups="1driver", description="test on call")
 	public void cancelAudioCallFromChatRoom() throws InterruptedException{
+		//1. Launch an audio call from a room
 		String roomNameTest="voip room test";
 		RiotRoomsListPageObjects mainListRoom=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		mainListRoom.getRoomByName(roomNameTest).click();
@@ -42,15 +43,20 @@ public class RiotVoipTests extends RiotParentTest{
 		voipRoom.startCallButton.click();
 		voipRoom.voiceCallFromMenuButton.click();
 		RiotCallingPageObjects callingView= new RiotCallingPageObjects(AppiumFactory.getAndroidDriver1());
+		
+		//2. From the call layout, hit the room link button
 		callingView.chatLinkButton.click();
-		//asserts on pending view
+		//Check the pending call view on the room view.
 		voipRoom.checkPendingCallView(true, "Calling...");
 		//assert on messages
 		Assert.assertTrue(voipRoom.getTextViewFromPost(voipRoom.getLastPost()).getText().contains("placed a voice call."),"No '[user] placed a voice call' message in the room.");
-		//come back in call view by touching pending call view
+		
+		//3. Switch between call view and room view
 		voipRoom.roomPendingCallLayout.click();
 		Assert.assertTrue(callingView.isDisplayed(true), "Calling view isn't displayed after touching pending call view from room view");
 		callingView.chatLinkButton.click();
+		
+		//4. End the call from the room view. 
 		voipRoom.endCallButton.click();
 		//asserts on pending view
 		voipRoom.checkPendingCallView(false, null);
@@ -60,11 +66,11 @@ public class RiotVoipTests extends RiotParentTest{
 	}
 
 	/**
-	 * Launch an video call from a room </br>
-	 * From the call layout, hit the room link button </br>
+	 * 1. Launch an video call from a room </br>
+	 * 2. From the call layout, hit the room link button </br>
 	 * Check the pending call view on the room view. </br>
-	 * Switch between call view and room view </br>
-	 * End the call from the room view. </br> 
+	 * 3. Switch between call view and room view </br>
+	 * 4. End the call from the room view. </br> 
 	 * Check that the call is ended.</br>
 	 * Check that events are logged in the messages.
 	 * @throws InterruptedException

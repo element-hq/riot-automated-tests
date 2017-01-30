@@ -23,7 +23,7 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 		//Thread.sleep(2000);
 		//ExplicitWait(driver,this.roomsExpandableListView);
 		try {
-			waitUntilDisplayed((AndroidDriver<MobileElement>) driver,"im.vector.alpha:id/fragment_recents_list", true, 5);
+			waitUntilDisplayed((AndroidDriver<MobileElement>) driver,"im.vector.alpha:id/fragment_recents_list", true, 10);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

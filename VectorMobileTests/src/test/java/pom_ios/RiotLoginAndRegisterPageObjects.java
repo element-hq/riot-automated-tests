@@ -63,6 +63,15 @@ private IOSDriver<MobileElement> driver;
 	@iOSFindBy(accessibility="AuthInputsViewPasswordTextField")
 	public MobileElement passwordTextField;
 	
+	/**
+	 * Simple login without doing any verifications.
+	 * @param usernameOrEmail
+	 * @param password
+	 */
+	public void fillLoginForm(String usernameOrEmail, String password){
+		emailOrUserNameTextField.setValue(usernameOrEmail);
+		passwordTextField.setValue(password+"\n");
+	}
 		/*
 		 * 		register part
 		 */

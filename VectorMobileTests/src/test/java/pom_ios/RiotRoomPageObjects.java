@@ -2,6 +2,7 @@ package pom_ios;
 
 import java.util.List;
 
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
@@ -80,6 +81,37 @@ public class RiotRoomPageObjects extends TestUtilities{
 		Assert.assertEquals(declineRoomButton.getText(), "Decline");
 	}
 	
+	/*
+	 * PENDING CALL VIEW
+	 */
+	public MobileElement getPendingCallView(String status) throws WebDriverException, InterruptedException{
+		if(waitUntilDisplayed(driver, status, true, 5)) {
+			return driver.findElementByAccessibilityId(status);
+			}
+		else{
+			return null;
+		}
+	}
+	
+	public void checkPendingCallView(Boolean displayed,String status) throws InterruptedException {
+		String messagePendingViewPresent;
+		//Boolean statusFound=false;
+		if(displayed){
+			messagePendingViewPresent="Pending view isn't displayed";
+		}else{
+			messagePendingViewPresent="Pending view is displayed";
+		}
+//		try {
+//			driver.findElementByAccessibilityId(status);
+			
+//			statusFound=true;
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//			statusFound=false;
+//		}
+		Assert.assertEquals(waitUntilDisplayed(driver, status, displayed, 5), displayed, messagePendingViewPresent);
+		
+	}
 	/*
 	 * MESSAGES
 	 */
@@ -310,4 +342,5 @@ public class RiotRoomPageObjects extends TestUtilities{
 			return true;
 		}
 	}
+
 }

@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import pom_ios.RiotCallingPageObjects;
@@ -13,12 +14,14 @@ import pom_ios.RiotRoomPageObjects;
 import pom_ios.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
 import utility.RiotParentTest;
+import utility.ScreenshotUtility;
 
 /**
  * Tests on e2e encryption on IOS platform.
  * @author matrix
  *
  */
+@Listeners({ ScreenshotUtility.class })
 public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 	private String roomWithEncryption="auto test encryption";
 	private String encrypted_msg_1="msg sent in encrypted room";
@@ -217,11 +220,6 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 		default:
 			break;
 		}
-	}
-
-	@Test
-	public void testTearDown() throws InterruptedException{
-		leaveRoomOn1DeviceFromRoomPageAfterTest("Empty room");
 	}
 
 	private void leaveRoomOn1DeviceFromRoomPageAfterTest(String roomNameFromDevice1) throws InterruptedException{

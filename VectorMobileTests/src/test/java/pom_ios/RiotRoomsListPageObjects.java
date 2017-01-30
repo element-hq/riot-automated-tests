@@ -148,10 +148,13 @@ private AppiumDriver<MobileElement> driver;
 	 }
 	
 	/*
-	 * SETTINGS
+	 * SETTINGS VIEW
 	 */
 	@iOSFindBy(accessibility="SettingsVCSignOutButton")
 	public MobileElement signOutButton;
+	
+	@iOSFindBy(xpath="//XCUIElementTypeTable//XCUIElementTypeCell//XCUIElementTypeStaticText[@name='Display Name']/parent::*//*[1]")
+	public MobileElement displayNameTextField;
 	
 	/**
 	 * Log-out from Riot with the lateral menu.

@@ -16,7 +16,8 @@ public class RiotIncomingCallPageObjects extends TestUtilities {
 		driver= (IOSDriver<MobileElement>) myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 		try {
-			waitUntilDisplayed(driver,"//XCUIElementTypeAlert[contains(@name,'Incoming voice call')]", true, 10);
+			//waitUntilDisplayed(driver,"//XCUIElementTypeAlert[contains(@name,'Incoming voice call')]", true, 10);
+			waitUntilDisplayed(driver,"//XCUIElementTypeAlert", true, 10);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
