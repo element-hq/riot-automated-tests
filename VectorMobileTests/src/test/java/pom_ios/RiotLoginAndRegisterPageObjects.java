@@ -21,7 +21,7 @@ private IOSDriver<MobileElement> driver;
 		PageFactory.initElements(new AppiumFieldDecorator(myDriver), this);
 		driver= (IOSDriver<MobileElement>) myDriver;
 		try {
-			waitUntilDisplayed(driver,"AuthenticationVCAuthenticationScrollContentView", true, 5);
+			waitUntilDisplayed(driver,"AuthenticationVCScrollViewContentView", true, 10);
 					} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

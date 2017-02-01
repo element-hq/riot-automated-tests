@@ -50,16 +50,19 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 	 * 				PEOPLE TAB
 	 */
 	/*
-	 * SEARCH BAR
+	 * FILTER BAR
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/search_value_edit_text")
-	public MobileElement searchEditText;
-	
+	public MobileElement filterRoomMembersEditText;
+	@AndroidFindBy(id="im.vector.alpha:id/clear_search_icon_image_view")
+	public MobileElement clearFilteredBarButton;
 	/*
 	 * MEMBERS LIST
 	 */
-	@AndroidFindBy(id="im.vector.alpha:id/room_details_members_exp_list_view")
+	@AndroidFindBy(xpath="//android.widget.ExpandableListView[@resource-id='im.vector.alpha:id/room_details_members_exp_list_view']/android.widget.RelativeLayout[@enabled='false']")
 	public List<MobileElement> membersList;
+	@AndroidFindBy(id="im.vector.alpha:id/search_no_results_text_view")
+	public MobileElement noResultTextView;
 	
 	/**
 	 * ADD BUTTON
@@ -69,7 +72,7 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 	
 	public void addParticipant(String inviteeAddress) throws InterruptedException {
 		addParticipantButton.click();
-		RiotSearchInvitePageObjects inviteMember = new RiotSearchInvitePageObjects(driver);
+		RiotContactPickerPageObjects inviteMember = new RiotContactPickerPageObjects(driver);
 		inviteMember.searchAndSelectMember(inviteeAddress);
 		checkInviteConfirmationMsgBox(inviteeAddress);
 		inputDialogOkButton.click();
@@ -82,6 +85,27 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 		waitUntilDisplayed(driver, "im.vector.alpha:id/parentPanel", true, 5);
 		Assert.assertEquals(inputDialogNameTextView.getText(), "Invite?");
 		Assert.assertTrue(inputDialogTextView.getText().matches("^Are you sure you want to invite (\\S+) to this chat\\?$"));
+	}
+	
+	/**
+	 * From the room details people tab, enter a text on the filter room members edittext.
+	 * @param filter
+	 */
+	public void filterOnRoomMembersList(String filter){
+		filterRoomMembersEditText.setValue(filter);
+	}
+	
+	/**
+	 * Return the displayname from a filtered member from the people tab.
+	 * @param member
+	 * @return
+	 */
+	public String getDisplayNameOfMemberFromPeopleTab(MobileElement member){
+		try {
+			return member.findElementById("im.vector.alpha:id/filtered_list_name").getText();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 		
 	/*

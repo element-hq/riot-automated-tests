@@ -38,7 +38,8 @@ public class RiotLoginTests_ios extends RiotParentTest{
 		Thread.sleep(5000);
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
 		mainPage.logOut();
-		Assert.assertTrue(loginPage.authenticationView.isEnabled(), "The login page isn't displayed after the log-out.");
+		Assert.assertTrue(waitUntilDisplayed(AppiumFactory.getiOsDriver1(), "AuthenticationVCView", true, 15), "The login page isn't displayed after the log-out.");
+		//Assert.assertTrue(loginPage.authenticationView.isEnabled(), "The login page isn't displayed after the log-out.");
 	}
 	
 	@Test(groups={"2driver_ios"})

@@ -13,7 +13,7 @@ import pom_android.RiotNewChatPageObjects;
 import pom_android.RiotRoomDetailsPageObjects;
 import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
-import pom_android.RiotSearchInvitePageObjects;
+import pom_android.RiotContactPickerPageObjects;
 import utility.AppiumFactory;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -152,7 +152,7 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 		RiotRoomsListPageObjects roomsListDevice2 = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver2());
 		roomsListDevice1.plusRoomButton.click();
 		roomsListDevice1.startChatCheckedTextView.click();
-		RiotSearchInvitePageObjects inviteViewDevice1=new RiotSearchInvitePageObjects(AppiumFactory.getAndroidDriver1());
+		RiotContactPickerPageObjects inviteViewDevice1=new RiotContactPickerPageObjects(AppiumFactory.getAndroidDriver1());
 		inviteViewDevice1.searchAndSelectMember(participant2Adress);
 		RiotNewChatPageObjects newChatViewDevice1= new RiotNewChatPageObjects(AppiumFactory.getAndroidDriver1());
 		newChatViewDevice1.confirmRoomCreationButton.click();

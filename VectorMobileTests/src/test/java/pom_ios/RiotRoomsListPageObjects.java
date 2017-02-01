@@ -21,7 +21,8 @@ private AppiumDriver<MobileElement> driver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 		//ExplicitWait(driver,this.roomsAndCategoriesList);
 		try {
-			waitUntilDisplayed((IOSDriver<MobileElement>) driver,"RecentsVCTableView", true, 5);
+			//waitUntilDisplayed((IOSDriver<MobileElement>) driver,"RecentsVCTableView", true, 5);
+			waitUntilDisplayed((IOSDriver<MobileElement>) driver,"Messages", true, 5);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -156,11 +157,17 @@ private AppiumDriver<MobileElement> driver;
 	@iOSFindBy(xpath="//XCUIElementTypeTable//XCUIElementTypeCell//XCUIElementTypeStaticText[@name='Display Name']/parent::*//*[1]")
 	public MobileElement displayNameTextField;
 	
+	@iOSFindBy(accessibility="SettingsVCSignoutAlertActionSign Out")
+	public MobileElement signOutAlertDialogButtonConfirm;
+	@iOSFindBy(accessibility="SettingsVCSignoutAlertActionCancel")
+	public MobileElement signOutAlertDialogButtonCancel;
+	
 	/**
 	 * Log-out from Riot with the lateral menu.
 	 */
 	public void logOut(){
 		this.settingsButton.click();
 		this.signOutButton.click();
+		signOutAlertDialogButtonConfirm.click();
 	}
 }
