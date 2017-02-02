@@ -1,6 +1,9 @@
 package mobilestests_android;
 
+import java.lang.reflect.Method;
+
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -22,6 +25,7 @@ import utility.ScreenshotUtility;
 public class RiotManagingRoomMembersTests extends RiotParentTest{
 	private String testRoom="room tests Jean";
 	private String matchingWithKnownContactFilter1="riot";
+	private String invitedUser="@riotuser3:matrix.org";
 
 	/**
 	 * 1. Open room testRoom and open his details, then people tab.
@@ -97,7 +101,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	public void contactPickerWithRandomSearchTest() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomContactName=(new StringBuilder("contact_").append(randInt1)).toString();
-		
+
 		//1. Open room testRoom and open his details.
 		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		roomsList1.getRoomByName(testRoom).click();
@@ -105,14 +109,14 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		roomPage1.collapseChatButton.click();
 		roomPage1.activeMembersTextView.click();
 		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(AppiumFactory.getAndroidDriver1());
-		
+
 		//2. Hit the addMember button
 		roomDetails1.addParticipantButton.click();
 		//Check that the ContactPicker page is open
 		RiotContactPickerPageObjects contactPicker1 = new RiotContactPickerPageObjects(AppiumFactory.getAndroidDriver1());
 		AppiumFactory.getAndroidDriver1().hideKeyboard();
 		contactPicker1.checkDefaultLayout();
-		
+
 		//3. Enter a random string in the search bar
 		contactPicker1.searchMemberEditText.setValue(randomContactName);
 		AppiumFactory.getAndroidDriver1().hideKeyboard();
@@ -123,13 +127,13 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		//Check that the item of the LOCAL CONTACTS categorie is (0)
 		Assert.assertEquals(contactPicker1.categoryList.get(1).findElementById("im.vector.alpha:id/people_header_text_view").getText(), "LOCAL CONTACTS (0)");
 		Assert.assertEquals(contactPicker1.detailsMemberListView.size(), 1, "There is too much members found with a random string.");
-		
+
 		//back to rooms list
 		contactPicker1.backButton.click();
 		roomDetails1.menuBackButton.click();
 		roomPage1.menuBackButton.click();
 	}
-	
+
 	/**
 	 * 1. Open room testRoom and open his details, then people tab.
 	 * 2. Hit the addMember button
@@ -148,17 +152,17 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		roomPage1.collapseChatButton.click();
 		roomPage1.activeMembersTextView.click();
 		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(AppiumFactory.getAndroidDriver1());
-		
+
 		//2. Hit the addMember button
 		roomDetails1.addParticipantButton.click();
 		//Check that the ContactPicker page is open
 		RiotContactPickerPageObjects contactPicker1 = new RiotContactPickerPageObjects(AppiumFactory.getAndroidDriver1());
 		//contactPicker1.checkDefaultLayout();
-		
+
 		//3. Enter in the search bar a word matching known contacts
 		contactPicker1.searchMemberEditText.setValue(matchingWithKnownContactFilter1);
 		AppiumFactory.getAndroidDriver1().hideKeyboard();
-		
+
 		//Check that the text of the first item is equal to the random string
 		Assert.assertEquals(contactPicker1.getDisplayNameOfMemberFromContactPickerList(contactPicker1.detailsMemberListView.get(0)), matchingWithKnownContactFilter1);
 		//Check that KNOWN CONTACTS categorie is displayed
@@ -169,5 +173,47 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		//Check that there is at least 2 filtered people
 		Assert.assertTrue(contactPicker1.detailsMemberListView.size()>=2, "There not enough members in the list after filtering with matching word.");
 	}
-	
+
+	/**
+	 * 1. Create a room.
+	 * 2. Invite a participant
+	 * 3. Remove this participant from the room details
+	 * Check that there is no more INVITED category
+	 * @throws InterruptedException
+	 */
+	@Test(groups="1driver")
+	public void inviteAndCancelInvitationTest() throws InterruptedException{
+		//1. Create a room.
+		RiotRoomsListPageObjects mainPage1=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomPageObjects roomPage=mainPage1.createRoom();
+
+		//2. Invite a participant
+		roomPage.inviteMembersButton.click();
+		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(AppiumFactory.getAndroidDriver1());
+		roomDetails1.addParticipant(invitedUser);
+
+		//3. Remove this participant from the room details
+		roomDetails1.removeMemberWithSwipeOnItem(roomDetails1.membersList.get(1));
+
+		//4. Check that there is no more INVITED category
+		Assert.assertEquals(roomDetails1.categoryList.size(), 1, "Invited category is still here");
+		//Go back to room list
+		roomDetails1.menuBackButton.click();
+	}
+
+	@AfterMethod(alwaysRun=true)
+	private void leaveRoomAfterTest(Method m) throws InterruptedException{
+		switch (m.getName()) {
+		case "inviteAndCancelInvitationTest":
+			leaveRoomFromRoomPageAfterTest("Empty room");
+			break;
+		}
+	}
+
+	private void leaveRoomFromRoomPageAfterTest(String roomName){
+		RiotRoomPageObjects roomPage=new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
+		roomPage.leaveRoom();
+		System.out.println("Leave room "+roomName+ " with device 1");
+	}
+
 }

@@ -61,6 +61,8 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 	 */
 	@AndroidFindBy(xpath="//android.widget.ExpandableListView[@resource-id='im.vector.alpha:id/room_details_members_exp_list_view']/android.widget.RelativeLayout[@enabled='false']")
 	public List<MobileElement> membersList;
+	@AndroidFindBy(xpath="//android.widget.ExpandableListView[@resource-id='im.vector.alpha:id/room_details_members_exp_list_view']/android.widget.RelativeLayout[@enabled='true']")
+	public List<MobileElement> categoryList;
 	@AndroidFindBy(id="im.vector.alpha:id/search_no_results_text_view")
 	public MobileElement noResultTextView;
 	
@@ -76,7 +78,9 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 		inviteMember.searchAndSelectMember(inviteeAddress);
 		checkInviteConfirmationMsgBox(inviteeAddress);
 		inputDialogOkButton.click();
+		waitUntilDisplayed(driver, "//android.widget.ProgressBar", false, 10);
 	}
+	
 	/**
 	 * Check texts of the invite confirmation msgbox.
 	 * @throws InterruptedException 
@@ -107,6 +111,32 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 			return null;
 		}
 	}
+	
+	/**
+	 * Swipe to the left on a member item, then hit the "eject" button.</br>
+	 * Wait until the progress bar is gone.
+	 * @param memberItem
+	 * @return 
+	 * @throws InterruptedException 
+	 */
+	public void removeMemberWithSwipeOnItem(MobileElement memberItem) throws InterruptedException{
+		int x = memberItem.getLocation().getX();
+		int y= memberItem.getLocation().getY();
+		int witdthX=memberItem.getSize().getWidth();
+		int xFirst=x+witdthX-80;
+		float xEndF=(float) (0.6*witdthX);
+		int xEnd=(int)xEndF;
+		//Swipe to the left on the item.
+		driver.swipe(xFirst,y, xEnd,y,500);
+		//Hit on eject button
+		memberItem.findElementById("im.vector.alpha:id/filtered_list_delete_action").click();
+		//hit on remove confirmation button from dialog alert
+		waitUntilDisplayed(driver, "android:id/parentPanel", true, 10);
+		Assert.assertEquals(inputAndroidDialogNameTextView.getText(), "Remove?");
+		inputDialogOkButton.click();
+		waitUntilDisplayed(driver, "//android.widget.ProgressBar", false, 10);
+	}
+	
 		
 	/*
 	 * 				FILES TAB

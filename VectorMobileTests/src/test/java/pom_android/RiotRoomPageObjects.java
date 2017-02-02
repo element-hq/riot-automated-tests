@@ -95,6 +95,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public void leaveRoom(){
 		moreOptionsButton.click();
 		leaveRoomMenuItem.click();
+		alertDialogButton2.click();
 	}
 	
 	/*
@@ -379,6 +380,23 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public MobileElement sendFilesFromMenuButton;
 	@AndroidFindBy(xpath="//android.widget.ListView//android.widget.TextView[@text='Take photo or video']/..")//take photo menu with send files and take photo buttons
 	public MobileElement takePhotoFromMenuButton;
+	
+	/*
+	 * ALERT DIALOG
+	 */
+	/**
+	 * Cancel Button.
+	 */
+	@AndroidFindBy(id="android:id/button2")
+	public MobileElement alertDialogButton1;
+	/**
+	 * Leave Button.
+	 */
+	@AndroidFindBy(id="android:id/button1")
+	public MobileElement alertDialogButton2;
+	
+	
+	
 	
 	/*
 	 * Functions
