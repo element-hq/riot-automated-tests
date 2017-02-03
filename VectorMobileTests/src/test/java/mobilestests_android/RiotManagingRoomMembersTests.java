@@ -18,7 +18,7 @@ import utility.ScreenshotUtility;
 
 /**
  * Tests on the members tab from the room details, and on the contact picker.
- * @author matrix
+ * @author jeang
  *
  */
 @Listeners({ ScreenshotUtility.class })
@@ -172,6 +172,11 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		Assert.assertTrue(knownContacts.matches("^KNOWN CONTACTS \\([^0][0-9]*\\)$"));
 		//Check that there is at least 2 filtered people
 		Assert.assertTrue(contactPicker1.detailsMemberListView.size()>=2, "There not enough members in the list after filtering with matching word.");
+		
+		//back to rooms list
+		contactPicker1.backButton.click();
+		roomDetails1.menuBackButton.click();
+		roomPage1.menuBackButton.click();
 	}
 
 	/**

@@ -127,11 +127,11 @@ private AppiumDriver<MobileElement> driver;
 	/*
 	 * START / CREATE ROOM SHEET. Opened after click on plus button.
 	 */
-	@iOSFindBy(accessibility="Start chat")
+	@iOSFindBy(accessibility="HomeVCCreateRoomAlertActionStart chat")
 	public MobileElement startChatButton;
-	@iOSFindBy(accessibility="Create room")
+	@iOSFindBy(accessibility="HomeVCCreateRoomAlertActionCreate room")
 	public MobileElement createRoomButton;
-	@iOSFindBy(accessibility="Cancel")
+	@iOSFindBy(accessibility="HomeVCCreateRoomAlertActionCancel")
 	public MobileElement cancelCreationButton;
 	
 	/**

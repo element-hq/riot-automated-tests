@@ -1,5 +1,7 @@
 package pom_ios;
 
+import java.util.List;
+
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
@@ -72,15 +74,23 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 		waitUntilDisplayed(driver, "//*[@name='In progress']", false, 10);
 	}
 	/*
-	 * MEMBERS
+	 * MEMBERS TAB
 	 */
-	@iOSFindBy(accessibility="Search / invite by name, email, id")
+	//FILTER BAR
+	@iOSFindBy(accessibility="RoomParticipantsVCSearchBarView")
+	public MobileElement searchInviteBarView;
+	@iOSFindBy(accessibility="RoomParticipantsVCSearchBarView")
 	public MobileElement searchInviteSearchField;
+	@iOSFindBy(accessibility="Clear text")
+	public MobileElement clearFilteredBarButton;
+	
+	//MEMBERS LIST
 	///AppiumAUT/XCUIElementTypeApplication/XCUIElementTypeWindow/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTable
-	@iOSFindBy(xpath="//XCUIElementTypeApplication/XCUIElementTypeWindow//XCUIElementTypeTable")
-	public MobileElement membersList;
+	@iOSFindBy(accessibility="ContactTableViewCell")
+	public List<MobileElement> membersList;
 	@iOSFindBy(accessibility="add_participant")
 	public MobileElement addParticipantButton;
+	
 	/**
 	 * Add a participant from room details, Members tab.
 	 * @param participant2Adress
@@ -89,23 +99,74 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 		addParticipantButton.click();
 		RiotContactPickerPageObjects contactPicker = new RiotContactPickerPageObjects(driver);
 		contactPicker.searchAndSelectMember(participant2Adress);
-		
 	}
 	
+	/**
+	 * From the room details people tab, enter a text on the filter room members edittext.
+	 * @param filter
+	 */
+	public void filterOnRoomMembersList(String filter){
+		searchInviteBarView.setValue(filter);
+	}
+	/**
+	 * Return the displayname from a filtered member from the people tab.
+	 * @param member
+	 * @return
+	 */
+	public String getDisplayNameOfMemberFromPeopleTab(MobileElement member){
+		try {
+			return member.findElementByAccessibilityId("MemberDisplayName").getText();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	/**
+	 * Swipe to the left on a member item, then hit the "eject" button.</br>
+	 * Wait until the progress bar is gone.
+	 * @param memberItem
+	 * @throws InterruptedException 
+	 */
+	public void removeMemberWithSwipeOnItem(MobileElement memberItem) throws InterruptedException{
+		int x = memberItem.getLocation().getX();
+		int y= memberItem.getLocation().getY();
+		int witdthX=memberItem.getSize().getWidth();
+		int xFirst=x+witdthX-80;
+		float xEndF=(float) (0.3*witdthX);
+		int xEnd=(int)xEndF;
+		//Swipe to the left on the item.
+		driver.swipe(witdthX+5,y, xFirst-50,y,500);
+		//Hit on eject button
+		memberItem.findElementByClassName("XCUIElementTypeButton").click();
+		//hit on remove confirmation button from dialog alert
+		alertRemoveConfirmationRemoveButton.click();
+		
+//		waitUntilDisplayed(driver, "android:id/parentPanel", true, 10);
+//		Assert.assertEquals(inputAndroidDialogNameTextView.getText(), "Remove?");
+//		inputDialogOkButton.click();
+//		waitUntilDisplayed(driver, "//android.widget.ProgressBar", false, 10);
+	}
+	
+	//Remove alert dialog
+	@iOSFindBy(accessibility="RoomParticipantsVCKickAlertActionRemove")
+	public MobileElement alertRemoveConfirmationRemoveButton;
+	@iOSFindBy(accessibility="RoomParticipantsVCKickAlertActionCancel")
+	public MobileElement alertRemoveConfirmationCancelButton;
 	/*
-	 * FILES
+	 * FILES TAB
 	 */
 	
 	/*
-	 * SETTINGS
+	 * SETTINGS TAB
 	 */
 	@iOSFindBy(xpath="//XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeTextField")
 	public MobileElement roomNameTextField;
 	
 	@iOSFindBy(accessibility="Leave")
 	public MobileElement leaveButton;
-	@iOSFindBy(xpath="//XCUIElementTypeCollectionView/XCUIElementTypeCell/XCUIElementTypeButton[@name='Leave']")
+	@iOSFindBy(accessibility="RoomSettingsVCLeaveAlertActionLeave")
 	public MobileElement confirmLeaveFromAlertButton;
+	@iOSFindBy(accessibility="RoomSettingsVCLeaveAlertActionCancel")
+	public MobileElement confirmCancelFromAlertButton;
 	
 	public void changeRoomName(String roomName){
 		roomNameTextField.clear();
@@ -127,9 +188,9 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 		//Warning alert
 	@iOSFindBy(xpath="//XCUIElementTypeApplication/XCUIElementTypeWindow//XCUIElementTypeAlert[@name='Warning!']")
 	public MobileElement warningAlert;
-	@iOSFindBy(accessibility="Cancel")
+	@iOSFindBy(accessibility="RoomSettingsVCEnableEncryptionAlertActionCancel")
 	public MobileElement warningAlertCancelButton;
-	@iOSFindBy(accessibility="OK")
+	@iOSFindBy(accessibility="RoomSettingsVCEnableEncryptionAlertActionOK")
 	public MobileElement warningAlertOkButton;
 	
 
