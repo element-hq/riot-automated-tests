@@ -127,7 +127,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * @throws InterruptedException 
 	 */
 	@Test(groups="2drivers", description="call from device 1 answered by device 2")
-	public void cancelIncommingAudioCall() throws InterruptedException{
+	public void cancelIncomingAudioCall() throws InterruptedException{
 		String callingUser="riotuser2";
 		String calledUser="riotuser3";
 		String pwd="riotuser";
@@ -161,13 +161,13 @@ public class RiotVoipTests extends RiotParentTest{
 	 * Open a room, launch a voice call.</br>
 	 * With device 2, assert that the incomming call view is displayed and correc.</br>
 	 * Accept the call from device 2, assert that the incomming call view is opened. </br>
-	 * From device 1, check that the calling view is opened.</br>
+	 * From device 2, check that the calling view is opened.</br>
 	 * Hang up call from device 2</br>Check that both calling view are closed.</br>
 	 * Check that "[user] ended the call" event is displayed on room view and room list view.
 	 * @throws InterruptedException 
 	 */
 	@Test(groups="2drivers", description="call from device 1 answered by device 2")
-	public void acceptIncommingAudioCall() throws InterruptedException{
+	public void acceptIncomingAudioCall() throws InterruptedException{
 		String callingUser="riotuser2";
 		String calledUser="riotuser3";
 		String pwd="riotuser";
@@ -197,8 +197,8 @@ public class RiotVoipTests extends RiotParentTest{
 		//hangout from device 2
 		callingViewDevice2.hangUpButton.click();
 		//check that both calling view are closed
-		callingViewDevice1.isDisplayed(false);
-		callingViewDevice2.isDisplayed(false);
+		Assert.assertFalse(callingViewDevice1.isDisplayed(false),"Calling view is still displayed on device 1 after call is ended");
+		Assert.assertFalse(callingViewDevice2.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
 		//check end call events on messages
 		Assert.assertEquals(voipRoomDevice1.getTextViewFromPost(voipRoomDevice1.getLastPost()).getText(),calledUser+" ended the call.");
 		Assert.assertEquals(riotListDevice2.getReceivedMessageByRoomName(roomNameTest),calledUser+" ended the call.");
@@ -216,7 +216,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * @throws InterruptedException 
 	 */
 	@Test(groups="2drivers", description="call from device 1 answered by device 2")
-	public void acceptIncommingVideoCall() throws InterruptedException{
+	public void acceptIncomingVideoCall() throws InterruptedException{
 		String callingUser="riotuser2";
 		String calledUser="riotuser3";
 		String pwd="riotuser";
@@ -248,8 +248,8 @@ public class RiotVoipTests extends RiotParentTest{
 		callingViewDevice2.mainCallLayout.click();//display the controls if they had fade out.
 		callingViewDevice2.hangUpButton.click();
 		//check that both calling view are closed
-		callingViewDevice1.isDisplayed(false);
-		callingViewDevice2.isDisplayed(false);
+		Assert.assertFalse(callingViewDevice1.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
+		Assert.assertFalse(callingViewDevice2.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
 		//check end call events on messages
 		Assert.assertEquals(voipRoomDevice1.getTextViewFromPost(voipRoomDevice1.getLastPost()).getText(),calledUser+" ended the call.");
 		Assert.assertEquals(riotListDevice2.getReceivedMessageByRoomName(roomNameTest),calledUser+" ended the call.");

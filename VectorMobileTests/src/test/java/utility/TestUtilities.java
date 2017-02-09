@@ -191,4 +191,19 @@ public class TestUtilities {
 		//AppiumFactory.getAndroidDriver1().swipe(0,scrollStart,0,scrollEnd,2000);
 		driver.swipe(0,scrollStart,0,scrollEnd,2000);
 	}
+	
+	public boolean doubleTapElement(MobileElement element, AppiumDriver<MobileElement> driver) {
+        int x,y;
+        try {
+            x = element.getCenter().getX();
+            y = element.getCenter().getY();
+            driver.tap(1, x, y, 0);
+            try{Thread.sleep(0);}catch (Exception e1) {}
+            driver.tap(1, x, y, 0);
+            try{Thread.sleep(0);}catch (Exception e1) {}
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

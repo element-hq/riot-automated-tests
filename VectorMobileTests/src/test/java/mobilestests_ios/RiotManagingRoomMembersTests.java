@@ -1,7 +1,6 @@
 package mobilestests_ios;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;

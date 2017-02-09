@@ -183,15 +183,15 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 		}
 	}
 	/**
-	 * Send back the last received message of a room by his name.</br>
+	 * Return the last received message of a room by his name.</br>
 	 * Message can be text or event. </br>
 	 * Return null if no message found.
-	 * @param myRommName
+	 * @param myRoomName
 	 * @return
 	 */
-	public String getReceivedMessageByRoomName(String myRommName){
+	public String getReceivedMessageByRoomName(String myRoomName){
 		try {
-			String messageWithUsername =driver.findElement(By.xpath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../..//android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_roomMessage']")).getText();
+			String messageWithUsername =driver.findElement(By.xpath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRoomName+"']/../..//android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_roomMessage']")).getText();
 			if(messageWithUsername.indexOf(":")!=-1){
 				return messageWithUsername.substring(messageWithUsername.indexOf(":")+2, messageWithUsername.length());
 			}else{

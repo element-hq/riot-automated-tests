@@ -33,7 +33,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * Check that events are logged in the messages.
 	 * @throws InterruptedException
 	 */
-	@Test(groups="1driver_ios", description="test on call")
+	@Test(groups="1driver_ios", description="test on call", priority=1)
 	public void cancelAudioCallFromChatRoom() throws InterruptedException{
 		//1. Launch an audio call from a room
 		RiotRoomsListPageObjects roomsList= new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
@@ -75,7 +75,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * Check that events are logged in the messages.
 	 * @throws InterruptedException
 	 */
-	@Test(groups="1driver_ios", description="test on call")
+	@Test(groups="1driver_ios", description="test on call",priority=2)
 	public void cancelVideoCallFromChatRoom() throws InterruptedException{
 		//1. Launch an video call from a room
 		RiotRoomsListPageObjects roomsList= new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
@@ -112,17 +112,20 @@ public class RiotVoipTests extends RiotParentTest{
 	 * 1. Open a room, launch a voice call.</br>
 	 * With device 2, assert that the incomming call view is displayed and correc.</br>
 	 * 2. Ignore the call from device 2, assert that the incomming call view is closed. </br>
-	 * From device 1, check that the calling view is closed.
+	 * From device 1, check that the calling view is closed.</br>
+	 * From device 2, check that last message is a 'ended call' event on the rooms list page</br>
+	 * From device 1, check that last message is a 'ended call' event on the room page</br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="2driver_ios", description="call from device 1 answered by device 2")
-	public void cancelIncommingAudioCall() throws InterruptedException{
+	@Test(groups="2driver_ios", description="call from device 1 answered by device 2",priority=3)
+	public void cancelIncomingAudioCall() throws InterruptedException{
 		//TODO maybe use a different option than checkIfUserLogged.
 		//checkIfUserLogged(AppiumFactory.getiOsDriver1(), user1, pwd);
 		//checkIfUserLogged(AppiumFactory.getiOsDriver2(), user2, pwd);
 		
 		//1. Open a room, launch a voice call.
 		RiotRoomsListPageObjects roomsList1= new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomsListPageObjects roomsList2= new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver2());
 		roomsList1.getRoomByName(roomNameTest).click();;
 		RiotRoomPageObjects room1=new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
 		room1.startVoiceCall();
@@ -130,16 +133,117 @@ public class RiotVoipTests extends RiotParentTest{
 		RiotCallingPageObjects callingView1=new RiotCallingPageObjects(AppiumFactory.getiOsDriver1());
 		//With device 2, assert that the incomming call view is displayed and correc.
 		RiotIncomingCallPageObjects incomingCall2 = new RiotIncomingCallPageObjects(AppiumFactory.getiOsDriver2());
-		incomingCall2.checkIncomingCallView(true, user1);
+		incomingCall2.checkIncomingCallView(true, user1,"voice");
 		//2. Ignore the call from device 2, assert that the incomming call view is closed
 		incomingCall2.declineCallButton.click();
 		//check that incoming call layout is closed on device 2
-		incomingCall2.checkIncomingCallView(false, user1);
+		incomingCall2.checkIncomingCallView(false, user1,"voice");
 		//From device 1, check that the calling view is closed.
 		callingView1.isDisplayed(false);
+		//From device 2, check that last message is a 'ended call' event on the rooms list page
+		Assert.assertEquals(roomsList2.getReceivedMessageByRoomName(roomNameTest), user2+" ended the call");
+		//From device 1, check that last message is a 'ended call' event on the room page
+		Assert.assertTrue(room1.getTextViewFromBubble(room1.getLastBubble()).getText().contains(user2+" ended the call"));
 		room1.menuBackButton.click();
 	}
+
+	/**
+	 * Required : both devices have an user logged.
+	 * 1. Open a room
+	 * 2. Launch a voice call.</br>
+	 * With device 2, assert that the incomming call view is displayed and correct.</br>
+	 * 3. Accept the call from device 2, assert that the incomming call view is opened. </br>
+	 * From device 2, check that the calling view is opened.</br>
+	 * 4. Hang up call from device 2</br>Check that both calling view are closed.</br>
+	 * Check that "[user] ended the call" event is displayed on room view and room list view.
+	 * @throws InterruptedException 
+	 */
+	@Test(groups="2driver_ios", description="call from device 1 answered by device 2",priority=4)
+	public void acceptIncomingAudioCall() throws InterruptedException{
+		//TODO maybe use a different option than checkIfUserLogged.
+		//checkIfUserLogged(AppiumFactory.getiOsDriver1(), user1, pwd);
+		//checkIfUserLogged(AppiumFactory.getiOsDriver2(), user2, pwd);
+		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver2());
+		//1. Open a room
+		roomsList1.getRoomByName(roomNameTest).click();
+		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		
+		//2. Launch a voice call.
+		roomPage1.startVoiceCall();
+		RiotCallingPageObjects callingPage1=new RiotCallingPageObjects(AppiumFactory.getiOsDriver1());
+		Assert.assertTrue(callingPage1.isDisplayed(true),"Calling view is not displayed on device 1");
+		//With device 2, assert that the incomming call view is displayed and correct
+		RiotIncomingCallPageObjects incomingPage2=new RiotIncomingCallPageObjects(AppiumFactory.getiOsDriver2());
+		incomingPage2.checkIncomingCallView(true,user1, "voice");
+		
+		//3. Accept the call from device 2, assert that the incomming call view is opened.
+		incomingPage2.acceptCallButton.click();
+		//From device 2, check that the calling view is opened.
+		RiotCallingPageObjects callingPage2=new RiotCallingPageObjects(AppiumFactory.getiOsDriver2());
+		Assert.assertTrue(callingPage2.isDisplayed(true),"Calling view is not displayed on device 2");
+		
+		//4. Hang up call from device 2
+		callingPage2.hangUpButton.click();
+		//Check that both calling view are closed
+		Assert.assertFalse(callingPage1.isDisplayed(false),"Calling view is still displayed on device 1 after call is ended");
+		Assert.assertFalse(callingPage2.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
+		//Check that "[user] ended the call" event is displayed on room view and room list view.
+		Assert.assertEquals(roomsList2.getReceivedMessageByRoomName(roomNameTest), user2+" ended the call");
+		//From device 1, check that last message is a 'ended call' event on the room page
+		Assert.assertTrue(roomPage1.getTextViewFromBubble(roomPage1.getLastBubble()).getText().contains(user2+" ended the call"));
+		roomPage1.menuBackButton.click();
+	}
 	
+	/**
+	 * Required : both devices have an user logged.
+	 * 1. Open a room
+	 * 2. Launch a video call.</br>
+	 * With device 2, assert that the incomming call view is displayed and correct.</br>
+	 * 3. Accept the call from device 2, assert that the incomming call view is opened. </br>
+	 * From device 2, check that the calling view is opened.</br>
+	 * 4. Hang up call from device 1</br>Check that both calling view are closed.</br>
+	 * Check that "[user] ended the call" event is displayed on room view and room list view.
+	 * @throws InterruptedException 
+	 */
+	@Test(groups="2driver_ios", description="video call from device 1 answered by device 2",priority=5)
+	public void acceptIncomingVideoCall() throws InterruptedException{
+		//TODO maybe use a different option than checkIfUserLogged.
+		//checkIfUserLogged(AppiumFactory.getiOsDriver1(), user1, pwd);
+		//checkIfUserLogged(AppiumFactory.getiOsDriver2(), user2, pwd);
+		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver2());
+		//1. Open a room
+		roomsList1.getRoomByName(roomNameTest).click();
+		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		
+		//2. Launch a voice call.
+		roomPage1.startVideoCall();
+		RiotCallingPageObjects callingPage1=new RiotCallingPageObjects(AppiumFactory.getiOsDriver1());
+		Assert.assertTrue(callingPage1.isDisplayed(true),"Calling view is not displayed on device 1");
+		//With device 2, assert that the incomming call view is displayed and correct
+		RiotIncomingCallPageObjects incomingPage2=new RiotIncomingCallPageObjects(AppiumFactory.getiOsDriver2());
+		incomingPage2.checkIncomingCallView(true,user1, "video");
+		
+		//3. Accept the call from device 2, assert that the incomming call view is opened.
+		incomingPage2.acceptCallButton.click();
+		//From device 2, check that the calling view is opened.
+		RiotCallingPageObjects callingPage2=new RiotCallingPageObjects(AppiumFactory.getiOsDriver2());
+		Assert.assertTrue(callingPage2.isDisplayed(true),"Calling view is not displayed on device 2");
+		
+		//4. Hang up call from device 1
+		callingPage1.hangUpWithDoubleTap();
+		
+		//Check that both calling view are closed
+		Assert.assertFalse(callingPage1.isDisplayed(false),"Calling view is still displayed on device 1 after call is ended");
+		Assert.assertFalse(callingPage2.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
+		//Check that "[user] ended the call" event is displayed on room view and room list view.
+		Assert.assertEquals(roomsList2.getReceivedMessageByRoomName(roomNameTest), user1+" ended the call");
+		//From device 1, check that last message is a 'ended call' event on the room page
+		Assert.assertTrue(roomPage1.getTextViewFromBubble(roomPage1.getLastBubble()).getText().contains(user1+" ended the call"));
+		roomPage1.menuBackButton.click();
+	}
+
 	/**
 	 * Log the good user if not.</br> Secure the test.
 	 * @param myDriver

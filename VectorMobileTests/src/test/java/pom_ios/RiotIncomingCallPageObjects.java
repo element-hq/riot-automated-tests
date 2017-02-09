@@ -16,21 +16,20 @@ public class RiotIncomingCallPageObjects extends TestUtilities {
 		driver= (IOSDriver<MobileElement>) myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 		try {
-			//waitUntilDisplayed(driver,"//XCUIElementTypeAlert[contains(@name,'Incoming voice call')]", true, 10);
-			waitUntilDisplayed(driver,"//XCUIElementTypeAlert", true, 10);
+			waitUntilDisplayed(driver,"AppDelegateIncomingCallAlert", true, 10);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
-	@iOSFindBy(xpath="//XCUIElementTypeAlert[contains(@name,'Incoming voice call')]")
+	@iOSFindBy(xpath="AppDelegateIncomingCallAlert")
 	public MobileElement incomingCallAlert;
-	@iOSFindBy(accessibility="Decline")
-	public MobileElement acceptCallButton;
-	@iOSFindBy(accessibility="Accept")
+	@iOSFindBy(accessibility="AppDelegateIncomingCallAlertActionDecline")
 	public MobileElement declineCallButton;
+	@iOSFindBy(accessibility="AppDelegateIncomingCallAlertActionAccept")
+	public MobileElement acceptCallButton;
 
 	
-	public void checkIncomingCallView(Boolean isDisplayed, String callerName) throws InterruptedException{
+	public void checkIncomingCallView(Boolean isDisplayed, String callerName, String voiceOrVideo) throws InterruptedException{
 //		String messagePendingViewPresent;
 //		if(isDisplayed){
 //			messagePendingViewPresent="Incoming call view isn't displayed";
@@ -39,7 +38,8 @@ public class RiotIncomingCallPageObjects extends TestUtilities {
 //		}
 		//Assert.assertTrue(waitUntilDisplayed(driver, "//XCUIElementTypeAlert[contains(@name,'Incoming voice call')]", isDisplayed, 5)==isDisplayed, messagePendingViewPresent);
 		if(isDisplayed){
-			Assert.assertTrue(waitUntilDisplayed(driver, "//XCUIElementTypeStaticText[@value='Incoming voice call from "+callerName+"']", true, 5), "Inconming call message is wrong.");
+			//Assert.assertTrue(waitUntilDisplayed(driver, "XCUIElementTypeAlert[@name='AppDelegateIncomingCallAlert']//XCUIElementTypeStaticText[@value='Incoming voice call from "+callerName+"']", true, 5), "Incoming call message is wrong.");
+			Assert.assertTrue(waitUntilDisplayed(driver, "Incoming "+voiceOrVideo+" call from "+callerName, true, 5), "Incoming call message is wrong.");
 		}
 	}
 

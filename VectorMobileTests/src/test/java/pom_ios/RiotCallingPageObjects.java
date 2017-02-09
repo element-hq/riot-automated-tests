@@ -68,6 +68,13 @@ public class RiotCallingPageObjects extends TestUtilities{
 	 * @throws InterruptedException
 	 */
 	public Boolean isDisplayed(Boolean displayed) throws InterruptedException{
-		return waitUntilDisplayed(driver,"CallVCOverlayContainerView", displayed, 5);
+		return waitUntilDisplayed(driver,"CallVCOverlayContainerView", displayed, 10);
+	}
+	
+	/**
+	 * Double tap on the hangup button. Usefull from a video call layout since the interface with button is quicly hidden. 
+	 */
+	public void hangUpWithDoubleTap(){
+		doubleTapElement(hangUpButton, driver);
 	}
 }

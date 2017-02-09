@@ -10,7 +10,6 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
-import pom_ios.RiotRoomPageObjects;
 import utility.TestUtilities;
 
 public class RiotRoomsListPageObjects extends TestUtilities{
@@ -109,10 +108,33 @@ private AppiumDriver<MobileElement> driver;
 	 * Return null if not found.
 	 * @param myRommName
 	 * @return 
+	 * @throws InterruptedException 
 	 */
-	public MobileElement getRoomByName(String myRommName){
+	public MobileElement getRoomByName(String myRommName) throws InterruptedException{
+		waitUntilDisplayed(driver, "ROOMS",true, 10);
 		try {
-			return roomsAndCategoriesListTable.findElementByXPath("//XCUIElementTypeCell/XCUIElementTypeStaticText[@value='"+myRommName+"']/..");
+			return roomsAndCategoriesListTable.findElementByXPath("//XCUIElementTypeCell[@name='RecentTableViewCell']/XCUIElementTypeStaticText[@name='TitleLabel' and @value='"+myRommName+"']/..");
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Return the last received message of a room by his name.</br>
+	 * Message can be text or event. </br>
+	 * Return null if no message found.
+	 * @param myRoomName
+	 * @return
+	 * @throws InterruptedException 
+	 */
+	public String getReceivedMessageByRoomName(String myRoomName) throws InterruptedException{
+		String messageWithUsername= getRoomByName(myRoomName).findElementByAccessibilityId("LastEventDescription").getText();
+		try {
+			if(messageWithUsername.indexOf(":")!=-1){
+				return messageWithUsername.substring(messageWithUsername.indexOf(":")+2, messageWithUsername.length());
+			}else{
+				return messageWithUsername;
+			}
 		} catch (Exception e) {
 			return null;
 		}
