@@ -46,7 +46,8 @@ Test environnement for Android
 ------------------------------
 
 - Install Android SDK (https://developer.android.com/studio/index.html?hl=sk). Make sure environnement variables are set with: "echo export "PATH=$home/Library/Android/sdk/platform-tools:${PATH}" >> ~/.bash_profile" and "echo export "PATH=$home/Library/Android/sdk/tools:${PATH}" >> ~/.bash_profile". Send "adb version" in terminal to make sure installation is correct.
-- 
+- Install this plugin https://github.com/JorisAerts/Eclipse-Environment-Variables, and set the ANDROID_HOME variable. It's mandatory when starting appium server programmatically
+
 Test environnement for iOS
 --------------------------
 
