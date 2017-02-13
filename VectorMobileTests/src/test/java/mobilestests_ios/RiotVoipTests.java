@@ -1,5 +1,8 @@
 package mobilestests_ios;
 
+import java.io.IOException;
+
+import org.apache.commons.exec.ExecuteException;
 import org.testng.Assert;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -12,6 +15,7 @@ import pom_ios.RiotLoginAndRegisterPageObjects;
 import pom_ios.RiotRoomPageObjects;
 import pom_ios.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
+import utility.AppiumServerStartAndStop;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -117,7 +121,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * From device 1, check that last message is a 'ended call' event on the room page</br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="2driver_ios", description="call from device 1 answered by device 2",priority=3)
+	@Test(groups="2drivers_ios", description="call from device 1 answered by device 2",priority=3)
 	public void cancelIncomingAudioCall() throws InterruptedException{
 		//TODO maybe use a different option than checkIfUserLogged.
 		//checkIfUserLogged(AppiumFactory.getiOsDriver1(), user1, pwd);
@@ -158,7 +162,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * Check that "[user] ended the call" event is displayed on room view and room list view.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="2driver_ios", description="call from device 1 answered by device 2",priority=4)
+	@Test(groups="2drivers_ios", description="call from device 1 answered by device 2",priority=4)
 	public void acceptIncomingAudioCall() throws InterruptedException{
 		//TODO maybe use a different option than checkIfUserLogged.
 		//checkIfUserLogged(AppiumFactory.getiOsDriver1(), user1, pwd);
@@ -206,7 +210,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * Check that "[user] ended the call" event is displayed on room view and room list view.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="2driver_ios", description="video call from device 1 answered by device 2",priority=5)
+	@Test(groups="2drivers_ios", description="video call from device 1 answered by device 2",priority=5)
 	public void acceptIncomingVideoCall() throws InterruptedException{
 		//TODO maybe use a different option than checkIfUserLogged.
 		//checkIfUserLogged(AppiumFactory.getiOsDriver1(), user1, pwd);

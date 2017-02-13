@@ -42,7 +42,7 @@ public class RiotLoginTests_ios extends RiotParentTest{
 		//Assert.assertTrue(loginPage.authenticationView.isEnabled(), "The login page isn't displayed after the log-out.");
 	}
 	
-	@Test(groups={"2driver_ios"})
+	@Test(groups={"2drivers_ios"})
 	public void doubleLogin(){
 String sUserName="riotuser1";
 String sPassword ="riotuser";

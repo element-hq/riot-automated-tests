@@ -68,7 +68,7 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 	 * Check that user on device 1 can decrypt and read the message.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2driver_ios"})
+	@Test(groups={"2drivers_ios"})
 	public void tryReadEncryptedMessageSentAfterJoining() throws InterruptedException{
 		//1. Create room with Device 1 and enable encryption.
 		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
@@ -125,7 +125,7 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 	 * Check that calling layout is closed on both devices.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2driver_ios"}, description="start a voice call in encrypted room")
+	@Test(groups={"2drivers_ios"}, description="start a voice call in encrypted room")
 	public void startVoiceAndVideoCallInEncryptedRoom() throws InterruptedException{
 		//1. Create DM room with Device 1 and invite device 2.
 		//		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());

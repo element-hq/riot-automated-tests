@@ -24,7 +24,7 @@ public class RiotNoConnectionTests extends RiotParentTest{
 	 * Bring back the wifi and verifies that the login button become enabled.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver"})
+	@Test(groups={"1driver_android"})
 	public void logInWithoutInternetConnection() throws InterruptedException{
 		logoutForSetup();
 		((AndroidDriver<MobileElement>) AppiumFactory.getAndroidDriver1()).setConnection(Connection.NONE);
@@ -42,7 +42,7 @@ public class RiotNoConnectionTests extends RiotParentTest{
 	 * Bring back the internet connection and verifies that the notification isn't displayed anymore.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"nointernet","1driver"})
+	@Test(groups={"nointernet","1driver_android"})
 	public void roomsListWithoutConnectionTest() throws InterruptedException{
 		String roomNameTest="temp room";
 		String expectedNotificationMessage="Connectivity to the server has been lost.";
@@ -75,7 +75,7 @@ public class RiotNoConnectionTests extends RiotParentTest{
 	 * Bring back internet, verifies that Riot proposes to send the unsent message.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver"})
+	@Test(groups={"1driver_android"})
 	public void sendMessageWithoutConnectionTest() throws InterruptedException{
 		String myMessage="message sent without internet connection";
 		String expectedNotificationMessage="Messages not sent. Resend now?";
@@ -121,7 +121,7 @@ public class RiotNoConnectionTests extends RiotParentTest{
 	 * Bring back internet, verifies that Riot proposes to send the unsent photo.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver"})
+	@Test(groups={"1driver_android"})
 	public void sendPhotoWithoutConnectionTest() throws InterruptedException{
 		String expectedNotificationMessage="Messages not sent. Resend now?";
 		String roomNameTest="temp room";

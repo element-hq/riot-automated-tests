@@ -30,7 +30,7 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver"})
+	@Test(groups={"1driver_android"})
 	public void rejectInvitationToARoom() throws IOException, InterruptedException{
 		String invitedUserAdress=Constant.DEFAULT_USERADRESS;
 		String roomName="room tests Jean";
@@ -62,7 +62,7 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver"})
+	@Test(groups={"1driver_android"})
 	public void cancelInvitationToARoom() throws IOException, InterruptedException{
 		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 		String invitedUserAdress=Constant.DEFAULT_USERADRESS;
@@ -103,7 +103,7 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver"})
+	@Test(groups={"1driver_android"})
 	public void acceptInvitationToARoom() throws IOException, InterruptedException{
 		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 		String invitedUserAdress=Constant.DEFAULT_USERADRESS;
@@ -151,7 +151,7 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver"})
+	@Test(groups={"1driver_android"})
 	public void acceptInvitationAndLeaveFromMenu() throws IOException, InterruptedException{
 		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
 		String invitedUserAdress=Constant.DEFAULT_USERADRESS;

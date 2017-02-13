@@ -33,7 +33,7 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 	 * Check that the photo is correctly uploaded. 
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver"}, description="upload a photo in encrypted room")
+	@Test(groups={"1driver_android"}, description="upload a photo in encrypted room")
 	public void sendPhotoInEncryptedRoom() throws InterruptedException{
 		//1. Create room with Device 1 and enable encryption.
 		RiotRoomsListPageObjects roomsListDevice1 = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
@@ -72,7 +72,7 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 	 * @throws IllegalAccessException 
 	 * @throws InstantiationException 
 	 */
-	@Test(groups={"2drivers"})
+	@Test(groups={"2drivers_android"})
 	public void tryReadEncryptedMessageSentAfterJoining() throws InterruptedException, InstantiationException, IllegalAccessException{
 		//1. Create room with Device 1 and enable encryption.
 		RiotRoomsListPageObjects roomsListDevice1 = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
@@ -145,7 +145,7 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 	 * Check that calling layout is closed on both devices.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers"}, description="start a voice call in encrypted room")
+	@Test(groups={"2drivers_android"}, description="start a voice call in encrypted room")
 	public void startVoiceAndVideoCallInEncryptedRoom() throws InterruptedException{
 		//1. Create DM room with Device 1 and enable encryption.
 		RiotRoomsListPageObjects roomsListDevice1 = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());

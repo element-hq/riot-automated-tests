@@ -27,5 +27,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="var" path="ANDROID_HOME"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

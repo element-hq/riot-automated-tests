@@ -33,7 +33,7 @@ import utility.ScreenshotUtility;
 @Listeners({ ScreenshotUtility.class })
 public class RiotLoginTests extends RiotParentTest{
 	
-	@Test(groups={"1driver","loginpage"})
+	@Test(groups={"1driver_android","loginpage"})
 	public void simpleLogin() throws Exception {
 		String sUserName="riotuser2", sPassword="riotuser";
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
@@ -43,7 +43,7 @@ public class RiotLoginTests extends RiotParentTest{
 	/**
 	 * Log and logout and iterate on several datas from excel file.
 	 */
-	@Test(groups={"1driver","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
+	@Test(groups={"1driver_android","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void loginAndLogoutTest(String sUserName,String sPassword)  throws Exception {
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		loginPage.fillLoginForm(sUserName, sPassword);
@@ -57,7 +57,7 @@ public class RiotLoginTests extends RiotParentTest{
 	/**
 	 * Check the custom server options and verify the form.
 	 */
-	@Test(groups={"1driver","loginpage"})
+	@Test(groups={"1driver_android","loginpage"})
 	public void customServerOptionsCheck(){
 		String homeServerTextView="Home Server:";
 		String identityServerTextView="Identity Server:";
@@ -75,7 +75,7 @@ public class RiotLoginTests extends RiotParentTest{
 	 * Check the reset password form.
 	 * Doesn't verifies the reset password function.
 	 */
-	@Test(groups={"1driver","loginpage"})
+	@Test(groups={"1driver_android","loginpage"})
 	public void forgotPasswordFormTest(){
 		String expectedResetPwdMessage="To reset your password, enter the email address linked to your account:";
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
@@ -104,7 +104,7 @@ public class RiotLoginTests extends RiotParentTest{
 	 * @throws InterruptedException 
 	 * @throws MalformedURLException 
 	 */
-	@Test(groups={"1driver","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
+	@Test(groups={"1driver_android","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void fillForgotFormPasswordWithForbiddenCharacter(String mailTest, String newPwdTest, String confirmPwdTest) throws InterruptedException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		loginPage.forgotPwdButton.click();
@@ -123,7 +123,7 @@ public class RiotLoginTests extends RiotParentTest{
 	 * Fill the forgot password form with corrects (but with fake mail) characters. </br>
 	 * Check that the login form is displayed then.
 	 */
-	@Test(groups={"1driver","loginpage"})
+	@Test(groups={"1driver_android","loginpage"})
 	public void fillForgotPasswordWithAllowedCharacters(){
 		String mailTest="riot@gmail.com";
 		String newPwdTest="riotuser";
@@ -137,7 +137,7 @@ public class RiotLoginTests extends RiotParentTest{
 		Assert.assertTrue(loginPage.inputsLoginLayout.isDisplayed(), "The Riot login page is not displayed.");
 	}
 	
-	@Test(groups={"1driver","loginpage"})
+	@Test(groups={"1driver_android","loginpage"})
 	public void checkRiotLogoFromLoginPage() throws IOException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		boolean status = false;

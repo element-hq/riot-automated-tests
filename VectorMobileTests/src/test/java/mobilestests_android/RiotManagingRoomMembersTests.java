@@ -40,7 +40,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * Check that the list of filtered members is empty and no results textview is displayed.
 	 * @throws InterruptedException
 	 */
-	@Test(groups="1driver")
+	@Test(groups="1driver_android")
 	public void useFilterFieldOnPeopleTabTest() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomFilter=(new StringBuilder("filter_").append(randInt1)).toString();
@@ -97,7 +97,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * Check that there is no KNOWN CONTACTS categorie
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="1driver")
+	@Test(groups="1driver_android")
 	public void contactPickerWithRandomSearchTest() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomContactName=(new StringBuilder("contact_").append(randInt1)).toString();
@@ -143,7 +143,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * Check that there is at least 2 filtered people
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="1driver")
+	@Test(groups="1driver_android")
 	public void contactPickerWithMatchingSearchOnKnownContact() throws InterruptedException{
 		//1. Open room testRoom and open his details.
 		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
@@ -186,7 +186,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * Check that there is no more INVITED category
 	 * @throws InterruptedException
 	 */
-	@Test(groups="1driver")
+	@Test(groups="1driver_android")
 	public void inviteAndCancelInvitationTest() throws InterruptedException{
 		//1. Create a room.
 		RiotRoomsListPageObjects mainPage1=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());

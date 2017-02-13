@@ -25,7 +25,7 @@ public class RiotSearchTests extends RiotParentTest{
 	 * Check that the random msg is shown up.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="1driver", priority=0,description="test on the search from the rooms list")
+	@Test(groups="1driver_android", priority=0,description="test on the search from the rooms list")
 	public void searchRoomsAndMessages() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		int randInt2 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
@@ -80,7 +80,7 @@ public class RiotSearchTests extends RiotParentTest{
 	 * Check that "No results" is displayed after search finished.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="1driver", priority=1,description="test on the search from the rooms list with non existent searches")
+	@Test(groups="1driver_android", priority=1,description="test on the search from the rooms list with non existent searches")
 	public void searchForNonExistentMsgAndRoom() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomName=(new StringBuilder("randomsearch_").append(randInt1)).toString();

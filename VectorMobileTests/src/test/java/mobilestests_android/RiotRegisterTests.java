@@ -23,7 +23,7 @@ public class RiotRegisterTests extends RiotParentTest {
 	 * Fill the register form without any email adress. </br>
 	 * Verifies that a confirmation messagebox pops up. 
 	 */
-	@Test(groups={"restartneeded","logout","1driver"})
+	@Test(groups={"restartneeded","logout","1driver_android"})
 	public void fillRegisterFormWithoutEmail(){
 		String userNameTest="riotusername";
 		String pwdTest="riotuser";
@@ -52,7 +52,7 @@ public class RiotRegisterTests extends RiotParentTest {
 	 * Verifies that the form is not sent and a notification "Passwords don't mach" pops.</br>
 	 * 
 	 */
-	@Test(groups={"1driver"})
+	@Test(groups={"1driver_android"})
 	public void fillRegisterFormWithDifferentPwds(){
 		String userNameTest="riotusername";
 		String pwd1Test="riotuser";
@@ -75,7 +75,7 @@ public class RiotRegisterTests extends RiotParentTest {
 	 * Verifies that the form is not sent.
 	 * @throws MalformedURLException 
 	 */
-	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class,groups={"1driver"})//groups={"restartneeded","logout","1driver"})
+	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class,groups={"1driver_android"})//groups={"restartneeded","logout","1driver_android"})
 	public void fillRegisterFormWithForbiddenCharacter(String mailTest,String userNameTest, String pwd1Test,String pwd2Test) throws MalformedURLException{
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		registerPage.registerButton.click();
@@ -97,7 +97,7 @@ public class RiotRegisterTests extends RiotParentTest {
 	/**
 	 * Empty the home server custom URLs then validates that the register button is not enabled.
 	 */
-	@Test(groups={"restartneeded","logout","1driver"})
+	@Test(groups={"restartneeded","logout","1driver_android"})
 	public void registerWithEmptyCustomServerUrls(){
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		registerPage.registerButton.click();
@@ -115,7 +115,7 @@ public class RiotRegisterTests extends RiotParentTest {
 	 * Validate that the register can't go any further.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"restartneeded","logout","1driver"}, enabled=false)
+	@Test(groups={"restartneeded","logout","1driver_android"}, enabled=false)
 	public void registerWithFailingCaptchaCheckingTest() throws InterruptedException{
 		//creation of a "unique" username by adding a randomize number to the username.
 		int userNamesuffix = 1 + (int)(Math.random() * ((10000 - 1) + 1));
@@ -132,7 +132,7 @@ public class RiotRegisterTests extends RiotParentTest {
 		Assert.assertTrue(captchaPage.tryAgainView.isDisplayed(), "The 'Please try again' view is not displayed");
 	}
 	
-	@Test(groups={"1driver"}, enabled=false)
+	@Test(groups={"1driver_android"}, enabled=false)
 	public void registerTestWebView() throws InterruptedException{
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		registerPage.fillRegisterForm("", "riotuser16","riotuser", "riotuser");

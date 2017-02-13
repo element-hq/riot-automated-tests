@@ -33,7 +33,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * Check that events are logged in the messages.
 	 * @throws InterruptedException
 	 */
-	@Test(groups="1driver", description="test on call")
+	@Test(groups="1driver_android", description="test on call")
 	public void cancelAudioCallFromChatRoom() throws InterruptedException{
 		//1. Launch an audio call from a room
 		String roomNameTest="voip room test";
@@ -75,7 +75,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * Check that events are logged in the messages.
 	 * @throws InterruptedException
 	 */
-	@Test(groups="1driver", description="test on call")
+	@Test(groups="1driver_android", description="test on call")
 	public void cancelVideoCallFromChatRoom() throws InterruptedException{
 		String roomNameTest="voip room test";
 		RiotRoomsListPageObjects mainListRoom=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
@@ -101,7 +101,7 @@ public class RiotVoipTests extends RiotParentTest{
 		voipRoom.menuBackButton.click();
 	}
 
-	@Test(groups="1driver", description="restart Riot during call", enabled=false)
+	@Test(groups="1driver_android", description="restart Riot during call", enabled=false)
 	public void restartAppDuringCall() throws InterruptedException{
 		String roomNameTest="voip room test";
 		RiotRoomsListPageObjects mainListRoom=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
@@ -126,7 +126,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * From device 1, check that the calling view is closed.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="2drivers", description="call from device 1 answered by device 2")
+	@Test(groups="2drivers_android", description="call from device 1 answered by device 2")
 	public void cancelIncomingAudioCall() throws InterruptedException{
 		String callingUser="riotuser2";
 		String calledUser="riotuser3";
@@ -166,7 +166,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * Check that "[user] ended the call" event is displayed on room view and room list view.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="2drivers", description="call from device 1 answered by device 2")
+	@Test(groups="2drivers_android", description="call from device 1 answered by device 2")
 	public void acceptIncomingAudioCall() throws InterruptedException{
 		String callingUser="riotuser2";
 		String calledUser="riotuser3";
@@ -215,7 +215,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * Check that "[user] ended the call" event is displayed on room view and room list view.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="2drivers", description="call from device 1 answered by device 2")
+	@Test(groups="2drivers_android", description="call from device 1 answered by device 2")
 	public void acceptIncomingVideoCall() throws InterruptedException{
 		String callingUser="riotuser2";
 		String calledUser="riotuser3";
@@ -267,7 +267,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * @throws InterruptedException 
 	 * @throws IOException 
 	 */
-	@Test(groups="2drivers", description="during a call desactivate mic")
+	@Test(groups="2drivers_android", description="during a call desactivate mic")
 	public void disableMicrophoneDuringCall() throws InterruptedException, IOException{
 		String callingUser="riotuser2";
 		String calledUser="riotuser3";
@@ -324,7 +324,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * Check that call is ended on both devices.</br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers","invitationneeded"}, description="leave room during a call")
+	@Test(groups={"2drivers_android","invitationneeded"}, description="leave room during a call")
 	public void leaveRoomDuringCall() throws InterruptedException{
 		String callingUser="riotuser2";
 		String calledUser="riotuser3";
@@ -378,7 +378,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 * @throws InterruptedException 
 	 * 
 	 */
-	@Test(groups={"2drivers"})
+	@Test(groups={"2drivers_android"})
 	public void hangUpWhenCalleeInRoomView() throws InterruptedException{
 		String callingUser="riotuser2";
 		String calledUser="riotuser3";

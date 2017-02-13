@@ -31,7 +31,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Try to start a newt chat with this same member : check that the previous room is opened instead.
 	 * @throws InterruptedException
 	 */
-	@Test(groups={"2drivers"}, description="direct message test")
+	@Test(groups={"2drivers_android"}, description="direct message test")
 	public void startChatWithOneUserTwice() throws InterruptedException{
 		String roomNameFromDevice1="riotuser9";
 		String roomNameFromDevice2="riotuser6";
@@ -93,7 +93,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Check that the new room doesn't have a little green man on both devices.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers"}, description="direct message test")
+	@Test(groups={"2drivers_android"}, description="direct message test")
 	public void startChatWithMoreThanTwoUsers() throws InterruptedException{
 		String roomNameFromDevice1="riotuser9 and riotuser10";
 		String roomNameFromDevice2="riotuser6";
@@ -136,7 +136,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Check that the new room doesn't have a little green man.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers"}, description="direct message test")
+	@Test(groups={"2drivers_android"}, description="direct message test")
 	public void createRoomWithOneUser() throws InterruptedException{
 		String roomNameFromDevice1="riotuser9";
 		String roomNameFromDevice2="riotuser6";
@@ -183,7 +183,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Check that the DM tag is changed on device 1.</br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers"})
+	@Test(groups={"2drivers_android"})
 	public void tagAndUntagDirectMessageRoom() throws InterruptedException{
 		String inviteeAddress="@riotuser9:matrix.org";
 		String roomName="tmp room DM";

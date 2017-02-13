@@ -29,7 +29,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 * @throws InterruptedException 
 	 * @throws IOException 
 	 */
-	@Test(groups={"messageReceivedInList","roomslist","1driver"},priority=1)
+	@Test(groups={"messageReceivedInList","roomslist","1driver_android"},priority=1)
 	public void checkBadgeAndMessageOnRoomItem() throws InterruptedException, IOException{
 		String roomName="room tests Jean";
 		String messageTest="coucou";
@@ -68,7 +68,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 * @throws InterruptedException 
 	 * @throws IOException 
 	 */
-	@Test(dependsOnGroups="messageReceivedInList",priority=2,groups={"roomOpenned","roomslist","1driver"})
+	@Test(dependsOnGroups="messageReceivedInList",priority=2,groups={"roomOpenned","roomslist","1driver_android"})
 	public void checkTextMessageOnRoomPage() throws InterruptedException{
 		String roomName="room tests Jean";
 		String messageTest="coucou";
@@ -87,7 +87,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 * Check that when a post is selected, timestamp is displayed.
 	 * @throws InterruptedException 
 	 */
-	@Test(dependsOnGroups="roomOpenned",groups={"roomslist","1driver"},priority=3)
+	@Test(dependsOnGroups="roomOpenned",groups={"roomslist","1driver_android"},priority=3)
 	public void checkTimeStampPositionOnRoomPage() throws InterruptedException{
 		String message="test for timestamp display";
 		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
@@ -117,7 +117,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	@Test(dependsOnGroups="roomOpenned",groups={"roomslist","1driver"},priority=4)
+	@Test(dependsOnGroups="roomOpenned",groups={"roomslist","1driver_android"},priority=4)
 	public void checkAvatarDisplayInRoomPage() throws IOException, InterruptedException{
 		String messageTest="hello from sender";
 		String messageTest2="this message have an avatar";
@@ -138,7 +138,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	@Test(dependsOnGroups="roomOpenned",groups={"roomslist","1driver"},priority=5)
+	@Test(dependsOnGroups="roomOpenned",groups={"roomslist","1driver_android"},priority=5)
 	public void checkImageMessageOnRoomPage() throws IOException, InterruptedException{
 		String pictureURL="mxc://matrix.org/gpQYPbjoqVeTWCGivjRshIni";
 		//send picture of already uploaded picture
@@ -160,7 +160,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 * Check that the room is no more in the favorites.
 	 * @throws InterruptedException
 	 */
-	@Test(groups={"roomslist","1driver"})
+	@Test(groups={"roomslist","1driver_android"})
 	public void addRoomInFavorites() throws InterruptedException{
 		String roomNameTest="room tests Jean";
 		RiotRoomsListPageObjects roomslist= new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());

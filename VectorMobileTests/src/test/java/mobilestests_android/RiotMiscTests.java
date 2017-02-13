@@ -63,7 +63,7 @@ public class RiotMiscTests extends RiotParentTest{
 		driver = new AndroidDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), capabilities); 
 	}
 
-	@Test(groups="1driver")
+	@Test(groups="1driver_android")
 	public void switchOrientationMode() throws InterruptedException{
 		driver.rotate(ScreenOrientation.LANDSCAPE);//Thread.sleep(2000);
 		(new WebDriverWait(driver, 15)).until(ExpectedConditions.presenceOfElementLocated(By.className("android.widget.FrameLayout")));
@@ -76,7 +76,7 @@ public class RiotMiscTests extends RiotParentTest{
 		scrollWindowDown();
 	}
 	
-	@Test(groups="1driver")
+	@Test(groups="1driver_android")
 	public void scrollRoomsList() throws Exception{
 		//RiotRoomsListPageObjects mainPage=new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
 		Dimension dimensions = AppiumFactory.getAndroidDriver1().manage().window().getSize();
@@ -94,7 +94,7 @@ public class RiotMiscTests extends RiotParentTest{
 	 * Detail: Enters in a room and post a message then come back in the main view.
 	 * @throws Exception 
 	 */
-	@Test(groups="1driver")
+	@Test(groups="1driver_android")
 	public void chatInTempRoom() throws Exception{
 		String testRoomName = "#dm16:matrix.org";
 		String testMessage1 = "this is an automated test on 1 line";
@@ -114,7 +114,7 @@ public class RiotMiscTests extends RiotParentTest{
 	 * Open all rooms context menus.
 	 * @throws Exception
 	 */
-	@Test(groups="1driver")
+	@Test(groups="1driver_android")
 	public void openRoomsMenuContexts() throws Exception {
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(driver);
 
@@ -131,7 +131,7 @@ public class RiotMiscTests extends RiotParentTest{
 	 * Search for a room, open it then come back to the main view.
 	 * @throws Exception
 	 */
-	@Test(groups="1driver")
+	@Test(groups="1driver_android")
 	public void searchForRoom() throws Exception{
 		String roomTestName="temp room";
 		//NEW WAY
@@ -148,7 +148,7 @@ public class RiotMiscTests extends RiotParentTest{
 	 * Open a room, then quote the last message entered
 	 * @throws Exception
 	 */
-	@Test(groups="1driver")
+	@Test(groups="1driver_android")
 	public void quoteLastMessage() throws Exception{
 		String testRoomName = "temp room";
 
@@ -165,7 +165,7 @@ public class RiotMiscTests extends RiotParentTest{
 	 * Open a room, start a call, end it and come back to the main view.
 	 * @throws InterruptedException
 	 */
-	@Test(groups="1driver")
+	@Test(groups="1driver_android")
 	public void voiceCallFromRoomTest() throws InterruptedException{
 		String testRoomName = "temp room";
 
@@ -182,7 +182,7 @@ public class RiotMiscTests extends RiotParentTest{
 	}
 
 
-	@Test(groups="1driver")
+	@Test(groups="1driver_android")
 	public void takeScreenShot() throws Exception{
 		// Set folder name to store screenshots.
 		destDir = "screenshots";
@@ -208,7 +208,7 @@ public class RiotMiscTests extends RiotParentTest{
 	 * @throws IOException
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="1driver")
+	@Test(groups="1driver_android")
 	public void checkUserDisplayName() throws IOException, InterruptedException{
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(driver);
 		mainPage.contextMenuButton.click();
@@ -219,7 +219,7 @@ public class RiotMiscTests extends RiotParentTest{
 	 * Open all the legal stuff webiews
 	 * @throws InterruptedException 
 	 */
-	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class,groups="1driver")
+	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class,groups="1driver_android")
 	public void openLegalStuffFromPortraitAndLandscapeMode(String items, String expectedTitle) throws InterruptedException{
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(driver);
 		driver.rotate(ScreenOrientation.PORTRAIT);
