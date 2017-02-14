@@ -40,7 +40,7 @@ Appium Server
 
 - Install Node.js for Mac OS (https://nodejs.org/en/download/). After installation, verify that node.js is set up by sending npm -version in terminal.
 - Install Appium Server with sudo npm install -g appium. Verify that appium is installed by sending "appium" in terminal : a server with default port must start.
-- Some tests support two devices, so two appium servers are needed. You can create two .sh file to open those quickly: For the first one: "appium -p 4723" and the second one: "appium -p 4724". Change the permission to make those executable "chmod 755 file.sh".
+- Some tests support two devices, so two appium servers are needed. You can create two .sh file to open those quickly: For the first one: "appium -p 4723" and the second one: "appium -p 4724". Change the permission to make those executable "chmod 755 file.sh". NOTE: this isn't mandatory anymore since we are able to launch the appium servers programmatically. The disavantage of this it's we don't see the appium server's logs.
 
 Test environnement for Android
 ------------------------------
@@ -69,6 +69,7 @@ which ios-deploy
 
 - workaround for start app issue: sudo chmod -R 777 /var/db/lockdown/
 - An IPA with developer provisionning profile is needed in order to launch the tests on iOS
+- Install this plugin https://github.com/JorisAerts/Eclipse-Environment-Variables, and set the PATH variable. It's mandatory when starting appium server programmatically
 
 Test execution
 ==============
