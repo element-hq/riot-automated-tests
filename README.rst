@@ -77,9 +77,10 @@ iOS
 ---
 Make sure iOs devices used for automated test have:
 
-- the developer mode enabled
+- The developer mode enabled
 - UI Automation enabled: Settings -> Developer -> Enable UI Automation
-- auto-correction disabled: Settings -> General -> Keyboard -> Auto-Correction
+- Auto-correction disabled: Settings -> General -> Keyboard -> Auto-Correction
+- Daily iOS updates proposals disabled: Settings -> iTunes & Appstore -> Updates: OFF
 
 Android
 -------
