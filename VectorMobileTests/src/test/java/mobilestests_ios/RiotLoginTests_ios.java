@@ -64,9 +64,7 @@ String sPassword ="riotuser";
 		loginPage.loginButton.click();
 		
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
-		mainPage.settingsButton.click();
-		mainPage.signOutButton.click();
-		//mainPage.navigationBar.click();
+		mainPage.logOut();
 	}
 	
 	@Test(groups={"1driver_ios"})

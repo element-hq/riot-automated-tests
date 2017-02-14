@@ -11,7 +11,12 @@ public class Constant {
 	public static final String WEBDRIVERAGENT_PORT="8080";
 	public static final String SERVER1_HTTP_ADDRESS="http://"+SERVER1_ADDRESS+":"+APPIUM_COMMON_PORT+"/wd/hub";
 	public static final String SERVER2_HTTP_ADDRESS="http://"+SERVER2_ADDRESS+":"+APPIUM_COMMON_PORT+"/wd/hub";//"http://127.0.0.1:4723/wd/hub";
-	
+	/**
+	 * 0: servers aren't automatically started.</br>
+	 * 1: servers are automatically started with a CommandLine object. Appium server's logs aren't displayed in the console.</br>
+	 * 2: servers are automatically started with an AppiumDriverLocalService object. Appium server's logs are displayed in the console.</br>
+	 */
+	public static final int STARTING_SERVER_MODE=2;
 	/*
 	 * DEVICES
 	 */

@@ -8,7 +8,7 @@ import org.apache.commons.exec.ExecuteException;
 import com.github.genium_framework.appium.support.server.AppiumServer;
 import com.github.genium_framework.server.ServerArguments;
 
-public class AppiumServerStartAndStop {
+public class AppiumServerStartAndStopCmdLine {
 private static AppiumServer appiumServer1;
 public static AppiumServer getAppiumServer1() {
 	return appiumServer1;

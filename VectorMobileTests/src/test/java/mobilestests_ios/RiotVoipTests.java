@@ -1,8 +1,5 @@
 package mobilestests_ios;
 
-import java.io.IOException;
-
-import org.apache.commons.exec.ExecuteException;
 import org.testng.Assert;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -15,7 +12,6 @@ import pom_ios.RiotLoginAndRegisterPageObjects;
 import pom_ios.RiotRoomPageObjects;
 import pom_ios.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
-import utility.AppiumServerStartAndStop;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -25,7 +21,7 @@ public class RiotVoipTests extends RiotParentTest{
 	private String user1="riotuser2";
 	private String user2="riotuser3";
 	private String roomNameTest="voip room test";
-	private String pwd="riotuser";
+	//private String pwd="riotuser";
 
 	/**
 	 * 1. Launch an audio call from a room </br>
