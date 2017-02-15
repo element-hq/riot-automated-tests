@@ -63,17 +63,16 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		AppiumFactory.getAndroidDriver1().hideKeyboard();
 		//Check that the people are correctly filtered.
 		for (MobileElement member : roomDetails1.membersList) {
-			Assert.assertTrue(roomDetails1.getDisplayNameOfMemberFromPeopleTab(member).contains(matchingWithKnownContactFilter1), "A display name of a member doesn't have the filtered word in");	
+			String memberDisplayName=roomDetails1.getDisplayNameOfMemberFromPeopleTab(member);
+			if(null!=memberDisplayName)Assert.assertTrue(memberDisplayName.contains(matchingWithKnownContactFilter1), "A display name of a member doesn't have the filtered word in");	
 		}
-		int nbFilteredMembers=roomDetails1.membersList.size();
 		//Check that the filter button is present
 		Assert.assertTrue(waitUntilDisplayed(AppiumFactory.getAndroidDriver1(), "im.vector.alpha:id/clear_search_icon_image_view",true , 0));
 
 		//3. Clear the filter
 		roomDetails1.clearFilteredBarButton.click();
 		//Check that the people are no more filtered
-		int nbMembers=roomDetails1.membersList.size();
-		Assert.assertTrue(nbMembers>nbFilteredMembers, "Clear filter button doesn't seem to work");
+		Assert.assertFalse(roomDetails1.getDisplayNameOfMemberFromPeopleTab(roomDetails1.membersList.get(0)).contains(matchingWithKnownContactFilter1),"After filter cleared, first result still matches the matching filter string");
 
 		//4. Filter with a random string
 		roomDetails1.filterOnRoomMembersList(randomFilter);
@@ -94,7 +93,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * 3. Enter a random string in the search bar
 	 * Check that the text of the first item is equal to the random string
 	 * Check that the item of the LOCAL CONTACTS categorie is (0)
-	 * Check that there is no KNOWN CONTACTS categorie
+	 * Check that the item of the KNOWN CONTACTS categorie is (0) (https://github.com/vector-im/riot-android/issues/923)
 	 * @throws InterruptedException 
 	 */
 	@Test(groups="1driver_android")
@@ -123,9 +122,10 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		//Check that the text of the first item is equal to the random string
 		Assert.assertEquals(contactPicker1.getDisplayNameOfMemberFromContactPickerList(contactPicker1.detailsMemberListView.get(0)), randomContactName);
 		//Check that there is no KNOWN CONTACTS categorie
-		Assert.assertEquals(contactPicker1.categoryList.size(), 2, "There is more than 1 categorie.");
+		Assert.assertEquals(contactPicker1.categoryList.size(), 2, "There is more than 2 categorie.");
 		//Check that the item of the LOCAL CONTACTS categorie is (0)
-		Assert.assertEquals(contactPicker1.categoryList.get(1).findElementById("im.vector.alpha:id/people_header_text_view").getText(), "LOCAL CONTACTS (0)");
+		Assert.assertEquals(contactPicker1.categoryList.get(0).findElementById("im.vector.alpha:id/people_header_text_view").getText(), "LOCAL CONTACTS (0)");
+		Assert.assertEquals(contactPicker1.categoryList.get(1).findElementById("im.vector.alpha:id/people_header_text_view").getText(), "KNOWN CONTACTS (0)");
 		Assert.assertEquals(contactPicker1.detailsMemberListView.size(), 1, "There is too much members found with a random string.");
 
 		//back to rooms list
@@ -166,9 +166,9 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		//Check that the text of the first item is equal to the random string
 		Assert.assertEquals(contactPicker1.getDisplayNameOfMemberFromContactPickerList(contactPicker1.detailsMemberListView.get(0)), matchingWithKnownContactFilter1);
 		//Check that KNOWN CONTACTS categorie is displayed
-		Assert.assertEquals(contactPicker1.categoryList.size(), 3, "There is more than 2 categorie.");
-		Assert.assertTrue(contactPicker1.categoryList.get(1).findElementById("im.vector.alpha:id/people_header_text_view").getText().matches("^LOCAL CONTACTS \\([0-9]*\\)$"));
-		String knownContacts=contactPicker1.categoryList.get(2).findElementById("im.vector.alpha:id/people_header_text_view").getText();
+		Assert.assertEquals(contactPicker1.categoryList.size(), 2, "There is more than 2 categorie.");
+		Assert.assertTrue(contactPicker1.categoryList.get(0).findElementById("im.vector.alpha:id/people_header_text_view").getText().matches("^LOCAL CONTACTS \\([0-9]*\\)$"));
+		String knownContacts=contactPicker1.categoryList.get(1).findElementById("im.vector.alpha:id/people_header_text_view").getText();
 		Assert.assertTrue(knownContacts.matches("^KNOWN CONTACTS \\([^0][0-9]*\\)$"));
 		//Check that there is at least 2 filtered people
 		Assert.assertTrue(contactPicker1.detailsMemberListView.size()>=2, "There not enough members in the list after filtering with matching word.");
@@ -196,9 +196,11 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		roomPage.inviteMembersButton.click();
 		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(AppiumFactory.getAndroidDriver1());
 		roomDetails1.addParticipant(invitedUser);
+		roomDetails1.waitUntilInvitedCategorieIsDisplayed(true);
 
 		//3. Remove this participant from the room details
 		roomDetails1.removeMemberWithSwipeOnItem(roomDetails1.membersList.get(1));
+		roomDetails1.waitUntilInvitedCategorieIsDisplayed(false);
 
 		//4. Check that there is no more INVITED category
 		Assert.assertEquals(roomDetails1.categoryList.size(), 1, "Invited category is still here");

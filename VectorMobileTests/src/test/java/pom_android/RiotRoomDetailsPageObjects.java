@@ -59,7 +59,9 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 	/*
 	 * MEMBERS LIST
 	 */
-	@AndroidFindBy(xpath="//android.widget.ExpandableListView[@resource-id='im.vector.alpha:id/room_details_members_exp_list_view']/android.widget.RelativeLayout[@enabled='false']")
+	
+	//@AndroidFindBy(id="im.vector.alpha:id/filtered_list_cell")
+	@AndroidFindBy(xpath="//android.widget.ExpandableListView[@resource-id='im.vector.alpha:id/room_details_members_exp_list_view']/android.widget.RelativeLayout/android.widget.RelativeLayout[@resource-id='im.vector.alpha:id/filtered_list_cell']/..")
 	public List<MobileElement> membersList;
 	@AndroidFindBy(xpath="//android.widget.ExpandableListView[@resource-id='im.vector.alpha:id/room_details_members_exp_list_view']/android.widget.RelativeLayout[@enabled='true']")
 	public List<MobileElement> categoryList;
@@ -89,6 +91,30 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 		waitUntilDisplayed(driver, "im.vector.alpha:id/parentPanel", true, 5);
 		Assert.assertEquals(inputDialogNameTextView.getText(), "Invite?");
 		Assert.assertTrue(inputDialogTextView.getText().matches("^Are you sure you want to invite (\\S+) to this chat\\?$"));
+	}
+	
+	/**
+	 * Wait until INVITED categorie is displayed.</br>
+	 * Can be used to wait until an invitation is done.
+	 * @throws InterruptedException
+	 */
+	public void waitUntilInvitedCategorieIsDisplayed(Boolean invitedCategorieDisplayed) throws InterruptedException{
+		int maxToWait=30;
+		int timeWaited=0;
+		int size;
+		if(invitedCategorieDisplayed){
+			size=2;
+		}else{
+			size=1;
+		}
+		while (categoryList.size()!=size && timeWaited <=maxToWait) {
+			Thread.sleep(500);
+			timeWaited++;
+		}
+		if(timeWaited>=maxToWait){
+			Assert.fail();
+			System.out.println("INVITED categorie isn't displayed after "+maxToWait+"s.");
+		}
 	}
 	
 	/**
@@ -127,7 +153,7 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 		float xEndF=(float) (0.6*witdthX);
 		int xEnd=(int)xEndF;
 		//Swipe to the left on the item.
-		driver.swipe(xFirst,y, xEnd,y,500);
+		driver.swipe(xFirst,y, xEnd,y,500);Thread.sleep(500);
 		//Hit on eject button
 		memberItem.findElementById("im.vector.alpha:id/filtered_list_delete_action").click();
 		//hit on remove confirmation button from dialog alert

@@ -65,13 +65,14 @@ public class RiotContactPickerPageObjects extends TestUtilities{
 	}
 	
 	/**
-	 * Check the layout of the ContactPicker page when the search bar is empty.
+	 * Check the layout of the ContactPicker page when the search bar is empty.</br>
+	 * Contact permission must be ON in the riot settings otherwise this function will fail.
 	 */
 	public void checkDefaultLayout(){
 		Assert.assertTrue(micButton.isDisplayed(), "Mic button isn't displayed");
 		Assert.assertEquals(searchMemberEditText.getText(), "User ID, Name or email");
 		Assert.assertEquals(categoryList.size(), 1, "There is more than 1 categorie.");
-		Assert.assertEquals(categoryList.get(0).findElementById("im.vector.alpha:id/people_header_text_view").getText(), "LOCAL CONTACTS");
+		Assert.assertTrue(categoryList.get(0).findElementById("im.vector.alpha:id/people_header_text_view").getText().matches("^LOCAL CONTACTS \\([0-9]*\\)$"));
 		Assert.assertTrue(categoryList.get(0).findElementsByClassName("android.widget.CheckBox").size()==1, "There is no checkbox in the LOCAL CONTACTS category item.");
 		Assert.assertEquals(categoryList.get(0).findElementByXPath("//android.widget.LinearLayout[@resource-id='im.vector.alpha:id/people_header_matrix_contacts_layout']/android.widget.TextView").getText(), "Matrix users only");
 	}
