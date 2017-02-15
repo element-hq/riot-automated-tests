@@ -1,5 +1,6 @@
 package mobilestests_android;
 
+import org.openqa.selenium.ScreenOrientation;
 import org.testng.Assert;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -15,14 +16,18 @@ import utility.ScreenshotUtility;
 public class RiotSearchTests extends RiotParentTest{
 	
 	/**
-	 * 1. Create a room with a random name.
-	 * 2. Post a random msg within
-	 * 3. From the rooms list hit the search button
-	 * 4. Search in ROOMS tab the random name given in step1
-	 * Check that the room previously created shown up
-	 * Check that the room previously created doesn't appears in browse directory 
-	 * 5. Search in MESSAGES tab the random msg given in step2
-	 * Check that the random msg is shown up.
+	 * Search in ROOMS and MESSAGES tab in search from recent.</br> 
+	 * Validate the issue https://github.com/vector-im/riot-android/issues/934 to. </br>
+	 * 1. Create a room with a random name.</br>
+	 * 2. Post a random msg within</br>
+	 * 3. From the rooms list hit the search button</br>
+	 * 4. Search in ROOMS tab the random name given in step1</br>
+	 * Check that the room previously created shown up</br>
+	 * Check that the room previously created doesn't appears in browse directory </br>
+	 * 5. Search in MESSAGES tab the random msg given in step2</br>
+	 * Check that the random msg is shown up.</br>
+	 * 6. Turn the device in landscape mode, then portrait</br>
+	 * Check that the search result is still displayed https://github.com/vector-im/riot-android/issues/934</br>
 	 * @throws InterruptedException 
 	 */
 	@Test(groups="1driver_android", priority=0,description="test on the search from the rooms list")
@@ -55,6 +60,7 @@ public class RiotSearchTests extends RiotParentTest{
 		//Check that the room previously created doesn't appears in browse directory
 		waitUntilPropertyIsSet(searchInRoomsList.getBrowseDirectory().findElementById("im.vector.alpha:id/roomSummaryAdapter_roomMessage"), "text", "Searching directory..", false, 20);
 		Assert.assertEquals(searchInRoomsList.getBrowseDirectory().findElementById("im.vector.alpha:id/roomSummaryAdapter_roomMessage").getText(), "0 room found for "+randomRoomName);
+		searchInRoomsList.clearSearchButton.click();
 		
 		//5. Search in MESSAGES tab the random msg given in step2
 		searchInRoomsList.messagesTab.click();
@@ -63,21 +69,31 @@ public class RiotSearchTests extends RiotParentTest{
 		Assert.assertEquals(searchInRoomsList.listMessagesLinearLayouts.size(), 1);
 		searchInRoomsList.checkMessageItemFromResult(0, randomRoomName,null,randomMsg);
 		
+		//6. Turn the device in landscape mode, then portrait
+		searchInRoomsList.searchEditText.click();
+		AppiumFactory.getAndroidDriver1().rotate(ScreenOrientation.LANDSCAPE);
+		Thread.sleep(1500);
+		AppiumFactory.getAndroidDriver1().rotate(ScreenOrientation.PORTRAIT);
+		//Check that the search result is still displayed https://github.com/vector-im/riot-android/issues/934
+		Assert.assertEquals(searchInRoomsList.listMessagesLinearLayouts.size(), 1);
+		searchInRoomsList.checkMessageItemFromResult(0, randomRoomName,null,randomMsg);
+		
 		//teardown : leave room
 		searchInRoomsList.menuBackButton.click();
 		roomsList.clickOnContextMenuOnRoom(randomRoomName, "Leave Conversation");
+		Thread.sleep(500);
 	}
 	
 	/**
-	 * 1. From the rooms list hit the search button
-	 * 2. Search in ROOMS tab a random name
-	 * Check that none room is found and the search doesn't appears in browse directory
-	 * 3. Search in MESSAGES tab a random name
-	 * Check that "No results" is displayed after search finished.
-	 * 4. Search in PEOPLE tab a random name
-	 * Check that "No results" is displayed after search finished.
-	 * 5. Search in FILES tab a random name
-	 * Check that "No results" is displayed after search finished.
+	 * 1. From the rooms list hit the search button</br>
+	 * 2. Search in ROOMS tab a random name</br>
+	 * Check that none room is found and the search doesn't appears in browse directory</br>
+	 * 3. Search in MESSAGES tab a random name</br>
+	 * Check that "No results" is displayed after search finished.</br>
+	 * 4. Search in PEOPLE tab a random name</br>
+	 * Check that "No results" is displayed after search finished.</br>
+	 * 5. Search in FILES tab a random name</br>
+	 * Check that "No results" is displayed after search finished.</br>
 	 * @throws InterruptedException 
 	 */
 	@Test(groups="1driver_android", priority=1,description="test on the search from the rooms list with non existent searches")

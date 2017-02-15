@@ -18,7 +18,8 @@ import utility.TestUtilities;
  */
 public class RiotSearchFromRoomsListPageObjects extends TestUtilities{
 private AndroidDriver<MobileElement> driver;
-	
+private int search_timeout=30;
+
 	public RiotSearchFromRoomsListPageObjects(AppiumDriver<MobileElement> myDriver){
 		driver=(AndroidDriver<MobileElement>) myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
@@ -42,6 +43,8 @@ private AndroidDriver<MobileElement> driver;
 	public MobileElement searchEditText;
 	@AndroidFindBy(id="im.vector.alpha:id/ic_action_speak_to_search")
 	public MobileElement microphoneTextView;
+	@AndroidFindBy(id="im.vector.alpha:id/ic_action_clear_search")
+	public MobileElement clearSearchButton;
 	
 	/*
 	 * TABS
@@ -69,7 +72,7 @@ private AndroidDriver<MobileElement> driver;
 	}
 	
 	public Boolean waitUntilSearchFinished() throws InterruptedException {
-		return waitUntilDisplayed(driver, "im.vector.alpha:id/search_in_progress_view", false, 10);
+		return waitUntilDisplayed(driver, "im.vector.alpha:id/search_in_progress_view", false, search_timeout);
 	}
 
 	/*
