@@ -86,10 +86,16 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 	
 	//MEMBERS LIST
 	///AppiumAUT/XCUIElementTypeApplication/XCUIElementTypeWindow/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTable
+	@iOSFindBy(accessibility="RoomParticipantsVCTableView")
+	public MobileElement membersTableView;
 	@iOSFindBy(accessibility="ContactTableViewCell")
 	public List<MobileElement> membersList;
 	@iOSFindBy(accessibility="add_participant")
 	public MobileElement addParticipantButton;
+	public List<MobileElement> getCategories(){
+		
+		return membersTableView.findElementsByClassName("XCUIElementTypeOther");
+	}
 	
 	/**
 	 * Add a participant from room details, Members tab.
@@ -151,6 +157,32 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 	public MobileElement alertRemoveConfirmationRemoveButton;
 	@iOSFindBy(accessibility="RoomParticipantsVCKickAlertActionCancel")
 	public MobileElement alertRemoveConfirmationCancelButton;
+	
+	/**
+	 * Wait until INVITED categorie is displayed.</br>
+	 * Can be used to wait until an invitation is done.
+	 * @throws InterruptedException
+	 */
+	public void waitUntilInvitedCategorieIsDisplayed(Boolean invitedCategorieDisplayed) throws InterruptedException{
+		int maxToWait=30;
+		int timeWaited=0;
+		int size;
+		if(invitedCategorieDisplayed){
+			size=1;
+		}else{
+			size=0;
+		}
+		waitUntilDisplayed(driver, "RoomParticipantsVCTableView", true, 5);
+		while (getCategories().size()!=size && timeWaited <=maxToWait) {
+			Thread.sleep(500);
+			timeWaited++;
+		}
+		if(timeWaited>=maxToWait){
+			Assert.fail();
+			System.out.println("INVITED categorie isn't displayed after "+maxToWait+"s.");
+		}
+	}
+	
 	/*
 	 * FILES TAB
 	 */

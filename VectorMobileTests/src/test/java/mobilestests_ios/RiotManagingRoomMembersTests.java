@@ -90,7 +90,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * 3. Enter a random string in the search bar
 	 * Check that the text of the first item is equal to the random string
 	 * Check that the item of the LOCAL CONTACTS categorie is (0)
-	 * Check that there is no KNOWN CONTACTS categorie
+	 * Check that the item of the KNOWN CONTACTS categorie is (0) https://github.com/vector-im/riot-ios/issues/1017
 	 * @throws InterruptedException
 	 */
 	@Test(groups="1driver_ios")
@@ -115,9 +115,10 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		//Check that the text of the first item is equal to the random string
 		Assert.assertEquals(contactPicker1.getDisplayNameOfMemberFromContactPickerList(contactPicker1.contactsOnlyList.get(0)), randomContactName);
 		//Check that there is no KNOWN CONTACTS categorie
-		Assert.assertEquals(contactPicker1.getCategoriesList().size(), 1, "There is more than 1 categorie.");
+		Assert.assertEquals(contactPicker1.getCategoriesList().size(), 2, "There is more than 2 categories.");
 		//Check that the item of the LOCAL CONTACTS categorie is (0)
 		Assert.assertEquals(contactPicker1.getCategoriesList().get(0).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText(), "LOCAL CONTACTS (0)");
+		Assert.assertEquals(contactPicker1.getCategoriesList().get(1).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText(), "KNOWN CONTACTS (0)");
 		Assert.assertEquals(contactPicker1.contactsOnlyList.size(), 1, "There is too much members found with a random string.");
 		
 		//back to rooms list
@@ -184,10 +185,13 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		roomPage.inviteMembersLink.click();
 		RiotRoomDetailsPageObjects roomDetails1 = new RiotRoomDetailsPageObjects(AppiumFactory.getiOsDriver1());
 		roomDetails1.addParticipant(invitedUser);
+		roomDetails1.waitUntilInvitedCategorieIsDisplayed(true);
 		
 		//3. Remove this participant from the room details
 		roomDetails1.removeMemberWithSwipeOnItem(roomDetails1.membersList.get(1));
-		roomDetails1.waitUntilDetailsDone();
+		//roomDetails1.waitUntilDetailsDone();
+		roomDetails1.waitUntilInvitedCategorieIsDisplayed(false);
+		
 		//4. Check that there is no more INVITED category
 		Assert.assertEquals(roomDetails1.membersList.size(), 1, "Invited category is still here");
 	}

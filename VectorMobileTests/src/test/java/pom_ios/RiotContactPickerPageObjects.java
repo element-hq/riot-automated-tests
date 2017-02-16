@@ -74,8 +74,9 @@ public class RiotContactPickerPageObjects extends TestUtilities{
 	 */
 	public void checkDefaultLayout(){
 		Assert.assertEquals(searchMemberEditText.getAttribute("label"), "Search / invite by User ID, Name or email");
-		Assert.assertEquals(getCategoriesList().size(), 1, "There is more than 1 categorie.");
-		Assert.assertEquals(getCategoriesList().get(0).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText(), "LOCAL CONTACTS");
+		Assert.assertEquals(getCategoriesList().size(), 2, "There is more than 2 categorie.");
+		Assert.assertTrue(getCategoriesList().get(0).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText().matches("^LOCAL CONTACTS \\([0-9]*\\)$"));
+		Assert.assertEquals(getCategoriesList().get(1).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText(), "KNOWN CONTACTS (-)");
 		Assert.assertTrue(getCategoriesList().get(0).findElementsByClassName("XCUIElementTypeStaticText").size()==2, "There is no checkbox in the LOCAL CONTACTS category item.");
 		Assert.assertTrue(getCategoriesList().get(0).findElementsByAccessibilityId("Matrix users only").size()==1, "Name of the checkbox isn't 'Matrix Only'.");
 		
