@@ -1,5 +1,8 @@
 package utility;
 import java.io.File;
+import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
@@ -11,6 +14,10 @@ public class AppiumServerStartAndStopService {
     static AppiumDriverLocalService service2;
     static String service_url1;
     static String service_url2;
+    static Field streamField1;
+    static Field streamFields1;
+    static Field streamField2;
+    static Field streamFields2;
 
     public static void appiumServer1Start() throws Exception{
         service1 = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().
@@ -19,6 +26,22 @@ public class AppiumServerStartAndStopService {
         service1.start();
         service_url1 = service1.getUrl().toString();
         System.out.println("URL:" +service_url1);
+        
+        //workaround for server logs displayed in the console
+        try {
+            streamField1 = AppiumDriverLocalService.class.getDeclaredField("stream");
+            streamField1.setAccessible(true);
+            streamFields1 = Class.forName("io.appium.java_client.service.local.ListOutputStream")
+                    .getDeclaredField("streams");
+            streamFields1.setAccessible(true);
+        } catch (ClassNotFoundException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        try {
+            ((ArrayList<OutputStream>) streamFields1.get(streamField1.get(service1))).clear(); // remove System.out logging
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
     public static void appiumServer2Start() throws Exception{
         service2 = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().
@@ -29,6 +52,22 @@ public class AppiumServerStartAndStopService {
         service2.start();
         service_url2 = service2.getUrl().toString();
         System.out.println("URL:" +service_url2);
+        
+        //workaround for server logs displayed in the console
+        try {
+            streamField2 = AppiumDriverLocalService.class.getDeclaredField("stream");
+            streamField2.setAccessible(true);
+            streamFields2 = Class.forName("io.appium.java_client.service.local.ListOutputStream")
+                    .getDeclaredField("streams");
+            streamFields2.setAccessible(true);
+        } catch (ClassNotFoundException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        try {
+            ((ArrayList<OutputStream>) streamFields2.get(streamField2.get(service2))).clear(); // remove System.out logging
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
     
 	public static void startAppiumServer1IfNecessary() throws Exception{
