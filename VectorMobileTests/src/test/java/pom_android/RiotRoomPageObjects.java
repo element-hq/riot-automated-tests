@@ -25,7 +25,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 			e.printStackTrace();
 		}
 	}
-	
+
 	/*
 	 * ACTION BAR
 	 */
@@ -39,7 +39,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public MobileElement activeMembersTextView;
 	@AndroidFindBy(id="im.vector.alpha:id/action_bar_header_invite_members")
 	public MobileElement inviteMembersButton;
-	
+
 	@AndroidFindBy(id="im.vector.alpha:id/room_toolbar")//action bar : contains back, room name, topic,search, collapse and more options buttons.
 	public MobileElement actionBarView;
 	@AndroidFindBy(xpath="//android.widget.ImageButton[@content-desc='Navigate up']")
@@ -54,7 +54,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public MobileElement searchInRoomButton;
 	@AndroidFindBy(xpath="//android.view.View[@resource-id='im.vector.alpha:id/room_toolbar']//android.widget.ImageView[@content-desc='More options']")
 	public MobileElement moreOptionsButton;
-	
+
 	/*
 	 * ROOM NAME DIALOG : opened after hit on room name from collapsed action bar.
 	 */
@@ -68,7 +68,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public MobileElement okFromChangeRoomNameButton;
 	@AndroidFindBy(xpath="//android.widget.LinearLayout[@resource-id='android:id/buttonPanel']//android.widget.Button[@text='Cancel']")
 	public MobileElement cancelFromChangeRoomNameButton;
-	
+
 	/**
 	 * Change the room name. Action bar must be collapsed first.
 	 * @param roomName
@@ -83,7 +83,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 		waitUntilDisplayed(driver, "im.vector.alpha:id/listView_spinner", false, 4);
 		Assert.assertEquals(roomNameTextViewCollapsed.getText(), roomName, "Room name haven't be changed.");
 	}
-	
+
 	/*
 	 * ROOM MENU
 	 */
@@ -91,13 +91,13 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public MobileElement roomDetailsMenuItem;
 	@AndroidFindBy(xpath="//android.widget.TextView[@resource-id='im.vector.alpha:id/title' and @text='Leave']")
 	public MobileElement leaveRoomMenuItem;
-	
+
 	public void leaveRoom(){
 		moreOptionsButton.click();
 		leaveRoomMenuItem.click();
 		alertDialogButton2.click();
 	}
-	
+
 	/*
 	 * PREVIEW LAYOUT
 	 */
@@ -109,7 +109,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public MobileElement joinRoomButton;
 	@AndroidFindBy(id="im.vector.alpha:id/button_decline")
 	public MobileElement cancelInvitationButton;
-	
+
 	/**
 	 * Check the room preview layout after accepting an invitation.
 	 * @throws InterruptedException 
@@ -141,7 +141,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 		Assert.assertFalse(waitUntilDisplayed(driver,"im.vector.alpha:id/room_start_call_layout", false, 0));
 		Assert.assertFalse(waitUntilDisplayed(driver,"im.vector.alpha:id/room_end_call_layout", false, 0));
 	}
-	
+
 	/**
 	 * Check the room page layout.
 	 * TODO complete this function by inspirant of checkPreviewRoomLayout() 
@@ -162,7 +162,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 		Assert.assertTrue(sendMessageButton.isDisplayed(), "Send message button isn't displayed");
 		Assert.assertTrue(startCallButton.isDisplayed(), "Start call button isn't displayed");
 	}
-	
+
 	/**
 	 * Return true or false if the room view is still displayed.</br>
 	 * Can be useful to test that the room page is closed after quitting it.
@@ -178,7 +178,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 		}
 		Assert.assertEquals(waitUntilDisplayed(driver,"im.vector.alpha:id/listView_messages", displayed, 5),displayed, messageFailed);
 	}
-	
+
 	/*
 	 * PENDING CALL VIEW
 	 */
@@ -190,7 +190,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public MobileElement calledRoomNameTextView;
 	@AndroidFindBy(id="im.vector.alpha:id/pending_call_status_textview")
 	public MobileElement callStatusTextView;
-	
+
 	public void checkPendingCallView(Boolean displayed,String status) throws InterruptedException{
 		String messagePendingViewPresent;
 		if(displayed){
@@ -204,7 +204,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 			Assert.assertEquals(callStatusTextView.getText(), status);
 		}
 	}
-	
+
 	/*
 	 * MESSAGES
 	 */
@@ -213,19 +213,19 @@ public class RiotRoomPageObjects extends TestUtilities{
 	 */
 	@AndroidFindBy(xpath="//android.widget.ListView[@resource-id='im.vector.alpha:id/listView_messages']/android.widget.LinearLayout")//messages list. Contains messages, days separators
 	public List<MobileElement> postsListLayout;
-	
+
 	public MobileElement getLastPost(){
 		//return Iterables.getLast(this.postsListLayout);
 		return postsListLayout.get(postsListLayout.size()-1);
 	}
-	
+
 	/**
 	 * Return a post by his index.
 	 */
 	public MobileElement getPostByIndex(int indexPost){
 		return postsListLayout.get(indexPost);
 	}
-	
+
 	/**
 	 * TODO use xpath instead of id because of https://github.com/appium/appium/issues/6269 issue
 	 * @param postLinearLayout
@@ -270,7 +270,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	 */
 	public MobileElement getTimeStampByPost(MobileElement postLinearLayout){	
 		try {
-//			return postLinearLayout.findElement(By.id("im.vector.alpha:id/messagesAdapter_timestamp"));
+			//			return postLinearLayout.findElement(By.id("im.vector.alpha:id/messagesAdapter_timestamp"));
 			return postLinearLayout.findElement(By.xpath("//android.widget.TextView[@resource-id='im.vector.alpha:id/messagesAdapter_timestamp']"));
 		} catch (Exception e) {
 			return null;
@@ -308,7 +308,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Get the progress bar displayed when a photo or video is uploaded.</br> Return null if not found.
 	 * @param message
@@ -321,7 +321,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Get the "X" imageview to stop the upload of a photo or video.</br> Return null if not found.
 	 * @param postLinearLayout
@@ -334,7 +334,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 			return null;
 		}
 	}
-	
+
 	/*
 	 * NOTIFICATION AREA
 	 */
@@ -344,8 +344,18 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public MobileElement notificationIcon;
 	@AndroidFindBy(id="im.vector.alpha:id/room_notification_message")
 	public MobileElement notificationMessage;
-		//MobileElement lastMessage=(MobileElement) getDriver().findElementByXPath("//android.widget.ListView[@resource-id='im.vector.alpha:id/listView_messages']/android.widget.LinearLayout[last()]");
-	
+
+	/**
+	 * Click on "Resend All" link on the messages not sent due to unknown devices messages, on the notification area.
+	 */
+	public void clickOnResendAllLinkFromNotificationArea(){
+		notificationMessage.getSize().getWidth();notificationMessage.getCenter();
+		int xLink=notificationMessage.getCenter().getX()+10;
+		int yLink=notificationMessage.getLocation().getY()+(notificationMessage.getSize().getHeight()/4)*3;
+		driver.tap(1, xLink, yLink, 10);
+	}
+	//MobileElement lastMessage=(MobileElement) getDriver().findElementByXPath("//android.widget.ListView[@resource-id='im.vector.alpha:id/listView_messages']/android.widget.LinearLayout[last()]");
+
 	/*
 	 * BOTTOM BAR : send edittext, attachment button, callbutton
 	 */
@@ -358,7 +368,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public MobileElement startCallButton;
 	@AndroidFindBy(id="im.vector.alpha:id/room_end_call_layout")//end a call button
 	public MobileElement endCallButton;
-	
+
 	/*
 	 * CONTEXT MENU ON MESSAGE
 	 */
@@ -366,7 +376,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public MobileElement menuListItems;
 	@AndroidFindBy(xpath="//android.widget.ListView//android.widget.TextView[@text='Quote']/../..")//quote item
 	public MobileElement quoteItemFromMenu;
-	
+
 	/*
 	 * POPING MENU: CALL MENU (voice call, video call), or ATTACHMENT MENU (send files, take photo)
 	 */
@@ -380,7 +390,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public MobileElement sendFilesFromMenuButton;
 	@AndroidFindBy(xpath="//android.widget.ListView//android.widget.TextView[@text='Take photo or video']/..")//take photo menu with send files and take photo buttons
 	public MobileElement takePhotoFromMenuButton;
-	
+
 	/*
 	 * ALERT DIALOG
 	 */
@@ -394,10 +404,10 @@ public class RiotRoomPageObjects extends TestUtilities{
 	 */
 	@AndroidFindBy(id="android:id/button1")
 	public MobileElement alertDialogButton2;
-	
-	
-	
-	
+
+
+
+
 	/*
 	 * Functions
 	 */
@@ -411,7 +421,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 		sendMessageButton.click();
 		System.out.println("Message "+message+" sent in the room.");
 	}
-	
+
 	/**
 	 * Wait for a new post to arrive in the room.
 	 * @throws InstantiationException
@@ -425,7 +435,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 			Thread.sleep(500);secondsWaited=(float) (secondsWaited+0.5);
 		}
 	}
-	
+
 	/**
 	 * Wait for the posts lists to be not empty.
 	 * @throws InterruptedException
@@ -437,7 +447,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 			Thread.sleep(500);secondsWaited=(float) (secondsWaited+0.5);
 		}
 	}
-	
+
 	/**
 	 * Wait until progress bar in the post is still displayed.
 	 * @param postLinearLayout
@@ -455,7 +465,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 		}
 		return uploaded;
 	}
-	
+
 	/**
 	 * From a room, take a photo and attach it to the messages.
 	 * @param photoSize : choose between Original, Large, Medium, Small.
@@ -481,14 +491,13 @@ public class RiotRoomPageObjects extends TestUtilities{
 		startCallButton.click();
 		voiceCallFromMenuButton.click();
 		//check that call layout is diplayed on device 2
-//		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAppiumDriver2());
-//		callingViewDevice2.isDisplayed(true);
+		//		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAppiumDriver2());
+		//		callingViewDevice2.isDisplayed(true);
 	}
 
 	public void startVideoCall() throws InterruptedException{
 		waitForPostsToBeDisplayed();
 		startCallButton.click();
 		videoCallFromMenuButton.click();
-		
 	}
 }

@@ -308,10 +308,16 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 		this.contextMenuButton.click();
 		this.signOutButton.click();
 		//verifies that sign out pop up is displayed and correct
-		Assert.assertEquals(signOutTitleTextView.getText(), "Sign out ?");
+		Assert.assertEquals(signOutTitleTextView.getText(), "For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.");
 		Assert.assertTrue(signOutCancelButton.isDisplayed(),"Cancel button isn't displayed");
 		Assert.assertTrue(signOutOkButton.isDisplayed(),"OK button isn't displayed");
 		signOutOkButton.click();
+	}
+	public RiotRoomsListPageObjects logOutAndLogin(String username, String password) throws InterruptedException{
+		this.logOut();
+		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
+		loginPage.fillLoginForm(username, password);
+		return new RiotRoomsListPageObjects(driver);
 	}
 	
 	/**
