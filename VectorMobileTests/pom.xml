@@ -1,0 +1,77 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.amdocs</groupId>
+  <artifactId>riotmobiletests</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>riotmobiletests</name>
+  <description>automated functional tests for riot mobiles applications</description>
+  <dependencies>
+  	<dependency>
+  		<groupId>io.appium</groupId>
+  		<artifactId>java-client</artifactId>
+  		<version>4.1.2</version>
+  		<scope>test</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.testng</groupId>
+  		<artifactId>testng</artifactId>
+  		<version>LATEST</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.apache.poi</groupId>
+  		<artifactId>poi-ooxml</artifactId>
+  		<version>3.15</version>
+  		<scope>test</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.hotwire.image-assert</groupId>
+  		<artifactId>image-assert</artifactId>
+  		<version>1.0.4</version>
+  	</dependency>
+  	<dependency>
+    <groupId>nu.pattern</groupId>
+    <artifactId>opencv</artifactId>
+    <version>2.4.9-4</version>
+</dependency>
+<dependency>
+	<groupId>com.github.genium-framework</groupId>
+	<artifactId>Appium-Support</artifactId>
+	<version>LATEST</version>
+</dependency>
+  </dependencies>
+  <build>
+            <sourceDirectory>${basedir}/src</sourceDirectory>
+            <testSourceDirectory>${basedir}/test</testSourceDirectory>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.testng</groupId>
+  			<artifactId>testng</artifactId>
+  			<version>6.8</version>
+  		</plugin>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-javadoc-plugin</artifactId>
+  			<version>2.10.4</version>
+  			        <configuration>
+          <reportOutputDirectory>${project.reporting.outputDirectory}/doc</reportOutputDirectory>
+          <destDir>myapidocs</destDir>
+
+        </configuration>
+  		</plugin>
+  		<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.8</version>
+                  			        <configuration>
+          <reportOutputDirectory>${project.reporting.outputDirectory}/doc</reportOutputDirectory>
+          <destDir>myapidocs</destDir>
+        </configuration>
+            </plugin>
+  	</plugins>
+  </build>
+  <properties>
+     <project.reporting.outputDirectory>
+        ./test-output
+    </project.reporting.outputDirectory>
+  </properties>
+</project>
