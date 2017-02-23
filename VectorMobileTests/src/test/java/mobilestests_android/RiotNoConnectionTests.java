@@ -137,8 +137,7 @@ public class RiotNoConnectionTests extends RiotParentTest{
 		myRoom.attachPhotoFromCamera("Small");
 		//verifies that it's displayed in the message list
 		waitUntilDisplayed(AppiumFactory.getAndroidDriver1(),"im.vector.alpha:id/messagesAdapter_image", true, 5);
-		org.openqa.selenium.Dimension takenPhoto=myRoom.getAttachedImageByPost(myRoom.getLastPost()).getSize();
-	    Assert.assertTrue(takenPhoto.height!=0 && takenPhoto.width!=0, "The unsent photo has null dimension");
+	    myRoom.checkThatPhotoIsPresentInPost(myRoom.getLastPost());
     
 		//Restart the application
 		AppiumFactory.getAndroidDriver1().closeApp();
@@ -160,8 +159,7 @@ public class RiotNoConnectionTests extends RiotParentTest{
 	    //Asserts that the room notification area isn't dispkayed anymore
 	    Assert.assertFalse(isPresentTryAndCatch(myRoom.roomNotificationArea),"The notification area is displayed");
 	    //The previously unsent message is still in the message list
-	    takenPhoto=myRoom.getAttachedImageByPost(myRoom.getLastPost()).getSize();
-	    Assert.assertTrue(takenPhoto.height!=0 && takenPhoto.width!=0, "The unsent photo has null dimension");
+	    myRoom.checkThatPhotoIsPresentInPost(myRoom.getLastPost());
 		//verifies that the upload failed icon is present in the last message
 	    Assert.assertFalse(isPresentTryAndCatch(myRoom.getMediaUploadFailIconFromPost(myRoom.getLastPost())),"The 'media upload failed' icon is displayed on the sent photo");
 	    //teardown : going back to rooms list

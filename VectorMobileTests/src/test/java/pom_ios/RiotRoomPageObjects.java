@@ -227,6 +227,34 @@ public class RiotRoomPageObjects extends TestUtilities{
 	@iOSFindBy(xpath="//XCUIElementTypeApplication/XCUIElementTypeWindow//XCUIElementTypeSheet//XCUIElementTypeCollectionView/XCUIElementTypeCell")
 	public MobileElement sendAsItemList;
 	
+	/*
+	 * NOTIFICATION AREA
+	 */
+	@iOSFindBy(accessibility="RoomVCActivitiesContainer")
+	public MobileElement roomNotificationArea;
+	@iOSFindBy(accessibility="RoomExtrasInfosView")
+	public MobileElement roomNotificationArea2;
+	
+	/**
+	 * Not sure it works. Better getNotificationMessage().
+	 */
+	@iOSFindBy(accessibility="RoomActivitiesViewMessageLabel")
+	public MobileElement notificationMessage;
+	
+	public MobileElement getNotificationMessage(){
+		return roomNotificationArea2.findElementByClassName("XCUIElementTypeTextView");
+	}
+	
+	/**
+	 * Click on "Resend All" link on the messages not sent due to unknown devices messages, on the notification area.
+	 */
+	public void clickOnResendAllLinkFromNotificationArea(){
+		notificationMessage.getSize().getWidth();notificationMessage.getCenter();
+		int xLink=notificationMessage.getCenter().getX();
+		//int yLink=notificationMessage.getLocation().getY()+(notificationMessage.getSize().getHeight()/4)*3;
+		int yLink=notificationMessage.getLocation().getY()+(notificationMessage.getSize().getHeight()/4)*2+5;
+		driver.tap(1, xLink, yLink, 500);
+	}
 	
 	/*
 	 * BOTTOM
@@ -274,6 +302,14 @@ public class RiotRoomPageObjects extends TestUtilities{
 		videoItemMenu.click();
 	}
 
+	/**
+	 * Check that a photo is present in a post by checking his dimension.
+	 * @param post
+	 */
+	public void checkThatPhotoIsPresentInPost(MobileElement post){
+//		org.openqa.selenium.Dimension takenPhoto=this.getAttachedImageByPost(post).getSize();
+//	    Assert.assertTrue(takenPhoto.height!=0 && takenPhoto.width!=0, "The unsent photo has null dimension");
+	}
 	/**
 	 * Hit the upload button, take photo, then select a size.
 	 * @param size

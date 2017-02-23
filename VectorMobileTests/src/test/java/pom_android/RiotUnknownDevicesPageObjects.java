@@ -14,7 +14,7 @@ import utility.TestUtilities;
 
 /**
  * Modal opened when a user send a message in a e2e room where there is unknown devices.
- * @author matrix
+ * @author jeangb
  */
 public class RiotUnknownDevicesPageObjects extends TestUtilities {
 	private AndroidDriver<MobileElement> driver;

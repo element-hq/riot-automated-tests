@@ -313,6 +313,14 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 		Assert.assertTrue(signOutOkButton.isDisplayed(),"OK button isn't displayed");
 		signOutOkButton.click();
 	}
+	
+	/**
+	 * Log out from the rooms list, log in with the parameters.</br>
+	 * Return a RiotRoomsListPageObjects POM.</br> Can be used to renew the encryption keys.
+	 * @param username
+	 * @param pwd
+	 * @return new RiotRoomsListPageObjects
+	 */
 	public RiotRoomsListPageObjects logOutAndLogin(String username, String password) throws InterruptedException{
 		this.logOut();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);

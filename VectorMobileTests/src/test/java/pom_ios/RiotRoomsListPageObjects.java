@@ -10,6 +10,8 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
+import pom_ios.RiotLoginAndRegisterPageObjects;
+import pom_ios.RiotRoomsListPageObjects;
 import utility.TestUtilities;
 
 public class RiotRoomsListPageObjects extends TestUtilities{
@@ -191,5 +193,18 @@ private AppiumDriver<MobileElement> driver;
 		this.settingsButton.click();
 		this.signOutButton.click();
 		signOutAlertDialogButtonConfirm.click();
+	}
+	/**
+	 * Log out from the rooms list, log in with the parameters.</br>
+	 * Return a RiotRoomsListPageObjects POM.</br> Can be used to renew the encryption keys.
+	 * @param username
+	 * @param pwd
+	 * @return new RiotRoomsListPageObjects
+	 */
+	public RiotRoomsListPageObjects logOutAndLogin(String username, String pwd) {
+		this.logOut();
+		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
+		loginPage.fillLoginForm(username, pwd);
+		return new RiotRoomsListPageObjects(driver);
 	}
 }

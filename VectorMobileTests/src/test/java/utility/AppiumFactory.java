@@ -13,21 +13,21 @@ import io.appium.java_client.ios.IOSDriver;
 public class AppiumFactory {
 	private static AppiumDriver<MobileElement> androidDriver1;
 	private static AppiumDriver<MobileElement> androidDriver2;
-	private static AppiumDriver<MobileElement> iosDriver3;
-	private static AppiumDriver<MobileElement> iosDriver4;
+	private static AppiumDriver<MobileElement> iosDriver1;
+	private static AppiumDriver<MobileElement> iosDriver2;
 	private static AppiumDriver<MobileElement> currentDriver;
 	// Set Android drivers or iOS drivers
 	public void setAndroidDriver1(URL url,DesiredCapabilities capabilities) throws MalformedURLException {
-		androidDriver1 = new AndroidDriver<MobileElement>(url, capabilities);          
+		androidDriver1 = new AndroidDriver<MobileElement>(url, capabilities);
 	}
 	public void setAndroidDriver2(URL url,DesiredCapabilities capabilities) throws MalformedURLException {
-		androidDriver2 = new AndroidDriver<MobileElement>(url, capabilities);          
+		androidDriver2 = new AndroidDriver<MobileElement>(url, capabilities);
 	}
 	public void setiOSDriver1(URL url,DesiredCapabilities capabilities) throws MalformedURLException {
-		iosDriver3 = new IOSDriver<MobileElement>(url, capabilities);          
+		iosDriver1 = new IOSDriver<MobileElement>(url, capabilities);
 	}
 	public void setiOSDriver2(URL url,DesiredCapabilities capabilities) throws MalformedURLException {
-		iosDriver4 = new IOSDriver<MobileElement>(url, capabilities);          
+		iosDriver2 = new IOSDriver<MobileElement>(url, capabilities);
 	}
 	
 	
@@ -41,12 +41,12 @@ public class AppiumFactory {
 		return (AndroidDriver<MobileElement>) androidDriver2;
 	}  
 	public static IOSDriver<MobileElement> getiOsDriver1() {
-		currentDriver= iosDriver3;
-		return (IOSDriver<MobileElement>) iosDriver3;
+		currentDriver= iosDriver1;
+		return (IOSDriver<MobileElement>) iosDriver1;
 	}   
 	public static IOSDriver<MobileElement> getiOsDriver2() {
-		currentDriver= iosDriver4;
-		return (IOSDriver<MobileElement>) iosDriver4;
+		currentDriver= iosDriver2;
+		return (IOSDriver<MobileElement>) iosDriver2;
 	}
 	public static AppiumDriver<MobileElement> getCurrentDriver() {
 		return currentDriver;

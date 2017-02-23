@@ -26,8 +26,7 @@ public abstract class RiotParentTest extends TestUtilities {
 		//capabilities.setCapability("autoWebview", true);
 
 		AppiumFactory appiumFactory=new AppiumFactory();
-		appiumFactory.setAndroidDriver1(new URL(Constant.SERVER1_HTTP_ADDRESS), capabilities);
-		//appiumFactory.setAndroidDriver1(new URL(AppiumServerStartAndStopService.service_url1), capabilities);
+		appiumFactory.setAndroidDriver1(new URL(Constant.getServer1HttpAddress()), capabilities);
 		System.out.println("Application "+Constant.PACKAGE_APP_NAME+" started on device "+Constant.ANDROID_DEVICE1_NAME +" with AppiumDriver 1.");
 	}
 
@@ -57,12 +56,10 @@ public abstract class RiotParentTest extends TestUtilities {
 		capabilities2.setCapability(MobileCapabilityType.FULL_RESET, false);
 
 		AppiumFactory appiumFactory=new AppiumFactory();
-		//appiumFactory.setAndroidDriver1(new URL(Constant.SERVER1_HTTP_ADDRESS), capabilities);
-		appiumFactory.setAndroidDriver1(new URL(AppiumServerStartAndStopService.service_url1), capabilities);
+		appiumFactory.setAndroidDriver1(new URL(Constant.getServer1HttpAddress()), capabilities);
 		System.out.println("Application "+Constant.APPLICATION_NAME+" started on ANDROID device "+Constant.ANDROID_DEVICE1_NAME +" with DRIVER 1.");
 
-		//appiumFactory.setAndroidDriver2(new URL(Constant.SERVER2_HTTP_ADDRESS), capabilities2);
-		appiumFactory.setAndroidDriver2(new URL(AppiumServerStartAndStopService.service_url2), capabilities2);
+		appiumFactory.setAndroidDriver2(new URL(Constant.getServer1HttpAddress()), capabilities2);
 		System.out.println("Application "+Constant.APPLICATION_NAME+" started on ANDROID device "+Constant.ANDROID_DEVICE2_NAME +" with DRIVER 2.");
 	}
 
@@ -109,7 +106,7 @@ public abstract class RiotParentTest extends TestUtilities {
 		//		capabilities.setCapability("autoWebview", true);
 
 		AppiumFactory appiumFactory=new AppiumFactory();
-		appiumFactory.setiOSDriver1(new URL(Constant.SERVER1_HTTP_ADDRESS), capabilities);
+		appiumFactory.setiOSDriver1(new URL(Constant.getServer1HttpAddress()), capabilities);
 		System.out.println("Application "+Constant.APPLICATION_NAME+" started on IOS device "+Constant.IOS_DEVICE1_UDID +" with DRIVER 1.");
 	}
 	@BeforeGroups(groups="1driver_ios_bis")
@@ -137,7 +134,7 @@ public abstract class RiotParentTest extends TestUtilities {
 		//		capabilities.setCapability("autoWebview", true);
 
 		AppiumFactory appiumFactory=new AppiumFactory();
-		appiumFactory.setiOSDriver1(new URL(Constant.SERVER1_HTTP_ADDRESS), capabilities);
+		appiumFactory.setiOSDriver1(new URL(Constant.getServer1HttpAddress()), capabilities);
 		System.out.println("Application "+Constant.APPLICATION_NAME+" started on IOS device "+Constant.IOS_DEVICE1_UDID +" with DRIVER 1.");
 	}
 	@BeforeGroups(groups="2drivers_ios")
@@ -182,12 +179,10 @@ public abstract class RiotParentTest extends TestUtilities {
 		capabilities2.setCapability("newCommandTimeout", 1200);
 
 		AppiumFactory appiumFactory=new AppiumFactory();
-		//appiumFactory.setiOSDriver1(new URL(Constant.SERVER1_HTTP_ADDRESS), capabilities1);
-		appiumFactory.setiOSDriver1(new URL(AppiumServerStartAndStopService.service_url1), capabilities1);
+		appiumFactory.setiOSDriver1(new URL(Constant.getServer1HttpAddress()), capabilities1);
 		System.out.println("Application "+Constant.APPLICATION_NAME+" started on IOS device "+Constant.IOS_DEVICE1_UDID +" with DRIVER 1.");
 
-		//appiumFactory.setiOSDriver2(new URL(Constant.SERVER2_HTTP_ADDRESS), capabilities2);
-		appiumFactory.setiOSDriver2(new URL(AppiumServerStartAndStopService.service_url2), capabilities2);
+		appiumFactory.setiOSDriver2(new URL(Constant.getServer2HttpAddress()), capabilities2);
 		System.out.println("Application "+Constant.APPLICATION_NAME+" started on IOS device "+Constant.IOS_DEVICE2_UDID +" with DRIVER 2.");
 	}
 
