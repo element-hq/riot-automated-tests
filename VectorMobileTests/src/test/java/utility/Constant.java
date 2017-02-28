@@ -31,16 +31,11 @@ public class Constant {
 	 * 1: servers are automatically started with a CommandLine object. Appium server's logs aren't displayed in the console.</br>
 	 * 2: servers are automatically started with an AppiumDriverLocalService object. Appium server's logs are displayed in the console.</br>
 	 */
-	public static final int STARTING_SERVER_MODE=0;
+	public static final int STARTING_SERVER_MODE=2;
 	/*
 	 * DEVICES
 	 */
-	public static final String ANDROID_DEVICE1_NAME = "a71011c8";
-	public static final String ANDROID_DEVICE2_NAME = "4df1a0ee7bf25fa3";
-	/*** iPhone 6+ STZ_DE_13243.*/
-	public static final String IOS_DEVICE1_UDID = "e75c0085c74a872846772a6b2ee56a86849a4d92";
-	/*** iPhone 5C STZ_DE_13208.*/
-	public static final String IOS_DEVICE2_UDID = "2a418a9dbcd960d904a501bf558120625f96f409";//1c7e0b4559589b57396a57f8eaa382c9bc42d8d7 //2a418a9dbcd960d904a501bf558120625f96f409 //99129ae17ce75bdc31f66f507725b2b98907a10d
+	public static final String DEVICES_CONFIG_FILE ="src/test/java/config/devices.yaml";
 	
 	/*
 	 * RIOT
