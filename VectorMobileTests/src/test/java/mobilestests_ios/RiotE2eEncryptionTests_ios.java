@@ -341,7 +341,6 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 	}
 
 	/**
-	 * TODO
 	 * 1. Log out / login for renew the keys 
 	 * 2. Device 1 open room oneToOneRoomWithEncryption
 	 * 3. Take a picture and attach it to the room
