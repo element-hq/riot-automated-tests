@@ -16,7 +16,9 @@ public class AppiumFactory {
 	private static AppiumDriver<MobileElement> iosDriver1;
 	private static AppiumDriver<MobileElement> iosDriver2;
 	private static AppiumDriver<MobileElement> currentDriver;
-	// Set Android drivers or iOS drivers
+	/*
+	 *  Set Android drivers or iOS drivers
+	 */
 	public void setAndroidDriver1(URL url,DesiredCapabilities capabilities) throws MalformedURLException {
 		androidDriver1 = new AndroidDriver<MobileElement>(url, capabilities);
 	}
@@ -30,8 +32,9 @@ public class AppiumFactory {
 		iosDriver2 = new IOSDriver<MobileElement>(url, capabilities);
 	}
 	
-	
-	//Get driver 1 or 2
+	/*
+	 * Get driver 1 or 2
+	 */
 	public static AndroidDriver<MobileElement> getAndroidDriver1() {
 		currentDriver= androidDriver1;
 		return (AndroidDriver<MobileElement>) androidDriver1;

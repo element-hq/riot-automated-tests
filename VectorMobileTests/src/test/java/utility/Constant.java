@@ -1,5 +1,9 @@
 package utility;
 
+import java.io.FileNotFoundException;
+
+import com.esotericsoftware.yamlbeans.YamlException;
+
 public class Constant {
 	public static final String FILE_TESTDATA = "testdata1.xlsx";
 	/*
@@ -10,31 +14,26 @@ public class Constant {
 	public static final String APPIUM_COMMON_PORT="4723";
 	public static final String WEBDRIVERAGENT_PORT="8080";
 	public static final String SERVER1_HTTP_ADDRESS="http://"+SERVER1_ADDRESS+":"+APPIUM_COMMON_PORT+"/wd/hub";
-	public static final String SERVER2_HTTP_ADDRESS="http://"+SERVER2_ADDRESS+":"+APPIUM_COMMON_PORT+"/wd/hub";//"http://127.0.0.1:4723/wd/hub";
+	public static final String SERVER2_HTTP_ADDRESS="http://"+SERVER2_ADDRESS+":"+APPIUM_COMMON_PORT+"/wd/hub";
 	
-	public static final String getServer1HttpAddress(){
-		if(2==STARTING_SERVER_MODE)
+	public static final String getServer1HttpAddress() throws FileNotFoundException, YamlException{
+		if("2"==ReadConfigFile.getInstance().getConfMap().get("starting_server_mode"))
 			return AppiumServerStartAndStopService.service_url1;
 		else
 			return SERVER1_HTTP_ADDRESS;
 	}
 	
-	public static final String getServer2HttpAddress(){
-		if(2==STARTING_SERVER_MODE)
+	public static final String getServer2HttpAddress() throws FileNotFoundException, YamlException{
+		if("2"==ReadConfigFile.getInstance().getConfMap().get("starting_server_mode"))
 			return AppiumServerStartAndStopService.service_url2;
 		else
 			return SERVER2_HTTP_ADDRESS;
 	}
 	
-	/**
-	 * 0: servers aren't automatically started.</br>
-	 * 1: servers are automatically started with a CommandLine object. Appium server's logs aren't displayed in the console.</br>
-	 * 2: servers are automatically started with an AppiumDriverLocalService object. Appium server's logs are displayed in the console.</br>
-	 */
-	public static final int STARTING_SERVER_MODE=2;
 	/*
-	 * DEVICES
+	 * CONF
 	 */
+	public static final String CONFIG_FILE = "src/test/java/config/config.yaml";
 	public static final String DEVICES_CONFIG_FILE ="src/test/java/config/devices.yaml";
 	
 	/*

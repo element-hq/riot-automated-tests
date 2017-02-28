@@ -23,7 +23,7 @@ import utility.ScreenshotUtility;
  */
 @Listeners({ ScreenshotUtility.class })
 public class RiotLoginTests_ios extends RiotParentTest{
-	
+
 	/**
 	 * Log and logout and iterate on several datas from excel file.
 	 */
@@ -41,11 +41,11 @@ public class RiotLoginTests_ios extends RiotParentTest{
 		Assert.assertTrue(waitUntilDisplayed(AppiumFactory.getiOsDriver1(), "AuthenticationVCView", true, 15), "The login page isn't displayed after the log-out.");
 		//Assert.assertTrue(loginPage.authenticationView.isEnabled(), "The login page isn't displayed after the log-out.");
 	}
-	
+
 	@Test(groups={"2drivers_ios"})
 	public void doubleLogin(){
-String sUserName="riotuser1";
-String sPassword ="riotuser";
+		String sUserName="riotuser1";
+		String sPassword ="riotuser";
 		RiotLoginAndRegisterPageObjects loginPage1 = new RiotLoginAndRegisterPageObjects(AppiumFactory.getiOsDriver1());
 		RiotLoginAndRegisterPageObjects loginPage2 = new RiotLoginAndRegisterPageObjects(AppiumFactory.getiOsDriver2());
 		loginPage1.emailOrUserNameTextField.setValue(sUserName);
@@ -55,41 +55,41 @@ String sPassword ="riotuser";
 		loginPage2.passwordTextField.setValue(sPassword);
 		loginPage2.loginButton.click();
 	}
-	
+
 	@Test(groups={"1driver_ios"})
 	public void simpleLogin(){
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getiOsDriver1());
 		loginPage.emailOrUserNameTextField.setValue("riotuser2");
 		loginPage.passwordTextField.setValue("riotuser");
 		loginPage.loginButton.click();
-		
+
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
 		mainPage.logOut();
 	}
-	
+
 	@Test(groups={"1driver_ios"})
 	public void checkCancelButtonNotDisplayed(){
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getiOsDriver1());
 		Assert.assertTrue(loginPage.registerButton.isDisplayed());
 		//loginPage.cancelButton.click();
 		//Assert.assertEquals(loginPage.cancelButton.getAttribute("Is Visible"),"false");
-	//	IsElementPresent sd=new IsElementPresent(ByAccessibilityId);
+		//	IsElementPresent sd=new IsElementPresent(ByAccessibilityId);
 		//IsElementPresent(ByAccessibilityId("ss"));
 		//loginPage.cancelButton.
-	
-//		Assert.assertTrue(ExpectedConditions.elementToBeClickable(loginPage.registerButton) != null);
-//		Assert.assertFalse(ExpectedConditions.elementToBeClickable(loginPage.cancelButton) != null);
+
+		//		Assert.assertTrue(ExpectedConditions.elementToBeClickable(loginPage.registerButton) != null);
+		//		Assert.assertFalse(ExpectedConditions.elementToBeClickable(loginPage.cancelButton) != null);
 		System.out.println(loginPage.cancelButton.getSize());
 		System.out.println(loginPage.cancelButton.getAttribute("userInteractionEnabled"));
 		System.out.println(ExpectedConditions.elementToBeClickable(loginPage.cancelButton));
 		System.out.println(ExpectedConditions.invisibilityOfElementLocated(By.name("AuthenticationVCCancelAuthFallbackButton")).toString());
 		System.out.println(ExpectedConditions.elementToBeClickable(loginPage.registerButton));
-		
-//		System.out.println(AppiumFactory.getiOsDriver1().findElementsByAccessibilityId("Register").isEmpty());
-//		System.out.println(AppiumFactory.getiOsDriver1().findElementsByAccessibilityId("AuthenticationVCCancelAuthFallbackButton").isEmpty());
-		
+
+		//		System.out.println(AppiumFactory.getiOsDriver1().findElementsByAccessibilityId("Register").isEmpty());
+		//		System.out.println(AppiumFactory.getiOsDriver1().findElementsByAccessibilityId("AuthenticationVCCancelAuthFallbackButton").isEmpty());
+
 	}
-	
+
 	/**
 	 * Check the custom server options and verify the form.
 	 */
@@ -129,7 +129,7 @@ String sPassword ="riotuser";
 		Assert.assertTrue(isPresentTryAndCatch(loginPage.customServerOptionsCheckBox), "The custom server option checkbox isn't displayed");
 		loginPage.cancelButton.click();
 	}
-	
+
 	/**
 	 * Will fail because of https://github.com/vector-im/riot-ios/issues/898
 	 * Fill the form with forbidden characters. </br>
@@ -146,7 +146,7 @@ String sPassword ="riotuser";
 		loginPage.newPwdResetPwdEditText.setValue(newPwdTest);
 		loginPage.confirmNewPwdResetPwdEditText.setValue(confirmPwdTest);
 		loginPage.sendResetEmailButton.click();
-		
+
 		//wait the dialog alert to be displayed
 		Assert.assertTrue(waitUntilDisplayed(AppiumFactory.getiOsDriver1(), "//XCUIElementTypeAlert[@name='Error']", true, 3), "Dialog error alert isn't displayed");
 		loginPage.dialogOkButton.click();
@@ -157,7 +157,7 @@ String sPassword ="riotuser";
 		//AppiumFactory.getiOsDriver1().resetApp();
 		loginPage.cancelButton.click();
 	}
-	
+
 	/**
 	 * Will fail because of https://github.com/vector-im/riot-ios/issues/898
 	 * Fill the forgot password form with corrects (but with fake mail) characters. </br>

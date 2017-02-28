@@ -1,0 +1,4 @@
+#0: servers aren't automatically started.
+#1: servers are automatically started with a CommandLine object. Appium server's logs aren't displayed in the console.
+#2: servers are automatically started with an AppiumDriverLocalService object. Appium server's logs are displayed in the console.
+starting_server_mode: 2
