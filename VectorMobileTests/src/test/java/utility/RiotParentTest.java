@@ -14,7 +14,7 @@ public abstract class RiotParentTest extends TestUtilities {
 	public void setUp1AndroidDriver() throws Exception{
 		//Start appium server 1 if necessary.
 		startAppiumServer1();
-		Map<String, String> androidDevice1=ReadConfigFile.getInstance().getDevicesMap().get("android device 1");
+		Map<String, String> androidDevice1=ReadConfigFile.getInstance().getDevicesMap().get("androiddevice1");
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability(MobileCapabilityType.UDID,androidDevice1.get(MobileCapabilityType.UDID));
 		capabilities.setCapability(MobileCapabilityType.DEVICE_NAME,androidDevice1.get(MobileCapabilityType.DEVICE_NAME));
@@ -35,8 +35,8 @@ public abstract class RiotParentTest extends TestUtilities {
 	public void setUp2AndroidDrivers() throws Exception{
 		//Start the two appium's servers if necessary.
 		start2AppiumServers();
-		Map<String, String> androidDevice1=ReadConfigFile.getInstance().getDevicesMap().get("android device 1");
-		Map<String, String> androidDevice2=ReadConfigFile.getInstance().getDevicesMap().get("android device 2");
+		Map<String, String> androidDevice1=ReadConfigFile.getInstance().getDevicesMap().get("androiddevice1");
+		Map<String, String> androidDevice2=ReadConfigFile.getInstance().getDevicesMap().get("androiddevice2");
 		DesiredCapabilities capabilities1 = new DesiredCapabilities();
 		capabilities1.setCapability(MobileCapabilityType.UDID,androidDevice1.get(MobileCapabilityType.UDID));
 		capabilities1.setCapability(MobileCapabilityType.DEVICE_NAME,androidDevice1.get(MobileCapabilityType.DEVICE_NAME));
@@ -70,7 +70,7 @@ public abstract class RiotParentTest extends TestUtilities {
 	@AfterGroups(groups="1driver_android")
 	public void tearDownAndroidDriver1() throws Exception{
 		AppiumFactory.getAndroidDriver1().quit();
-		System.out.println("Android DRIVER 1 quitted on ANDROID device "+ReadConfigFile.getInstance().getDevicesMap().get("android device 1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
+		System.out.println("Android DRIVER 1 quitted on ANDROID device "+ReadConfigFile.getInstance().getDevicesMap().get("androiddevice1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
 		//Stop appium server1.
 		stopAppiumServer1();
 	}
@@ -78,9 +78,9 @@ public abstract class RiotParentTest extends TestUtilities {
 	@AfterGroups(groups={"2drivers_android"}, alwaysRun=true)
 	public void tearDown2AndroidDrivers() throws Exception{
 		AppiumFactory.getAndroidDriver1().quit();
-		System.out.println("Android DRIVER 1 quitted on ANDROID device "+ReadConfigFile.getInstance().getDevicesMap().get("android device 1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
+		System.out.println("Android DRIVER 1 quitted on ANDROID device "+ReadConfigFile.getInstance().getDevicesMap().get("androiddevice1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
 		AppiumFactory.getAndroidDriver2().quit();
-		System.out.println("Android DRIVER 2 quitted on ANDROID device "+ReadConfigFile.getInstance().getDevicesMap().get("android device 2").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
+		System.out.println("Android DRIVER 2 quitted on ANDROID device "+ReadConfigFile.getInstance().getDevicesMap().get("androiddevice2").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
 		//Stop the two appium's servers.
 		stop2AppiumServers();
 	}
@@ -89,7 +89,7 @@ public abstract class RiotParentTest extends TestUtilities {
 	public void setUp1IosDriver() throws Exception{
 		//Start appium server 1 if necessary.
 		startAppiumServer1();
-		Map<String, String> iosDevice1=ReadConfigFile.getInstance().getDevicesMap().get("ios device 1");
+		Map<String, String> iosDevice1=ReadConfigFile.getInstance().getDevicesMap().get("iosdevice1");
 		
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability(MobileCapabilityType.UDID, iosDevice1.get(MobileCapabilityType.UDID));
@@ -117,7 +117,7 @@ public abstract class RiotParentTest extends TestUtilities {
 	public void setUp1IosDriverBis() throws Exception{
 		//Start appium server 1 if necessary.
 		startAppiumServer1();
-		Map<String, String> iosDevice2=ReadConfigFile.getInstance().getDevicesMap().get("ios device 2");
+		Map<String, String> iosDevice2=ReadConfigFile.getInstance().getDevicesMap().get("iosdevice2");
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability(MobileCapabilityType.UDID, iosDevice2.get(MobileCapabilityType.UDID));
 		capabilities.setCapability(MobileCapabilityType.DEVICE_NAME,iosDevice2.get(MobileCapabilityType.DEVICE_NAME));
@@ -141,12 +141,42 @@ public abstract class RiotParentTest extends TestUtilities {
 		appiumFactory.setiOSDriver1(new URL(Constant.getServer1HttpAddress()), capabilities);
 		System.out.println("Application "+Constant.APPLICATION_NAME+" started on IOS device "+capabilities.getCapability(MobileCapabilityType.DEVICE_NAME) +" with DRIVER 1.");
 	}
+	@BeforeGroups(groups="1driver_ios_install")
+	public void setUp1IosDriverForInstallation() throws Exception{
+		//Start appium server 1 if necessary.
+		startAppiumServer1();
+		Map<String, String> iosDevice1=ReadConfigFile.getInstance().getDevicesMap().get("iosdevice1");
+		
+		DesiredCapabilities capabilities = new DesiredCapabilities();
+		capabilities.setCapability(MobileCapabilityType.UDID, iosDevice1.get(MobileCapabilityType.UDID));
+		capabilities.setCapability(MobileCapabilityType.DEVICE_NAME,iosDevice1.get(MobileCapabilityType.DEVICE_NAME));
+		capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME,iosDevice1.get(MobileCapabilityType.PLATFORM_NAME));
+		capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, iosDevice1.get(MobileCapabilityType.PLATFORM_VERSION));
+		capabilities.setCapability(MobileCapabilityType.APP, System.getProperty("user.dir")+Constant.PATH_TO_IOS_IPA);
+		//capabilities.setCapability("bundleId", "im.vector.app");
+		//XCUITest is used because Appium Ios driver doesn't support xcode version 8.0
+		capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME,iosDevice1.get(MobileCapabilityType.AUTOMATION_NAME));
+		capabilities.setCapability("realDeviceLogger", "/usr/local/lib/node_modules/deviceconsole/deviceconsole");
+		capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
+		capabilities.setCapability(MobileCapabilityType.FULL_RESET, false);
+		capabilities.setCapability("xcodeConfigFile", "/usr/local/lib/node_modules/appium/node_modules/appium-xcuitest-driver/WebDriverAgent/Configurations/ProjectSettings.xcconfig");
+		capabilities.setCapability("keychainPath","/Users/matrix/Library/Keychains/appiumKeychain.keychain");
+		capabilities.setCapability("keychainPassword","appium6754");
+		capabilities.setCapability("autoDismissAlerts", false);
+		capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 1200);
+		//		capabilities.setCapability("autoWebview", true);
+
+		AppiumFactory appiumFactory=new AppiumFactory();
+		appiumFactory.setiOSDriver1(new URL(Constant.getServer1HttpAddress()), capabilities);
+		System.out.println("Application "+Constant.APPLICATION_NAME+" started on IOS device "+capabilities.getCapability(MobileCapabilityType.DEVICE_NAME) +" with DRIVER 1.");
+	}
+	
 	@BeforeGroups(groups="2drivers_ios")
 	public void setUp2IosDriver() throws Exception{
 		//Start the two appium's servers if necessary.
 		start2AppiumServers();
-		Map<String, String> iosDevice1=ReadConfigFile.getInstance().getDevicesMap().get("ios device 1");
-		Map<String, String> iosDevice2=ReadConfigFile.getInstance().getDevicesMap().get("ios device 2");
+		Map<String, String> iosDevice1=ReadConfigFile.getInstance().getDevicesMap().get("iosdevice1");
+		Map<String, String> iosDevice2=ReadConfigFile.getInstance().getDevicesMap().get("iosdevice2");
 		DesiredCapabilities capabilities1 = new DesiredCapabilities();
 		capabilities1.setCapability(MobileCapabilityType.UDID, iosDevice1.get(MobileCapabilityType.UDID));
 		capabilities1.setCapability(MobileCapabilityType.DEVICE_NAME,iosDevice1.get(MobileCapabilityType.DEVICE_NAME));
@@ -194,7 +224,7 @@ public abstract class RiotParentTest extends TestUtilities {
 	@AfterGroups(groups="1driver_ios")
 	public void tearDownIosDriver1() throws Exception{
 		AppiumFactory.getiOsDriver1().quit();
-		System.out.println("Ios DRIVER 1 quitted on IOS device "+ReadConfigFile.getInstance().getDevicesMap().get("ios device 1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
+		System.out.println("Ios DRIVER 1 quitted on IOS device "+ReadConfigFile.getInstance().getDevicesMap().get("iosdevice1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
 
 		//Stop appium server1.
 		stopAppiumServer1();
@@ -203,9 +233,9 @@ public abstract class RiotParentTest extends TestUtilities {
 	@AfterGroups(groups={"2drivers_ios"}, alwaysRun=true)
 	public void tearDown2IosDrivers() throws Exception{
 		AppiumFactory.getiOsDriver1().quit();
-		System.out.println("Ios DRIVER 1 quitted on IOS device "+ReadConfigFile.getInstance().getDevicesMap().get("ios device 1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
+		System.out.println("Ios DRIVER 1 quitted on IOS device "+ReadConfigFile.getInstance().getDevicesMap().get("iosdevice1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
 		AppiumFactory.getiOsDriver2().quit();
-		System.out.println("Ios DRIVER 2 quitted on IOS device "+ReadConfigFile.getInstance().getDevicesMap().get("ios device 2").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
+		System.out.println("Ios DRIVER 2 quitted on IOS device "+ReadConfigFile.getInstance().getDevicesMap().get("iosdevice2").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
 
 		//Stop the two appium's servers.
 		stop2AppiumServers();

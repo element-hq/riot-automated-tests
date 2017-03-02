@@ -240,6 +240,18 @@ public class RiotMiscTests extends RiotParentTest{
 		//copyrightPolicyView.okButton.click();
 		driver.rotate(ScreenOrientation.PORTRAIT);
 	}
+	
+	@Test(groups="1driver_android")
+	public void testApkInstallation() throws IOException{
+		AppiumFactory.getAndroidDriver1().removeApp(Constant.PACKAGE_APP_NAME);
+		AppiumFactory.getAndroidDriver1().installApp(System.getProperty("user.dir")+Constant.PATH_TO_ANDROID_APK);
+	}
+	
+	@Test(groups="1driver_ios_install")
+	public void testIpaInstallation(){
+		//AppiumFactory.getiOsDriver1().removeApp(Constant.APP_BUNDLE_ID);
+		AppiumFactory.getiOsDriver1().installApp(System.getProperty("user.dir")+Constant.PATH_TO_IOS_IPA);
+	}
 
 	private void scrollWindowDown(){
 		Dimension dimensions = driver.manage().window().getSize();

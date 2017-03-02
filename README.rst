@@ -65,6 +65,8 @@ sudo npm install deviceconsole
 - Install ideviceinstaller
 brew install ideviceinstaller
 
+- Install cmake: used for download riot-ios dependencies. For reminder riot-android and riot-ios are downloaded and installed for being installed on the tests devices.
+
 - Install ios-deploy (not sure if necessary)
 which ios-deploy
 

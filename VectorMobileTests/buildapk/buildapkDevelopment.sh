@@ -7,7 +7,8 @@ git fetch origin/develop
 git checkout -b develop origin/develop
 
 #download dependencies and compile the apk
-gradle clean assembleDebug
+#gradle clean assembleDebug
+gradle assembleDebug
 
 #copy it to out directory
 mkdir out
