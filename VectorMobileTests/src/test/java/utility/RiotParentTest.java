@@ -102,9 +102,11 @@ public abstract class RiotParentTest extends TestUtilities {
 		capabilities.setCapability("realDeviceLogger", "/usr/local/lib/node_modules/deviceconsole/deviceconsole");
 		capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
 		capabilities.setCapability(MobileCapabilityType.FULL_RESET, false);
-		capabilities.setCapability("xcodeConfigFile", "/usr/local/lib/node_modules/appium/node_modules/appium-xcuitest-driver/WebDriverAgent/Configurations/ProjectSettings.xcconfig");
-		capabilities.setCapability("keychainPath","/Users/matrix/Library/Keychains/appiumKeychain.keychain");
-		capabilities.setCapability("keychainPassword","appium6754");
+		capabilities.setCapability("xcodeOrgId", ReadConfigFile.getInstance().getConfMap().get("development_team"));
+		capabilities.setCapability("xcodeSigningId", ReadConfigFile.getInstance().getConfMap().get("code_sign_identity"));
+		//capabilities.setCapability("xcodeConfigFile", "/usr/local/lib/node_modules/appium/node_modules/appium-xcuitest-driver/WebDriverAgent/Configurations/ProjectSettings.xcconfig");
+//		capabilities.setCapability("keychainPath","/Users/matrix/Library/Keychains/appiumKeychain.keychain");
+		//capabilities.setCapability("keychainPassword","appium6754");
 		capabilities.setCapability("autoDismissAlerts", false);
 		capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 1200);
 		//		capabilities.setCapability("autoWebview", true);
@@ -130,9 +132,8 @@ public abstract class RiotParentTest extends TestUtilities {
 		capabilities.setCapability("realDeviceLogger", "/usr/local/lib/node_modules/deviceconsole/deviceconsole");
 		capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
 		capabilities.setCapability(MobileCapabilityType.FULL_RESET, false);
-		capabilities.setCapability("xcodeConfigFile", "/usr/local/lib/node_modules/appium/node_modules/appium-xcuitest-driver/WebDriverAgent/Configurations/ProjectSettings.xcconfig");
-		capabilities.setCapability("keychainPath","/Users/matrix/Library/Keychains/appiumKeychain.keychain");
-		capabilities.setCapability("keychainPassword","appium6754");
+		capabilities.setCapability("xcodeOrgId", ReadConfigFile.getInstance().getConfMap().get("development_team"));
+		capabilities.setCapability("xcodeSigningId", ReadConfigFile.getInstance().getConfMap().get("code_sign_identity"));
 		capabilities.setCapability("autoDismissAlerts", false);
 		capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 1200);
 		//		capabilities.setCapability("autoWebview", true);
@@ -159,9 +160,8 @@ public abstract class RiotParentTest extends TestUtilities {
 		capabilities.setCapability("realDeviceLogger", "/usr/local/lib/node_modules/deviceconsole/deviceconsole");
 		capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
 		capabilities.setCapability(MobileCapabilityType.FULL_RESET, false);
-		capabilities.setCapability("xcodeConfigFile", "/usr/local/lib/node_modules/appium/node_modules/appium-xcuitest-driver/WebDriverAgent/Configurations/ProjectSettings.xcconfig");
-		capabilities.setCapability("keychainPath","/Users/matrix/Library/Keychains/appiumKeychain.keychain");
-		capabilities.setCapability("keychainPassword","appium6754");
+		capabilities.setCapability("xcodeOrgId", ReadConfigFile.getInstance().getConfMap().get("development_team"));
+		capabilities.setCapability("xcodeSigningId", ReadConfigFile.getInstance().getConfMap().get("code_sign_identity"));
 		capabilities.setCapability("autoDismissAlerts", false);
 		capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 1200);
 		//		capabilities.setCapability("autoWebview", true);
@@ -189,9 +189,8 @@ public abstract class RiotParentTest extends TestUtilities {
 		capabilities1.setCapability("realDeviceLogger", "/usr/local/lib/node_modules/deviceconsole/deviceconsole");
 		capabilities1.setCapability(MobileCapabilityType.NO_RESET, true);
 		capabilities1.setCapability(MobileCapabilityType.FULL_RESET, false);
-		capabilities1.setCapability("xcodeConfigFile", "/usr/local/lib/node_modules/appium/node_modules/appium-xcuitest-driver/WebDriverAgent/Configurations/ProjectSettings.xcconfig");
-		capabilities1.setCapability("keychainPath","/Users/matrix/Library/Keychains/appiumKeychain.keychain");
-		capabilities1.setCapability("keychainPassword","appium6754");
+		capabilities1.setCapability("xcodeOrgId", ReadConfigFile.getInstance().getConfMap().get("development_team"));
+		capabilities1.setCapability("xcodeSigningId", ReadConfigFile.getInstance().getConfMap().get("code_sign_identity"));
 		capabilities1.setCapability("autoDismissAlerts", false);
 		capabilities1.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 1200);
 
@@ -207,9 +206,8 @@ public abstract class RiotParentTest extends TestUtilities {
 		capabilities2.setCapability("realDeviceLogger", "/usr/local/lib/node_modules/deviceconsole/deviceconsole");
 		capabilities2.setCapability(MobileCapabilityType.NO_RESET, true);
 		capabilities2.setCapability(MobileCapabilityType.FULL_RESET, false);
-		capabilities2.setCapability("xcodeConfigFile", "/usr/local/lib/node_modules/appium/node_modules/appium-xcuitest-driver/WebDriverAgent/Configurations/ProjectSettings.xcconfig");
-		capabilities2.setCapability("keychainPath","/Users/matrix/Library/Keychains/appiumKeychain.keychain");
-		capabilities2.setCapability("keychainPassword","appium6754");
+		capabilities2.setCapability("xcodeOrgId", ReadConfigFile.getInstance().getConfMap().get("development_team"));
+		capabilities2.setCapability("xcodeSigningId", ReadConfigFile.getInstance().getConfMap().get("code_sign_identity"));
 		capabilities2.setCapability("autoDismissAlerts", false);
 		capabilities2.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 1200);
 

@@ -34,7 +34,7 @@ public class AppiumServerStartAndStopService {
             streamFields1 = Class.forName("io.appium.java_client.service.local.ListOutputStream")
                     .getDeclaredField("streams");
             streamFields1.setAccessible(true);
-        } catch (ClassNotFoundException | NoSuchFieldException e) {
+        } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
         try {
@@ -60,7 +60,7 @@ public class AppiumServerStartAndStopService {
             streamFields2 = Class.forName("io.appium.java_client.service.local.ListOutputStream")
                     .getDeclaredField("streams");
             streamFields2.setAccessible(true);
-        } catch (ClassNotFoundException | NoSuchFieldException e) {
+        } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
         try {
