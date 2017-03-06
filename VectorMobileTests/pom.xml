@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -7,16 +8,16 @@
 	<name>riotmobiletests</name>
 	<description>automated functional tests for riot mobiles applications</description>
 	<dependencies>
-	<dependency>
-	<groupId>com.beust</groupId>
-	<artifactId>jcommander</artifactId>
-	<version>1.58</version>
-</dependency>
+		<dependency>
+			<groupId>com.beust</groupId>
+			<artifactId>jcommander</artifactId>
+			<version>1.58</version>
+		</dependency>
 		<dependency>
 			<groupId>io.appium</groupId>
 			<artifactId>java-client</artifactId>
 			<version>4.1.2</version>
-			<scope>test</scope>
+			<!-- <scope>test</scope> -->
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
@@ -50,12 +51,21 @@
 			<artifactId>yamlbeans</artifactId>
 			<version>LATEST</version>
 		</dependency>
-
 	</dependencies>
 	<build>
-		<sourceDirectory>${basedir}/src/test</sourceDirectory>
-		<testSourceDirectory>${basedir}/test</testSourceDirectory>
+		<sourceDirectory>../src/test/java</sourceDirectory>
+		<testSourceDirectory>../src/test/java</testSourceDirectory>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.1</version>
+				<configuration>
+					<!-- or whatever version you use -->
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.testng</groupId>
 				<artifactId>testng</artifactId>
@@ -79,13 +89,59 @@
 					<destDir>myapidocs</destDir>
 				</configuration>
 			</plugin>
-			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin> <!-- Test launching -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.14.1</version>
+				<configuration> <!-- Suite testng xml file to consider for test execution -->
+					<suiteXmlFiles>
+						<suiteXmlFile>search-android_testsuite.xml</suiteXmlFile>
+					</suiteXmlFiles>
+					<source>1.8</source>
+					<target>1.8</target>
+					<compilerArguments>
+						<encoding>${project.build.sourceEncoding}</encoding>
+					</compilerArguments>
+				</configuration>
+			</plugin>
+			<!-- TestNG -->
+			<plugin>
+				<groupId>org.testng</groupId>
+				<artifactId>testng</artifactId>
+				<version>6.8</version>
+			</plugin>
+			<!-- Java doc -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.4</version>
+				<configuration>
+					<reportOutputDirectory>${project.reporting.outputDirectory}/doc</reportOutputDirectory>
+					<destDir>myapidocs</destDir>
+				</configuration>
+			</plugin>
+			<!-- Reports -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.8</version>
+				<configuration>
+					<reportOutputDirectory>${project.reporting.outputDirectory}/doc</reportOutputDirectory>
+					<destDir>myapidocs</destDir>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<properties>
-		<project.reporting.outputDirectory>
-			./test-output
-		</project.reporting.outputDirectory>
+		<project.reporting.outputDirectory>./test-output</project.reporting.outputDirectory>
 	</properties>
 	<url>https://github.com/vector-im/riot-automated-tests</url>
 	<organization>
