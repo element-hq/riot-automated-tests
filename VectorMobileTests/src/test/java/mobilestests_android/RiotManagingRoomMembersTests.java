@@ -79,7 +79,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		//Check that the list of filtered members is empty and no result textview is displayed
 		Assert.assertEquals(roomDetails1.membersList.size(), 0);
 		Assert.assertTrue(roomDetails1.noResultTextView.isDisplayed(), "No result text view isn't displayed after filtering members list with random string.");
-		Assert.assertEquals(roomDetails1.noResultTextView.getText(), "No Results");
+		Assert.assertEquals(roomDetails1.noResultTextView.getText(), "No results");
 
 		//back to rooms list
 		roomDetails1.menuBackButton.click();

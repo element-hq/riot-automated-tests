@@ -81,6 +81,7 @@ public class RiotSearchTests extends RiotParentTest{
 		//teardown : leave room
 		searchInRoomsList.menuBackButton.click();
 		roomsList.clickOnContextMenuOnRoom(randomRoomName, "Leave Conversation");
+		roomsList.alertDialogButton2.click();
 		Thread.sleep(500);
 	}
 	
@@ -118,7 +119,7 @@ public class RiotSearchTests extends RiotParentTest{
 		searchInRoomsList.messagesTab.click();
 		searchInRoomsList.waitUntilSearchFinished();
 		//Check that "No results" is displayed after search finished.
-		Assert.assertEquals(searchInRoomsList.noResultTextView.getText(), "No Results");
+		Assert.assertEquals(searchInRoomsList.noResultTextView.getText(), "No results");
 		
 		//4. Search in PEOPLE tab a random name
 		searchInRoomsList.peopleTab.click();
@@ -131,7 +132,7 @@ public class RiotSearchTests extends RiotParentTest{
 		searchInRoomsList.filesTab.click();
 		searchInRoomsList.waitUntilSearchFinished();
 		//Check that "No results" is displayed after search finished.
-		Assert.assertEquals(searchInRoomsList.noResultTextView.getText(), "No Results");
+		Assert.assertEquals(searchInRoomsList.noResultTextView.getText(), "No results");
 		//coming back in the rooms list
 		searchInRoomsList.menuBackButton.click();
 	}
