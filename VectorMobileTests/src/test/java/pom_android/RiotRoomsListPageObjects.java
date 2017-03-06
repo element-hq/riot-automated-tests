@@ -248,16 +248,16 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	public MobileElement openCopyrightButton;
 	
 	/*
-	 * SIGN OUT pop-up
+	 * ALERT DIALOG
 	 */
 	@AndroidFindBy(id="android:id/parentPanel")
 	public MobileElement signOutPopUpPanel;
 	@AndroidFindBy(id="android:id/message")
 	public MobileElement signOutTitleTextView;
 	@AndroidFindBy(id="android:id/button1")
-	public MobileElement signOutOkButton;
+	public MobileElement alertDialogButton2;
 	@AndroidFindBy(id="android:id/button2")
-	public MobileElement signOutCancelButton;
+	public MobileElement alertDialogButton1;
 	
 	
 	
@@ -309,9 +309,9 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 		this.signOutButton.click();
 		//verifies that sign out pop up is displayed and correct
 		Assert.assertEquals(signOutTitleTextView.getText(), "For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.");
-		Assert.assertTrue(signOutCancelButton.isDisplayed(),"Cancel button isn't displayed");
-		Assert.assertTrue(signOutOkButton.isDisplayed(),"OK button isn't displayed");
-		signOutOkButton.click();
+		Assert.assertTrue(alertDialogButton1.isDisplayed(),"Cancel button isn't displayed");
+		Assert.assertTrue(alertDialogButton2.isDisplayed(),"OK button isn't displayed");
+		alertDialogButton2.click();
 	}
 	
 	/**
