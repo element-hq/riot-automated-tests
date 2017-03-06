@@ -7,6 +7,11 @@
 	<name>riotmobiletests</name>
 	<description>automated functional tests for riot mobiles applications</description>
 	<dependencies>
+	<dependency>
+	<groupId>com.beust</groupId>
+	<artifactId>jcommander</artifactId>
+	<version>1.58</version>
+</dependency>
 		<dependency>
 			<groupId>io.appium</groupId>
 			<artifactId>java-client</artifactId>
@@ -48,7 +53,7 @@
 
 	</dependencies>
 	<build>
-		<sourceDirectory>${basedir}/src</sourceDirectory>
+		<sourceDirectory>${basedir}/src/test</sourceDirectory>
 		<testSourceDirectory>${basedir}/test</testSourceDirectory>
 		<plugins>
 			<plugin>
@@ -63,7 +68,6 @@
 				<configuration>
 					<reportOutputDirectory>${project.reporting.outputDirectory}/doc</reportOutputDirectory>
 					<destDir>myapidocs</destDir>
-
 				</configuration>
 			</plugin>
 			<plugin>
@@ -75,6 +79,7 @@
 					<destDir>myapidocs</destDir>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</build>
 	<properties>
