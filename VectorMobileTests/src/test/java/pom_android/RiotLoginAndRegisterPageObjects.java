@@ -25,7 +25,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 		//ExplicitWaitToBeVisible(driver,this.inputsLoginLayout);
 		try {
 			if(driver instanceof AndroidDriver<?>){
-				waitUntilDisplayed((AndroidDriver<MobileElement>) driver,"im.vector.alpha:id/login_inputs_layout", true, 5);
+				waitUntilDisplayed((AndroidDriver<MobileElement>) driver,"im.vector.alpha:id/login_inputs_layout", true, 10);
 			}else if(driver instanceof IOSDriver<?>){
 				waitUntilDisplayed((IOSDriver<MobileElement>) driver,"//UIAApplication[1]/UIAWindow[1]/UIAScrollView[2]/UIATextField[1]", true, 5);
 			}		

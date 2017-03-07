@@ -22,7 +22,7 @@ import utility.ScreenshotUtility;
  *
  */
 @Listeners({ ScreenshotUtility.class })
-public class RiotLoginTests_ios extends RiotParentTest{
+public class RiotLoginTests extends RiotParentTest{
 
 	/**
 	 * Log and logout and iterate on several datas from excel file.
