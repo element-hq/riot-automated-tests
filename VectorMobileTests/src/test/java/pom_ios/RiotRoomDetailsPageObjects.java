@@ -137,8 +137,8 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 		int y= memberItem.getLocation().getY();
 		int witdthX=memberItem.getSize().getWidth();
 		int xFirst=x+witdthX-80;
-		float xEndF=(float) (0.3*witdthX);
-		int xEnd=(int)xEndF;
+//		float xEndF=(float) (0.3*witdthX);
+//		int xEnd=(int)xEndF;
 		//Swipe to the left on the item.
 		driver.swipe(witdthX+5,y, xFirst-50,y,500);
 		//Hit on eject button

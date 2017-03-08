@@ -239,6 +239,7 @@ public abstract class RiotParentTest extends TestUtilities {
 		stop2AppiumServers();
 	}
 	
+
 	/**
 	 * According to the chosen starting mode, start the first appium server if needed.
 	 * @throws Exception 

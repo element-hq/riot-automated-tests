@@ -4,15 +4,11 @@ import org.testng.Assert;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import io.appium.java_client.MobileElement;
-import io.appium.java_client.ios.IOSDriver;
 import pom_ios.RiotCallingPageObjects;
 import pom_ios.RiotIncomingCallPageObjects;
-import pom_ios.RiotLoginAndRegisterPageObjects;
 import pom_ios.RiotRoomPageObjects;
 import pom_ios.RiotRoomsListPageObjects;
 import utility.AppiumFactory;
-import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
@@ -242,38 +238,5 @@ public class RiotVoipTests extends RiotParentTest{
 		//From device 1, check that last message is a 'ended call' event on the room page
 		Assert.assertTrue(roomPage1.getTextViewFromBubble(roomPage1.getLastBubble()).getText().contains(user1+" ended the call"));
 		roomPage1.menuBackButton.click();
-	}
-
-	/**
-	 * Log the good user if not.</br> Secure the test.
-	 * @param myDriver
-	 * @param username
-	 * @param pwd
-	 */
-	private void checkIfUserLogged(IOSDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException {
-		//if login page is displayed, then logged with the wanted user
-		System.out.println("Check if user "+username+" is logged in "+Constant.APPLICATION_NAME);
-		if(waitUntilDisplayed(myDriver, "AuthenticationVCView", false, 5)){
-			System.out.println("User "+username+" isn't logged, login forced.");
-			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(myDriver);
-			loginPage.fillLoginForm(username, pwd);
-		}else{
-			//check if the wanted user is loged in
-			RiotRoomsListPageObjects listRoom = new RiotRoomsListPageObjects(myDriver);
-			listRoom.settingsButton.click();
-			String actualLoggedUser=listRoom.displayNameTextField.getText();
-			System.out.println("display :"+actualLoggedUser);
-			if(!actualLoggedUser.equals(username)){
-				System.out.println("User "+username+" isn't logged. An other user is logged ("+actualLoggedUser+"), login with "+username+".");
-				listRoom.logOut();
-				RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(myDriver);
-				loginPage.fillLoginForm(username, pwd);
-			}else{
-				//close lateral menu
-				System.out.println("User "+username+" is logged.");
-				myDriver.findElementByAccessibilityId("Back").click();
-			}
-		}
-		
 	}
 }

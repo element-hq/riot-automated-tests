@@ -21,6 +21,9 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.Connection;
+import io.appium.java_client.ios.IOSDriver;
+import pom_ios.RiotLoginAndRegisterPageObjects;
+import pom_ios.RiotRoomsListPageObjects;
 
 public class TestUtilities {
 	
@@ -206,4 +209,29 @@ public class TestUtilities {
             return false;
         }
     }
+	
+	protected void checkIfUserLoggedIos(IOSDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException {
+		//if login page is displayed, then logged with the wanted user
+		System.out.println("Check if user "+username+" is logged in "+Constant.APPLICATION_NAME);
+		if(waitUntilDisplayed(myDriver, "AuthenticationVCScrollViewContentView", false, 5)){
+			System.out.println("User "+username+" isn't logged, login forced.");
+			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(myDriver);
+			loginPage.fillLoginForm(username, pwd);
+		}else{
+			//check if the wanted user is loged in
+			RiotRoomsListPageObjects listRoom = new RiotRoomsListPageObjects(myDriver);
+			listRoom.settingsButton.click();
+			String actualLoggedUser=listRoom.displayNameTextField.getText();
+			if(!actualLoggedUser.equals(username)){
+				System.out.println("User "+username+" isn't logged. An other user is logged ("+actualLoggedUser+"), let's log in with "+username+".");
+				listRoom.logOutFromSettingsView();
+				RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(myDriver);
+				loginPage.fillLoginForm(username, pwd);
+			}else{
+				//close lateral menu
+				System.out.println("User "+username+" is logged.");
+				listRoom.backMenuButton.click();
+			}
+		}
+	}
 }

@@ -10,8 +10,6 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
-import pom_ios.RiotLoginAndRegisterPageObjects;
-import pom_ios.RiotRoomsListPageObjects;
 import utility.TestUtilities;
 
 public class RiotRoomsListPageObjects extends TestUtilities{
@@ -175,22 +173,76 @@ private AppiumDriver<MobileElement> driver;
 	/*
 	 * SETTINGS VIEW
 	 */
+	/*
+	 * NAV BAR
+	 */
+	@iOSFindBy(accessibility="SettingsVCNavBarSaveButton")
+	public MobileElement saveNavBarButton;
+	@iOSFindBy(accessibility="Back")
+	public MobileElement backMenuButton;
 	@iOSFindBy(accessibility="SettingsVCSignOutButton")
 	public MobileElement signOutButton;
 	
-	@iOSFindBy(xpath="//XCUIElementTypeTable//XCUIElementTypeCell//XCUIElementTypeStaticText[@name='Display Name']/parent::*//*[1]")
+	/*
+	 * USER SETTINGS
+	 */
+	@iOSFindBy(accessibility="SettingsVCDisplayNameTextField")
 	public MobileElement displayNameTextField;
-	
+	@iOSFindBy(accessibility="SettingsVCChangePasswordStaticText")
+	public MobileElement changePasswordStaticText;
 	@iOSFindBy(accessibility="SettingsVCSignoutAlertActionSign Out")
 	public MobileElement signOutAlertDialogButtonConfirm;
 	@iOSFindBy(accessibility="SettingsVCSignoutAlertActionCancel")
 	public MobileElement signOutAlertDialogButtonCancel;
 	
+	
+	/**
+	 * From the settings view, erase the display name and set a new one.</br>
+	 * It doesn't click on the save button.
+	 * @param newDisplayName
+	 */
+	public void changeDisplayNameFromSettings(String newDisplayName){
+		displayNameTextField.click();
+		displayNameTextField.clear();
+		displayNameTextField.setValue(newDisplayName);
+	}
+	
+	/**
+	 * From the settings view, hit the Change password item, change the password in the AlertDialog and click on save on this alert.
+	 * </br> Then click on the confirmation alertbox 'Your pwd have been updated'.
+	 * @param oldPwd
+	 * @param newPwd
+	 * @throws InterruptedException 
+	 */
+	public void changePasswordFromSettings(String oldPwd, String newPwd, Boolean expectedCorrectlyChange) throws InterruptedException{
+		changePasswordStaticText.click();
+		driver.getKeyboard().sendKeys(oldPwd+"\n");
+		driver.getKeyboard().sendKeys(newPwd+"\n");
+		driver.getKeyboard().sendKeys(newPwd);
+		//driver.findElementByAccessibilityId("Save").click();
+		driver.findElementsByClassName("XCUIElementTypeCollectionView").get(1).findElementsByClassName("XCUIElementTypeCell").get(1).click();
+		if(expectedCorrectlyChange){
+			Assert.assertTrue(waitUntilDisplayed(driver, "Your password has been updated", true, 10), "Password updated alert dialog isn't displayed after changing the password");
+			driver.findElementByAccessibilityId("SettingsVCOnPasswordUpdatedAlertActionOK").click();
+		}else{
+			Assert.assertTrue(waitUntilDisplayed(driver, "Fail to update password", true, 10), "Password updated fail dialog isn't displayed after changing the password");
+			driver.findElementByAccessibilityId("SettingsVCPasswordChangeFailedAlertActionOK").click();
+		}
+
+		
+	}
+	
 	/**
 	 * Log-out from Riot with the lateral menu.
 	 */
-	public void logOut(){
+	public void logOutFromRoomsList(){
 		this.settingsButton.click();
+		logOutFromSettingsView();
+	}
+	/**
+	 * Log-out from Riot from the settings view.
+	 */
+	public void logOutFromSettingsView(){
 		this.signOutButton.click();
 		signOutAlertDialogButtonConfirm.click();
 	}
@@ -202,7 +254,7 @@ private AppiumDriver<MobileElement> driver;
 	 * @return new RiotRoomsListPageObjects
 	 */
 	public RiotRoomsListPageObjects logOutAndLogin(String username, String pwd) {
-		this.logOut();
+		this.logOutFromRoomsList();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
 		loginPage.fillLoginForm(username, pwd);
 		return new RiotRoomsListPageObjects(driver);

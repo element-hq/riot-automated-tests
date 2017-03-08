@@ -37,7 +37,7 @@ public class RiotLoginTests extends RiotParentTest{
 		//Wait for the main page (rooms list) to be opened, and log out.
 		Thread.sleep(5000);
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
-		mainPage.logOut();
+		mainPage.logOutFromRoomsList();
 		Assert.assertTrue(waitUntilDisplayed(AppiumFactory.getiOsDriver1(), "AuthenticationVCView", true, 15), "The login page isn't displayed after the log-out.");
 		//Assert.assertTrue(loginPage.authenticationView.isEnabled(), "The login page isn't displayed after the log-out.");
 	}
@@ -64,7 +64,7 @@ public class RiotLoginTests extends RiotParentTest{
 		loginPage.loginButton.click();
 
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
-		mainPage.logOut();
+		mainPage.logOutFromRoomsList();
 	}
 
 	@Test(groups={"1driver_ios"})
