@@ -48,6 +48,7 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 		//1. Create room with Device 1 and enable encryption.
 		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
 		RiotRoomPageObjects roomPage= roomsList.createRoom();
+		
 		RiotRoomDetailsPageObjects roomDetails =roomPage.openDetailView();
 		roomDetails.settingsTab.click();
 		scrollToBottom(AppiumFactory.getiOsDriver1());
@@ -102,6 +103,7 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 		roomsList2.previewInvitation(roomWithEncryption);
 		RiotRoomPageObjects roomPage2 = new RiotRoomPageObjects(AppiumFactory.getiOsDriver2());
 		roomPage2.joinRoomButton.click();
+		roomPage2.closeWarningAlertAboutBetaStateOfE2e();
 
 		//Check that user on Device 2 can't read the msg sent by Device 1 before he joined.
 		roomPage2.waitForBubblesToBeDisplayed();
@@ -244,11 +246,13 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 		//2. Device 1 open room oneToOneRoomWithEncryption
 		roomsList1.getRoomByName(oneToOneRoomWithEncryption).click();
 		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		roomPage1.closeWarningAlertAboutBetaStateOfE2e();
 
 		//2. Device 2 open room oneToOneRoomWithEncryption
 		roomsList2.getRoomByName(oneToOneRoomWithEncryption).click();
 		RiotRoomPageObjects roomPage2=new RiotRoomPageObjects(AppiumFactory.getiOsDriver2());
-
+		roomPage2.closeWarningAlertAboutBetaStateOfE2e();
+		
 		//4. Device 1 send a message
 		roomPage1.sendAMessage(encrypted_msg_1);
 		//Check that message is not sent with device 2
@@ -278,7 +282,7 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 		//8. Click on the OK button from the 'Room contains unknown devices' modal
 		riotUnknownDevicesList1.doneButton.click();
 		//Check the message in the notification area, on the room page.
-		Assert.assertEquals(roomPage1.getNotificationMessage().getText(), "Message not sent due to unknown devices being present. Resend now?");
+		Assert.assertEquals(roomPage1.getNotificationMessage().getText(), "Message not sent due to unknown devices being present. Resend all or cancel all now?");
 
 		//9. Click on Resend all
 		roomPage1.clickOnResendAllLinkFromNotificationArea();
@@ -314,6 +318,7 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 		//2. Device 1 open room oneToOneRoomWithEncryption
 		roomsList1.getRoomByName(oneToOneRoomWithEncryption).click();
 		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		roomPage1.closeWarningAlertAboutBetaStateOfE2e();
 
 		//3. Start a voice call
 		roomPage1.startVoiceCall();
@@ -360,7 +365,8 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 		//2. Device 1 open room oneToOneRoomWithEncryption
 		roomsList1.getRoomByName(oneToOneRoomWithEncryption).click();
 		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
-
+		roomPage1.closeWarningAlertAboutBetaStateOfE2e();
+		
 		//3. Take a picture and attach it to the room
 		roomPage1.attachPhotoFromCamera("Small");
 		//roomPage1.waitAndCheckForMediaToBeUploaded(roomPage1.getLastBubble(), 20);

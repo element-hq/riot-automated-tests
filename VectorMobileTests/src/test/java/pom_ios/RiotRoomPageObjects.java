@@ -336,10 +336,10 @@ public class RiotRoomPageObjects extends TestUtilities{
 
 	/**
 	 * Type and send a message.
-	 * @param encrypted_msg_1
+	 * @param msg
 	 */
-	public void sendAMessage(String encrypted_msg_1) {
-		sendKeyTextView.sendKeys(encrypted_msg_1);
+	public void sendAMessage(String msg) {
+		sendKeyTextView.sendKeys(msg);
 		sendButton.click();
 	}
 	
@@ -379,4 +379,22 @@ public class RiotRoomPageObjects extends TestUtilities{
 		}
 	}
 
+	/*
+	 * ENCRYPTION
+	 */
+	@iOSFindBy(accessibility="RoomVCEncryptionAlert")
+	public MobileElement WarningOnBetaEncryptionAlert;
+	@iOSFindBy(accessibility="RoomVCEncryptionAlertActionOK")
+	public MobileElement WarningOnBetaEncryptionOkButton;
+	
+	/**
+	 * Close the warning alert about the beta state of encryption when user enters the first time in a room.
+	 * @throws InterruptedException
+	 */
+	public void closeWarningAlertAboutBetaStateOfE2e() throws InterruptedException{
+		if(waitUntilDisplayed(driver, "RoomVCEncryptionAlert", true, 1)){
+			WarningOnBetaEncryptionOkButton.click();
+		}
+		
+	}
 }

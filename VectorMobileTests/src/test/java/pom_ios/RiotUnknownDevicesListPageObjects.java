@@ -38,6 +38,8 @@ public class RiotUnknownDevicesListPageObjects extends TestUtilities{
 	public MobileElement titleStaticText;
 	@iOSFindBy(accessibility="UsersDevicesVCDoneButton")
 	public MobileElement doneButton;
+	@iOSFindBy(accessibility="UsersDevicesVCCancelButton")
+	public MobileElement cancelButton;
 	
 	
 	/*

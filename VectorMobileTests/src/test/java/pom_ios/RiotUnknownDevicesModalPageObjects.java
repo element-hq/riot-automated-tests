@@ -48,10 +48,13 @@ public class RiotUnknownDevicesModalPageObjects extends TestUtilities{
 	/*
 	 * ALERT BOTTOM
 	 */
+	@Deprecated
 	@iOSFindBy(accessibility="RoomVCUnknownDevicesAlertActionCancel")
 	public MobileElement cancelButton;
 	@iOSFindBy(accessibility="RoomVCUnknownDevicesAlertActionVerify...")
 	public MobileElement verifyButton;
+	@iOSFindBy(accessibility="RoomVCUnknownDevicesAlertActionSend Anyway")
+	public MobileElement sendAnywayButton;
 	
 	public void checkUnknownDevicesModal(){
 		Assert.assertEquals(alertTitleTextView.getText(), "Room contains unknown devices", "Modal title is wrong.");
