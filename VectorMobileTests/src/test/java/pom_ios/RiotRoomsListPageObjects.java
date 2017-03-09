@@ -106,14 +106,14 @@ private AppiumDriver<MobileElement> driver;
 	/**
 	 * Return a room as a MobileElement.</br>
 	 * Return null if not found.
-	 * @param myRommName
+	 * @param myRoomName
 	 * @return 
 	 * @throws InterruptedException 
 	 */
-	public MobileElement getRoomByName(String myRommName) throws InterruptedException{
+	public MobileElement getRoomByName(String myRoomName) throws InterruptedException{
 		waitUntilDisplayed(driver, "ROOMS",true, 10);
 		try {
-			return roomsAndCategoriesListTable.findElementByXPath("//XCUIElementTypeCell[@name='RecentTableViewCell']/XCUIElementTypeStaticText[@name='TitleLabel' and @value='"+myRommName+"']/..");
+			return roomsAndCategoriesListTable.findElementByXPath("//XCUIElementTypeCell[@name='RecentTableViewCell']/XCUIElementTypeStaticText[@name='TitleLabel' and @value='"+myRoomName+"']/..");
 		} catch (Exception e) {
 			return null;
 		}
