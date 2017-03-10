@@ -11,9 +11,11 @@ import java.util.Date;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.interactions.Keyboard;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -95,6 +97,8 @@ public class RiotLoginTests extends RiotParentTest{
 		Assert.assertTrue(isPresentTryAndCatch(loginPage.riotLogoImageView), "The riot logo isn't displayed");
 		//custom server option checkbox is still displayed
 		Assert.assertTrue(isPresentTryAndCatch(loginPage.customServerOptionsCheckBox), "The custom server option checkbox isn't displayed");
+		//come back in login page
+		AppiumFactory.getAndroidDriver1().pressKeyCode(AndroidKeyCode.BACK);
 	}
 	
 	/**

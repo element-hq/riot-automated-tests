@@ -91,7 +91,7 @@ private IOSDriver<MobileElement> driver;
 	public MobileElement forgotPwdButton;
 	@iOSFindBy(accessibility="AuthenticationVCLoginButton")
 	public MobileElement loginButton;
-	@iOSFindBy(accessibility="AuthenticationVCOptionTickButton")
+	@iOSFindBy(accessibility="AuthenticationVCCustomServersTickButton")
 	public MobileElement customServerOptionsCheckBox;
 	
 	/*
