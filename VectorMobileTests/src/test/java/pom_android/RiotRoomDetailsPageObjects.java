@@ -89,7 +89,7 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 	 */
 	public void checkInviteConfirmationMsgBox(String memberAddress) throws InterruptedException{
 		waitUntilDisplayed(driver, "im.vector.alpha:id/parentPanel", true, 5);
-		Assert.assertEquals(inputDialogNameTextView.getText(), "Invite?");
+		Assert.assertEquals(inputDialogNameTextView.getText(), "Confirmation");
 		Assert.assertTrue(inputDialogTextView.getText().matches("^Are you sure you want to invite (\\S+) to this chat\\?$"));
 	}
 	
