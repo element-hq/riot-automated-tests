@@ -210,6 +210,36 @@ public class TestUtilities {
         }
     }
 	
+	/**
+	 * Log the good user if not.</br> Secure the test.
+	 * @param myDriver
+	 * @param username
+	 * @param pwd
+	 * @throws InterruptedException
+	 */
+	protected void checkIfUserLoggedAndroid(AndroidDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException {
+		//if login page is displayed, then logged with the wanted user
+		System.out.println("Check if user "+username+" is logged in "+Constant.APPLICATION_NAME);
+		if(waitUntilDisplayed(myDriver, "im.vector.alpha:id/main_input_layout", false, 5)){
+			System.out.println("User "+username+" isn't logged, login forced.");
+			pom_android.RiotLoginAndRegisterPageObjects loginView = new pom_android.RiotLoginAndRegisterPageObjects(myDriver);
+			loginView.fillLoginForm(username, pwd);
+		}else{
+			//check if the wanted user is loged in
+			pom_android.RiotRoomsListPageObjects listRoom = new pom_android.RiotRoomsListPageObjects(myDriver);
+			listRoom.contextMenuButton.click();
+			String actualLoggedUser=listRoom.displayedUserMain.getText();
+			if(!actualLoggedUser.equals(username)){
+				System.out.println("User "+username+" isn't logged. An other user is logged ("+actualLoggedUser+"), login with "+username+".");
+				myDriver.navigate().back();
+				listRoom.logOutAndLogin(username, pwd);
+			}else{
+				//close lateral menu
+				System.out.println("User "+username+" is logged.");
+				myDriver.navigate().back();
+			}
+		}
+	}
 	protected void checkIfUserLoggedIos(IOSDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException {
 		//if login page is displayed, then logged with the wanted user
 		System.out.println("Check if user "+username+" is logged in "+Constant.APPLICATION_NAME);

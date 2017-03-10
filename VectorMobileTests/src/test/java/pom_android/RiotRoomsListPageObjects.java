@@ -36,7 +36,7 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	public MobileElement invitesHeadingLayout;
 	
 	public MobileElement getInvitationLayoutByName(String roomName){
-		return driver.findElementByXPath("//android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_roomName' and@text='"+roomName+"']/../../../../..");
+		return driver.findElementByXPath("//android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_roomName' and@text='"+roomName+"']/../../../..");
 	}
 	
 	/**

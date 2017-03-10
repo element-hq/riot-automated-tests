@@ -134,8 +134,8 @@ public class RiotVoipTests extends RiotParentTest{
 		String roomNameTest="voip room test";
 
 		//TODO maybe use a different option than checkIfUserLogged.
-		checkIfUserLogged(AppiumFactory.getAndroidDriver1(), callingUser, pwd);
-		checkIfUserLogged(AppiumFactory.getAndroidDriver2(), calledUser, pwd);
+		checkIfUserLoggedAndroid(AppiumFactory.getAndroidDriver1(), callingUser, pwd);
+		checkIfUserLoggedAndroid(AppiumFactory.getAndroidDriver2(), calledUser, pwd);
 		//call from device 1
 		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		riotListDevice1.getRoomByName(roomNameTest).click();
@@ -174,8 +174,8 @@ public class RiotVoipTests extends RiotParentTest{
 		String roomNameTest="voip room test";
 
 		//TODO maybe use a different option than checkIfUserLogged.
-		checkIfUserLogged(AppiumFactory.getAndroidDriver1(), callingUser, pwd);
-		checkIfUserLogged(AppiumFactory.getAndroidDriver2(), calledUser, pwd);
+		checkIfUserLoggedAndroid(AppiumFactory.getAndroidDriver1(), callingUser, pwd);
+		checkIfUserLoggedAndroid(AppiumFactory.getAndroidDriver2(), calledUser, pwd);
 		//call from device 1
 		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		riotListDevice1.getRoomByName(roomNameTest).click();
@@ -223,8 +223,8 @@ public class RiotVoipTests extends RiotParentTest{
 		String roomNameTest="voip room test";
 
 		//TODO maybe use a different option than checkIfUserLogged.
-		checkIfUserLogged(AppiumFactory.getAndroidDriver1(), callingUser, pwd);
-		checkIfUserLogged(AppiumFactory.getAndroidDriver2(), calledUser, pwd);
+		checkIfUserLoggedAndroid(AppiumFactory.getAndroidDriver1(), callingUser, pwd);
+		checkIfUserLoggedAndroid(AppiumFactory.getAndroidDriver2(), calledUser, pwd);
 		//call from device 1
 		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		riotListDevice1.getRoomByName(roomNameTest).click();
@@ -275,8 +275,8 @@ public class RiotVoipTests extends RiotParentTest{
 		String roomNameTest="voip room test";
 
 		//TODO maybe use a different option than checkIfUserLogged.
-		checkIfUserLogged(AppiumFactory.getAndroidDriver1(), callingUser, pwd);
-		checkIfUserLogged(AppiumFactory.getAndroidDriver2(), calledUser, pwd);
+		checkIfUserLoggedAndroid(AppiumFactory.getAndroidDriver1(), callingUser, pwd);
+		checkIfUserLoggedAndroid(AppiumFactory.getAndroidDriver2(), calledUser, pwd);
 		//call from device 1
 		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		riotListDevice1.getRoomByName(roomNameTest).click();
@@ -332,8 +332,8 @@ public class RiotVoipTests extends RiotParentTest{
 		String roomNameTest="voip room test";
 		
 		//TODO maybe use a different option than checkIfUserLogged.
-		checkIfUserLogged(AppiumFactory.getAndroidDriver1(), callingUser, pwd);
-		checkIfUserLogged(AppiumFactory.getAndroidDriver2(), calledUser, pwd);
+		checkIfUserLoggedAndroid(AppiumFactory.getAndroidDriver1(), callingUser, pwd);
+		checkIfUserLoggedAndroid(AppiumFactory.getAndroidDriver2(), calledUser, pwd);
 		//go on 1to1 room with device 1
 		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
 		riotListDevice1.getRoomByName(roomNameTest).click();
@@ -381,13 +381,9 @@ public class RiotVoipTests extends RiotParentTest{
 	@Test(groups={"2drivers_android"})
 	public void hangUpWhenCalleeInRoomView() throws InterruptedException{
 		String callingUser="riotuser2";
-		String calledUser="riotuser3";
-		String pwd="riotuser";
+//		String calledUser="riotuser3";
+//		String pwd="riotuser";
 		String roomNameTest="voip room test";
-		
-		//TODO maybe use a different option than checkIfUserLogged.
-//		checkIfUserLogged(AppiumFactory.getAndroidDriver1(), callingUser, pwd);
-//		checkIfUserLogged(AppiumFactory.getAndroidDriver2(), calledUser, pwd);
 		
 		//Go in room voip test with both devices
 		RiotRoomsListPageObjects roomsListDevice1 = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
@@ -431,35 +427,6 @@ public class RiotVoipTests extends RiotParentTest{
 		HttpsRequestsToMatrix.joinRoom(accessTokenDevice2, roomId);
 	}
 
-	/**
-	 * Log the good user if not.</br> Secure the test.
-	 * @param myDriver
-	 * @param username
-	 * @param pwd
-	 * @throws InterruptedException
-	 */
-	private void checkIfUserLogged(AndroidDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException {
-		//if login page is displayed, then logged with the wanted user
-		System.out.println("Check if user "+username+" is logged in "+Constant.APPLICATION_NAME);
-		if(waitUntilDisplayed(myDriver, "im.vector.alpha:id/main_input_layout", false, 5)){
-			System.out.println("User "+username+" isn't logged, login forced.");
-			RiotLoginAndRegisterPageObjects loginView = new RiotLoginAndRegisterPageObjects(myDriver);
-			loginView.fillLoginForm(username, pwd);
-		}else{
-			//check if the wanted user is loged in
-			RiotRoomsListPageObjects listRoom = new RiotRoomsListPageObjects(myDriver);
-			listRoom.contextMenuButton.click();
-			String actualLoggedUser=listRoom.displayedUserMain.getText();
-			if(!actualLoggedUser.equals(username)){
-				System.out.println("User "+username+" isn't logged. An other user is logged ("+actualLoggedUser+"), login with "+username+".");
-				myDriver.navigate().back();
-				listRoom.logOutAndLogin(username, pwd);
-			}else{
-				//close lateral menu
-				System.out.println("User "+username+" is logged.");
-				myDriver.navigate().back();
-			}
-		}
-	}
+
 
 }
