@@ -3,7 +3,6 @@ package mobilestests_android;
 import java.net.MalformedURLException;
 
 import org.testng.Assert;
-import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -23,7 +22,7 @@ public class RiotRegisterTests extends RiotParentTest {
 	 * Fill the register form without any email adress. </br>
 	 * Verifies that a confirmation messagebox pops up. 
 	 */
-	@Test(groups={"restartneeded","logout","1driver_android"})
+	@Test(groups={"logout","1driver_android"})
 	public void fillRegisterFormWithoutEmail(){
 		String userNameTest="riotusername";
 		String pwdTest="riotuser";
@@ -45,6 +44,7 @@ public class RiotRegisterTests extends RiotParentTest {
 		//Validate that the fields are still filled
 		Assert.assertFalse(registerPage.userNameRegisterEditText.getText().isEmpty(), "The username field from the register form is empty");
 		//(Impossible to test the password text lenght)
+		restartRiot();
 	}
 	
 	/**
@@ -67,6 +67,7 @@ public class RiotRegisterTests extends RiotParentTest {
 		//Validate the toast "Passwords don't match" : not possible with appium
 		//Validate that we are still on the register form
 		Assert.assertTrue(registerPage.inputsRegisteringLayout.isDisplayed(), "The register form is not displayed");
+		restartRiot();
 	}
 	
 	/**
@@ -97,7 +98,7 @@ public class RiotRegisterTests extends RiotParentTest {
 	/**
 	 * Empty the home server custom URLs then validates that the register button is not enabled.
 	 */
-	@Test(groups={"restartneeded","logout","1driver_android"})
+	@Test(groups={"logout","1driver_android"})
 	public void registerWithEmptyCustomServerUrls(){
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(AppiumFactory.getAndroidDriver1());
 		registerPage.registerButton.click();
@@ -115,7 +116,7 @@ public class RiotRegisterTests extends RiotParentTest {
 	 * Validate that the register can't go any further.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"restartneeded","logout","1driver_android"}, enabled=false)
+	@Test(groups={"logout","1driver_android"}, enabled=false)
 	public void registerWithFailingCaptchaCheckingTest() throws InterruptedException{
 		//creation of a "unique" username by adding a randomize number to the username.
 		int userNamesuffix = 1 + (int)(Math.random() * ((10000 - 1) + 1));
@@ -141,7 +142,6 @@ public class RiotRegisterTests extends RiotParentTest {
 		captchaPage.handleCaptchaWebView();
 	}
 	
-	@BeforeGroups(groups="restartneeded")
 	private void restartRiot(){
 		//Restart the application
 		System.out.println("Restart the app");
