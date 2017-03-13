@@ -7,7 +7,6 @@ import org.testng.annotations.Test;
 
 import pom_ios.RiotRoomPageObjects;
 import pom_ios.RiotRoomsListPageObjects;
-import utility.AppiumFactory;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -31,16 +30,16 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	@Test(groups={"2drivers_ios","checkuser"})//@Test(groups="2drivers_ios")
 	public void typingIndicatorTest() throws InterruptedException{
 		String notSentMsg="tmp";
-		RiotRoomsListPageObjects roomsListA = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
-		RiotRoomsListPageObjects roomsListB= new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver2());
+		RiotRoomsListPageObjects roomsListA = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		RiotRoomsListPageObjects roomsListB= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
 		
 		//1. Open roomtest with device A.
 		roomsListA.getRoomByName(roomTest).click();
-		RiotRoomPageObjects roomA=new  RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomPageObjects roomA=new  RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		
 		//2. Open roomtest with device B.		
 		roomsListB.getRoomByName(roomTest).click();
-		RiotRoomPageObjects roomB=new  RiotRoomPageObjects(AppiumFactory.getiOsDriver2());
+		RiotRoomPageObjects roomB=new  RiotRoomPageObjects(appiumFactory.getiOsDriver2());
 		
 		//3. User A write something in the message bar but don't send it.
 		roomA.sendKeyTextView.setValue(notSentMsg);
@@ -67,7 +66,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 */
 	@BeforeGroups("checkuser")
 	private void checkIfUsersLogged() throws InterruptedException{
-		super.checkIfUserLoggedIos(AppiumFactory.getiOsDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);
-		super.checkIfUserLoggedIos(AppiumFactory.getiOsDriver2(), riotUserDisplayNameB, Constant.DEFAULT_USERPWD);
+		super.checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);
+		super.checkIfUserLoggedIos(appiumFactory.getiOsDriver2(), riotUserDisplayNameB, Constant.DEFAULT_USERPWD);
 	}
 }

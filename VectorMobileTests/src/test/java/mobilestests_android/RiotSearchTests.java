@@ -8,7 +8,6 @@ import org.testng.annotations.Test;
 import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
 import pom_android.RiotSearchFromRoomsListPageObjects;
-import utility.AppiumFactory;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
@@ -38,7 +37,7 @@ public class RiotSearchTests extends RiotParentTest{
 		String randomMsg=(new StringBuilder("msg_search").append(randInt2)).toString();
 		
 		//1. Create a room with a random name.
-		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		RiotRoomPageObjects newRoom= roomsList.createRoom();
 		newRoom.changeRoomName(randomRoomName);
 		
@@ -50,7 +49,7 @@ public class RiotSearchTests extends RiotParentTest{
 		roomsList.searchButton.click();
 		
 		//4. Search in ROOMS tab the random name given in step1
-		RiotSearchFromRoomsListPageObjects searchInRoomsList = new RiotSearchFromRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotSearchFromRoomsListPageObjects searchInRoomsList = new RiotSearchFromRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		searchInRoomsList.roomsTab.click();
 		searchInRoomsList.launchASearch(randomRoomName,true);
 		
@@ -71,9 +70,9 @@ public class RiotSearchTests extends RiotParentTest{
 		
 		//6. Turn the device in landscape mode, then portrait
 		searchInRoomsList.searchEditText.click();
-		AppiumFactory.getAndroidDriver1().rotate(ScreenOrientation.LANDSCAPE);
+		appiumFactory.getAndroidDriver1().rotate(ScreenOrientation.LANDSCAPE);
 		Thread.sleep(1500);
-		AppiumFactory.getAndroidDriver1().rotate(ScreenOrientation.PORTRAIT);
+		appiumFactory.getAndroidDriver1().rotate(ScreenOrientation.PORTRAIT);
 		//Check that the search result is still displayed https://github.com/vector-im/riot-android/issues/934
 		Assert.assertEquals(searchInRoomsList.listMessagesLinearLayouts.size(), 1);
 		searchInRoomsList.checkMessageItemFromResult(0, randomRoomName,null,randomMsg);
@@ -103,9 +102,9 @@ public class RiotSearchTests extends RiotParentTest{
 		String randomName=(new StringBuilder("randomsearch_").append(randInt1)).toString();
 		
 		//1. From the rooms list hit the search button
-		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		roomsList.searchButton.click();
-		RiotSearchFromRoomsListPageObjects searchInRoomsList = new RiotSearchFromRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotSearchFromRoomsListPageObjects searchInRoomsList = new RiotSearchFromRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		
 		//2. Search in ROOMS tab a random name
 		searchInRoomsList.roomsTab.click();

@@ -8,7 +8,6 @@ import pom_ios.RiotCallingPageObjects;
 import pom_ios.RiotIncomingCallPageObjects;
 import pom_ios.RiotRoomPageObjects;
 import pom_ios.RiotRoomsListPageObjects;
-import utility.AppiumFactory;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
@@ -32,11 +31,11 @@ public class RiotVoipTests extends RiotParentTest{
 	@Test(groups="1driver_ios", description="test on call", priority=1)
 	public void cancelAudioCallFromChatRoom() throws InterruptedException{
 		//1. Launch an audio call from a room
-		RiotRoomsListPageObjects roomsList= new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomsListPageObjects roomsList= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		roomsList.getRoomByName(roomNameTest).click();;
-		RiotRoomPageObjects room1=new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomPageObjects room1=new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		room1.startVoiceCall();
-		RiotCallingPageObjects callingView1=new RiotCallingPageObjects(AppiumFactory.getiOsDriver1());
+		RiotCallingPageObjects callingView1=new RiotCallingPageObjects(appiumFactory.getiOsDriver1());
 
 		//2. From the call layout, hit the room link button
 		callingView1.chatLinkButton.click();
@@ -74,11 +73,11 @@ public class RiotVoipTests extends RiotParentTest{
 	@Test(groups="1driver_ios", description="test on call",priority=2)
 	public void cancelVideoCallFromChatRoom() throws InterruptedException{
 		//1. Launch an video call from a room
-		RiotRoomsListPageObjects roomsList= new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomsListPageObjects roomsList= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		roomsList.getRoomByName(roomNameTest).click();;
-		RiotRoomPageObjects room1=new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomPageObjects room1=new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		room1.startVideoCall();
-		RiotCallingPageObjects callingView1=new RiotCallingPageObjects(AppiumFactory.getiOsDriver1());
+		RiotCallingPageObjects callingView1=new RiotCallingPageObjects(appiumFactory.getiOsDriver1());
 
 		//2. From the call layout, hit the room link button
 		callingView1.chatLinkButton.click();
@@ -116,19 +115,19 @@ public class RiotVoipTests extends RiotParentTest{
 	@Test(groups="2drivers_ios", description="call from device 1 answered by device 2",priority=3)
 	public void cancelIncomingAudioCall() throws InterruptedException{
 		//TODO maybe use a different option than checkIfUserLogged.
-		//checkIfUserLogged(AppiumFactory.getiOsDriver1(), user1, pwd);
-		//checkIfUserLogged(AppiumFactory.getiOsDriver2(), user2, pwd);
+		//checkIfUserLogged(appiumFactory.getiOsDriver1(), user1, pwd);
+		//checkIfUserLogged(appiumFactory.getiOsDriver2(), user2, pwd);
 		
 		//1. Open a room, launch a voice call.
-		RiotRoomsListPageObjects roomsList1= new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
-		RiotRoomsListPageObjects roomsList2= new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver2());
+		RiotRoomsListPageObjects roomsList1= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		RiotRoomsListPageObjects roomsList2= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
 		roomsList1.getRoomByName(roomNameTest).click();;
-		RiotRoomPageObjects room1=new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomPageObjects room1=new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		room1.startVoiceCall();
 		//check that call layout is diplayed on device 1
-		RiotCallingPageObjects callingView1=new RiotCallingPageObjects(AppiumFactory.getiOsDriver1());
+		RiotCallingPageObjects callingView1=new RiotCallingPageObjects(appiumFactory.getiOsDriver1());
 		//With device 2, assert that the incomming call view is displayed and correc.
-		RiotIncomingCallPageObjects incomingCall2 = new RiotIncomingCallPageObjects(AppiumFactory.getiOsDriver2());
+		RiotIncomingCallPageObjects incomingCall2 = new RiotIncomingCallPageObjects(appiumFactory.getiOsDriver2());
 		incomingCall2.checkIncomingCallView(true, user1,"voice");
 		//2. Ignore the call from device 2, assert that the incomming call view is closed
 		incomingCall2.declineCallButton.click();
@@ -157,26 +156,26 @@ public class RiotVoipTests extends RiotParentTest{
 	@Test(groups="2drivers_ios", description="call from device 1 answered by device 2",priority=4)
 	public void acceptIncomingAudioCall() throws InterruptedException{
 		//TODO maybe use a different option than checkIfUserLogged.
-		//checkIfUserLogged(AppiumFactory.getiOsDriver1(), user1, pwd);
-		//checkIfUserLogged(AppiumFactory.getiOsDriver2(), user2, pwd);
-		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
-		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver2());
+		//checkIfUserLogged(appiumFactory.getiOsDriver1(), user1, pwd);
+		//checkIfUserLogged(appiumFactory.getiOsDriver2(), user2, pwd);
+		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
 		//1. Open a room
 		roomsList1.getRoomByName(roomNameTest).click();
-		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		
 		//2. Launch a voice call.
 		roomPage1.startVoiceCall();
-		RiotCallingPageObjects callingPage1=new RiotCallingPageObjects(AppiumFactory.getiOsDriver1());
+		RiotCallingPageObjects callingPage1=new RiotCallingPageObjects(appiumFactory.getiOsDriver1());
 		Assert.assertTrue(callingPage1.isDisplayed(true),"Calling view is not displayed on device 1");
 		//With device 2, assert that the incomming call view is displayed and correct
-		RiotIncomingCallPageObjects incomingPage2=new RiotIncomingCallPageObjects(AppiumFactory.getiOsDriver2());
+		RiotIncomingCallPageObjects incomingPage2=new RiotIncomingCallPageObjects(appiumFactory.getiOsDriver2());
 		incomingPage2.checkIncomingCallView(true,user1, "voice");
 		
 		//3. Accept the call from device 2, assert that the incomming call view is opened.
 		incomingPage2.acceptCallButton.click();
 		//From device 2, check that the calling view is opened.
-		RiotCallingPageObjects callingPage2=new RiotCallingPageObjects(AppiumFactory.getiOsDriver2());
+		RiotCallingPageObjects callingPage2=new RiotCallingPageObjects(appiumFactory.getiOsDriver2());
 		Assert.assertTrue(callingPage2.isDisplayed(true),"Calling view is not displayed on device 2");
 		
 		//4. Hang up call from device 2
@@ -205,26 +204,26 @@ public class RiotVoipTests extends RiotParentTest{
 	@Test(groups="2drivers_ios", description="video call from device 1 answered by device 2",priority=5)
 	public void acceptIncomingVideoCall() throws InterruptedException{
 		//TODO maybe use a different option than checkIfUserLogged.
-		//checkIfUserLogged(AppiumFactory.getiOsDriver1(), user1, pwd);
-		//checkIfUserLogged(AppiumFactory.getiOsDriver2(), user2, pwd);
-		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
-		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver2());
+		//checkIfUserLogged(appiumFactory.getiOsDriver1(), user1, pwd);
+		//checkIfUserLogged(appiumFactory.getiOsDriver2(), user2, pwd);
+		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
 		//1. Open a room
 		roomsList1.getRoomByName(roomNameTest).click();
-		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		
 		//2. Launch a voice call.
 		roomPage1.startVideoCall();
-		RiotCallingPageObjects callingPage1=new RiotCallingPageObjects(AppiumFactory.getiOsDriver1());
+		RiotCallingPageObjects callingPage1=new RiotCallingPageObjects(appiumFactory.getiOsDriver1());
 		Assert.assertTrue(callingPage1.isDisplayed(true),"Calling view is not displayed on device 1");
 		//With device 2, assert that the incomming call view is displayed and correct
-		RiotIncomingCallPageObjects incomingPage2=new RiotIncomingCallPageObjects(AppiumFactory.getiOsDriver2());
+		RiotIncomingCallPageObjects incomingPage2=new RiotIncomingCallPageObjects(appiumFactory.getiOsDriver2());
 		incomingPage2.checkIncomingCallView(true,user1, "video");
 		
 		//3. Accept the call from device 2, assert that the incomming call view is opened.
 		incomingPage2.acceptCallButton.click();
 		//From device 2, check that the calling view is opened.
-		RiotCallingPageObjects callingPage2=new RiotCallingPageObjects(AppiumFactory.getiOsDriver2());
+		RiotCallingPageObjects callingPage2=new RiotCallingPageObjects(appiumFactory.getiOsDriver2());
 		Assert.assertTrue(callingPage2.isDisplayed(true),"Calling view is not displayed on device 2");
 		
 		//4. Hang up call from device 1

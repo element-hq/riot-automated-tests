@@ -19,7 +19,8 @@ public class AppiumServerStartAndStopService {
     static Field streamField2;
     static Field streamFields2;
 
-    public static void appiumServer1Start() throws Exception{
+    @SuppressWarnings("unchecked")
+	public static void appiumServer1Start() throws Exception{
         service1 = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().
                 usingPort(Integer.parseInt(Constant.APPIUM_COMMON_PORT)).usingDriverExecutable(new File(Appium_Node_Path)).
                 withAppiumJS(new File(Appium_JS_Path)));
@@ -43,7 +44,8 @@ public class AppiumServerStartAndStopService {
             e.printStackTrace();
         }
     }
-    public static void appiumServer2Start() throws Exception{
+    @SuppressWarnings("unchecked")
+	public static void appiumServer2Start() throws Exception{
         service2 = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().
         		withArgument(() -> "--webdriveragent-port", Constant.WEBDRIVERAGENT_PORT).
         		withIPAddress(Constant.SERVER2_ADDRESS).

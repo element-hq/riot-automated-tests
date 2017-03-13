@@ -10,7 +10,6 @@ import org.testng.annotations.Test;
 import io.appium.java_client.MobileElement;
 import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
-import utility.AppiumFactory;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
 import utility.RiotParentTest;
@@ -35,7 +34,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	@Test(groups={"messageReceivedInList","1checkuser","1driver_android"},priority=1)
 	public void checkBadgeAndMessageOnRoomItem() throws InterruptedException, IOException{
 		//TODO invite user in the room if room not present
-		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		//get the current badge on the room.
 		Integer currentBadge=riotRoomsList.getBadgeNumberByRoomName(roomTest);
 		//send a message to the room with an other user using https request to matrix.
@@ -71,11 +70,11 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 */
 	@Test(dependsOnGroups="messageReceivedInList",priority=2,groups={"roomOpenned","1checkuser","1driver_android"})
 	public void checkTextMessageOnRoomPage() throws InterruptedException{
-		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		//open room
 		riotRoomsList.getRoomByName(roomTest).click();
 		//check that lately sended message is the last displayed in the room
-		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		MobileElement lastPost= testRoom.getLastPost();
 		Assert.assertEquals(testRoom.getTextViewFromPost(lastPost).getText(), msgFromUpUser);
 	}
@@ -89,10 +88,10 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	@Test(dependsOnGroups="roomOpenned",groups={"1checkuser","1driver_android"},priority=3)
 	public void checkTimeStampPositionOnRoomPage() throws InterruptedException{
 		String message="test for timestamp display";
-		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		//send message
 		testRoom.sendAMessage(message);Thread.sleep(500);
-		//AppiumFactory.getAppiumDriver().hideKeyboard();
+		//appiumFactory.getAppiumDriver().hideKeyboard();
 		//check that timestamp is displayed on this message
 		MobileElement lastPost= testRoom.getLastPost();
 		Assert.assertNotNull(testRoom.getTimeStampByPost(lastPost), "Last message have no timestamp");
@@ -123,7 +122,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 		String messageTest3="this message doesn't have an avatar";
 		//send a message to the room with an other user using https request to matrix.
 		HttpsRequestsToMatrix.sendMessageInRoom(senderAccesToken, roomId, messageTest);
-		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		testRoom.sendAMessage(messageTest2);Thread.sleep(500);
 		Assert.assertNotNull(testRoom.getUserAvatarByPost(testRoom.getLastPost()), "The last post doesn't have an avatar and should because it's the first post from the user");
 		testRoom.sendAMessage(messageTest3);
@@ -142,7 +141,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 		String pictureURL="mxc://matrix.org/gpQYPbjoqVeTWCGivjRshIni";
 		//send picture of already uploaded picture
 		HttpsRequestsToMatrix.sendPicture(senderAccesToken, roomId, pictureURL);
-		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		Thread.sleep(500);
 		MobileElement lastPost=testRoom.getLastPost();
 		MobileElement uploadPicture = testRoom.getAttachedImageByPost(lastPost);
@@ -161,7 +160,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 */
 	@Test(groups={"1checkuser","1driver_android"})
 	public void addRoomInFavorites() throws InterruptedException{
-		RiotRoomsListPageObjects roomslist= new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomsListPageObjects roomslist= new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		//add room in favourites
 		roomslist.clickOnContextMenuOnRoom(roomTest, "Favourite");
 		Thread.sleep(2000);
@@ -180,7 +179,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 */
 	@BeforeGroups("1checkuser")
 	private void checkIfUserLogged() throws InterruptedException{
-		super.checkIfUserLoggedAndroid(AppiumFactory.getAndroidDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);
+		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);
 	}
 	
 }

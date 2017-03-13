@@ -16,17 +16,18 @@ import org.testng.ITestResult;
 import io.appium.java_client.android.AndroidDriver;
 
 public class ScreenshotUtility implements ITestListener {
-
+	public static AppiumFactory appiumFactory=AppiumFactory.getInstance();
+	
 	public void onTestStart(ITestResult result) {
 
 	}
 
 	public void onTestSuccess(ITestResult result) {
-		if(AppiumFactory.getCurrentDriver()!=null)captureScreenShot(result, "pass");
+		if(appiumFactory.getCurrentDriver()!=null)captureScreenShot(result, "pass");
 	}
 
 	public void onTestFailure(ITestResult result) {
-		if(AppiumFactory.getCurrentDriver()!=null)captureScreenShot(result, "fail");
+		if(appiumFactory.getCurrentDriver()!=null)captureScreenShot(result, "fail");
 	}
 
 	public void onTestSkipped(ITestResult result) {
@@ -48,7 +49,7 @@ public class ScreenshotUtility implements ITestListener {
 	public void captureScreenShot(ITestResult result, String status) {
 		//choice of output screenshot according to the sut
 		String os="";
-		if(AppiumFactory.getCurrentDriver() instanceof AndroidDriver<?>){
+		if(appiumFactory.getCurrentDriver() instanceof AndroidDriver<?>){
 			os="android";
 		}else{
 			os="ios";
@@ -57,7 +58,7 @@ public class ScreenshotUtility implements ITestListener {
 		String destDir = "";
 		String passfailMethod = result.getMethod().getRealClass().getSimpleName() + "." + result.getMethod().getMethodName();
 		// To capture screenshot.
-		File scrFile = ((TakesScreenshot) AppiumFactory.getCurrentDriver()).getScreenshotAs(OutputType.FILE);
+		File scrFile = ((TakesScreenshot) appiumFactory.getCurrentDriver()).getScreenshotAs(OutputType.FILE);
 		DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy__hh_mm_ssaa");
 
 		// If status = fail then set folder name "screenshots/Failures"

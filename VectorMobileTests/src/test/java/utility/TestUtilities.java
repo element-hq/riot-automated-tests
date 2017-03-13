@@ -26,6 +26,7 @@ import pom_ios.RiotLoginAndRegisterPageObjects;
 import pom_ios.RiotRoomsListPageObjects;
 
 public class TestUtilities {
+	public static AppiumFactory appiumFactory=AppiumFactory.getInstance();
 	
 	public void ExplicitWait(AppiumDriver<MobileElement> driver, WebElement element){
 		(new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(element));
@@ -144,7 +145,7 @@ public class TestUtilities {
 	
 	public void captureImage(String imgUrl,MobileElement element) throws IOException{
 		new File(imgUrl).delete();
-		File screen = ((TakesScreenshot) AppiumFactory.getAndroidDriver2())
+		File screen = ((TakesScreenshot) appiumFactory.getAndroidDriver2())
                 .getScreenshotAs(OutputType.FILE);
 	    Point point = element.getLocation();
 
@@ -191,7 +192,7 @@ public class TestUtilities {
 		//System.out.println("s="+scrollStart);
 		Double screenHeightEnd = dimensions.getHeight() * 0.2;
 		int scrollEnd = screenHeightEnd.intValue();
-		//AppiumFactory.getAndroidDriver1().swipe(0,scrollStart,0,scrollEnd,2000);
+		//appiumFactory.getAndroidDriver1().swipe(0,scrollStart,0,scrollEnd,2000);
 		driver.swipe(0,scrollStart,0,scrollEnd,2000);
 	}
 	

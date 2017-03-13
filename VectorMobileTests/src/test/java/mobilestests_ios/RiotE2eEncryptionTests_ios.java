@@ -16,7 +16,6 @@ import pom_ios.RiotRoomsListPageObjects;
 import pom_ios.RiotUnknownDevicesListPageObjects;
 import pom_ios.RiotUnknownDevicesModalPageObjects;
 import pom_ios.RiotVerifyDevicePageObjects;
-import utility.AppiumFactory;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -46,12 +45,12 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 	@Test(groups={"1driver_ios"}, description="upload a photo in encrypted room")
 	public void sendPhotoInEncryptedRoom() throws InterruptedException{
 		//1. Create room with Device 1 and enable encryption.
-		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		RiotRoomPageObjects roomPage= roomsList.createRoom();
 		
 		RiotRoomDetailsPageObjects roomDetails =roomPage.openDetailView();
 		roomDetails.settingsTab.click();
-		scrollToBottom(AppiumFactory.getiOsDriver1());
+		scrollToBottom(appiumFactory.getiOsDriver1());
 		roomDetails.enableEncryption();
 		roomDetails.roomDetailsDoneButton.click();
 		roomDetails.waitUntilDetailsDone();
@@ -78,17 +77,17 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 	@Test(groups={"2drivers_ios"})
 	public void tryReadEncryptedMessageSentAfterJoining() throws InterruptedException{
 		//1. Create room with Device 1 and enable encryption.
-		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		RiotRoomPageObjects roomPage1= roomsList.createRoom();
 		roomPage1.roomMembersDetailIcon.click();
-		RiotRoomDetailsPageObjects roomDetails = new RiotRoomDetailsPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomDetailsPageObjects roomDetails = new RiotRoomDetailsPageObjects(appiumFactory.getiOsDriver1());
 		roomDetails.settingsTab.click();
 		roomDetails.changeRoomName(roomWithEncryption);
-		scrollToBottom(AppiumFactory.getiOsDriver1());
+		scrollToBottom(appiumFactory.getiOsDriver1());
 		roomDetails.enableEncryption();
 		roomDetails.roomDetailsDoneButton.click();
 		roomDetails.waitUntilDetailsDone();
-		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver2());//TMP
+		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());//TMP
 
 		//2. Send a message.
 		roomPage1.sendAMessage(encrypted_msg_1);
@@ -96,12 +95,12 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 
 		//3. Send invitation to user on Device 2 and device 2 accepts.
 		roomPage1.openRoomDetails.click();
-		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(appiumFactory.getiOsDriver1());
 		roomDetails1.addParticipant(participant2Adress);
 		roomDetails1.menuBackButton.click();
 		//accept invitation with device 2
 		roomsList2.previewInvitation(roomWithEncryption);
-		RiotRoomPageObjects roomPage2 = new RiotRoomPageObjects(AppiumFactory.getiOsDriver2());
+		RiotRoomPageObjects roomPage2 = new RiotRoomPageObjects(appiumFactory.getiOsDriver2());
 		roomPage2.joinRoomButton.click();
 		roomPage2.closeWarningAlertAboutBetaStateOfE2e();
 
@@ -136,52 +135,52 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 	@Test(groups={"2drivers_ios"}, description="start a voice call in encrypted room")
 	public void startVoiceAndVideoCallInEncryptedRoom() throws InterruptedException{
 		//1. Create DM room with Device 1 and invite device 2.
-		//		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
-		//		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver2());
+		//		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		//		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
 		//		roomsList1.plusRoomButton.click();
 		//		roomsList1.startChatButton.click();
-		//		RiotNewChatPageObjects inviteNewChatPage = new RiotNewChatPageObjects(AppiumFactory.getiOsDriver1());
+		//		RiotNewChatPageObjects inviteNewChatPage = new RiotNewChatPageObjects(appiumFactory.getiOsDriver1());
 		//		inviteNewChatPage.searchAndSelectMember(participant2Adress);
-		//		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		//		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		//		
 		//		//2. Enable encryption.
 		//		roomPage1.roomNameStaticText.click();
 		//		roomPage1.roomMembersDetailIcon.click();
-		//		RiotRoomDetailsPageObjects roomDetails = new RiotRoomDetailsPageObjects(AppiumFactory.getiOsDriver1());
+		//		RiotRoomDetailsPageObjects roomDetails = new RiotRoomDetailsPageObjects(appiumFactory.getiOsDriver1());
 		//		roomDetails.settingsTab.click();
-		//		scrollToBottom(AppiumFactory.getiOsDriver1());
+		//		scrollToBottom(appiumFactory.getiOsDriver1());
 		//		roomDetails.enableEncryption();
 		//		roomDetails.roomDetailsDoneButton.click();
 		//		roomDetails.waitUntilDetailsDone();
 		//		//accepts invitation with device 2
 		//		roomsList2.previewInvitation(participant1DisplayName);
-		//		RiotRoomPageObjects roomPage2 = new RiotRoomPageObjects(AppiumFactory.getiOsDriver2());
+		//		RiotRoomPageObjects roomPage2 = new RiotRoomPageObjects(appiumFactory.getiOsDriver2());
 		//		roomPage2.joinRoomButton.click();
 		//		roomPage2.waitForBubblesToBeDisplayed();
 
 
 		//TMP
-		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
-		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver2());
+		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
 		roomsList1.getRoomByName(participant2DisplayName).click();
 		roomsList2.getRoomByName(participant1DisplayName).click();
-		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
-		RiotRoomPageObjects roomPage2 = new RiotRoomPageObjects(AppiumFactory.getiOsDriver2());
+		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
+		RiotRoomPageObjects roomPage2 = new RiotRoomPageObjects(appiumFactory.getiOsDriver2());
 		//FIN TMP
 
 
 		//3. Start a VOICE call with Device 2.
 		roomPage2.startVoiceCall();
-		RiotCallingPageObjects callLayout2= new RiotCallingPageObjects(AppiumFactory.getiOsDriver2());
+		RiotCallingPageObjects callLayout2= new RiotCallingPageObjects(appiumFactory.getiOsDriver2());
 		//		callLayout2.isDisplayed(true);
 		//Check that an incoming layout is displayed on device 1.
-		RiotIncomingCallPageObjects incomingCall1= new RiotIncomingCallPageObjects(AppiumFactory.getiOsDriver1());
+		RiotIncomingCallPageObjects incomingCall1= new RiotIncomingCallPageObjects(appiumFactory.getiOsDriver1());
 		//incomingCall1.checkIncomingCallView(true, participant2DisplayName);
 
 		//4. Accept call with device 1.
 		incomingCall1.acceptCallButton.click();
 		//check that call layout is diplayed on device 1
-		RiotCallingPageObjects callLayout1= new RiotCallingPageObjects(AppiumFactory.getiOsDriver1());
+		RiotCallingPageObjects callLayout1= new RiotCallingPageObjects(appiumFactory.getiOsDriver1());
 		callLayout1.isDisplayed(true);
 
 		//5. Hang-out after a few seconds.
@@ -195,12 +194,12 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 
 		//6. Start a video call with Device 2.
 		roomPage2.startVideoCall();
-		callLayout2= new RiotCallingPageObjects(AppiumFactory.getiOsDriver2());
+		callLayout2= new RiotCallingPageObjects(appiumFactory.getiOsDriver2());
 
 		//7. Accept call with device 1.
 		incomingCall1.acceptCallButton.click();
 		//check that call layout is diplayed on device 1
-		callLayout1= new RiotCallingPageObjects(AppiumFactory.getiOsDriver1());
+		callLayout1= new RiotCallingPageObjects(appiumFactory.getiOsDriver1());
 		callLayout1.isDisplayed(true);
 
 		//8. Hang-out after a few seconds.
@@ -238,19 +237,19 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 	public void sendMessageInE2eRoomWithUnknownDevicesTest() throws InterruptedException{
 		int deviceIndex=0;
 
-		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
-		RiotRoomsListPageObjects roomsList2=new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver2());
+		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		RiotRoomsListPageObjects roomsList2=new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
 		//1. Device 2 logout/log in to renew his keys 
 		roomsList2=roomsList2.logOutAndLogin(participant2DisplayName, Constant.DEFAULT_USERPWD);
 
 		//2. Device 1 open room oneToOneRoomWithEncryption
 		roomsList1.getRoomByName(oneToOneRoomWithEncryption).click();
-		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		roomPage1.closeWarningAlertAboutBetaStateOfE2e();
 
 		//2. Device 2 open room oneToOneRoomWithEncryption
 		roomsList2.getRoomByName(oneToOneRoomWithEncryption).click();
-		RiotRoomPageObjects roomPage2=new RiotRoomPageObjects(AppiumFactory.getiOsDriver2());
+		RiotRoomPageObjects roomPage2=new RiotRoomPageObjects(appiumFactory.getiOsDriver2());
 		roomPage2.closeWarningAlertAboutBetaStateOfE2e();
 		
 		//4. Device 1 send a message
@@ -258,20 +257,20 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 		//Check that message is not sent with device 2
 		Assert.assertFalse(roomPage2.getTextViewFromBubble(roomPage2.getLastBubble()).getText().equals(encrypted_msg_1), "Msg sent by user1 is decrypted by user2 whereas user1 has new key");
 		//Check that the 'Room contains unknown devices' modal is opened
-		RiotUnknownDevicesModalPageObjects unknownDevicesModal1 = new RiotUnknownDevicesModalPageObjects(AppiumFactory.getiOsDriver1());
+		RiotUnknownDevicesModalPageObjects unknownDevicesModal1 = new RiotUnknownDevicesModalPageObjects(appiumFactory.getiOsDriver1());
 		unknownDevicesModal1.checkUnknownDevicesModal();
 
 		//5. Hit the verify button of the modal
 		unknownDevicesModal1.verifyButton.click();
 		//Check that 'Unknown devices' list modal is opened.
-		RiotUnknownDevicesListPageObjects riotUnknownDevicesList1 = new RiotUnknownDevicesListPageObjects(AppiumFactory.getiOsDriver1());
+		RiotUnknownDevicesListPageObjects riotUnknownDevicesList1 = new RiotUnknownDevicesListPageObjects(appiumFactory.getiOsDriver1());
 		String expectedDeviceName = riotUnknownDevicesList1.getDeviceNameByIndex(deviceIndex);
 		String expectedDeviceKey = riotUnknownDevicesList1.getDeviceIDByIndex(deviceIndex);
 
 		//6. Hit the verify button of the first device item of the list
 		riotUnknownDevicesList1.getVerifyDeviceButton(deviceIndex).click();
 		//Check that the Verify device modal is openned
-		RiotVerifyDevicePageObjects verifyDeviceConfirmModal1= new RiotVerifyDevicePageObjects(AppiumFactory.getiOsDriver1());
+		RiotVerifyDevicePageObjects verifyDeviceConfirmModal1= new RiotVerifyDevicePageObjects(appiumFactory.getiOsDriver1());
 		verifyDeviceConfirmModal1.checkVerifyDeviceAlert(expectedDeviceName, expectedDeviceKey, null);
 
 		//7. Hit the 'I verify that the keys match' button
@@ -311,32 +310,32 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 	 */
 	@Test(groups={"1driver_ios"}, description="Test the Warn Unknown Devices modal with a voice call",  enabled=false)
 	public void tryVoiceCallInE2eRoomWithUnknownDevicesTest() throws InterruptedException{
-		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		//1. Device 2 logout/log in to renew his keys 
 		roomsList1=roomsList1.logOutAndLogin(participant1DisplayName, Constant.DEFAULT_USERPWD);
 
 		//2. Device 1 open room oneToOneRoomWithEncryption
 		roomsList1.getRoomByName(oneToOneRoomWithEncryption).click();
-		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		roomPage1.closeWarningAlertAboutBetaStateOfE2e();
 
 		//3. Start a voice call
 		roomPage1.startVoiceCall();
 		//Check that the call layout isn't displayed
-		Assert.assertFalse(waitUntilDisplayed(AppiumFactory.getiOsDriver1(),"CallVCView", true, 1), "Call layout is displayed and shouldn't.");
+		Assert.assertFalse(waitUntilDisplayed(appiumFactory.getiOsDriver1(),"CallVCView", true, 1), "Call layout is displayed and shouldn't.");
 		//Check that the 'Room contains unknown devices' modal is opened
-		RiotUnknownDevicesPageObjects unknownDevicesModal1 = new RiotUnknownDevicesPageObjects(AppiumFactory.getiOsDriver1());
+		RiotUnknownDevicesPageObjects unknownDevicesModal1 = new RiotUnknownDevicesPageObjects(appiumFactory.getiOsDriver1());
 		unknownDevicesModal1.checkUnknownDevicesModal();
 
 		// 4. Click OK on the modal
 		unknownDevicesModal1.okButton.click();
 		//5. Click Done on the Unknown Devices list
-		RiotUnknownDevicesListPageObjects riotUnknownDevicesList1 = new RiotUnknownDevicesListPageObjects(AppiumFactory.getiOsDriver1());
+		RiotUnknownDevicesListPageObjects riotUnknownDevicesList1 = new RiotUnknownDevicesListPageObjects(appiumFactory.getiOsDriver1());
 		riotUnknownDevicesList1.doneButton.click();
 		
 		//6. Start a call
 		roomPage1.startVoiceCall();
-		RiotCallingPageObjects callLayout1 = new RiotCallingPageObjects(AppiumFactory.getiOsDriver1());
+		RiotCallingPageObjects callLayout1 = new RiotCallingPageObjects(appiumFactory.getiOsDriver1());
 		callLayout1.isDisplayed(true);
 
 		//7. Cancel it
@@ -358,31 +357,31 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 	 */
 	@Test(groups={"1driver_ios"}, description="Test the Warn Unknown Devices modal with a file upload")
 	public void sendPhotoInE2eRoomWithUnknownDevicesTest() throws InterruptedException{
-		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		//1. Device 1 logout/log in to renew his keys 
 		roomsList1=roomsList1.logOutAndLogin(participant1DisplayName, Constant.DEFAULT_USERPWD);
 
 		//2. Device 1 open room oneToOneRoomWithEncryption
 		roomsList1.getRoomByName(oneToOneRoomWithEncryption).click();
-		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		roomPage1.closeWarningAlertAboutBetaStateOfE2e();
 		
 		//3. Take a picture and attach it to the room
 		roomPage1.attachPhotoFromCamera("Small");
 		//roomPage1.waitAndCheckForMediaToBeUploaded(roomPage1.getLastBubble(), 20);
 		//Check that the 'Room contains unknown devices' modal is opened
-		RiotUnknownDevicesModalPageObjects unknownDevicesModal1 = new RiotUnknownDevicesModalPageObjects(AppiumFactory.getiOsDriver1());
+		RiotUnknownDevicesModalPageObjects unknownDevicesModal1 = new RiotUnknownDevicesModalPageObjects(appiumFactory.getiOsDriver1());
 		unknownDevicesModal1.checkUnknownDevicesModal();
 
 		//4. Click Verify on the modal
 		unknownDevicesModal1.verifyButton.click();
 		//5. Click Done on the Unknown Devices list
-		RiotUnknownDevicesListPageObjects riotUnknownDevicesList1 = new RiotUnknownDevicesListPageObjects(AppiumFactory.getiOsDriver1());
+		RiotUnknownDevicesListPageObjects riotUnknownDevicesList1 = new RiotUnknownDevicesListPageObjects(appiumFactory.getiOsDriver1());
 		riotUnknownDevicesList1.doneButton.click();
 		
 		//6. Click "Resend all" on the notification area of the room page
 		roomPage1.clickOnResendAllLinkFromNotificationArea();
-		//Assert.assertFalse(waitUntilDisplayed(AppiumFactory.getiOsDriver1(), "im.vector.alpha:id/room_notification_message", true, 0),"Room notification message about msg not sent due to unknown devices is still here after clicking on 'Resend all'");
+		//Assert.assertFalse(waitUntilDisplayed(appiumFactory.getiOsDriver1(), "im.vector.alpha:id/room_notification_message", true, 0),"Room notification message about msg not sent due to unknown devices is still here after clicking on 'Resend all'");
 		//Check that the file is actually uploaded.
 		//roomPage1.checkThatPhotoIsPresentInPost(roomPage1.getLastBubble());
 
@@ -408,16 +407,16 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 	}
 
 	private void leaveRoomOn1DeviceFromRoomPageAfterTest(String roomNameFromDevice1) throws InterruptedException{
-		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		System.out.println("Leave room "+roomNameFromDevice1+ " with device 1");
 		roomPage1.leaveRoom();
-		RiotRoomsListPageObjects roomsList1= new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
+		RiotRoomsListPageObjects roomsList1= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		Assert.assertNull(roomsList1.getRoomByName(roomNameFromDevice1), "Room "+roomNameFromDevice1+" is still displayed in the list in device 1.");
 	}
 
 	private void leaveRoomOn2DevicesFromRoomPageAfterTest(String roomNameFromDevice1, String roomNameFromDevice2) throws InterruptedException{
-		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(AppiumFactory.getiOsDriver1());
-		RiotRoomPageObjects roomPage2 = new RiotRoomPageObjects(AppiumFactory.getiOsDriver2());
+		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
+		RiotRoomPageObjects roomPage2 = new RiotRoomPageObjects(appiumFactory.getiOsDriver2());
 		System.out.println("Leave room "+roomNameFromDevice1+ " with device 1");
 		roomPage1.leaveRoom();
 		System.out.println("Leave room "+roomNameFromDevice1+ " with device 2");
@@ -425,11 +424,11 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 
 		//asserts that the DM rooms are really left
 		if(roomNameFromDevice1!=null){
-			RiotRoomsListPageObjects roomsList1= new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver1());
+			RiotRoomsListPageObjects roomsList1= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 			Assert.assertNull(roomsList1.getRoomByName(roomNameFromDevice1), "Room "+roomNameFromDevice1+" is still displayed in the list in device 1.");
 		}
 		if(roomNameFromDevice1!=null){
-			RiotRoomsListPageObjects roomsList2= new RiotRoomsListPageObjects(AppiumFactory.getiOsDriver2());
+			RiotRoomsListPageObjects roomsList2= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
 			Assert.assertNull(roomsList2.getRoomByName(roomNameFromDevice2), "Room "+roomNameFromDevice2+" is still displayed in the list in device 1.");
 		}
 	}

@@ -31,7 +31,6 @@ import pom_android.RiotLegalStuffViewPageObject;
 import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
 import pom_android.RiotSearchFromRoomPageObjects;
-import utility.AppiumFactory;
 import utility.Constant;
 import utility.DataproviderClass;
 import utility.RiotParentTest;
@@ -49,7 +48,7 @@ public class RiotMiscTests extends RiotParentTest{
 	public void restardDriver() throws MalformedURLException{
 		System.out.println("teardown after test");
 		DesiredCapabilities capabilities = new DesiredCapabilities();
-		AppiumFactory.getAndroidDriver1().quit();
+		appiumFactory.getAndroidDriver1().quit();
 		capabilities.setCapability("deviceName","a71011c8");
 		capabilities.setCapability("platformName","Android");
 		capabilities.setCapability("platformVersion", "4.4.2");
@@ -78,14 +77,14 @@ public class RiotMiscTests extends RiotParentTest{
 	
 	@Test(groups="1driver_android")
 	public void scrollRoomsList() throws Exception{
-		//RiotRoomsListPageObjects mainPage=new RiotRoomsListPageObjects(AppiumFactory.getAppiumDriver());
-		Dimension dimensions = AppiumFactory.getAndroidDriver1().manage().window().getSize();
+		//RiotRoomsListPageObjects mainPage=new RiotRoomsListPageObjects(appiumFactory.getAppiumDriver());
+		Dimension dimensions = appiumFactory.getAndroidDriver1().manage().window().getSize();
 		Double screenHeightStart = dimensions.getHeight() * 0.9;
 		int scrollStart = screenHeightStart.intValue();
 		System.out.println("s="+scrollStart);
 		Double screenHeightEnd = dimensions.getHeight() * 0.2;
 		int scrollEnd = screenHeightEnd.intValue();
-		AppiumFactory.getAndroidDriver1().swipe(0,scrollStart,0,scrollEnd,2000);
+		appiumFactory.getAndroidDriver1().swipe(0,scrollStart,0,scrollEnd,2000);
 	}
 
 
@@ -100,9 +99,9 @@ public class RiotMiscTests extends RiotParentTest{
 		String testMessage1 = "this is an automated test on 1 line";
 		String testMessage2 = "this is an automated test on 2 lines: \n here's the second line";
 
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		mainPage.getRoomByName(testRoomName).click();
-		RiotRoomPageObjects roomPage = new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomPageObjects roomPage = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		roomPage.messageZoneEditText.sendKeys(testMessage1);
 		roomPage.sendMessageButton.click();
 		roomPage.messageZoneEditText.sendKeys(testMessage2);
@@ -243,14 +242,14 @@ public class RiotMiscTests extends RiotParentTest{
 	
 	@Test(groups="1driver_android")
 	public void testApkInstallation() throws IOException{
-		AppiumFactory.getAndroidDriver1().removeApp(Constant.PACKAGE_APP_NAME);
-		AppiumFactory.getAndroidDriver1().installApp(System.getProperty("user.dir")+Constant.PATH_TO_ANDROID_APK);
+		appiumFactory.getAndroidDriver1().removeApp(Constant.PACKAGE_APP_NAME);
+		appiumFactory.getAndroidDriver1().installApp(System.getProperty("user.dir")+Constant.PATH_TO_ANDROID_APK);
 	}
 	
 	@Test(groups="1driver_ios_install")
 	public void testIpaInstallation(){
-		//AppiumFactory.getiOsDriver1().removeApp(Constant.APP_BUNDLE_ID);
-		AppiumFactory.getiOsDriver1().installApp(System.getProperty("user.dir")+Constant.PATH_TO_IOS_IPA);
+		//appiumFactory.getiOsDriver1().removeApp(Constant.APP_BUNDLE_ID);
+		appiumFactory.getiOsDriver1().installApp(System.getProperty("user.dir")+Constant.PATH_TO_IOS_IPA);
 	}
 
 	private void scrollWindowDown(){

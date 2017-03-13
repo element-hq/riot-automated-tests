@@ -11,11 +11,18 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 
 public class AppiumFactory {
+	private static AppiumFactory instance = new AppiumFactory();
+	
 	private static AppiumDriver<MobileElement> androidDriver1;
 	private static AppiumDriver<MobileElement> androidDriver2;
 	private static AppiumDriver<MobileElement> iosDriver1;
 	private static AppiumDriver<MobileElement> iosDriver2;
 	private static AppiumDriver<MobileElement> currentDriver;
+	
+	
+	public static AppiumFactory getInstance() {
+        return instance;
+    }
 	/*
 	 *  Set Android drivers or iOS drivers
 	 */
@@ -35,23 +42,23 @@ public class AppiumFactory {
 	/*
 	 * Get driver 1 or 2
 	 */
-	public static AndroidDriver<MobileElement> getAndroidDriver1() {
+	public  AndroidDriver<MobileElement> getAndroidDriver1() {
 		currentDriver= androidDriver1;
 		return (AndroidDriver<MobileElement>) androidDriver1;
 	}   
-	public static AndroidDriver<MobileElement> getAndroidDriver2() {
+	public  AndroidDriver<MobileElement> getAndroidDriver2() {
 		currentDriver= androidDriver2;
 		return (AndroidDriver<MobileElement>) androidDriver2;
 	}  
-	public static IOSDriver<MobileElement> getiOsDriver1() {
+	public  IOSDriver<MobileElement> getiOsDriver1() {
 		currentDriver= iosDriver1;
 		return (IOSDriver<MobileElement>) iosDriver1;
 	}   
-	public static IOSDriver<MobileElement> getiOsDriver2() {
+	public  IOSDriver<MobileElement> getiOsDriver2() {
 		currentDriver= iosDriver2;
 		return (IOSDriver<MobileElement>) iosDriver2;
 	}
-	public static AppiumDriver<MobileElement> getCurrentDriver() {
+	public  AppiumDriver<MobileElement> getCurrentDriver() {
 		return currentDriver;
 	}  
 }

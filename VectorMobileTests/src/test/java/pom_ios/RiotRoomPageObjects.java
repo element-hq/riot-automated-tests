@@ -11,7 +11,6 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
-import utility.AppiumFactory;
 import utility.TestUtilities;
 
 public class RiotRoomPageObjects extends TestUtilities{
@@ -317,7 +316,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	 */
 	public void attachPhotoFromCamera(String size) throws InterruptedException {
 		uploadButton.click();
-		RiotCameraPageObjects cameraPage = new RiotCameraPageObjects(AppiumFactory.getiOsDriver1());
+		RiotCameraPageObjects cameraPage = new RiotCameraPageObjects(appiumFactory.getiOsDriver1());
 		cameraPage.cameraCaptureButton.click();
 		waitUntilDisplayed(driver, "OK", true, 10);
 		cameraPage.okButton.click();
