@@ -34,6 +34,13 @@ public class HttpsRequestsToMatrix {
 		StringBuilder url=new StringBuilder(Constant.DEFAULT_MATRIX_SERVER).append("/_matrix/client/r0/rooms/").append(roomId).append("/leave").append("?access_token=").append(accessToken);
 		executeUrl(url.toString(), "POST", null);
 	}
+	
+	public static void kickUser(String accessToken, String roomId, String kickedUserAdress) throws IOException{
+		//https://matrix.org/_matrix/client/r0/rooms/!ECguyzzDCnAZarUOSW%3Amatrix.org/invite?access_token=MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0NzU1OTQxNjYwNTAKMDAyZnNpZ25hdHVyZSDofV-Ok8f6xSEPDNnKuZ9tM8YO_TXiwoKcfuvQrDLilwo
+		StringBuilder url=new StringBuilder(Constant.DEFAULT_MATRIX_SERVER).append("/_matrix/client/r0/rooms/").append(roomId).append("/kick").append("?access_token=").append(accessToken);
+		String postJsonData = "{\"user_id\":\""+kickedUserAdress+"\"}";
+		executeUrl(url.toString(), "POST", postJsonData);
+	}
 
 	/**
 	 * TODO : write this function
