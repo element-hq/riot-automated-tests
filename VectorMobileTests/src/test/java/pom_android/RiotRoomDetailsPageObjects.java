@@ -158,7 +158,7 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 		memberItem.findElementById("im.vector.alpha:id/filtered_list_delete_action").click();
 		//hit on remove confirmation button from dialog alert
 		waitUntilDisplayed(driver, "android:id/parentPanel", true, 10);
-		Assert.assertEquals(inputAndroidDialogNameTextView.getText(), "Remove?");
+		Assert.assertEquals(inputAndroidDialogNameTextView.getText(), "Confirmation");
 		inputDialogOkButton.click();
 		waitUntilDisplayed(driver, "//android.widget.ProgressBar", false, 10);
 	}
