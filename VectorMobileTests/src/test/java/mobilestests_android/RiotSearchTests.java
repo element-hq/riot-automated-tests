@@ -82,8 +82,7 @@ public class RiotSearchTests extends RiotParentTest{
 		
 		//teardown : leave room
 		searchInRoomsList.menuBackButton.click();
-		roomsList.clickOnContextMenuOnRoom(randomRoomName, "Leave Conversation");
-		roomsList.alertDialogButton2.click();
+		roomsList.leaveRoom(randomRoomName);
 		Thread.sleep(500);
 	}
 	

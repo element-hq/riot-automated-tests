@@ -215,7 +215,9 @@ public class RiotVoipTests extends RiotParentTest{
 		callingViewDevice2.isDisplayed(true);
 		//TODO check the calling layout
 		//hangout from device 2
-		callingViewDevice2.mainCallLayout.click();//display the controls if they had fade out.
+		//callingViewDevice2.mainCallLayout.click();//display the controls if they had fade out.
+		Thread.sleep(5000);
+		appiumFactory.getAndroidDriver2().tap(1, 200, 200, 50);
 		callingViewDevice2.hangUpButton.click();
 		//check that both calling view are closed
 		Assert.assertFalse(callingViewDevice1.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
@@ -326,9 +328,7 @@ public class RiotVoipTests extends RiotParentTest{
 		//callingViewDevice2.isDisplayed(true);
 		//go back in room page and leave the room
 		callingViewDevice2.chatLinkButton.click();
-		newRoomDevice2.moreOptionsButton.click();
-		newRoomDevice2.leaveRoomMenuItem.click();
-		newRoomDevice2.alertDialogButton2.click();
+		newRoomDevice2.leaveRoom();
 		//check that call is ended on device 2
 		Assert.assertFalse(callingViewDevice2.isDisplayed(false), "Call isn't ended on device 2 after leaving the room.");
 		//check that call is ended on device 1

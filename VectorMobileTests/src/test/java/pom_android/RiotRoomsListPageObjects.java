@@ -169,6 +169,16 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	}
 	
 	/**
+	 * Leave a room from the rooms list.
+	 * @param roomName
+	 * @throws InterruptedException
+	 */
+	public void leaveRoom(String roomName) throws InterruptedException{
+		clickOnContextMenuOnRoom(roomName, "Leave Conversation");
+		alertDialogButton2.click();
+	}
+	
+	/**
 	 * Send back the badge number of a room by his name.</br>
 	 * Return null if no badge.
 	 * @param myRommName
