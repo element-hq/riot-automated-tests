@@ -19,6 +19,9 @@ public class AppiumFactory {
 	private static AppiumDriver<MobileElement> iosDriver2;
 	private static AppiumDriver<MobileElement> currentDriver;
 	
+	private AppiumFactory(){
+		
+	}
 	
 	public static AppiumFactory getInstance() {
         return instance;
