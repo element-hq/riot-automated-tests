@@ -2,17 +2,20 @@ package mobilestests_android;
 
 import org.openqa.selenium.ScreenOrientation;
 import org.testng.Assert;
+import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
 import pom_android.RiotSearchFromRoomsListPageObjects;
+import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
 @Listeners({ ScreenshotUtility.class })
 public class RiotSearchTests extends RiotParentTest{
+	private String riotUserDisplayName="riotuser15";
 	
 	/**
 	 * Search in ROOMS and MESSAGES tab in search from recent.</br> 
@@ -29,7 +32,7 @@ public class RiotSearchTests extends RiotParentTest{
 	 * Check that the search result is still displayed https://github.com/vector-im/riot-android/issues/934</br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="1driver_android", priority=0,description="test on the search from the rooms list")
+	@Test(groups={"1driver_android","1checkuser"}, priority=0,description="test on the search from the rooms list")
 	public void searchRoomsAndMessages() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		int randInt2 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
@@ -96,7 +99,7 @@ public class RiotSearchTests extends RiotParentTest{
 	 * Check that "No results" is displayed after search finished.</br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="1driver_android", priority=1,description="test on the search from the rooms list with non existent searches")
+	@Test(groups={"1driver_android","1checkuser"}, priority=1,description="test on the search from the rooms list with non existent searches")
 	public void searchForNonExistentMsgAndRoom() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomName=(new StringBuilder("randomsearch_").append(randInt1)).toString();
@@ -134,5 +137,17 @@ public class RiotSearchTests extends RiotParentTest{
 		Assert.assertEquals(searchInRoomsList.noResultTextView.getText(), "No results");
 		//coming back in the rooms list
 		searchInRoomsList.menuBackButton.click();
+	}
+	
+	/**
+	 * Log the good user if not.</br> Secure the test.
+	 * @param myDriver
+	 * @param username
+	 * @param pwd
+	 * @throws InterruptedException 
+	 */
+	@BeforeGroups("1checkuser")
+	private void checkIfUserLogged() throws InterruptedException{
+		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
 	}
 }
