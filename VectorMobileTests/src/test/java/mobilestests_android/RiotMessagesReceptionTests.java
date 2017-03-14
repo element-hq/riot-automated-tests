@@ -12,17 +12,17 @@ import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
+import utility.ReadConfigFile;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
 @Listeners({ ScreenshotUtility.class })
 public class RiotMessagesReceptionTests extends RiotParentTest{
-	private String senderAccesToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI5Y2lkIHVzZXJfaWQgPSBAcmlvdHVzZXJ1cDptYXRyaXgub3JnCjAwMTZjaWQgdHlwZSA9IGFjY2VzcwowMDIxY2lkIG5vbmNlID0gLDV4QF5rQ0UuZERNNV9HeQowMDJmc2lnbmF0dXJlIM2bpjf8d6LoAkV4CZqmCjZjDWTVVyefC16_ts_SbSvGCg";  
 	private String msgFromUpUser="UP";
 	private String roomId="!SBpfTGBlKgELgoLALQ%3Amatrix.org";
 	private String roomTest="msg rcpt 4 automated tests";
 	private String riotUserDisplayNameA="riotuser4";
-	private String riotUserDisplayNameB="riotuser5";
+	//private String riotUserDisplayNameB="riotuser5";
 	
 	/**
 	 * Required : user must be logged in room and notifications are On on this room </br>
@@ -38,6 +38,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 		//get the current badge on the room.
 		Integer currentBadge=riotRoomsList.getBadgeNumberByRoomName(roomTest);
 		//send a message to the room with an other user using https request to matrix.
+		String senderAccesToken=ReadConfigFile.getInstance().getConfMap().get("riotuserup_access_token");
 		HttpsRequestsToMatrix.sendMessageInRoom(senderAccesToken, roomId, msgFromUpUser);
 		if(currentBadge==null)currentBadge=0;
 		//wait until message is received
@@ -121,6 +122,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 		String messageTest2="this message have an avatar";
 		String messageTest3="this message doesn't have an avatar";
 		//send a message to the room with an other user using https request to matrix.
+		String senderAccesToken=ReadConfigFile.getInstance().getConfMap().get("riotuserup_access_token");
 		HttpsRequestsToMatrix.sendMessageInRoom(senderAccesToken, roomId, messageTest);
 		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		testRoom.sendAMessage(messageTest2);Thread.sleep(500);
@@ -140,6 +142,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	public void checkImageMessageOnRoomPage() throws IOException, InterruptedException{
 		String pictureURL="mxc://matrix.org/gpQYPbjoqVeTWCGivjRshIni";
 		//send picture of already uploaded picture
+		String senderAccesToken=ReadConfigFile.getInstance().getConfMap().get("riotuserup_access_token");
 		HttpsRequestsToMatrix.sendPicture(senderAccesToken, roomId, pictureURL);
 		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		Thread.sleep(500);

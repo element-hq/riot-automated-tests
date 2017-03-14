@@ -3,40 +3,39 @@ package mobilestests_android;
 import java.io.IOException;
 
 import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import pom_android.RiotLoginAndRegisterPageObjects;
 import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
+import utility.ReadConfigFile;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
 @Listeners({ ScreenshotUtility.class })
 public class RiotRoomInvitationTests extends RiotParentTest{
-	String inviterUserAccessToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI1Y2lkIHVzZXJfaWQgPSBAamVhbmdiOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMjFjaWQgbm9uY2UgPSAqaUcwOVFzc2w4PUB0OixkCjAwMmZzaWduYXR1cmUgTz8fR2UypyIHa-uKum3e60I7oxIg087S4LQw4kM_R9kK";  
-	String invitedUserAccessToken="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI4Y2lkIHVzZXJfaWQgPSBAcmlvdHVzZXIyOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMjFjaWQgbm9uY2UgPSA2bSNGLHM3dFcwMlA1JlFCCjAwMmZzaWduYXR1cmUgiOIVBX5WRFIpop8OHyq2uN8601NHMqG1e9eg1txWkqwK";
-	private String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
+	private String roomId="!WnWDyMPdDkzMLHuGXK%3Amatrix.org";
+	String invitedUserAdress="@riotuser16:matrix.org";
+	String riotUserDisplayName="riotuser16";
+	String roomName="invitation auto tests";
 	
 	/**
 	 * Required : the test user hasn't received any invitation.
 	 * Receive an invitation to a room. </br>
 	 * Check that riot allows the user to accept or decline the invitation.</br>
 	 * Check that the invitation is closed when accepted.</br>
-	 * @throws IOException 
-	 * @throws InterruptedException 
+	 * @throws IOException
+	 * @throws InterruptedException
 	 */
-	@Test(groups={"1driver_android"})
+	@Test(groups={"1driver_android","1checkuser"})
 	public void rejectInvitationToARoom() throws IOException, InterruptedException{
-		String invitedUserAdress=Constant.DEFAULT_USERADRESS;
-		String roomName="room tests Jean";
-		String leavingUserAdress=Constant.DEFAULT_USERADRESS;
-		
-		HttpsRequestsToMatrix.leaveRoom(invitedUserAccessToken, roomId, leavingUserAdress);
-		HttpsRequestsToMatrix.sendInvitationToUser(inviterUserAccessToken, roomId, invitedUserAdress);
+		String riotUserUpAccessToken=ReadConfigFile.getInstance().getConfMap().get("riotuserup_access_token");
+		HttpsRequestsToMatrix.kickUser(riotUserUpAccessToken, roomId, invitedUserAdress);
+		Thread.sleep(1000);
+		HttpsRequestsToMatrix.sendInvitationToUser(riotUserUpAccessToken, roomId, invitedUserAdress);
 		
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		ExplicitWait(appiumFactory.getAndroidDriver1(),riotRoomsList.invitesHeadingLayout);
@@ -61,15 +60,12 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver_android"})
+	@Test(groups={"1driver_android","1checkuser"})
 	public void cancelInvitationToARoom() throws IOException, InterruptedException{
-		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
-		String invitedUserAdress=Constant.DEFAULT_USERADRESS;
-		String roomName="room tests Jean";
-		String leavingUserAdress=Constant.DEFAULT_USERADRESS;
-		
-		HttpsRequestsToMatrix.leaveRoom(invitedUserAccessToken, roomId, leavingUserAdress);
-		HttpsRequestsToMatrix.sendInvitationToUser(inviterUserAccessToken, roomId, invitedUserAdress);
+		String riotUserUpAccessToken=ReadConfigFile.getInstance().getConfMap().get("riotuserup_access_token");
+		HttpsRequestsToMatrix.kickUser(riotUserUpAccessToken, roomId, invitedUserAdress);
+		Thread.sleep(1000);
+		HttpsRequestsToMatrix.sendInvitationToUser(riotUserUpAccessToken, roomId, invitedUserAdress);
 		
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		ExplicitWait(appiumFactory.getAndroidDriver1(),riotRoomsList.invitesHeadingLayout);
@@ -102,15 +98,12 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver_android"})
+	@Test(groups={"1driver_android","1checkuser"})
 	public void acceptInvitationToARoom() throws IOException, InterruptedException{
-		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
-		String invitedUserAdress=Constant.DEFAULT_USERADRESS;
-		String roomName="room tests Jean";
-		String leavingUserAdress=Constant.DEFAULT_USERADRESS;
-		
-		HttpsRequestsToMatrix.leaveRoom(invitedUserAccessToken, roomId, leavingUserAdress);
-		HttpsRequestsToMatrix.sendInvitationToUser(inviterUserAccessToken, roomId, invitedUserAdress);
+		String riotUserUpAccessToken=ReadConfigFile.getInstance().getConfMap().get("riotuserup_access_token");
+		HttpsRequestsToMatrix.kickUser(riotUserUpAccessToken, roomId, invitedUserAdress);
+		Thread.sleep(1000);
+		HttpsRequestsToMatrix.sendInvitationToUser(riotUserUpAccessToken, roomId, invitedUserAdress);
 		
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		ExplicitWait(appiumFactory.getAndroidDriver1(),riotRoomsList.invitesHeadingLayout);
@@ -130,7 +123,7 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		newRoom.menuBackButton.click();
 		riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		//leave the room
-		riotRoomsList.clickOnContextMenuOnRoom(roomName, "Leave Conversation");
+		riotRoomsList.leaveRoom(roomName);
 		//check that room is closed and isn't in the rooms list page
 		newRoom.isDisplayed(false);
 		riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
@@ -150,15 +143,12 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver_android"})
+	@Test(groups={"1driver_android","1checkuser"})
 	public void acceptInvitationAndLeaveFromMenu() throws IOException, InterruptedException{
-		String roomId="!ECguyzzDCnAZarUOSW%3Amatrix.org";
-		String invitedUserAdress=Constant.DEFAULT_USERADRESS;
-		String roomName="room tests Jean";
-		String leavingUserAdress=Constant.DEFAULT_USERADRESS;
-		
-		HttpsRequestsToMatrix.leaveRoom(invitedUserAccessToken, roomId, leavingUserAdress);
-		HttpsRequestsToMatrix.sendInvitationToUser(inviterUserAccessToken, roomId, invitedUserAdress);
+		String riotUserUpAccessToken=ReadConfigFile.getInstance().getConfMap().get("riotuserup_access_token");
+		HttpsRequestsToMatrix.kickUser(riotUserUpAccessToken, roomId, invitedUserAdress);
+		Thread.sleep(1000);
+		HttpsRequestsToMatrix.sendInvitationToUser(riotUserUpAccessToken, roomId, invitedUserAdress);
 		
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		ExplicitWait(appiumFactory.getAndroidDriver1(),riotRoomsList.invitesHeadingLayout);
@@ -175,8 +165,7 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		newRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		newRoom.checkRoomLayout(roomName);
 		//leave room from room menu
-		newRoom.moreOptionsButton.click();
-		newRoom.leaveRoomMenuItem.click();
+		newRoom.leaveRoom();
 		//check that room is closed and isn't in the rooms list page
 		newRoom.isDisplayed(false);
 		riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
@@ -207,24 +196,16 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	public void leaveRoom(){
 		
 	}
+
 	/**
-	 * Log-in the user if it can't see the login page.
-	 * @throws InterruptedException
+	 * Log the good user if not.</br> Secure the test.
+	 * @param myDriver
+	 * @param username
+	 * @param pwd
+	 * @throws InterruptedException 
 	 */
-	@BeforeMethod
-	public void loginForSetup() throws InterruptedException{
-		if(false==waitUntilDisplayed(appiumFactory.getAndroidDriver1(),"im.vector.alpha:id/fragment_recents_list", true, 5)){
-			System.out.println("Can't access to the rooms list page, none user must be logged. Forcing the log-in.");
-			forceWifiOnIfNeeded(appiumFactory.getAndroidDriver1());
-			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
-			loginPage.emailOrUserNameEditText.setValue(Constant.DEFAULT_USERNAME);
-			loginPage.passwordEditText.setValue(Constant.DEFAULT_USERPWD);
-			//Forcing the login button to be enabled : this bug should be corrected.
-			if(loginPage.loginButton.isEnabled()==false){
-				loginPage.registerButton.click();
-				loginPage.loginButton.click();
-			}
-			loginPage.loginButton.click();
-		}
+	@BeforeGroups("1checkuser")
+	private void checkIfUserLogged() throws InterruptedException{
+		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
 	}
 }
