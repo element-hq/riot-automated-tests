@@ -13,24 +13,23 @@ import pom_android.RiotNewChatPageObjects;
 import pom_android.RiotRoomDetailsPageObjects;
 import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
+import pom_android.RiotSettingsPageObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
 /**
- * TODO CHECK THAT ACCESS CONTACT PERMISSION IS TICKED IN SETTINGS
  * Tests on Direct Message.
- * @author jeang
- *
+ * @author jeangb
  */
 @Listeners({ ScreenshotUtility.class })
 public class RiotDirectMessagesTests extends RiotParentTest{
-private String riotuser1DisplayName="riotuser6";
-private String riotuser2DisplayName="riotuser7";
-private String riotuser2MatrixId="@riotuser7:matrix.org";
-private String riotuser3DisplayName="riotuser8";
-private String riotuser3MatrixId="@riotuser8:matrix.org";
-private String tmpRoomName="tmp room DM";
+	private String riotuser1DisplayName="riotuser6";
+	private String riotuser2DisplayName="riotuser7";
+	private String riotuser2MatrixId="@riotuser7:matrix.org";
+	private String riotuser3DisplayName="riotuser8";
+	private String riotuser3MatrixId="@riotuser8:matrix.org";
+	private String tmpRoomName="tmp room DM";
 
 	/**
 	 * Start a chat </br>
@@ -39,7 +38,7 @@ private String tmpRoomName="tmp room DM";
 	 * Try to start a newt chat with this same member : check that the previous room is opened instead.
 	 * @throws InterruptedException
 	 */
-	@Test(groups={"2drivers_android","checkuser"}, description="direct message test")
+	@Test(groups={"2drivers_android","checkuser","check_contacts_permission"}, description="direct message test")
 	public void startChatWithOneUserTwice() throws InterruptedException{
 		int randInt = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomMsg=(new StringBuilder("direct chat test").append(randInt)).toString();
@@ -98,10 +97,10 @@ private String tmpRoomName="tmp room DM";
 	 * Check that the new room doesn't have a little green man on both devices.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers_android","checkuser"}, description="direct message test")
+	@Test(groups={"2drivers_android","checkuser","check_contacts_permission"}, description="direct message test")
 	public void startChatWithMoreThanTwoUsers() throws InterruptedException{
 		String roomNameFromDevice1=riotuser2DisplayName+" and "+riotuser3DisplayName;
-		
+
 		RiotRoomsListPageObjects roomsListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		RiotRoomsListPageObjects roomsListDevice2=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
 		//create a new "start chat" room
@@ -138,7 +137,7 @@ private String tmpRoomName="tmp room DM";
 	 * Check that the new room doesn't have a little green man.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers_android","checkuser"}, description="direct message test")
+	@Test(groups={"2drivers_android","checkuser","check_contacts_permission"}, description="direct message test")
 	public void createRoomWithOneUser() throws InterruptedException{
 		RiotRoomsListPageObjects roomsListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		RiotRoomsListPageObjects roomsListDevice2=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
@@ -181,7 +180,7 @@ private String tmpRoomName="tmp room DM";
 	 * Check that the DM tag is changed on device 1.</br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers_android","checkuser"})
+	@Test(groups={"2drivers_android","checkuser","check_contacts_permission"})
 	public void tagAndUntagDirectMessageRoom() throws InterruptedException{
 		RiotRoomsListPageObjects roomsListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		RiotRoomsListPageObjects roomsListDevice2=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
@@ -203,8 +202,8 @@ private String tmpRoomName="tmp room DM";
 		roomsListDevice2.previewInvitation(tmpRoomName);
 		RiotRoomPageObjects newRoomDevice2 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
 		newRoomDevice2.joinRoomButton.click();
-		ExplicitWait(appiumFactory.getAndroidDriver2(), newRoomDevice2.menuBackButton);
-		//appiumFactory.getAndroidDriver2().pressKeyCode(AndroidKeyCode.BACK);
+		//ExplicitWait(appiumFactory.getAndroidDriver2(), newRoomDevice2.menuBackButton);
+		newRoomDevice2 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
 		newRoomDevice2.menuBackButton.click();
 
 		//2. Tag it on DM on device 1
@@ -222,7 +221,8 @@ private String tmpRoomName="tmp room DM";
 		Assert.assertFalse(roomsListDevice2.isDirectMessageByRoomName(tmpRoomName),"Room "+tmpRoomName+" have a little green man on invitee device.");
 	}
 
-	
+
+
 	@AfterMethod(alwaysRun=true)
 	private void leaveRoomAfterTest(Method m) throws InterruptedException{
 		switch (m.getName()) {
@@ -242,7 +242,7 @@ private String tmpRoomName="tmp room DM";
 			break;
 		}
 	}
-	
+
 	private void leaveRoomFromRoomsListAfterTest(String roomNameFromDevice1, String roomNameFromDevice2) throws InterruptedException{
 		RiotRoomsListPageObjects roomsListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		RiotRoomsListPageObjects roomsListDevice2=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
@@ -255,7 +255,7 @@ private String tmpRoomName="tmp room DM";
 		Assert.assertNull(roomsListDevice1.getRoomByName(roomNameFromDevice1), "Room "+roomNameFromDevice1+" is still displayed in the list in device 1.");
 		Assert.assertNull(roomsListDevice2.getRoomByName(roomNameFromDevice2), "Room "+roomNameFromDevice2+" is still displayed in the list in device 2.");
 	}
-	
+
 	/**
 	 * Log the good user if not.</br> Secure the test.
 	 * @param myDriver
@@ -268,5 +268,23 @@ private String tmpRoomName="tmp room DM";
 		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
 		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
 	}
-	
+
+	/**
+	 * Open settings from recents list and check if contacts permission are checked on both devices.
+	 * @throws InterruptedException
+	 */
+	@BeforeGroups("check_contacts_permission")
+	private void checkContactPermissionChecked() throws InterruptedException{
+		System.out.println("Check if contact permission is checked on device1.");
+		RiotRoomsListPageObjects roomsList1= new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
+		RiotSettingsPageObjects settingsView1= roomsList1.openRiotSettingsFromLateralMenu();
+		settingsView1.checkContactsPermissionIfNecessary(true);
+		settingsView1.actionBarBackButton.click();
+
+		System.out.println("Check if contact permission is checked on device2.");
+		RiotRoomsListPageObjects roomsList2= new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
+		RiotSettingsPageObjects settingsView2= roomsList2.openRiotSettingsFromLateralMenu();
+		settingsView2.checkContactsPermissionIfNecessary(true);
+		settingsView2.actionBarBackButton.click();
+	}
 }
