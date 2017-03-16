@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
 import pom_android.RiotSearchFromRoomsListPageObjects;
+import pom_android.RiotSettingsPageObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -32,7 +33,7 @@ public class RiotSearchTests extends RiotParentTest{
 	 * Check that the search result is still displayed https://github.com/vector-im/riot-android/issues/934</br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver_android","1checkuser"}, priority=0,description="test on the search from the rooms list")
+	@Test(groups={"1driver_android","1checkuser_and_contact_permission",}, priority=0,description="test on the search from the rooms list")
 	public void searchRoomsAndMessages() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		int randInt2 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
@@ -98,7 +99,7 @@ public class RiotSearchTests extends RiotParentTest{
 	 * Check that "No results" is displayed after search finished.</br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver_android","1checkuser"}, priority=1,description="test on the search from the rooms list with non existent searches")
+	@Test(groups={"1driver_android","1checkuser_and_contact_permission"}, priority=1,description="test on the search from the rooms list with non existent searches")
 	public void searchForNonExistentMsgAndRoom() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomName=(new StringBuilder("randomsearch_").append(randInt1)).toString();
@@ -145,8 +146,21 @@ public class RiotSearchTests extends RiotParentTest{
 	 * @param pwd
 	 * @throws InterruptedException 
 	 */
-	@BeforeGroups("1checkuser")
+	@BeforeGroups("1checkuser_and_contact_permission")
 	private void checkIfUserLogged() throws InterruptedException{
 		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
+		checkContactPermissionChecked();
+	}
+	
+	/**
+	 * Open settings from recents list and check if contacts permission are checked on both devices.
+	 * @throws InterruptedException
+	 */
+	private void checkContactPermissionChecked() throws InterruptedException{
+		System.out.println("Check if contact permission is checked on device1.");
+		RiotRoomsListPageObjects roomsList1= new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
+		RiotSettingsPageObjects settingsView1= roomsList1.openRiotSettingsFromLateralMenu();
+		settingsView1.checkContactsPermissionIfNecessary(true);
+		settingsView1.actionBarBackButton.click();
 	}
 }
