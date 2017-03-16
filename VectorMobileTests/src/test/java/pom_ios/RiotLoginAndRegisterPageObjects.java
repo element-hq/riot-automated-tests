@@ -46,7 +46,7 @@ private IOSDriver<MobileElement> driver;
 	/*
 	 * AUTHENTICATION VIEW : auth forms, forgot password forms...
 	 */
-	@iOSFindBy(accessibility="AuthenticationVCSrcollView")
+	@iOSFindBy(accessibility="AuthenticationVCScrollView")
 	public MobileElement authenticationScrollView;
 	@iOSFindBy(accessibility="AuthenticationVCWelcomeImageView")
 	public MobileElement riotLogoImage;
@@ -58,8 +58,17 @@ private IOSDriver<MobileElement> driver;
 			/*
 			 * 		login part
 			 */
+	//email or login
 	@iOSFindBy(accessibility="AuthInputsViewUserLoginTextField")
 	public MobileElement emailOrUserNameTextField;
+	//phone
+	@iOSFindBy(accessibility="AuthInputsViewPhoneTextField")
+	public MobileElement phoneNumberTextField;
+	@iOSFindBy(accessibility="AuthInputsViewPhoneCountryCodeButton")
+	public MobileElement chooseCountryCodeButton;
+	@iOSFindBy(accessibility="AuthInputsViewPhoneCallingCodeLabel")
+	public MobileElement chooseCountryCodeLabel;
+	//password
 	@iOSFindBy(accessibility="AuthInputsViewPasswordTextField")
 	public MobileElement passwordTextField;
 	

@@ -2,9 +2,8 @@ package mobilestests_ios;
 
 import java.net.MalformedURLException;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -26,7 +25,7 @@ public class RiotLoginTests extends RiotParentTest{
 	/**
 	 * Log and logout and iterate on several datas from excel file.
 	 */
-	@Test(groups={"1driver_ios"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
+	@Test(groups={"1driver_ios","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void loginAndLogoutiOsTest(String sUserName,String sPassword)  throws Exception {
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getiOsDriver1());
 		loginPage.emailOrUserNameTextField.setValue(sUserName);
@@ -41,21 +40,7 @@ public class RiotLoginTests extends RiotParentTest{
 		//Assert.assertTrue(loginPage.authenticationView.isEnabled(), "The login page isn't displayed after the log-out.");
 	}
 
-	@Test(groups={"2drivers_ios"})
-	public void doubleLogin(){
-		String sUserName="riotuser1";
-		String sPassword ="riotuser";
-		RiotLoginAndRegisterPageObjects loginPage1 = new RiotLoginAndRegisterPageObjects(appiumFactory.getiOsDriver1());
-		RiotLoginAndRegisterPageObjects loginPage2 = new RiotLoginAndRegisterPageObjects(appiumFactory.getiOsDriver2());
-		loginPage1.emailOrUserNameTextField.setValue(sUserName);
-		loginPage1.passwordTextField.setValue(sPassword);
-		loginPage1.loginButton.click();
-		loginPage2.emailOrUserNameTextField.setValue(sUserName);
-		loginPage2.passwordTextField.setValue(sPassword);
-		loginPage2.loginButton.click();
-	}
-
-	@Test(groups={"1driver_ios"})
+	@Test(groups={"1driver_ios","loginpage"})
 	public void simpleLogin(){
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getiOsDriver1());
 		loginPage.emailOrUserNameTextField.setValue("riotuser2");
@@ -66,33 +51,10 @@ public class RiotLoginTests extends RiotParentTest{
 		mainPage.logOutFromRoomsList();
 	}
 
-	@Test(groups={"1driver_ios"})
-	public void checkCancelButtonNotDisplayed(){
-		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getiOsDriver1());
-		Assert.assertTrue(loginPage.registerButton.isDisplayed());
-		//loginPage.cancelButton.click();
-		//Assert.assertEquals(loginPage.cancelButton.getAttribute("Is Visible"),"false");
-		//	IsElementPresent sd=new IsElementPresent(ByAccessibilityId);
-		//IsElementPresent(ByAccessibilityId("ss"));
-		//loginPage.cancelButton.
-
-		//		Assert.assertTrue(ExpectedConditions.elementToBeClickable(loginPage.registerButton) != null);
-		//		Assert.assertFalse(ExpectedConditions.elementToBeClickable(loginPage.cancelButton) != null);
-		System.out.println(loginPage.cancelButton.getSize());
-		System.out.println(loginPage.cancelButton.getAttribute("userInteractionEnabled"));
-		System.out.println(ExpectedConditions.elementToBeClickable(loginPage.cancelButton));
-		System.out.println(ExpectedConditions.invisibilityOfElementLocated(By.name("AuthenticationVCCancelAuthFallbackButton")).toString());
-		System.out.println(ExpectedConditions.elementToBeClickable(loginPage.registerButton));
-
-		//		System.out.println(appiumFactory.getiOsDriver1().findElementsByAccessibilityId("Register").isEmpty());
-		//		System.out.println(appiumFactory.getiOsDriver1().findElementsByAccessibilityId("AuthenticationVCCancelAuthFallbackButton").isEmpty());
-
-	}
-
 	/**
 	 * Check the custom server options and verify the form.
 	 */
-	@Test(groups={"1driver_ios"})
+	@Test(groups={"1driver_ios","loginpage"})
 	public void customServerOptionsCheck(){
 		String homeServerTextView="Home Server:";
 		String identityServerTextView="Identity Server:";
@@ -103,13 +65,14 @@ public class RiotLoginTests extends RiotParentTest{
 		Assert.assertEquals(loginPage.identityServerStaticText.getText(), identityServerTextView);
 		Assert.assertEquals(loginPage.homeServerTextField.getText(), Constant.DEFAULT_MATRIX_SERVER);
 		Assert.assertEquals(loginPage.identityServerTextField.getText(), Constant.DEFAULT_IDENTITY_SERVER);
+		loginPage.customServerOptionsCheckBox.click();
 	}
 
 	/**
 	 * Check the reset password form.
 	 * Doesn't verifies the reset password function.
 	 */
-	@Test(groups={"1driver_ios"})
+	@Test(groups={"1driver_ios","loginpage"})
 	public void forgotPasswordFormTest(){
 		String expectedResetPwdMessage="To reset your password, enter the email address linked to your account:";
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getiOsDriver1());
@@ -155,6 +118,7 @@ public class RiotLoginTests extends RiotParentTest{
 		//Since that is an iterative test, we need to setup the next iteration : form must be cleared, fort it app is reset.
 		//appiumFactory.getiOsDriver1().resetApp();
 		loginPage.cancelButton.click();
+		restartApp();
 	}
 
 	/**
@@ -163,7 +127,7 @@ public class RiotLoginTests extends RiotParentTest{
 	 * Check that the login form is displayed then.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver_ios"})
+	@Test(groups={"1driver_ios","loginpage"})
 	public void fillForgotPasswordWithAllowedCharacters() throws InterruptedException{
 		String mailTest="riot@gmail.com";
 		String newPwdTest="riotuser";
@@ -177,5 +141,24 @@ public class RiotLoginTests extends RiotParentTest{
 		//Assert.assertTrue(loginPage.loginScrollView.isDisplayed(), "The Riot login page is not displayed.");
 		Assert.assertTrue(loginPage.authenticationInputContainer.getSize().width>0, "The Riot login page is not displayed.");
 		//Assert.assertTrue(waitUntilDisplayed(appiumFactory.getiOsDriver1(), "//XCUIElementTypeApplication/XCUIElementTypeWindow/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther", true, 2), "The Riot login page is not displayed");
+	}
+	
+	/**
+	 * Log-out the user if it can't see the login page.
+	 * @throws InterruptedException
+	 */
+	@BeforeMethod(groups="loginpage")
+	//@BeforeTest
+	private void logOutIfNecessary() throws InterruptedException{
+			if(false==waitUntilDisplayed(appiumFactory.getiOsDriver1(),"AuthenticationVCView", true, 5)){
+				System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
+				RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
+				mainPage.logOutFromRoomsList();
+			}
+	}
+	
+	private void restartApp(){
+	appiumFactory.getiOsDriver1().closeApp();
+	appiumFactory.getiOsDriver1().launchApp();
 	}
 }
