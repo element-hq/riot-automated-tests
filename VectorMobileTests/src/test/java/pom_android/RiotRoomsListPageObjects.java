@@ -353,7 +353,7 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	public RiotRoomsListPageObjects logOutAndLogin(String username, String password) throws InterruptedException{
 		this.logOut();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
-		loginPage.fillLoginForm(username, password);
+		loginPage.fillLoginForm(username, null,password);
 		return new RiotRoomsListPageObjects(driver);
 	}
 	public RiotSettingsPageObjects openRiotSettingsFromLateralMenu() throws InterruptedException{

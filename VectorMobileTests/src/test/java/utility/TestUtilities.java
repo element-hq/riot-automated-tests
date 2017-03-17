@@ -224,7 +224,7 @@ public class TestUtilities {
 		if(waitUntilDisplayed(myDriver, "im.vector.alpha:id/main_input_layout", false, 5)){
 			System.out.println("User "+username+" isn't logged, login forced.");
 			pom_android.RiotLoginAndRegisterPageObjects loginView = new pom_android.RiotLoginAndRegisterPageObjects(myDriver);
-			loginView.fillLoginForm(username, pwd);
+			loginView.fillLoginForm(username,null, pwd);
 		}else{
 			//check if the wanted user is loged in
 			pom_android.RiotRoomsListPageObjects listRoom = new pom_android.RiotRoomsListPageObjects(myDriver);

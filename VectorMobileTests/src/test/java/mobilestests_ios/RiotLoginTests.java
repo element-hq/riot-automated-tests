@@ -3,7 +3,7 @@ package mobilestests_ios;
 import java.net.MalformedURLException;
 
 import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -28,12 +28,10 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver_ios","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void loginAndLogoutiOsTest(String sUserName,String sPassword)  throws Exception {
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getiOsDriver1());
-		loginPage.emailOrUserNameTextField.setValue(sUserName);
-		loginPage.passwordTextField.setValue(sPassword);
-		loginPage.loginButton.click();
+		loginPage.fillLoginForm(sUserName, sPassword);
 
 		//Wait for the main page (rooms list) to be opened, and log out.
-		Thread.sleep(5000);
+		//Thread.sleep(5000);
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		mainPage.logOutFromRoomsList();
 		Assert.assertTrue(waitUntilDisplayed(appiumFactory.getiOsDriver1(), "AuthenticationVCView", true, 15), "The login page isn't displayed after the log-out.");
@@ -147,12 +145,11 @@ public class RiotLoginTests extends RiotParentTest{
 	 * Log-out the user if it can't see the login page.
 	 * @throws InterruptedException
 	 */
-	@BeforeMethod(groups="loginpage")
-	//@BeforeTest
+	@BeforeGroups(groups="loginpage")
 	private void logOutIfNecessary() throws InterruptedException{
 			if(false==waitUntilDisplayed(appiumFactory.getiOsDriver1(),"AuthenticationVCView", true, 5)){
 				System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
-				RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
+				RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 				mainPage.logOutFromRoomsList();
 			}
 	}
