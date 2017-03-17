@@ -12,7 +12,6 @@ import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
-import utility.ReadConfigFile;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
@@ -22,6 +21,8 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	private String roomId="!SBpfTGBlKgELgoLALQ%3Amatrix.org";
 	private String roomTest="msg rcpt 4 automated tests";
 	private String riotUserDisplayNameA="riotuser4";
+	String riotSenderUserDisplayName="riotuserup";
+	String riotSenderAccessToken;
 	//private String riotUserDisplayNameB="riotuser5";
 	
 	/**
@@ -38,8 +39,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 		//get the current badge on the room.
 		Integer currentBadge=riotRoomsList.getBadgeNumberByRoomName(roomTest);
 		//send a message to the room with an other user using https request to matrix.
-		String senderAccesToken=ReadConfigFile.getInstance().getConfMap().get("riotuserup_access_token");
-		HttpsRequestsToMatrix.sendMessageInRoom(senderAccesToken, roomId, msgFromUpUser);
+		HttpsRequestsToMatrix.sendMessageInRoom(riotSenderAccessToken, roomId, msgFromUpUser);
 		if(currentBadge==null)currentBadge=0;
 		//wait until message is received
 		riotRoomsList.waitForRoomToReceiveNewMessage(roomTest, currentBadge);
@@ -122,8 +122,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 		String messageTest2="this message have an avatar";
 		String messageTest3="this message doesn't have an avatar";
 		//send a message to the room with an other user using https request to matrix.
-		String senderAccesToken=ReadConfigFile.getInstance().getConfMap().get("riotuserup_access_token");
-		HttpsRequestsToMatrix.sendMessageInRoom(senderAccesToken, roomId, messageTest);
+		HttpsRequestsToMatrix.sendMessageInRoom(riotSenderAccessToken, roomId, messageTest);
 		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		testRoom.sendAMessage(messageTest2);Thread.sleep(500);
 		Assert.assertNotNull(testRoom.getUserAvatarByPost(testRoom.getLastPost()), "The last post doesn't have an avatar and should because it's the first post from the user");
@@ -142,8 +141,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	public void checkImageMessageOnRoomPage() throws IOException, InterruptedException{
 		String pictureURL="mxc://matrix.org/gpQYPbjoqVeTWCGivjRshIni";
 		//send picture of already uploaded picture
-		String senderAccesToken=ReadConfigFile.getInstance().getConfMap().get("riotuserup_access_token");
-		HttpsRequestsToMatrix.sendPicture(senderAccesToken, roomId, pictureURL);
+		HttpsRequestsToMatrix.sendPicture(riotSenderAccessToken, roomId, pictureURL);
 		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		Thread.sleep(500);
 		MobileElement lastPost=testRoom.getLastPost();
@@ -184,5 +182,14 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	private void checkIfUserLogged() throws InterruptedException{
 		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);
 	}
-	
+	/**
+	 * Log riotuserup to get his access token. </br> Mandatory to send http request with it.
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	@BeforeGroups("1checkuser")
+	private void renewRiotInviterAccessToken() throws IOException, InterruptedException{
+		System.out.println("Log "+riotSenderUserDisplayName+" to get a new AccessToken.");
+		riotSenderAccessToken=HttpsRequestsToMatrix.login(riotSenderUserDisplayName, Constant.DEFAULT_USERPWD);
+	}
 }

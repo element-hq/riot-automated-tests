@@ -9,7 +9,16 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class HttpsRequestsToMatrix {
-
+	public static String login(String user, String password) throws IOException{ 
+		String initialDeviceDisplayName="https://riot.im/app/ via Chrome on Mac OS";
+		String accessToken;
+		StringBuilder url=new StringBuilder(Constant.DEFAULT_MATRIX_SERVER).append("/_matrix/client/r0/login?");
+		String postJsonData = "{\"initial_device_display_name\":\""+initialDeviceDisplayName+"\",\"password\":\""+password+"\",\"type\":\"m.login.password\",\"user\":\""+user+"\"}";		  
+		String reponseStr=executeUrl(url.toString(), "POST", postJsonData).toString();
+		accessToken=reponseStr.substring(reponseStr.indexOf("access_token\":")+15,reponseStr.indexOf("\",\"home_server"));
+		return accessToken;
+	}
+	
 	public static void sendMessageInRoom(String accessToken, String roomId, String message) throws IOException{  
 		int token = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		StringBuilder url=new StringBuilder(Constant.DEFAULT_MATRIX_SERVER).append("/_matrix/client/r0/rooms/").append(roomId).append("/send/m.room.message/").append(token).append("?access_token=").append(accessToken);
@@ -58,7 +67,7 @@ public class HttpsRequestsToMatrix {
 		executeUrl(url.toString(), "PUT", postJsonData);
 	}
 	
-	private static void executeUrl(String url, String typeRequete, String jsonData) throws IOException{
+	private static StringBuffer executeUrl(String url, String typeRequete, String jsonData) throws IOException{
 		URL obj = new URL(url);  
 		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 		con.setRequestMethod(typeRequete);
@@ -83,6 +92,7 @@ public class HttpsRequestsToMatrix {
 		}  
 		in.close();  
 		//printing result from response  
-		System.out.println(response.toString());  
+		System.out.println(response.toString());
+		return response;
 	}
 }
