@@ -15,14 +15,14 @@ import utility.TestUtilities;
  *
  */
 public class RiotLoginAndRegisterPageObjects extends TestUtilities{
-private IOSDriver<MobileElement> driver;
-	
+	private IOSDriver<MobileElement> driver;
+
 	public RiotLoginAndRegisterPageObjects(AppiumDriver<MobileElement> myDriver) {
 		PageFactory.initElements(new AppiumFieldDecorator(myDriver), this);
 		driver= (IOSDriver<MobileElement>) myDriver;
 		try {
 			waitUntilDisplayed(driver,"AuthenticationVCScrollViewContentView", true, 10);
-					} catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		//ExplicitWait(driver, loginScrollView);
@@ -32,7 +32,7 @@ private IOSDriver<MobileElement> driver;
 	 */
 	@iOSFindBy(accessibility="AuthenticationVCView")
 	public MobileElement authenticationView;
-	
+
 	/*
 	 * NAVIGATION BAR
 	 */
@@ -42,7 +42,7 @@ private IOSDriver<MobileElement> driver;
 	public MobileElement registerButton;
 	@iOSFindBy(accessibility="AuthenticationVCCancelAuthFallbackButton")
 	public MobileElement cancelButton;
-	
+
 	/*
 	 * AUTHENTICATION VIEW : auth forms, forgot password forms...
 	 */
@@ -55,9 +55,9 @@ private IOSDriver<MobileElement> driver;
 	 */
 	@iOSFindBy(accessibility="AuthenticationVCInputContainerView")
 	public MobileElement authenticationInputContainer;
-			/*
-			 * 		login part
-			 */
+	/*
+	 * 		login part
+	 */
 	//email or login
 	@iOSFindBy(accessibility="AuthInputsViewUserLoginTextField")
 	public MobileElement emailOrUserNameTextField;
@@ -71,28 +71,33 @@ private IOSDriver<MobileElement> driver;
 	//password
 	@iOSFindBy(accessibility="AuthInputsViewPasswordTextField")
 	public MobileElement passwordTextField;
-	
+
 	/**
 	 * Simple login without doing any verifications.
 	 * @param usernameOrEmail
 	 * @param password
 	 */
-	public void fillLoginForm(String usernameOrEmail, String password){
-		emailOrUserNameTextField.setValue(usernameOrEmail);
-		passwordTextField.setValue(password+"\n");
+	public void fillLoginForm(String usernameOrEmail, String phoneNumber,String password){
+		if(null!=usernameOrEmail && usernameOrEmail.length()!=0)
+			emailOrUserNameTextField.setValue(usernameOrEmail);
+		if(null!=phoneNumber && phoneNumber.length()!=0)
+			phoneNumberTextField.setValue(phoneNumber);
+		if(null!=password && password.length()!=0)
+			passwordTextField.setValue(password);
+		loginButton.click();
 	}
-		/*
-		 * 		register part
-		 */
+	/*
+	 * 		register part
+	 */
 	@iOSFindBy(accessibility="AuthInputsViewUserLoginTextField")
 	public MobileElement emailTextField;
 	@iOSFindBy(accessibility="AuthInputsVRepeatPasswordTextField")
 	public MobileElement repeatPasswordTextField;
-	
-	
+
+
 	@iOSFindBy(accessibility="In progress")
 	public MobileElement loadingWheel;
-	
+
 	/*
 	 * BOTTOM: Forgot password, login
 	 */
@@ -102,7 +107,7 @@ private IOSDriver<MobileElement> driver;
 	public MobileElement loginButton;
 	@iOSFindBy(accessibility="AuthenticationVCCustomServersTickButton")
 	public MobileElement customServerOptionsCheckBox;
-	
+
 	/*
 	 * FORGOT PASSWORD FORM
 	 */
@@ -118,7 +123,7 @@ private IOSDriver<MobileElement> driver;
 	public MobileElement confirmNewPwdResetPwdEditText;
 	@iOSFindBy(accessibility="AuthenticationVCLoginButton")
 	public MobileElement sendResetEmailButton;
-	
+
 	/*
 	 * CUSTOM SERVER FORM
 	 */
@@ -133,7 +138,7 @@ private IOSDriver<MobileElement> driver;
 	public MobileElement identityServerStaticText;
 	@iOSFindBy(accessibility="AuthenticationVCISTextField")
 	public MobileElement identityServerTextField;
-	
+
 	/*
 	 * DIALOG ALERT
 	 */
@@ -143,11 +148,11 @@ private IOSDriver<MobileElement> driver;
 	public MobileElement pwdDontMatchStaticText;
 	@iOSFindBy(accessibility="OK")
 	public MobileElement dialogOkButton;
-	
+
 	/*
 	 * CAPTCHA
 	 */
 	@iOSFindBy(accessibility="AuthInputsVRecaptchaWebView")
 	public MobileElement captchaWebView;
-	
+
 }

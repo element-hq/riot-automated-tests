@@ -28,10 +28,9 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver_ios","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void loginAndLogoutiOsTest(String sUserName,String sPassword)  throws Exception {
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getiOsDriver1());
-		loginPage.fillLoginForm(sUserName, sPassword);
+		loginPage.fillLoginForm(sUserName,null, sPassword);
 
 		//Wait for the main page (rooms list) to be opened, and log out.
-		//Thread.sleep(5000);
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		mainPage.logOutFromRoomsList();
 		Assert.assertTrue(waitUntilDisplayed(appiumFactory.getiOsDriver1(), "AuthenticationVCView", true, 15), "The login page isn't displayed after the log-out.");
@@ -139,6 +138,14 @@ public class RiotLoginTests extends RiotParentTest{
 		//Assert.assertTrue(loginPage.loginScrollView.isDisplayed(), "The Riot login page is not displayed.");
 		Assert.assertTrue(loginPage.authenticationInputContainer.getSize().width>0, "The Riot login page is not displayed.");
 		//Assert.assertTrue(waitUntilDisplayed(appiumFactory.getiOsDriver1(), "//XCUIElementTypeApplication/XCUIElementTypeWindow/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther", true, 2), "The Riot login page is not displayed");
+	}
+	
+	@Test(groups={"1driver_ios","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
+	public void fillLoginFormWithUnvalidPhoneNumberTest(String emailOrUserName, String phoneNumber, String pwd) throws InterruptedException{
+		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getiOsDriver1());
+		loginPage.fillLoginForm(emailOrUserName,phoneNumber, pwd);
+		Assert.assertFalse(waitUntilDisplayed(appiumFactory.getiOsDriver1(),"RecentsVCTableView", false, 2), "Riot rooms list page is opened and shouldn't");
+		appiumFactory.getiOsDriver1().resetApp();
 	}
 	
 	/**

@@ -247,7 +247,7 @@ public class TestUtilities {
 		if(waitUntilDisplayed(myDriver, "AuthenticationVCScrollViewContentView", false, 5)){
 			System.out.println("User "+username+" isn't logged, login forced.");
 			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(myDriver);
-			loginPage.fillLoginForm(username, pwd);
+			loginPage.fillLoginForm(username,null, pwd);
 		}else{
 			//check if the wanted user is loged in
 			RiotRoomsListPageObjects listRoom = new RiotRoomsListPageObjects(myDriver);
@@ -257,7 +257,7 @@ public class TestUtilities {
 				System.out.println("User "+username+" isn't logged. An other user is logged ("+actualLoggedUser+"), let's log in with "+username+".");
 				listRoom.logOutFromSettingsView();
 				RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(myDriver);
-				loginPage.fillLoginForm(username, pwd);
+				loginPage.fillLoginForm(username,null, pwd);
 			}else{
 				//close lateral menu
 				System.out.println("User "+username+" is logged.");

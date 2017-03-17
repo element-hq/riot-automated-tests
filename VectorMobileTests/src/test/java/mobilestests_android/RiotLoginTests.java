@@ -142,7 +142,7 @@ public class RiotLoginTests extends RiotParentTest{
 	public void fillLoginFormWithUnvalidPhoneNumberTest(String emailOrUserName, String phoneNumber, String pwd) throws InterruptedException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
 		loginPage.fillLoginForm(emailOrUserName, phoneNumber, pwd);
-		Assert.assertFalse(waitUntilDisplayed(appiumFactory.getAndroidDriver1(),"im.vector.alpha:id/fragment_recents_list", false, 2), "Riot ooms list page is opened and shouldn't");
+		Assert.assertFalse(waitUntilDisplayed(appiumFactory.getAndroidDriver1(),"im.vector.alpha:id/fragment_recents_list", false, 2), "Riot rooms list page is opened and shouldn't");
 		appiumFactory.getAndroidDriver1().resetApp();
 	}
 	

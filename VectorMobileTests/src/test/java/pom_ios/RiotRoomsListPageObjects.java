@@ -21,7 +21,7 @@ private AppiumDriver<MobileElement> driver;
 		//ExplicitWait(driver,this.roomsAndCategoriesList);
 		try {
 			//waitUntilDisplayed((IOSDriver<MobileElement>) driver,"RecentsVCTableView", true, 5);
-			waitUntilDisplayed((IOSDriver<MobileElement>) driver,"Messages", true, 5);
+			waitUntilDisplayed((IOSDriver<MobileElement>) driver,"RecentsVCTableView", true, 5);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -256,7 +256,7 @@ private AppiumDriver<MobileElement> driver;
 	public RiotRoomsListPageObjects logOutAndLogin(String username, String pwd) {
 		this.logOutFromRoomsList();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
-		loginPage.fillLoginForm(username, pwd);
+		loginPage.fillLoginForm(username,null, pwd);
 		return new RiotRoomsListPageObjects(driver);
 	}
 }
