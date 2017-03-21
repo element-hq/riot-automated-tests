@@ -402,8 +402,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@BeforeGroups("1checkuser")
 	private void checkIfUser1Logged() throws InterruptedException{
-		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
-		//super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
+		checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
 	}
 	
 	@BeforeGroups("2checkuser")

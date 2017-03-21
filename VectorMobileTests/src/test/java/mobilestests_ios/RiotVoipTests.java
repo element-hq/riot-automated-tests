@@ -1,6 +1,7 @@
 package mobilestests_ios;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -8,15 +9,15 @@ import pom_ios.RiotCallingPageObjects;
 import pom_ios.RiotIncomingCallPageObjects;
 import pom_ios.RiotRoomPageObjects;
 import pom_ios.RiotRoomsListPageObjects;
+import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
 @Listeners({ ScreenshotUtility.class })
 public class RiotVoipTests extends RiotParentTest{
-	private String user1="riotuser2";
-	private String user2="riotuser3";
-	private String roomNameTest="voip room test";
-	//private String pwd="riotuser";
+	private String roomNameTest="1:1_voip_automated_tests";
+	private String riotuser1DisplayName="riotuser12";
+	private String riotuser2DisplayName="riotuser13";
 
 	/**
 	 * 1. Launch an audio call from a room </br>
@@ -28,8 +29,10 @@ public class RiotVoipTests extends RiotParentTest{
 	 * Check that events are logged in the messages.
 	 * @throws InterruptedException
 	 */
-	@Test(groups="1driver_ios", description="test on call", priority=1)
+	@Test(groups={"1driver_ios","1checkuser"}, description="test on call", priority=1)
 	public void cancelAudioCallFromChatRoom() throws InterruptedException{
+		restartRiotOnDevice1();
+		
 		//1. Launch an audio call from a room
 		RiotRoomsListPageObjects roomsList= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		roomsList.getRoomByName(roomNameTest).click();;
@@ -41,19 +44,19 @@ public class RiotVoipTests extends RiotParentTest{
 		callingView1.chatLinkButton.click();
 		//Check the pending call view on the room view.
 		//TODO in the future change to room1.checkPendingCallView(true, "Calling..."); because of https://github.com/vector-im/riot-ios/issues/977
-		room1.checkPendingCallView(true, "Active Call ("+user2+")");
+		room1.checkPendingCallView(true, "Active Call ("+riotuser2DisplayName+")");
 		//assert on messages
 		Assert.assertTrue(room1.getTextViewFromBubble(room1.getLastBubble()).getText().contains("placed a voice call"),"No '[user] placed a voice call' message in the room.");
 
 		//3. Switch between call view and room view
 		//TODO in the future change to room1.checkPendingCallView(true, "Calling..."); because of https://github.com/vector-im/riot-ios/issues/977
-		room1.getPendingCallView("Active Call ("+user2+")").click();
+		room1.getPendingCallView("Active Call ("+riotuser2DisplayName+")").click();
 		Assert.assertTrue(callingView1.isDisplayed(true), "Calling view isn't displayed after touching pending call view from room view");
 		callingView1.chatLinkButton.click();
 
 		//4. End the call from the room view. 
 		room1.hangUpCallButton.click();
-		room1.checkPendingCallView(false, "Active Call ("+user2+")");
+		room1.checkPendingCallView(false, "Active Call ("+riotuser2DisplayName+")");
 		//assert on messages
 		Assert.assertTrue(room1.getTextViewFromBubble(room1.getLastBubble()).getText().contains("ended the call"),"No '[user] ended the call' message in the room.");
 		//come back in rooms list
@@ -70,8 +73,10 @@ public class RiotVoipTests extends RiotParentTest{
 	 * Check that events are logged in the messages.
 	 * @throws InterruptedException
 	 */
-	@Test(groups="1driver_ios", description="test on call",priority=2)
+	@Test(groups={"1driver_ios","1checkuser"}, description="test on call",priority=2)
 	public void cancelVideoCallFromChatRoom() throws InterruptedException{
+		restartRiotOnDevice1();
+		
 		//1. Launch an video call from a room
 		RiotRoomsListPageObjects roomsList= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		roomsList.getRoomByName(roomNameTest).click();;
@@ -83,19 +88,19 @@ public class RiotVoipTests extends RiotParentTest{
 		callingView1.chatLinkButton.click();
 		//Check the pending call view on the room view.
 		//TODO in the future change to room1.checkPendingCallView(true, "Calling..."); because of https://github.com/vector-im/riot-ios/issues/977
-		room1.checkPendingCallView(true, "Active Call ("+user2+")");
+		room1.checkPendingCallView(true, "Active Call ("+riotuser2DisplayName+")");
 		//assert on messages
 		Assert.assertTrue(room1.getTextViewFromBubble(room1.getLastBubble()).getText().contains("placed a video call"),"No '[user] placed a video call' message in the room.");
 
 		//3. Switch between call view and room view
 		//TODO in the future change to room1.checkPendingCallView(true, "Calling..."); because of https://github.com/vector-im/riot-ios/issues/977
-		room1.getPendingCallView("Active Call ("+user2+")").click();
+		room1.getPendingCallView("Active Call ("+riotuser2DisplayName+")").click();
 		Assert.assertTrue(callingView1.isDisplayed(true), "Calling view isn't displayed after touching pending call view from room view");
 		callingView1.chatLinkButton.click();
 
 		//4. End the call from the room view. 
 		room1.hangUpCallButton.click();
-		room1.checkPendingCallView(false, "Active Call ("+user2+")");
+		room1.checkPendingCallView(false, "Active Call ("+riotuser2DisplayName+")");
 		//assert on messages
 		Assert.assertTrue(room1.getTextViewFromBubble(room1.getLastBubble()).getText().contains("ended the call"),"No '[user] ended the call' message in the room.");
 		//come back in rooms list
@@ -112,11 +117,9 @@ public class RiotVoipTests extends RiotParentTest{
 	 * From device 1, check that last message is a 'ended call' event on the room page</br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="2drivers_ios", description="call from device 1 answered by device 2",priority=3)
+	@Test(groups={"2drivers_ios","2checkuser"}, description="call from device 1 answered by device 2",priority=3)
 	public void cancelIncomingAudioCall() throws InterruptedException{
-		//TODO maybe use a different option than checkIfUserLogged.
-		//checkIfUserLogged(appiumFactory.getiOsDriver1(), user1, pwd);
-		//checkIfUserLogged(appiumFactory.getiOsDriver2(), user2, pwd);
+		restartRiotOnDevice2();
 		
 		//1. Open a room, launch a voice call.
 		RiotRoomsListPageObjects roomsList1= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
@@ -128,17 +131,17 @@ public class RiotVoipTests extends RiotParentTest{
 		RiotCallingPageObjects callingView1=new RiotCallingPageObjects(appiumFactory.getiOsDriver1());
 		//With device 2, assert that the incomming call view is displayed and correc.
 		RiotIncomingCallPageObjects incomingCall2 = new RiotIncomingCallPageObjects(appiumFactory.getiOsDriver2());
-		incomingCall2.checkIncomingCallView(true, user1,"voice");
+		incomingCall2.checkIncomingCallView(true, riotuser1DisplayName,"voice");
 		//2. Ignore the call from device 2, assert that the incomming call view is closed
 		incomingCall2.declineCallButton.click();
 		//check that incoming call layout is closed on device 2
-		incomingCall2.checkIncomingCallView(false, user1,"voice");
+		incomingCall2.checkIncomingCallView(false, riotuser1DisplayName,"voice");
 		//From device 1, check that the calling view is closed.
 		callingView1.isDisplayed(false);
 		//From device 2, check that last message is a 'ended call' event on the rooms list page
-		Assert.assertEquals(roomsList2.getReceivedMessageByRoomName(roomNameTest), user2+" ended the call");
+		Assert.assertEquals(roomsList2.getReceivedMessageByRoomName(roomNameTest), riotuser2DisplayName+" ended the call");
 		//From device 1, check that last message is a 'ended call' event on the room page
-		Assert.assertTrue(room1.getTextViewFromBubble(room1.getLastBubble()).getText().contains(user2+" ended the call"));
+		Assert.assertTrue(room1.getTextViewFromBubble(room1.getLastBubble()).getText().contains(riotuser2DisplayName+" ended the call"));
 		room1.menuBackButton.click();
 	}
 
@@ -153,11 +156,10 @@ public class RiotVoipTests extends RiotParentTest{
 	 * Check that "[user] ended the call" event is displayed on room view and room list view.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="2drivers_ios", description="call from device 1 answered by device 2",priority=4)
+	@Test(groups={"2drivers_ios","2checkuser"}, description="call from device 1 answered by device 2",priority=4)
 	public void acceptIncomingAudioCall() throws InterruptedException{
-		//TODO maybe use a different option than checkIfUserLogged.
-		//checkIfUserLogged(appiumFactory.getiOsDriver1(), user1, pwd);
-		//checkIfUserLogged(appiumFactory.getiOsDriver2(), user2, pwd);
+		restartRiotOnDevice2();
+		
 		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
 		//1. Open a room
@@ -170,7 +172,7 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertTrue(callingPage1.isDisplayed(true),"Calling view is not displayed on device 1");
 		//With device 2, assert that the incomming call view is displayed and correct
 		RiotIncomingCallPageObjects incomingPage2=new RiotIncomingCallPageObjects(appiumFactory.getiOsDriver2());
-		incomingPage2.checkIncomingCallView(true,user1, "voice");
+		incomingPage2.checkIncomingCallView(true,riotuser1DisplayName, "voice");
 		
 		//3. Accept the call from device 2, assert that the incomming call view is opened.
 		incomingPage2.acceptCallButton.click();
@@ -184,9 +186,9 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertFalse(callingPage1.isDisplayed(false),"Calling view is still displayed on device 1 after call is ended");
 		Assert.assertFalse(callingPage2.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
 		//Check that "[user] ended the call" event is displayed on room view and room list view.
-		Assert.assertEquals(roomsList2.getReceivedMessageByRoomName(roomNameTest), user2+" ended the call");
+		Assert.assertEquals(roomsList2.getReceivedMessageByRoomName(roomNameTest), riotuser2DisplayName+" ended the call");
 		//From device 1, check that last message is a 'ended call' event on the room page
-		Assert.assertTrue(roomPage1.getTextViewFromBubble(roomPage1.getLastBubble()).getText().contains(user2+" ended the call"));
+		Assert.assertTrue(roomPage1.getTextViewFromBubble(roomPage1.getLastBubble()).getText().contains(riotuser2DisplayName+" ended the call"));
 		roomPage1.menuBackButton.click();
 	}
 	
@@ -201,11 +203,10 @@ public class RiotVoipTests extends RiotParentTest{
 	 * Check that "[user] ended the call" event is displayed on room view and room list view.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="2drivers_ios", description="video call from device 1 answered by device 2",priority=5)
+	@Test(groups={"2drivers_ios","2checkuser"}, description="video call from device 1 answered by device 2",priority=5)
 	public void acceptIncomingVideoCall() throws InterruptedException{
-		//TODO maybe use a different option than checkIfUserLogged.
-		//checkIfUserLogged(appiumFactory.getiOsDriver1(), user1, pwd);
-		//checkIfUserLogged(appiumFactory.getiOsDriver2(), user2, pwd);
+		restartRiotOnDevice2();
+		
 		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
 		//1. Open a room
@@ -218,7 +219,7 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertTrue(callingPage1.isDisplayed(true),"Calling view is not displayed on device 1");
 		//With device 2, assert that the incomming call view is displayed and correct
 		RiotIncomingCallPageObjects incomingPage2=new RiotIncomingCallPageObjects(appiumFactory.getiOsDriver2());
-		incomingPage2.checkIncomingCallView(true,user1, "video");
+		incomingPage2.checkIncomingCallView(true,riotuser1DisplayName, "video");
 		
 		//3. Accept the call from device 2, assert that the incomming call view is opened.
 		incomingPage2.acceptCallButton.click();
@@ -233,9 +234,41 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertFalse(callingPage1.isDisplayed(false),"Calling view is still displayed on device 1 after call is ended");
 		Assert.assertFalse(callingPage2.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
 		//Check that "[user] ended the call" event is displayed on room view and room list view.
-		Assert.assertEquals(roomsList2.getReceivedMessageByRoomName(roomNameTest), user1+" ended the call");
+		Assert.assertEquals(roomsList2.getReceivedMessageByRoomName(roomNameTest), riotuser1DisplayName+" ended the call");
 		//From device 1, check that last message is a 'ended call' event on the room page
-		Assert.assertTrue(roomPage1.getTextViewFromBubble(roomPage1.getLastBubble()).getText().contains(user1+" ended the call"));
+		Assert.assertTrue(roomPage1.getTextViewFromBubble(roomPage1.getLastBubble()).getText().contains(riotuser1DisplayName+" ended the call"));
 		roomPage1.menuBackButton.click();
+	}
+	
+	/**
+	 * Log the good user if not.</br> Secure the test.
+	 * @param myDriver
+	 * @param username
+	 * @param pwd
+	 * @throws InterruptedException 
+	 */
+	@BeforeGroups("1checkuser")
+	private void checkIfUser1Logged() throws InterruptedException{
+		checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
+	}
+	
+	@BeforeGroups("2checkuser")
+	private void checkIfUser2Logged() throws InterruptedException{
+		checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
+		checkIfUserLoggedIos(appiumFactory.getiOsDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
+	}
+	
+	private void restartRiotOnDevice1(){
+		System.out.println("Restarting "+Constant.APPLICATION_NAME+" on device 1.");
+		appiumFactory.getiOsDriver1().closeApp();
+		appiumFactory.getiOsDriver1().launchApp();
+	}
+	private void restartRiotOnDevice2(){
+		System.out.println("Restarting "+Constant.APPLICATION_NAME+" on device 1.");
+		appiumFactory.getiOsDriver1().closeApp();
+		appiumFactory.getiOsDriver1().launchApp();
+		System.out.println("Restarting "+Constant.APPLICATION_NAME+" on device 2.");
+		appiumFactory.getiOsDriver2().closeApp();
+		appiumFactory.getiOsDriver2().launchApp();
 	}
 }

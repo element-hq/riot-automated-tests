@@ -516,4 +516,17 @@ public class RiotRoomPageObjects extends TestUtilities{
 		startCallButton.click();
 		videoCallFromMenuButton.click();
 	}
+	
+	/*
+	 * Encryption
+	 */
+	/**
+	 * Close the warning alert about the beta state of encryption when user enters the first time in a room.
+	 * @throws InterruptedException
+	 */
+	public void closeWarningAlertAboutBetaStateOfE2e() throws InterruptedException{
+		if(waitUntilDisplayed(driver, "im.vector.alpha:id/parentPanel", true, 1)){
+			alertDialogButton2.click();
+		}
+	}
 }

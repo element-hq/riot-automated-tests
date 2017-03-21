@@ -259,4 +259,17 @@ private AppiumDriver<MobileElement> driver;
 		loginPage.fillLoginForm(username,null, pwd);
 		return new RiotRoomsListPageObjects(driver);
 	}
+	/**
+	 * Log out from the rooms list, log in with the parameters.</br>
+	 * Return a RiotRoomsListPageObjects POM.</br> Can be used to renew the encryption keys.
+	 * @param username
+	 * @param pwd
+	 * @return new RiotRoomsListPageObjects
+	 */
+	public RiotRoomsListPageObjects logOutAndLoginFromSettingsView(String username, String pwd) {
+		this.logOutFromSettingsView();
+		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
+		loginPage.fillLoginForm(username,null, pwd);
+		return new RiotRoomsListPageObjects(driver);
+	}
 }

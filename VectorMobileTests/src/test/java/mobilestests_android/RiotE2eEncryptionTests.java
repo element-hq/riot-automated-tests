@@ -39,8 +39,9 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 	public void sendPhotoInEncryptedRoom() throws InterruptedException{
 		//1. Create room with Device 1 and enable encryption.
 		RiotRoomsListPageObjects roomsListDevice1 = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		roomsListDevice1.getRoomByName(roomWithEncryption);
+		roomsListDevice1.getRoomByName(oneToOneRoomWithEncryption);
 		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
+		roomPage1.closeWarningAlertAboutBetaStateOfE2e();
 		// 2. Send a photo
 		roomPage1.attachPhotoFromCamera("Small");
 		//verifies that it's displayed in the message list
@@ -72,12 +73,14 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 		RiotRoomsListPageObjects roomsListDevice2 = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
 
 		//1. Open room roomWithEncryption with Device 1.
-		roomsListDevice1.getRoomByName(roomWithEncryption);
+		roomsListDevice1.getRoomByName(oneToOneRoomWithEncryption);
 		RiotRoomPageObjects newRoomDevice1 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
+		newRoomDevice1.closeWarningAlertAboutBetaStateOfE2e();
 		
 		//2. Open room roomWithEncryption with Device 2.
-		roomsListDevice2.getRoomByName(roomWithEncryption);
+		roomsListDevice2.getRoomByName(oneToOneRoomWithEncryption);
 		RiotRoomPageObjects newRoomDevice2 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
+		newRoomDevice2.closeWarningAlertAboutBetaStateOfE2e();
 
 		//3. Start a voice call with Device 2.
 		newRoomDevice2.startVoiceCall();
@@ -188,6 +191,7 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 		RiotRoomPageObjects newRoomDevice2 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
 		newRoomDevice2.joinRoomButton.click();
 		newRoomDevice2 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
+		newRoomDevice2.closeWarningAlertAboutBetaStateOfE2e();
 
 		//Check that user on Device 2 can't read the msg sent by Device 1 before he joined.
 		//get the before before last post
@@ -225,7 +229,8 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 		//2. Device 1 open room oneToOneRoomWithEncryption
 		roomsList1.getRoomByName(oneToOneRoomWithEncryption).click();
 		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
-
+		roomPage1.closeWarningAlertAboutBetaStateOfE2e();
+		
 		//3. Take a picture and attach it to the room
 		roomPage1.attachPhotoFromCamera("Small");
 		//roomPage1.waitAndCheckForMediaToBeUploaded(roomPage1.getLastPost(), 20);
@@ -277,10 +282,12 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 		//2. Device 1 open room oneToOneRoomWithEncryption
 		roomsList1.getRoomByName(oneToOneRoomWithEncryption).click();
 		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
+		roomPage1.closeWarningAlertAboutBetaStateOfE2e();
 
 		//3. Device 2 open room oneToOneRoomWithEncryption
 		roomsList2.getRoomByName(oneToOneRoomWithEncryption).click();
 		RiotRoomPageObjects roomPage2=new RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
+		roomPage2.closeWarningAlertAboutBetaStateOfE2e();
 
 		//4. Device 1 send a message
 		roomPage1.sendAMessage(encrypted_msg_1);
@@ -340,7 +347,8 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 		//2. Device 1 open room oneToOneRoomWithEncryption
 		roomsList1.getRoomByName(oneToOneRoomWithEncryption).click();
 		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
-
+		roomPage1.closeWarningAlertAboutBetaStateOfE2e();
+		
 		//3. Start a voice call
 		roomPage1.startVoiceCall();
 		//Check that the call layout isn't displayed
