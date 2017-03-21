@@ -1,5 +1,6 @@
 package pom_ios;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.PageFactory;
 
 import io.appium.java_client.AppiumDriver;
@@ -76,6 +77,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	 * Simple login without doing any verifications.
 	 * @param usernameOrEmail
 	 * @param password
+	 * TODO: works need to be done here because if the password is null, the login won't happen.
 	 */
 	public void fillLoginForm(String usernameOrEmail, String phoneNumber,String password){
 		if(null!=usernameOrEmail && usernameOrEmail.length()!=0)
@@ -83,8 +85,11 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 		if(null!=phoneNumber && phoneNumber.length()!=0)
 			phoneNumberTextField.setValue(phoneNumber);
 		if(null!=password && password.length()!=0)
-			passwordTextField.setValue(password);
-		loginButton.click();
+		{
+			driver.getKeyboard().sendKeys(Keys.RETURN);
+			passwordTextField.setValue(password+"\n");
+		}
+	//	loginButton.click();
 	}
 	/*
 	 * 		register part
