@@ -103,7 +103,7 @@ public abstract class RiotParentTest extends TestUtilities {
 	//	}
 
 	@AfterTest
-	public void tearDownAndroid() throws Exception{
+	public void tearDownAllDrivers() throws Exception{
 		if(null!=appiumFactory.getAndroidDriver1()){
 			appiumFactory.getAndroidDriver1().quit();
 			System.out.println("Android DRIVER 1 quitted on ANDROID device "+ReadConfigFile.getInstance().getDevicesMap().get("androiddevice1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");	
@@ -116,10 +116,9 @@ public abstract class RiotParentTest extends TestUtilities {
 			appiumFactory.getiOsDriver1().quit();
 			System.out.println("Ios DRIVER 1 quitted on ANDROID device "+ReadConfigFile.getInstance().getDevicesMap().get("iosdevice1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");	
 		}
-
 		if(null!=appiumFactory.getiOsDriver2()){
 			appiumFactory.getiOsDriver2().quit();
-			System.out.println("Ios DRIVER 2 quitted on ANDROID device "+ReadConfigFile.getInstance().getDevicesMap().get("iosdevice1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");	
+			System.out.println("Ios DRIVER 2 quitted on ANDROID device "+ReadConfigFile.getInstance().getDevicesMap().get("iosdevice2").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");	
 		}
 		//Stop the two appium's servers.
 		stop2AppiumServers();
@@ -188,10 +187,12 @@ public abstract class RiotParentTest extends TestUtilities {
 	@BeforeGroups(groups="2drivers_ios")
 	public void setUp2IosDriver() throws Exception{
 		//Start the two appium's servers if necessary.
+		Boolean iosDriver1NeedToStart=false;
 		start2AppiumServers();
 
 		//Create ios driver 1 if necessary
 		if(appiumFactory.getiOsDriver1()==null || appiumFactory.getiOsDriver1().getSessionId()==null){
+			iosDriver1NeedToStart=true;
 			Map<String, String> iosDevice1=ReadConfigFile.getInstance().getDevicesMap().get("iosdevice1");
 			DesiredCapabilities capabilities1 = new DesiredCapabilities();
 			capabilities1.setCapability(MobileCapabilityType.UDID, iosDevice1.get(MobileCapabilityType.UDID));
@@ -228,37 +229,47 @@ public abstract class RiotParentTest extends TestUtilities {
 			capabilities2.setCapability(MobileCapabilityType.AUTOMATION_NAME,iosDevice2.get(MobileCapabilityType.AUTOMATION_NAME));
 			capabilities2.setCapability("realDeviceLogger", "/usr/local/lib/node_modules/deviceconsole/deviceconsole");
 			capabilities2.setCapability(MobileCapabilityType.NO_RESET, true);
-			capabilities2.setCapability(MobileCapabilityType.FULL_RESET, false);
+			//capabilities2.setCapability(MobileCapabilityType.FULL_RESET, false);
 			capabilities2.setCapability("xcodeOrgId", ReadConfigFile.getInstance().getConfMap().get("development_team"));
 			capabilities2.setCapability("xcodeSigningId", ReadConfigFile.getInstance().getConfMap().get("code_sign_identity"));
 			capabilities2.setCapability("autoDismissAlerts", false);
 			capabilities2.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 1200);
-
+			
+			if(!iosDriver1NeedToStart){
+				Thread.sleep(5000);
+				int timeWaited=0;
+				int maxToWait=6;
+				while (!AppiumServerStartAndStopService.service2.isRunning()&&timeWaited<maxToWait) {
+					timeWaited++;
+					Thread.sleep(1000);
+				}
+				System.out.println(timeWaited);
+			}
 			appiumFactory.setiOSDriver2(new URL(Constant.getServer2HttpAddress()), capabilities2);
 			System.out.println("Application "+Constant.APPLICATION_NAME+" started on IOS device "+capabilities2.getCapability(MobileCapabilityType.DEVICE_NAME) +" with DRIVER 2.");
 		}		
 	}
 
-//	@AfterGroups(groups="1driver_ios")
-//	public void tearDownIosDriver1() throws Exception{
-//		appiumFactory.getiOsDriver1().quit();
-//		System.out.println("Ios DRIVER 1 quitted on IOS device "+ReadConfigFile.getInstance().getDevicesMap().get("iosdevice1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
-//
-//		//Stop appium server1.
-//		stopAppiumServer1();
-//	}
-//
-//	@AfterGroups(groups={"2drivers_ios"}, alwaysRun=true)
-//	public void tearDown2IosDrivers() throws Exception{
-//		appiumFactory.getiOsDriver1().quit();
-//		System.out.println("Ios DRIVER 1 quitted on IOS device "+ReadConfigFile.getInstance().getDevicesMap().get("iosdevice1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
-//		appiumFactory.getiOsDriver2().quit();
-//		System.out.println("Ios DRIVER 2 quitted on IOS device "+ReadConfigFile.getInstance().getDevicesMap().get("iosdevice2").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
-//
-//		//Stop the two appium's servers.
-//		stop2AppiumServers();
-//	}
-	
+	//	@AfterGroups(groups="1driver_ios")
+	//	public void tearDownIosDriver1() throws Exception{
+	//		appiumFactory.getiOsDriver1().quit();
+	//		System.out.println("Ios DRIVER 1 quitted on IOS device "+ReadConfigFile.getInstance().getDevicesMap().get("iosdevice1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
+	//
+	//		//Stop appium server1.
+	//		stopAppiumServer1();
+	//	}
+	//
+	//	@AfterGroups(groups={"2drivers_ios"}, alwaysRun=true)
+	//	public void tearDown2IosDrivers() throws Exception{
+	//		appiumFactory.getiOsDriver1().quit();
+	//		System.out.println("Ios DRIVER 1 quitted on IOS device "+ReadConfigFile.getInstance().getDevicesMap().get("iosdevice1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
+	//		appiumFactory.getiOsDriver2().quit();
+	//		System.out.println("Ios DRIVER 2 quitted on IOS device "+ReadConfigFile.getInstance().getDevicesMap().get("iosdevice2").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");
+	//
+	//		//Stop the two appium's servers.
+	//		stop2AppiumServers();
+	//	}
+
 
 	/**
 	 * According to the chosen starting mode, start the first appium server if needed.
