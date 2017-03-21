@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -12,6 +13,7 @@ import pom_ios.RiotContactPickerPageObjects;
 import pom_ios.RiotRoomDetailsPageObjects;
 import pom_ios.RiotRoomPageObjects;
 import pom_ios.RiotRoomsListPageObjects;
+import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
@@ -22,9 +24,10 @@ import utility.ScreenshotUtility;
  */
 @Listeners({ ScreenshotUtility.class })
 public class RiotManagingRoomMembersTests extends RiotParentTest{
-	private String testRoom="room tests Jean";
+	private String testRoom="Common riotusers auto tests";
 	private String matchingWithKnownContactFilter1="riot";
-	private String invitedUser="@riotuser3:matrix.org";
+	private String invitedUser="@riotuser16:matrix.org";
+	private String riotUserDisplayName="riotuser15";
 	
 	/**
 	 * 1. Open room testRoom and open his details, then people tab.
@@ -39,7 +42,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * Check that the list of filtered members is empty and no results textview is displayed.
 	 * @throws InterruptedException
 	 */
-	@Test(groups="1driver_ios")
+	@Test(groups={"1driver_ios","1checkuser"})
 	public void useFilterFieldOnPeopleTabTest() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomFilter=(new StringBuilder("filter_").append(randInt1)).toString();
@@ -92,7 +95,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * Check that the item of the KNOWN CONTACTS categorie is (0) https://github.com/vector-im/riot-ios/issues/1017
 	 * @throws InterruptedException
 	 */
-	@Test(groups="1driver_ios")
+	@Test(groups={"1driver_ios","1checkuser"})
 	public void contactPickerWithRandomSearchTest() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomContactName=(new StringBuilder("contact_").append(randInt1)).toString();
@@ -135,7 +138,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * Check that there is at least 2 filtered people
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="1driver_ios")
+	@Test(groups={"1driver_ios","1checkuser"})
 	public void contactPickerWithMatchingSearchOnKnownContact() throws InterruptedException{
 		//1. Open room testRoom and open his details.
 		RiotRoomsListPageObjects roomList1=new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
@@ -174,7 +177,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * Check that there is no more INVITED category
 	 * @throws InterruptedException
 	 */
-	@Test(groups="1driver_ios")
+	@Test(groups={"1driver_ios","1checkuser"})
 	public void inviteAndCancelInvitationTest() throws InterruptedException{
 //		//1. Create a room.
 		RiotRoomsListPageObjects roomList1=new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
@@ -210,5 +213,17 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		RiotRoomPageObjects roomPage=new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		roomPage.leaveRoom();
 		System.out.println("Leave room "+roomName+ " with device 1");
+	}
+	
+	/**
+	 * Log the good user if not.</br> Secure the test.
+	 * @param myDriver
+	 * @param username
+	 * @param pwd
+	 * @throws InterruptedException 
+	 */
+	@BeforeGroups("1checkuser")
+	private void checkIfUser1Logged() throws InterruptedException{
+		checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
 	}
 }
