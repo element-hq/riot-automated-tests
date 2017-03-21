@@ -218,7 +218,7 @@ public class TestUtilities {
 	 * @param pwd
 	 * @throws InterruptedException
 	 */
-	protected void checkIfUserLoggedAndroid(AndroidDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException {
+	public void checkIfUserLoggedAndroid(AndroidDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException {
 		//if login page is displayed, then logged with the wanted user
 		System.out.println("Check if user "+username+" is logged in "+Constant.APPLICATION_NAME);
 		if(waitUntilDisplayed(myDriver, "im.vector.alpha:id/main_input_layout", false, 5)){
@@ -230,6 +230,9 @@ public class TestUtilities {
 			pom_android.RiotRoomsListPageObjects listRoom = new pom_android.RiotRoomsListPageObjects(myDriver);
 			listRoom.contextMenuButton.click();
 			String actualLoggedUser=listRoom.displayedUserMain.getText();
+			if(null==actualLoggedUser){
+				actualLoggedUser="";
+			}
 			if(!actualLoggedUser.equals(username)){
 				System.out.println("User "+username+" isn't logged. An other user is logged ("+actualLoggedUser+"), login with "+username+".");
 				myDriver.navigate().back();
@@ -241,23 +244,25 @@ public class TestUtilities {
 			}
 		}
 	}
-	protected void checkIfUserLoggedIos(IOSDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException {
+	public void checkIfUserLoggedIos(IOSDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException {
 		//if login page is displayed, then logged with the wanted user
 		System.out.println("Check if user "+username+" is logged in "+Constant.APPLICATION_NAME);
 		if(waitUntilDisplayed(myDriver, "AuthenticationVCScrollViewContentView", false, 5)){
 			System.out.println("User "+username+" isn't logged, login forced.");
 			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(myDriver);
 			loginPage.fillLoginForm(username,null, pwd);
+			new RiotRoomsListPageObjects(myDriver);
 		}else{
 			//check if the wanted user is loged in
 			RiotRoomsListPageObjects listRoom = new RiotRoomsListPageObjects(myDriver);
 			listRoom.settingsButton.click();
 			String actualLoggedUser=listRoom.displayNameTextField.getText();
+			if(null==actualLoggedUser){
+				actualLoggedUser="";
+			}
 			if(!actualLoggedUser.equals(username)){
 				System.out.println("User "+username+" isn't logged. An other user is logged ("+actualLoggedUser+"), let's log in with "+username+".");
-				listRoom.logOutFromSettingsView();
-				RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(myDriver);
-				loginPage.fillLoginForm(username,null, pwd);
+				listRoom.logOutAndLoginFromSettingsView(username, pwd);
 			}else{
 				//close lateral menu
 				System.out.println("User "+username+" is logged.");
