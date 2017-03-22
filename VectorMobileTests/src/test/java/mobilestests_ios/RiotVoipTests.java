@@ -31,7 +31,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver_ios","1checkuser"}, description="test on call", priority=1)
 	public void cancelAudioCallFromChatRoom() throws InterruptedException{
-		restartRiotOnDevice1();
+		restartApplication(appiumFactory.getiOsDriver1());
 		
 		//1. Launch an audio call from a room
 		RiotRoomsListPageObjects roomsList= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
@@ -75,7 +75,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver_ios","1checkuser"}, description="test on call",priority=2)
 	public void cancelVideoCallFromChatRoom() throws InterruptedException{
-		restartRiotOnDevice1();
+		restartApplication(appiumFactory.getiOsDriver1());
 		
 		//1. Launch an video call from a room
 		RiotRoomsListPageObjects roomsList= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
@@ -119,7 +119,8 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_ios","2checkuser"}, description="call from device 1 answered by device 2",priority=3)
 	public void cancelIncomingAudioCall() throws InterruptedException{
-		restartRiotOnDevice2();
+		restartApplication(appiumFactory.getiOsDriver1());
+		restartApplication(appiumFactory.getiOsDriver2());
 		
 		//1. Open a room, launch a voice call.
 		RiotRoomsListPageObjects roomsList1= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
@@ -158,7 +159,8 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_ios","2checkuser"}, description="call from device 1 answered by device 2",priority=4)
 	public void acceptIncomingAudioCall() throws InterruptedException{
-		restartRiotOnDevice2();
+		restartApplication(appiumFactory.getiOsDriver1());
+		restartApplication(appiumFactory.getiOsDriver2());
 		
 		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
@@ -205,7 +207,8 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_ios","2checkuser"}, description="video call from device 1 answered by device 2",priority=5)
 	public void acceptIncomingVideoCall() throws InterruptedException{
-		restartRiotOnDevice2();
+		restartApplication(appiumFactory.getiOsDriver1());
+		restartApplication(appiumFactory.getiOsDriver2());
 		
 		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
@@ -256,19 +259,5 @@ public class RiotVoipTests extends RiotParentTest{
 	private void checkIfUser2Logged() throws InterruptedException{
 		checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
 		checkIfUserLoggedIos(appiumFactory.getiOsDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
-	}
-	
-	private void restartRiotOnDevice1(){
-		System.out.println("Restarting "+Constant.APPLICATION_NAME+" on device 1.");
-		appiumFactory.getiOsDriver1().closeApp();
-		appiumFactory.getiOsDriver1().launchApp();
-	}
-	private void restartRiotOnDevice2(){
-		System.out.println("Restarting "+Constant.APPLICATION_NAME+" on device 1.");
-		appiumFactory.getiOsDriver1().closeApp();
-		appiumFactory.getiOsDriver1().launchApp();
-		System.out.println("Restarting "+Constant.APPLICATION_NAME+" on device 2.");
-		appiumFactory.getiOsDriver2().closeApp();
-		appiumFactory.getiOsDriver2().launchApp();
 	}
 }

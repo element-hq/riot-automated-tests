@@ -38,7 +38,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver_android","1checkuser"}, description="test on call")
 	public void cancelAudioCallFromChatRoom() throws InterruptedException{
-		restartRiotOnDevice1();
+		restartApplication(getAndroidDriver1());
 		
 		//1. Launch an audio call from a room
 		RiotRoomsListPageObjects mainListRoom=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
@@ -81,7 +81,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver_android","1checkuser",}, description="test on call")
 	public void cancelVideoCallFromChatRoom() throws InterruptedException{
-		restartRiotOnDevice1();
+		restartApplication(getAndroidDriver1());
 		
 		RiotRoomsListPageObjects mainListRoom=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		mainListRoom.getRoomByName(roomNameTest).click();
@@ -116,7 +116,8 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"}, description="call from device 1 answered by device 2")
 	public void cancelIncomingAudioCall() throws InterruptedException{
-		restartRiotOnDevice2();
+		restartApplication(getAndroidDriver1());
+		restartApplication(getAndroidDriver2());
 		
 		//call from device 1
 		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
@@ -150,7 +151,8 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"}, description="call from device 1 answered by device 2")
 	public void acceptIncomingAudioCall() throws InterruptedException{
-		restartRiotOnDevice2();
+		restartApplication(getAndroidDriver1());
+		restartApplication(getAndroidDriver2());
 		
 		//call from device 1
 		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
@@ -193,7 +195,8 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"}, description="call from device 1 answered by device 2")
 	public void acceptIncomingVideoCall() throws InterruptedException{
-		restartRiotOnDevice2();
+		restartApplication(getAndroidDriver1());
+		restartApplication(getAndroidDriver2());
 		
 		//call from device 1
 		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
@@ -241,7 +244,8 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"}, description="during a call desactivate mic")
 	public void disableMicrophoneDuringCall() throws InterruptedException, IOException{
-		restartRiotOnDevice2();
+		restartApplication(getAndroidDriver1());
+		restartApplication(getAndroidDriver2());
 		
 		//call from device 1
 		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
@@ -291,7 +295,8 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"},priority=15, description="leave room during a call")
 	public void leaveRoomDuringCall() throws InterruptedException{
-		restartRiotOnDevice2();
+		restartApplication(getAndroidDriver1());
+		restartApplication(getAndroidDriver2());
 		
 		//go on 1to1 room with device 1
 		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
@@ -348,7 +353,8 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"})
 	public void hangUpWhenCalleeInRoomView() throws InterruptedException{
-		restartRiotOnDevice2();
+		restartApplication(getAndroidDriver1());
+		restartApplication(getAndroidDriver2());
 		
 		//Go in room voip test with both devices
 		RiotRoomsListPageObjects roomsListDevice1 = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
@@ -409,19 +415,5 @@ public class RiotVoipTests extends RiotParentTest{
 	private void checkIfUser2Logged() throws InterruptedException{
 		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
 		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
-	}
-
-	private void restartRiotOnDevice1(){
-		System.out.println("Restarting "+Constant.APPLICATION_NAME+" on device 1.");
-		appiumFactory.getAndroidDriver1().closeApp();
-		appiumFactory.getAndroidDriver1().launchApp();
-	}
-	private void restartRiotOnDevice2(){
-		System.out.println("Restarting "+Constant.APPLICATION_NAME+" on device 1.");
-		appiumFactory.getAndroidDriver1().closeApp();
-		appiumFactory.getAndroidDriver1().launchApp();
-		System.out.println("Restarting "+Constant.APPLICATION_NAME+" on device 2.");
-		appiumFactory.getAndroidDriver2().closeApp();
-		appiumFactory.getAndroidDriver2().launchApp();
 	}
 }

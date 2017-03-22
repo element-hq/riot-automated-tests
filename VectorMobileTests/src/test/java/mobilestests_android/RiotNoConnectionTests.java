@@ -91,8 +91,7 @@ public class RiotNoConnectionTests extends RiotParentTest{
 		myRoom.sendAMessage(myMessage);
 		Assert.assertEquals(myRoom.getTextViewFromPost(myRoom.getLastPost()).getText(), myMessage,"The usent message isn't in the last message.");
 		//Restart the application
-		appiumFactory.getAndroidDriver1().closeApp();
-		appiumFactory.getAndroidDriver1().launchApp();
+		restartApplication(getAndroidDriver1());
 		//Reopen the room
 		riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		riotRoomsList.getRoomByName(roomNameTest).click();
@@ -139,8 +138,7 @@ public class RiotNoConnectionTests extends RiotParentTest{
 	    myRoom.checkThatPhotoIsPresentInPost(myRoom.getLastPost());
     
 		//Restart the application
-		appiumFactory.getAndroidDriver1().closeApp();
-		appiumFactory.getAndroidDriver1().launchApp();
+	    restartApplication(getAndroidDriver1());
 		//Reopen the room
 		riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		riotRoomsList.getRoomByName(roomNameTest).click();

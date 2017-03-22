@@ -133,7 +133,7 @@ public class RiotLoginTests extends RiotParentTest{
 		//Since that is an iterative test, we need to setup the next iteration : form must be cleared, fort it app is reset.
 		//appiumFactory.getiOsDriver1().resetApp();
 		loginPage.cancelButton.click();
-		restartApp();
+		restartApplication(appiumFactory.getiOsDriver1());
 	}
 
 	/**
@@ -177,10 +177,5 @@ public class RiotLoginTests extends RiotParentTest{
 				RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 				mainPage.logOutFromRoomsList();
 			}
-	}
-	
-	private void restartApp(){
-	appiumFactory.getiOsDriver1().closeApp();
-	appiumFactory.getiOsDriver1().launchApp();
 	}
 }

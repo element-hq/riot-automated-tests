@@ -226,9 +226,13 @@ public class TestUtilities {
 			pom_android.RiotLoginAndRegisterPageObjects loginView = new pom_android.RiotLoginAndRegisterPageObjects(myDriver);
 			loginView.fillLoginForm(username,null, pwd);
 		}else{
-			//check if the wanted user is loged in
+			//if riot list isn't displayed, restart riot
+			if(!waitUntilDisplayed(myDriver, "im.vector.alpha:id/fragment_recents_list", true, 0)){
+				restartApplication(myDriver);
+			}
 			pom_android.RiotRoomsListPageObjects listRoom = new pom_android.RiotRoomsListPageObjects(myDriver);
 			listRoom.contextMenuButton.click();
+			//check if the wanted user is loged in
 			String actualLoggedUser=listRoom.displayedUserMain.getText();
 			if(null==actualLoggedUser){
 				actualLoggedUser="";
@@ -244,6 +248,7 @@ public class TestUtilities {
 			}
 		}
 	}
+	
 	public void checkIfUserLoggedIos(IOSDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException {
 		//if login page is displayed, then logged with the wanted user
 		System.out.println("Check if user "+username+" is logged in "+Constant.APPLICATION_NAME);
@@ -253,9 +258,13 @@ public class TestUtilities {
 			loginPage.fillLoginForm(username,null, pwd);
 			new RiotRoomsListPageObjects(myDriver);
 		}else{
-			//check if the wanted user is loged in
+			//if riot list isn't displayed, restart riot
+			if(!waitUntilDisplayed(myDriver, "RecentsVCTableView", true, 0)){
+				restartApplication(myDriver);
+			}
 			RiotRoomsListPageObjects listRoom = new RiotRoomsListPageObjects(myDriver);
 			listRoom.settingsButton.click();
+			//check if the wanted user is loged in
 			String actualLoggedUser=listRoom.displayNameTextField.getText();
 			if(null==actualLoggedUser){
 				actualLoggedUser="";
@@ -269,5 +278,15 @@ public class TestUtilities {
 				listRoom.backMenuButton.click();
 			}
 		}
+	}
+	
+	/**
+	 * Close then open again the application.
+	 * @param myDriver
+	 */
+	public void restartApplication(AppiumDriver<MobileElement> myDriver) {
+		System.out.println("Restart "+Constant.APPLICATION_NAME);
+		myDriver.closeApp();
+		myDriver.launchApp();
 	}
 }
