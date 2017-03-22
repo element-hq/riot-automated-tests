@@ -21,9 +21,9 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	private String roomId="!SBpfTGBlKgELgoLALQ%3Amatrix.org";
 	private String roomTest="msg rcpt 4 automated tests";
 	private String riotUserDisplayNameA="riotuser4";
-	String riotSenderUserDisplayName="riotuserup";
-	String riotSenderAccessToken;
-	//private String riotUserDisplayNameB="riotuser5";
+	private String riotUserDisplayNameB="riotuser5";
+	private String riotSenderUserDisplayName="riotuserup";
+	private String riotSenderAccessToken;
 	
 	/**
 	 * Required : user must be logged in room and notifications are On on this room </br>
@@ -159,7 +159,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 * Check that the room is no more in the favorites.
 	 * @throws InterruptedException
 	 */
-	@Test(groups={"1checkuser","1driver_android"})
+	@Test(groups={"1checkuser","1driver_android"},priority=1)
 	public void addRoomInFavorites() throws InterruptedException{
 		RiotRoomsListPageObjects roomslist= new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		//add room in favourites
@@ -170,6 +170,46 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 		Assert.assertFalse(roomslist.checkRoomInCategory(roomTest, "FAVORITES"), "Room "+roomTest+" is in the FAVORITES category and should not");
 	}
 	
+	/**
+	 * Validates issue https://github.com/vector-im/riot-ios/issues/809
+	 * 1. Open roomtest with device A.
+	 * 2. Open roomtest with device B.
+	 * 3. User A write something in the message bar but don't send it.
+	 * Test that the typing indicator indicates '[user1] is typing..." with device B.
+	 * 4. Type an other msg and clear it with user 4 in the message bar.
+	 * Test that the typing indicator is empty on device B.
+	 * @throws InterruptedException 
+	 */
+	@Test(groups={"2drivers_android","2checkuser"},priority=0)
+	public void typingIndicatorTest() throws InterruptedException{
+		String notSentMsg="tmp";
+		RiotRoomsListPageObjects roomsListA = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
+		RiotRoomsListPageObjects roomsListB= new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
+
+		//1. Open roomtest with device A.
+		roomsListA.getRoomByName(roomTest).click();
+		RiotRoomPageObjects roomA=new  RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
+
+		//2. Open roomtest with device B.		
+		roomsListB.getRoomByName(roomTest).click();
+		RiotRoomPageObjects roomB=new  RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
+		
+		//3. User A write something in the message bar but don't send it.
+		roomA.messageZoneEditText.setValue(notSentMsg);
+		//Test that the typing indicator indicates '[user1] is typing..." with device B.
+		Assert.assertEquals(roomB.notificationMessage.getText(), riotUserDisplayNameA+" is typing...");
+		Assert.assertTrue(roomB.notificationMessage.isDisplayed(),"Typing indicator isn't displayed on device B");
+		
+		//4. Type an other msg and clear it with user 4 in the message bar.
+		roomA.messageZoneEditText.setValue(notSentMsg);
+		roomA.messageZoneEditText.clear();
+		Thread.sleep(1000);
+		//Test that the typing indicator is empty on device B.
+		Assert.assertFalse(isPresentTryAndCatch(roomB.notificationMessage),"Typing indicator is displayed on device B and shouldn't because device A isn't typing");
+		//come back to rooms list
+		roomA.menuBackButton.click();
+		roomB.menuBackButton.click();
+	}
 
 	/**
 	 * Log the good user if not.</br> Secure the test.
@@ -182,6 +222,19 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	private void checkIfUserLogged() throws InterruptedException{
 		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);
 	}
+	/**
+	 * Log the good user if not.</br> Secure the test.
+	 * @param myDriver
+	 * @param username
+	 * @param pwd
+	 * @throws InterruptedException 
+	 */
+	@BeforeGroups("2checkuser")
+	private void checkIfUser2Logged() throws InterruptedException{
+		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);
+		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver2(), riotUserDisplayNameB, Constant.DEFAULT_USERPWD);
+	}
+	
 	/**
 	 * Log riotuserup to get his access token. </br> Mandatory to send http request with it.
 	 * @throws IOException
