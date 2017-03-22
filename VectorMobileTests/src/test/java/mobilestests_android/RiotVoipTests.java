@@ -38,7 +38,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver_android","1checkuser"}, description="test on call")
 	public void cancelAudioCallFromChatRoom() throws InterruptedException{
-		restartApplication(getAndroidDriver1());
+		restartApplication(appiumFactory.getAndroidDriver1());
 		
 		//1. Launch an audio call from a room
 		RiotRoomsListPageObjects mainListRoom=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
@@ -81,7 +81,7 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver_android","1checkuser",}, description="test on call")
 	public void cancelVideoCallFromChatRoom() throws InterruptedException{
-		restartApplication(getAndroidDriver1());
+		restartApplication(appiumFactory.getAndroidDriver1());
 		
 		RiotRoomsListPageObjects mainListRoom=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		mainListRoom.getRoomByName(roomNameTest).click();
@@ -116,8 +116,8 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"}, description="call from device 1 answered by device 2")
 	public void cancelIncomingAudioCall() throws InterruptedException{
-		restartApplication(getAndroidDriver1());
-		restartApplication(getAndroidDriver2());
+		restartApplication(appiumFactory.getAndroidDriver1());
+		restartApplication(appiumFactory.getAndroidDriver2());
 		
 		//call from device 1
 		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
@@ -151,8 +151,8 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"}, description="call from device 1 answered by device 2")
 	public void acceptIncomingAudioCall() throws InterruptedException{
-		restartApplication(getAndroidDriver1());
-		restartApplication(getAndroidDriver2());
+		restartApplication(appiumFactory.getAndroidDriver1());
+		restartApplication(appiumFactory.getAndroidDriver2());
 		
 		//call from device 1
 		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
@@ -195,8 +195,8 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"}, description="call from device 1 answered by device 2")
 	public void acceptIncomingVideoCall() throws InterruptedException{
-		restartApplication(getAndroidDriver1());
-		restartApplication(getAndroidDriver2());
+		restartApplication(appiumFactory.getAndroidDriver1());
+		restartApplication(appiumFactory.getAndroidDriver2());
 		
 		//call from device 1
 		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
@@ -244,8 +244,8 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"}, description="during a call desactivate mic")
 	public void disableMicrophoneDuringCall() throws InterruptedException, IOException{
-		restartApplication(getAndroidDriver1());
-		restartApplication(getAndroidDriver2());
+		restartApplication(appiumFactory.getAndroidDriver1());
+		restartApplication(appiumFactory.getAndroidDriver2());
 		
 		//call from device 1
 		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
@@ -295,8 +295,8 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"},priority=15, description="leave room during a call")
 	public void leaveRoomDuringCall() throws InterruptedException{
-		restartApplication(getAndroidDriver1());
-		restartApplication(getAndroidDriver2());
+		restartApplication(appiumFactory.getAndroidDriver1());
+		restartApplication(appiumFactory.getAndroidDriver2());
 		
 		//go on 1to1 room with device 1
 		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
@@ -353,8 +353,8 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"})
 	public void hangUpWhenCalleeInRoomView() throws InterruptedException{
-		restartApplication(getAndroidDriver1());
-		restartApplication(getAndroidDriver2());
+		restartApplication(appiumFactory.getAndroidDriver1());
+		restartApplication(appiumFactory.getAndroidDriver2());
 		
 		//Go in room voip test with both devices
 		RiotRoomsListPageObjects roomsListDevice1 = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());

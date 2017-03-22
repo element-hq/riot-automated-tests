@@ -43,7 +43,7 @@ public class RiotRegisterTests extends RiotParentTest {
 		//Validate that the fields are still filled
 		Assert.assertFalse(registerPage.userNameRegisterEditText.getText().isEmpty(), "The username field from the register form is empty");
 		//(Impossible to test the password text lenght)
-		restartApplication(getAndroidDriver1());
+		restartApplication(appiumFactory.getAndroidDriver1());
 	}
 	
 	/**
@@ -66,7 +66,7 @@ public class RiotRegisterTests extends RiotParentTest {
 		//Validate the toast "Passwords don't match" : not possible with appium
 		//Validate that we are still on the register form
 		Assert.assertTrue(registerPage.inputsRegisteringLayout.isDisplayed(), "The register form is not displayed");
-		restartApplication(getAndroidDriver1());
+		restartApplication(appiumFactory.getAndroidDriver1());
 	}
 	
 	/**
@@ -91,7 +91,7 @@ public class RiotRegisterTests extends RiotParentTest {
 		//Validate the toasts : not possible with appium
 		//Validate that we are still on the register form
 		Assert.assertTrue(registerPage.isPresentTryAndCatch(registerPage.inputsRegisteringLayout), "The register form is not displayed");
-		restartApplication(getAndroidDriver1());
+		restartApplication(appiumFactory.getAndroidDriver1());
 	}
 	
 	/**
