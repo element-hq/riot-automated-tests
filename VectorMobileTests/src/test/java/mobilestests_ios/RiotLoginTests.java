@@ -47,6 +47,24 @@ public class RiotLoginTests extends RiotParentTest{
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		mainPage.logOutFromRoomsList();
 	}
+	
+	/**
+	 * TODO
+	 * Log with a matrix id.
+	 */
+	@Test(enabled=false)
+	public void loginWithMatrixId(){
+		
+	}
+	
+	/**
+	 * TODO
+	 * Log with a phone number
+	 */
+	@Test(enabled=false)
+	public void loginWithPhoneNumber(){
+		
+	}
 
 	/**
 	 * Check the custom server options and verify the form.

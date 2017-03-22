@@ -179,7 +179,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver_ios","1checkuser"})
 	public void inviteAndCancelInvitationTest() throws InterruptedException{
-//		//1. Create a room.
+		//1. Create a room.
 		RiotRoomsListPageObjects roomList1=new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		RiotRoomPageObjects roomPage=roomList1.createRoom();
 		

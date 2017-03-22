@@ -188,7 +188,7 @@ private AppiumDriver<MobileElement> driver;
 	 */
 	@iOSFindBy(accessibility="SettingsVCDisplayNameTextField")
 	public MobileElement displayNameTextField;
-	@iOSFindBy(accessibility="SettingsVCChangePasswordStaticText")
+	@iOSFindBy(accessibility="SettingsVCChangePwdStaticText")
 	public MobileElement changePasswordStaticText;
 	@iOSFindBy(accessibility="SettingsVCSignoutAlertActionSign Out")
 	public MobileElement signOutAlertDialogButtonConfirm;

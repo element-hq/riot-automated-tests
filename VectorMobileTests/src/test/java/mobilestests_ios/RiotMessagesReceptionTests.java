@@ -27,7 +27,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 * Test that the typing indicator is empty on device B.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers_ios","checkuser"})//@Test(groups="2drivers_ios")
+	@Test(groups={"2drivers_ios","2checkuser"})//@Test(groups="2drivers_ios")
 	public void typingIndicatorTest() throws InterruptedException{
 		String notSentMsg="tmp";
 		RiotRoomsListPageObjects roomsListA = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
@@ -64,7 +64,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 * @param pwd
 	 * @throws InterruptedException 
 	 */
-	@BeforeGroups("checkuser")
+	@BeforeGroups("2checkuser")
 	private void checkIfUsersLogged() throws InterruptedException{
 		super.checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);
 		super.checkIfUserLoggedIos(appiumFactory.getiOsDriver2(), riotUserDisplayNameB, Constant.DEFAULT_USERPWD);

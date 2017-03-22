@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -51,6 +50,24 @@ public class RiotLoginTests extends RiotParentTest{
 		Assert.assertTrue(mainPage.roomsExpandableListView.isDisplayed(), "Rooms list ins't displayed after login.");
 		mainPage.logOut();
 		Assert.assertTrue(loginPage.inputsLoginLayout.isDisplayed(), "The login page isn't displayed after the log-out.");
+	}
+	
+	/**
+	 * TODO
+	 * Log with a matrix id.
+	 */
+	@Test(enabled=false)
+	public void loginWithMatrixId(){
+		
+	}
+	
+	/**
+	 * TODO
+	 * Log with a phone number
+	 */
+	@Test(enabled=false)
+	public void loginWithPhoneNumber(){
+		
 	}
 	
 	/**
