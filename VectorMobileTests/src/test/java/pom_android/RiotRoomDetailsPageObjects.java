@@ -89,7 +89,7 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 	 */
 	public void checkInviteConfirmationMsgBox(String memberAddress) throws InterruptedException{
 		waitUntilDisplayed(driver, "im.vector.alpha:id/parentPanel", true, 5);
-		Assert.assertEquals(inputDialogNameTextView.getText(), "Invite?");
+		Assert.assertEquals(inputDialogNameTextView.getText(), "Confirmation");
 		Assert.assertTrue(inputDialogTextView.getText().matches("^Are you sure you want to invite (\\S+) to this chat\\?$"));
 	}
 	
@@ -158,7 +158,7 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 		memberItem.findElementById("im.vector.alpha:id/filtered_list_delete_action").click();
 		//hit on remove confirmation button from dialog alert
 		waitUntilDisplayed(driver, "android:id/parentPanel", true, 10);
-		Assert.assertEquals(inputAndroidDialogNameTextView.getText(), "Remove?");
+		Assert.assertEquals(inputAndroidDialogNameTextView.getText(), "Confirmation");
 		inputDialogOkButton.click();
 		waitUntilDisplayed(driver, "//android.widget.ProgressBar", false, 10);
 	}

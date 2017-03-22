@@ -10,7 +10,6 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import utility.AppiumFactory;
 import utility.TestUtilities;
 
 public class RiotCaptchaPageObject extends TestUtilities{
@@ -73,7 +72,7 @@ public class RiotCaptchaPageObject extends TestUtilities{
 	 * @throws InterruptedException 
 	 */
 	public void selectAllImages() throws InterruptedException{
-		//ExplicitWait(AppiumFactory.getAppiumDriver(), selectImageForCaptchaView);
+		//ExplicitWait(appiumFactory.getAppiumDriver(), selectImageForCaptchaView);
 		if(waitUntilDisplayed(driver,"//android.view.View[count(android.view.View)>5]", true, 5)){
 			for (MobileElement image : driver.findElementsByXPath("//android.view.View[count(android.view.View)>5]/android.view.View[@content-desc='']")) {
 				image.click();
@@ -84,14 +83,14 @@ public class RiotCaptchaPageObject extends TestUtilities{
 	
 	public void handleCaptchaWebView() throws InterruptedException{
 		Thread.sleep(15000);
-		//Set<String> contextNames = AppiumFactory.getAndroidDriver1().getContextHandles();
-		Set<String> contextNames = ( AppiumFactory.getAndroidDriver1()).getContextHandles();
+		//Set<String> contextNames = appiumFactory.getAndroidDriver1().getContextHandles();
+		Set<String> contextNames = ( appiumFactory.getAndroidDriver1()).getContextHandles();
 		for (String contextName : contextNames) {
 
 			      System.out.println(contextName);
 			  }
-		System.out.println(AppiumFactory.getAndroidDriver1().getCurrentUrl());
-		AppiumFactory.getAndroidDriver1().context("WEBVIEW");
+		System.out.println(appiumFactory.getAndroidDriver1().getCurrentUrl());
+		appiumFactory.getAndroidDriver1().context("WEBVIEW");
 		//captchaPage.newCaptchaWebView.
 		newCaptchaWebView.submit();
 		newCaptchaWebView.click();

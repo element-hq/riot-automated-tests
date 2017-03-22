@@ -13,7 +13,6 @@ import utility.TestUtilities;
 /**
  * 'Verify Device' modal opened to verify keys for one device. Opened after clicking the verify button from a list of devices to verify.
  * @author jeang
- *
  */
 public class RiotVerifyDevicePageObjects extends TestUtilities{
 	private AndroidDriver<MobileElement> driver;

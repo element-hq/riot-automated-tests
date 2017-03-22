@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -12,7 +13,7 @@ import pom_android.RiotContactPickerPageObjects;
 import pom_android.RiotRoomDetailsPageObjects;
 import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
-import utility.AppiumFactory;
+import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
@@ -23,9 +24,10 @@ import utility.ScreenshotUtility;
  */
 @Listeners({ ScreenshotUtility.class })
 public class RiotManagingRoomMembersTests extends RiotParentTest{
-	private String testRoom="room tests Jean";
+	private String testRoom="Common riotusers auto tests";
 	private String matchingWithKnownContactFilter1="riot";
-	private String invitedUser="@riotuser3:matrix.org";
+	private String invitedUser="@riotuser16:matrix.org";
+	private String riotUserDisplayName="riotuser15";
 
 	/**
 	 * 1. Open room testRoom and open his details, then people tab.
@@ -40,34 +42,34 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * Check that the list of filtered members is empty and no results textview is displayed.
 	 * @throws InterruptedException
 	 */
-	@Test(groups="1driver_android")
+	@Test(groups={"1driver_android","1checkuser"})
 	public void useFilterFieldOnPeopleTabTest() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomFilter=(new StringBuilder("filter_").append(randInt1)).toString();
 
 		//1. Open room testRoom and open his details.
-		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		roomsList1.getRoomByName(testRoom).click();
-		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		roomPage1.collapseChatButton.click();
 		roomPage1.activeMembersTextView.click();
-		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(appiumFactory.getAndroidDriver1());
 
 		//Check that text of the filter edittext is correct.
 		Assert.assertEquals(roomDetails1.filterRoomMembersEditText.getText(), "Filter room members","Text on the Filter Room Members is not correct");
 		//Check that the filter button isn't present
-		Assert.assertFalse(waitUntilDisplayed(AppiumFactory.getAndroidDriver1(), "im.vector.alpha:id/clear_search_icon_image_view",false , 0));
+		Assert.assertFalse(waitUntilDisplayed(appiumFactory.getAndroidDriver1(), "im.vector.alpha:id/clear_search_icon_image_view",false , 0));
 
 		//2. Enter a filter in the "Filter room members" edittext.
 		roomDetails1.filterOnRoomMembersList(matchingWithKnownContactFilter1);
-		AppiumFactory.getAndroidDriver1().hideKeyboard();
+		appiumFactory.getAndroidDriver1().hideKeyboard();
 		//Check that the people are correctly filtered.
 		for (MobileElement member : roomDetails1.membersList) {
 			String memberDisplayName=roomDetails1.getDisplayNameOfMemberFromPeopleTab(member);
 			if(null!=memberDisplayName)Assert.assertTrue(memberDisplayName.contains(matchingWithKnownContactFilter1), "A display name of a member doesn't have the filtered word in");	
 		}
 		//Check that the filter button is present
-		Assert.assertTrue(waitUntilDisplayed(AppiumFactory.getAndroidDriver1(), "im.vector.alpha:id/clear_search_icon_image_view",true , 0));
+		Assert.assertTrue(waitUntilDisplayed(appiumFactory.getAndroidDriver1(), "im.vector.alpha:id/clear_search_icon_image_view",true , 0));
 
 		//3. Clear the filter
 		roomDetails1.clearFilteredBarButton.click();
@@ -79,7 +81,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		//Check that the list of filtered members is empty and no result textview is displayed
 		Assert.assertEquals(roomDetails1.membersList.size(), 0);
 		Assert.assertTrue(roomDetails1.noResultTextView.isDisplayed(), "No result text view isn't displayed after filtering members list with random string.");
-		Assert.assertEquals(roomDetails1.noResultTextView.getText(), "No Results");
+		Assert.assertEquals(roomDetails1.noResultTextView.getText(), "No results");
 
 		//back to rooms list
 		roomDetails1.menuBackButton.click();
@@ -96,29 +98,29 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * Check that the item of the KNOWN CONTACTS categorie is (0) (https://github.com/vector-im/riot-android/issues/923)
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="1driver_android")
+	@Test(groups={"1driver_android","1checkuser"})
 	public void contactPickerWithRandomSearchTest() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomContactName=(new StringBuilder("contact_").append(randInt1)).toString();
 
 		//1. Open room testRoom and open his details.
-		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		roomsList1.getRoomByName(testRoom).click();
-		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		roomPage1.collapseChatButton.click();
 		roomPage1.activeMembersTextView.click();
-		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(appiumFactory.getAndroidDriver1());
 
 		//2. Hit the addMember button
 		roomDetails1.addParticipantButton.click();
 		//Check that the ContactPicker page is open
-		RiotContactPickerPageObjects contactPicker1 = new RiotContactPickerPageObjects(AppiumFactory.getAndroidDriver1());
-		AppiumFactory.getAndroidDriver1().hideKeyboard();
+		RiotContactPickerPageObjects contactPicker1 = new RiotContactPickerPageObjects(appiumFactory.getAndroidDriver1());
+		appiumFactory.getAndroidDriver1().hideKeyboard();
 		contactPicker1.checkDefaultLayout();
 
 		//3. Enter a random string in the search bar
 		contactPicker1.searchMemberEditText.setValue(randomContactName);
-		AppiumFactory.getAndroidDriver1().hideKeyboard();
+		appiumFactory.getAndroidDriver1().hideKeyboard();
 		//Check that the text of the first item is equal to the random string
 		Assert.assertEquals(contactPicker1.getDisplayNameOfMemberFromContactPickerList(contactPicker1.detailsMemberListView.get(0)), randomContactName);
 		//Check that there is no KNOWN CONTACTS categorie
@@ -143,25 +145,25 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * Check that there is at least 2 filtered people
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="1driver_android")
+	@Test(groups={"1driver_android","1checkuser"})
 	public void contactPickerWithMatchingSearchOnKnownContact() throws InterruptedException{
 		//1. Open room testRoom and open his details.
-		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		roomsList1.getRoomByName(testRoom).click();
-		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		roomPage1.collapseChatButton.click();
 		roomPage1.activeMembersTextView.click();
-		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(appiumFactory.getAndroidDriver1());
 
 		//2. Hit the addMember button
 		roomDetails1.addParticipantButton.click();
 		//Check that the ContactPicker page is open
-		RiotContactPickerPageObjects contactPicker1 = new RiotContactPickerPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotContactPickerPageObjects contactPicker1 = new RiotContactPickerPageObjects(appiumFactory.getAndroidDriver1());
 		//contactPicker1.checkDefaultLayout();
 
 		//3. Enter in the search bar a word matching known contacts
 		contactPicker1.searchMemberEditText.setValue(matchingWithKnownContactFilter1);
-		AppiumFactory.getAndroidDriver1().hideKeyboard();
+		appiumFactory.getAndroidDriver1().hideKeyboard();
 
 		//Check that the text of the first item is equal to the random string
 		Assert.assertEquals(contactPicker1.getDisplayNameOfMemberFromContactPickerList(contactPicker1.detailsMemberListView.get(0)), matchingWithKnownContactFilter1);
@@ -186,15 +188,15 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * Check that there is no more INVITED category
 	 * @throws InterruptedException
 	 */
-	@Test(groups="1driver_android")
+	@Test(groups={"1driver_android","1checkuser"})
 	public void inviteAndCancelInvitationTest() throws InterruptedException{
 		//1. Create a room.
-		RiotRoomsListPageObjects mainPage1=new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomsListPageObjects mainPage1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		RiotRoomPageObjects roomPage=mainPage1.createRoom();
 
 		//2. Invite a participant
 		roomPage.inviteMembersButton.click();
-		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(appiumFactory.getAndroidDriver1());
 		roomDetails1.addParticipant(invitedUser);
 		roomDetails1.waitUntilInvitedCategorieIsDisplayed(true);
 
@@ -208,6 +210,18 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		roomDetails1.menuBackButton.click();
 	}
 
+	/**
+	 * Log the good user if not.</br> Secure the test.
+	 * @param myDriver
+	 * @param username
+	 * @param pwd
+	 * @throws InterruptedException 
+	 */
+	@BeforeGroups("1checkuser")
+	private void checkIfUserLogged() throws InterruptedException{
+		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
+	}
+	
 	@AfterMethod(alwaysRun=true)
 	private void leaveRoomAfterTest(Method m) throws InterruptedException{
 		switch (m.getName()) {
@@ -218,7 +232,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	}
 
 	private void leaveRoomFromRoomPageAfterTest(String roomName){
-		RiotRoomPageObjects roomPage=new RiotRoomPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomPageObjects roomPage=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		roomPage.leaveRoom();
 		System.out.println("Leave room "+roomName+ " with device 1");
 	}

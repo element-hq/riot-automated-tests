@@ -108,8 +108,8 @@ private int search_timeout=30;
 		}
 		if (lastMsg!=null){
 			String userAndMsg=roomswithBrowseDirectoryLayouts.get(index).findElementById("im.vector.alpha:id/roomSummaryAdapter_roomMessage").getText();
-			String user=userAndMsg.substring(0, userAndMsg.indexOf(":"));
-			String msg=userAndMsg.substring(userAndMsg.indexOf(":")+2,userAndMsg.length());
+			String user=userAndMsg.substring(0, userAndMsg.lastIndexOf(":"));
+			String msg=userAndMsg.substring(userAndMsg.lastIndexOf(":")+2,userAndMsg.length());
 			Assert.assertTrue(user.length()>1, "No user name in the last message of the searched room at index "+index);
 			Assert.assertEquals(msg, lastMsg);	
 		}

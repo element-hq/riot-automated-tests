@@ -2,18 +2,21 @@ package mobilestests_android;
 
 import org.openqa.selenium.ScreenOrientation;
 import org.testng.Assert;
+import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
 import pom_android.RiotSearchFromRoomsListPageObjects;
-import utility.AppiumFactory;
+import pom_android.RiotSettingsPageObjects;
+import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
 @Listeners({ ScreenshotUtility.class })
 public class RiotSearchTests extends RiotParentTest{
+	private String riotUserDisplayName="riotuser15";
 	
 	/**
 	 * Search in ROOMS and MESSAGES tab in search from recent.</br> 
@@ -30,7 +33,7 @@ public class RiotSearchTests extends RiotParentTest{
 	 * Check that the search result is still displayed https://github.com/vector-im/riot-android/issues/934</br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="1driver_android", priority=0,description="test on the search from the rooms list")
+	@Test(groups={"1driver_android","1checkuser_and_contact_permission",}, priority=0,description="test on the search from the rooms list")
 	public void searchRoomsAndMessages() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		int randInt2 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
@@ -38,7 +41,7 @@ public class RiotSearchTests extends RiotParentTest{
 		String randomMsg=(new StringBuilder("msg_search").append(randInt2)).toString();
 		
 		//1. Create a room with a random name.
-		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		RiotRoomPageObjects newRoom= roomsList.createRoom();
 		newRoom.changeRoomName(randomRoomName);
 		
@@ -50,7 +53,7 @@ public class RiotSearchTests extends RiotParentTest{
 		roomsList.searchButton.click();
 		
 		//4. Search in ROOMS tab the random name given in step1
-		RiotSearchFromRoomsListPageObjects searchInRoomsList = new RiotSearchFromRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotSearchFromRoomsListPageObjects searchInRoomsList = new RiotSearchFromRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		searchInRoomsList.roomsTab.click();
 		searchInRoomsList.launchASearch(randomRoomName,true);
 		
@@ -71,16 +74,16 @@ public class RiotSearchTests extends RiotParentTest{
 		
 		//6. Turn the device in landscape mode, then portrait
 		searchInRoomsList.searchEditText.click();
-		AppiumFactory.getAndroidDriver1().rotate(ScreenOrientation.LANDSCAPE);
+		appiumFactory.getAndroidDriver1().rotate(ScreenOrientation.LANDSCAPE);
 		Thread.sleep(1500);
-		AppiumFactory.getAndroidDriver1().rotate(ScreenOrientation.PORTRAIT);
+		appiumFactory.getAndroidDriver1().rotate(ScreenOrientation.PORTRAIT);
 		//Check that the search result is still displayed https://github.com/vector-im/riot-android/issues/934
 		Assert.assertEquals(searchInRoomsList.listMessagesLinearLayouts.size(), 1);
 		searchInRoomsList.checkMessageItemFromResult(0, randomRoomName,null,randomMsg);
 		
 		//teardown : leave room
 		searchInRoomsList.menuBackButton.click();
-		roomsList.clickOnContextMenuOnRoom(randomRoomName, "Leave Conversation");
+		roomsList.leaveRoom(randomRoomName);
 		Thread.sleep(500);
 	}
 	
@@ -96,15 +99,15 @@ public class RiotSearchTests extends RiotParentTest{
 	 * Check that "No results" is displayed after search finished.</br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups="1driver_android", priority=1,description="test on the search from the rooms list with non existent searches")
+	@Test(groups={"1driver_android","1checkuser_and_contact_permission"}, priority=1,description="test on the search from the rooms list with non existent searches")
 	public void searchForNonExistentMsgAndRoom() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomName=(new StringBuilder("randomsearch_").append(randInt1)).toString();
 		
 		//1. From the rooms list hit the search button
-		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		roomsList.searchButton.click();
-		RiotSearchFromRoomsListPageObjects searchInRoomsList = new RiotSearchFromRoomsListPageObjects(AppiumFactory.getAndroidDriver1());
+		RiotSearchFromRoomsListPageObjects searchInRoomsList = new RiotSearchFromRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		
 		//2. Search in ROOMS tab a random name
 		searchInRoomsList.roomsTab.click();
@@ -118,7 +121,7 @@ public class RiotSearchTests extends RiotParentTest{
 		searchInRoomsList.messagesTab.click();
 		searchInRoomsList.waitUntilSearchFinished();
 		//Check that "No results" is displayed after search finished.
-		Assert.assertEquals(searchInRoomsList.noResultTextView.getText(), "No Results");
+		Assert.assertEquals(searchInRoomsList.noResultTextView.getText(), "No results");
 		
 		//4. Search in PEOPLE tab a random name
 		searchInRoomsList.peopleTab.click();
@@ -131,8 +134,33 @@ public class RiotSearchTests extends RiotParentTest{
 		searchInRoomsList.filesTab.click();
 		searchInRoomsList.waitUntilSearchFinished();
 		//Check that "No results" is displayed after search finished.
-		Assert.assertEquals(searchInRoomsList.noResultTextView.getText(), "No Results");
+		Assert.assertEquals(searchInRoomsList.noResultTextView.getText(), "No results");
 		//coming back in the rooms list
 		searchInRoomsList.menuBackButton.click();
+	}
+	
+	/**
+	 * Log the good user if not.</br> Secure the test.
+	 * @param myDriver
+	 * @param username
+	 * @param pwd
+	 * @throws InterruptedException 
+	 */
+	@BeforeGroups("1checkuser_and_contact_permission")
+	private void checkIfUserLogged() throws InterruptedException{
+		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
+		checkContactPermissionChecked();
+	}
+	
+	/**
+	 * Open settings from recents list and check if contacts permission are checked on both devices.
+	 * @throws InterruptedException
+	 */
+	private void checkContactPermissionChecked() throws InterruptedException{
+		System.out.println("Check if contact permission is checked on device1.");
+		RiotRoomsListPageObjects roomsList1= new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
+		RiotSettingsPageObjects settingsView1= roomsList1.openRiotSettingsFromLateralMenu();
+		settingsView1.checkContactsPermissionIfNecessary(true);
+		settingsView1.actionBarBackButton.click();
 	}
 }

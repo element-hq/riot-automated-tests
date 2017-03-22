@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Voip tests for both Android and iOS">
+  <test name="Test">
+    <classes>
+      <class name="mobilestests_android.RiotVoipTests"/>
+      <class name="mobilestests_ios.RiotVoipTests"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->

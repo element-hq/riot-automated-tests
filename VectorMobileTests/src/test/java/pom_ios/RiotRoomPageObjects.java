@@ -11,7 +11,6 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
-import utility.AppiumFactory;
 import utility.TestUtilities;
 
 public class RiotRoomPageObjects extends TestUtilities{
@@ -227,6 +226,34 @@ public class RiotRoomPageObjects extends TestUtilities{
 	@iOSFindBy(xpath="//XCUIElementTypeApplication/XCUIElementTypeWindow//XCUIElementTypeSheet//XCUIElementTypeCollectionView/XCUIElementTypeCell")
 	public MobileElement sendAsItemList;
 	
+	/*
+	 * NOTIFICATION AREA
+	 */
+	@iOSFindBy(accessibility="RoomVCActivitiesContainer")
+	public MobileElement roomNotificationArea;
+	@iOSFindBy(accessibility="RoomExtrasInfosView")
+	public MobileElement roomNotificationArea2;
+	
+	/**
+	 * Not sure it works. Better getNotificationMessage().
+	 */
+	@iOSFindBy(accessibility="RoomActivitiesViewMessageLabel")
+	public MobileElement notificationMessage;
+	
+	public MobileElement getNotificationMessage(){
+		return roomNotificationArea2.findElementByClassName("XCUIElementTypeTextView");
+	}
+	
+	/**
+	 * Click on "Resend All" link on the messages not sent due to unknown devices messages, on the notification area.
+	 */
+	public void clickOnResendAllLinkFromNotificationArea(){
+		notificationMessage.getSize().getWidth();notificationMessage.getCenter();
+		int xLink=notificationMessage.getCenter().getX();
+		//int yLink=notificationMessage.getLocation().getY()+(notificationMessage.getSize().getHeight()/4)*3;
+		int yLink=notificationMessage.getLocation().getY()+(notificationMessage.getSize().getHeight()/4)*2+5;
+		driver.tap(1, xLink, yLink, 500);
+	}
 	
 	/*
 	 * BOTTOM
@@ -275,13 +302,21 @@ public class RiotRoomPageObjects extends TestUtilities{
 	}
 
 	/**
+	 * Check that a photo is present in a post by checking his dimension.
+	 * @param post
+	 */
+	public void checkThatPhotoIsPresentInPost(MobileElement post){
+//		org.openqa.selenium.Dimension takenPhoto=this.getAttachedImageByPost(post).getSize();
+//	    Assert.assertTrue(takenPhoto.height!=0 && takenPhoto.width!=0, "The unsent photo has null dimension");
+	}
+	/**
 	 * Hit the upload button, take photo, then select a size.
 	 * @param size
 	 * @throws InterruptedException
 	 */
 	public void attachPhotoFromCamera(String size) throws InterruptedException {
 		uploadButton.click();
-		RiotCameraPageObjects cameraPage = new RiotCameraPageObjects(AppiumFactory.getiOsDriver1());
+		RiotCameraPageObjects cameraPage = new RiotCameraPageObjects(appiumFactory.getiOsDriver1());
 		cameraPage.cameraCaptureButton.click();
 		waitUntilDisplayed(driver, "OK", true, 10);
 		cameraPage.okButton.click();
@@ -300,10 +335,10 @@ public class RiotRoomPageObjects extends TestUtilities{
 
 	/**
 	 * Type and send a message.
-	 * @param encrypted_msg_1
+	 * @param msg
 	 */
-	public void sendAMessage(String encrypted_msg_1) {
-		sendKeyTextView.sendKeys(encrypted_msg_1);
+	public void sendAMessage(String msg) {
+		sendKeyTextView.sendKeys(msg);
 		sendButton.click();
 	}
 	
@@ -343,4 +378,22 @@ public class RiotRoomPageObjects extends TestUtilities{
 		}
 	}
 
+	/*
+	 * ENCRYPTION
+	 */
+	@iOSFindBy(accessibility="RoomVCEncryptionAlert")
+	public MobileElement WarningOnBetaEncryptionAlert;
+	@iOSFindBy(accessibility="RoomVCEncryptionAlertActionOK")
+	public MobileElement WarningOnBetaEncryptionOkButton;
+	
+	/**
+	 * Close the warning alert about the beta state of encryption when user enters the first time in a room.
+	 * @throws InterruptedException
+	 */
+	public void closeWarningAlertAboutBetaStateOfE2e() throws InterruptedException{
+		if(waitUntilDisplayed(driver, "RoomVCEncryptionAlert", true, 1)){
+			WarningOnBetaEncryptionOkButton.click();
+		}
+		
+	}
 }

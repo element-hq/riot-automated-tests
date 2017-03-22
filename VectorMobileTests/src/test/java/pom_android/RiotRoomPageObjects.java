@@ -216,7 +216,14 @@ public class RiotRoomPageObjects extends TestUtilities{
 
 	public MobileElement getLastPost(){
 		//return Iterables.getLast(this.postsListLayout);
-		return postsListLayout.get(postsListLayout.size()-1);
+		int sizeList=postsListLayout.size();
+		if(sizeList>0){
+			return postsListLayout.get(postsListLayout.size()-1);
+		}else{
+			Assert.fail("Not a single post layout found in the room.");
+			return null;
+		}
+		
 	}
 
 	/**
@@ -316,7 +323,8 @@ public class RiotRoomPageObjects extends TestUtilities{
 	 */
 	public MobileElement getProgressionBarFromPost(MobileElement postLinearLayout){
 		try {
-			return postLinearLayout.findElement(By.xpath("//android.widget.ProgressBar[@resource-id='im.vector.alpha:id/media_progress_view']"));
+			//return postLinearLayout.findElement(By.xpath("//android.widget.ProgressBar[@resource-id='im.vector.alpha:id/media_progress_view']"));
+			return postLinearLayout.findElement(By.id("im.vector.alpha:id/media_progress_view"));
 		} catch (Exception e) {
 			return null;
 		}
@@ -465,6 +473,15 @@ public class RiotRoomPageObjects extends TestUtilities{
 		}
 		return uploaded;
 	}
+	
+	/**
+	 * Check that a photo is present in a post by checking his dimension.
+	 * @param post
+	 */
+	public void checkThatPhotoIsPresentInPost(MobileElement post){
+		org.openqa.selenium.Dimension takenPhoto=this.getAttachedImageByPost(post).getSize();
+	    Assert.assertTrue(takenPhoto.height!=0 && takenPhoto.width!=0, "The unsent photo has null dimension");
+	}
 
 	/**
 	 * From a room, take a photo and attach it to the messages.
@@ -480,6 +497,8 @@ public class RiotRoomPageObjects extends TestUtilities{
 		cameraPreview.confirmPickingPictureButton.click();
 		ExplicitWaitToBeVisible(driver,cameraPreview.sendAsMenuLayout);
 		cameraPreview.getItemFromSendAsMenu(photoSize).click();
+		//wait until the progress layout on the room page is gone. Don't mix up with the progress bar in the post showing the upload of the media.
+		waitUntilDisplayed(driver, "im.vector.alpha:id/medias_processing_progress", false, 10);
 	}
 
 	/**
@@ -490,14 +509,24 @@ public class RiotRoomPageObjects extends TestUtilities{
 		waitForPostsToBeDisplayed();
 		startCallButton.click();
 		voiceCallFromMenuButton.click();
-		//check that call layout is diplayed on device 2
-		//		RiotCallingPageObject callingViewDevice2= new RiotCallingPageObject(AppiumFactory.getAppiumDriver2());
-		//		callingViewDevice2.isDisplayed(true);
 	}
 
 	public void startVideoCall() throws InterruptedException{
 		waitForPostsToBeDisplayed();
 		startCallButton.click();
 		videoCallFromMenuButton.click();
+	}
+	
+	/*
+	 * Encryption
+	 */
+	/**
+	 * Close the warning alert about the beta state of encryption when user enters the first time in a room.
+	 * @throws InterruptedException
+	 */
+	public void closeWarningAlertAboutBetaStateOfE2e() throws InterruptedException{
+		if(waitUntilDisplayed(driver, "im.vector.alpha:id/parentPanel", true, 1)){
+			alertDialogButton2.click();
+		}
 	}
 }

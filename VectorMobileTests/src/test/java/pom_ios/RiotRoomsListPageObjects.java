@@ -21,7 +21,7 @@ private AppiumDriver<MobileElement> driver;
 		//ExplicitWait(driver,this.roomsAndCategoriesList);
 		try {
 			//waitUntilDisplayed((IOSDriver<MobileElement>) driver,"RecentsVCTableView", true, 5);
-			waitUntilDisplayed((IOSDriver<MobileElement>) driver,"Messages", true, 5);
+			waitUntilDisplayed((IOSDriver<MobileElement>) driver,"RecentsVCTableView", true, 5);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -106,14 +106,14 @@ private AppiumDriver<MobileElement> driver;
 	/**
 	 * Return a room as a MobileElement.</br>
 	 * Return null if not found.
-	 * @param myRommName
+	 * @param myRoomName
 	 * @return 
 	 * @throws InterruptedException 
 	 */
-	public MobileElement getRoomByName(String myRommName) throws InterruptedException{
+	public MobileElement getRoomByName(String myRoomName) throws InterruptedException{
 		waitUntilDisplayed(driver, "ROOMS",true, 10);
 		try {
-			return roomsAndCategoriesListTable.findElementByXPath("//XCUIElementTypeCell[@name='RecentTableViewCell']/XCUIElementTypeStaticText[@name='TitleLabel' and @value='"+myRommName+"']/..");
+			return roomsAndCategoriesListTable.findElementByXPath("//XCUIElementTypeCell[@name='RecentTableViewCell']/XCUIElementTypeStaticText[@name='TitleLabel' and @value='"+myRoomName+"']/..");
 		} catch (Exception e) {
 			return null;
 		}
@@ -173,23 +173,103 @@ private AppiumDriver<MobileElement> driver;
 	/*
 	 * SETTINGS VIEW
 	 */
+	/*
+	 * NAV BAR
+	 */
+	@iOSFindBy(accessibility="SettingsVCNavBarSaveButton")
+	public MobileElement saveNavBarButton;
+	@iOSFindBy(accessibility="Back")
+	public MobileElement backMenuButton;
 	@iOSFindBy(accessibility="SettingsVCSignOutButton")
 	public MobileElement signOutButton;
 	
-	@iOSFindBy(xpath="//XCUIElementTypeTable//XCUIElementTypeCell//XCUIElementTypeStaticText[@name='Display Name']/parent::*//*[1]")
+	/*
+	 * USER SETTINGS
+	 */
+	@iOSFindBy(accessibility="SettingsVCDisplayNameTextField")
 	public MobileElement displayNameTextField;
-	
+	@iOSFindBy(accessibility="SettingsVCChangePwdStaticText")
+	public MobileElement changePasswordStaticText;
 	@iOSFindBy(accessibility="SettingsVCSignoutAlertActionSign Out")
 	public MobileElement signOutAlertDialogButtonConfirm;
 	@iOSFindBy(accessibility="SettingsVCSignoutAlertActionCancel")
 	public MobileElement signOutAlertDialogButtonCancel;
 	
+	
+	/**
+	 * From the settings view, erase the display name and set a new one.</br>
+	 * It doesn't click on the save button.
+	 * @param newDisplayName
+	 */
+	public void changeDisplayNameFromSettings(String newDisplayName){
+		displayNameTextField.click();
+		displayNameTextField.clear();
+		displayNameTextField.setValue(newDisplayName);
+	}
+	
+	/**
+	 * From the settings view, hit the Change password item, change the password in the AlertDialog and click on save on this alert.
+	 * </br> Then click on the confirmation alertbox 'Your pwd have been updated'.
+	 * @param oldPwd
+	 * @param newPwd
+	 * @throws InterruptedException 
+	 */
+	public void changePasswordFromSettings(String oldPwd, String newPwd, Boolean expectedCorrectlyChange) throws InterruptedException{
+		changePasswordStaticText.click();
+		driver.getKeyboard().sendKeys(oldPwd+"\n");
+		driver.getKeyboard().sendKeys(newPwd+"\n");
+		driver.getKeyboard().sendKeys(newPwd);
+		//driver.findElementByAccessibilityId("Save").click();
+		driver.findElementsByClassName("XCUIElementTypeCollectionView").get(1).findElementsByClassName("XCUIElementTypeCell").get(1).click();
+		if(expectedCorrectlyChange){
+			Assert.assertTrue(waitUntilDisplayed(driver, "Your password has been updated", true, 10), "Password updated alert dialog isn't displayed after changing the password");
+			driver.findElementByAccessibilityId("SettingsVCOnPasswordUpdatedAlertActionOK").click();
+		}else{
+			Assert.assertTrue(waitUntilDisplayed(driver, "Fail to update password", true, 10), "Password updated fail dialog isn't displayed after changing the password");
+			driver.findElementByAccessibilityId("SettingsVCPasswordChangeFailedAlertActionOK").click();
+		}
+
+		
+	}
+	
 	/**
 	 * Log-out from Riot with the lateral menu.
 	 */
-	public void logOut(){
+	public void logOutFromRoomsList(){
 		this.settingsButton.click();
+		logOutFromSettingsView();
+	}
+	/**
+	 * Log-out from Riot from the settings view.
+	 */
+	public void logOutFromSettingsView(){
 		this.signOutButton.click();
 		signOutAlertDialogButtonConfirm.click();
+	}
+	/**
+	 * Log out from the rooms list, log in with the parameters.</br>
+	 * Return a RiotRoomsListPageObjects POM.</br> Can be used to renew the encryption keys.
+	 * @param username
+	 * @param pwd
+	 * @return new RiotRoomsListPageObjects
+	 */
+	public RiotRoomsListPageObjects logOutAndLogin(String username, String pwd) {
+		this.logOutFromRoomsList();
+		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
+		loginPage.fillLoginForm(username,null, pwd);
+		return new RiotRoomsListPageObjects(driver);
+	}
+	/**
+	 * Log out from the rooms list, log in with the parameters.</br>
+	 * Return a RiotRoomsListPageObjects POM.</br> Can be used to renew the encryption keys.
+	 * @param username
+	 * @param pwd
+	 * @return new RiotRoomsListPageObjects
+	 */
+	public RiotRoomsListPageObjects logOutAndLoginFromSettingsView(String username, String pwd) {
+		this.logOutFromSettingsView();
+		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
+		loginPage.fillLoginForm(username,null, pwd);
+		return new RiotRoomsListPageObjects(driver);
 	}
 }

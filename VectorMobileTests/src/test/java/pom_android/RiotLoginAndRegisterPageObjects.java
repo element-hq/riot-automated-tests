@@ -18,14 +18,14 @@ import utility.TestUtilities;
  */
 public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	private AppiumDriver<MobileElement> driver;
-	
+
 	public RiotLoginAndRegisterPageObjects(AppiumDriver<MobileElement> myDriver) {
 		driver= myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 		//ExplicitWaitToBeVisible(driver,this.inputsLoginLayout);
 		try {
 			if(driver instanceof AndroidDriver<?>){
-				waitUntilDisplayed((AndroidDriver<MobileElement>) driver,"im.vector.alpha:id/login_inputs_layout", true, 5);
+				waitUntilDisplayed((AndroidDriver<MobileElement>) driver,"im.vector.alpha:id/login_inputs_layout", true, 10);
 			}else if(driver instanceof IOSDriver<?>){
 				waitUntilDisplayed((IOSDriver<MobileElement>) driver,"//UIAApplication[1]/UIAWindow[1]/UIAScrollView[2]/UIATextField[1]", true, 5);
 			}		
@@ -41,34 +41,39 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	/**
 	 * MAIN LOGIN FORM
 	 */
-			/**
-			 * 		login part
-			 */
+	/**
+	 * 		login part
+	 */
 	@AndroidFindBy(id="im.vector.alpha:id/main_input_layout")
 	public MobileElement inputsLoginLayout;
-	
-	@iOSFindBy(xpath="//UIAApplication[1]/UIAWindow[1]/UIAScrollView[2]/UIATextField[1]")
+
 	@AndroidFindBy(id="im.vector.alpha:id/login_user_name")
 	public MobileElement emailOrUserNameEditText;
-	
-	@iOSFindBy(xpath="//UIAApplication[1]/UIAWindow[1]/UIAScrollView[2]/UIASecureTextField[1]")
+	@AndroidFindBy(id="im.vector.alpha:id/login_phone_number_country")
+	public MobileElement countryCodeSelectorEditText;
+	@AndroidFindBy(id="im.vector.alpha:id/login_phone_number_value")
+	public MobileElement phoneNumberEditText;
 	@AndroidFindBy(id="im.vector.alpha:id/login_password")
 	public MobileElement passwordEditText;
-	
+
 	/**
 	 * Simple login without doing any verifications.
 	 * @param usernameOrEmail
 	 * @param password
 	 */
-	public void fillLoginForm(String usernameOrEmail, String password){
-		emailOrUserNameEditText.setValue(usernameOrEmail);
-		passwordEditText.setValue(password);
+	public void fillLoginForm(String usernameOrEmail, String phoneNumber,String password){
+		if(null!=usernameOrEmail && usernameOrEmail.length()!=0)
+			emailOrUserNameEditText.setValue(usernameOrEmail);
+		if(null!=phoneNumber && phoneNumber.length()!=0)
+			phoneNumberEditText.setValue(phoneNumber);
+		if(null!=password && password.length()!=0)
+			passwordEditText.setValue(password);
 		loginButton.click();
 	}
-	
-			/**
-			 * 		register part
-			 */
+
+	/**
+	 * 		register part
+	 */
 	@AndroidFindBy(id="im.vector.alpha:id/creation_inputs_layout")
 	public MobileElement inputsRegisteringLayout;
 	@AndroidFindBy(id="im.vector.alpha:id/creation_email_address")
@@ -79,10 +84,10 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement pwd1EditRegisterText;
 	@AndroidFindBy(id="im.vector.alpha:id/creation_password2")
 	public MobileElement pwd2EditRegisterText;
-	
-			/**
-			 * 		forget password part
-			 */
+
+	/**
+	 * 		forget password part
+	 */
 	@AndroidFindBy(id="im.vector.alpha:id/forget_password_inputs_layout")
 	public MobileElement inputsForgetPasswordLayout;
 	@AndroidFindBy(xpath="//android.widget.LinearLayout[@resource-id='im.vector.alpha:id/forget_password_inputs_layout']/android.widget.TextView")
@@ -95,14 +100,14 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement confirmNewPwdResetPwdEditText;
 	@AndroidFindBy(id="im.vector.alpha:id/button_reset_password")
 	public MobileElement sendResetEmailButton;
-	
+
 	@AndroidFindBy(xpath="//android.widget.LinearLayout[@resource-id='im.vector.alpha:id/main_input_layout']//android.widget.LinearLayout[@resource-id='im.vector.alpha:id/display_server_url_layout']/android.widget.TextView[@index='1']")
 	public MobileElement customServerOptionsTextView;
 	@AndroidFindBy(id="im.vector.alpha:id/display_server_url_expand_checkbox")
 	public MobileElement customServerOptionsCheckBox;
 	@AndroidFindBy(id="im.vector.alpha:id/login_forgot_password")
 	public MobileElement forgotPwdButton;
-	
+
 	/**
 	 * LOGIN MATRIX SERVER CUSTOM OPTIONS
 	 */
@@ -118,19 +123,19 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement identityServerTextView;
 	@AndroidFindBy(xpath="//android.widget.LinearLayout[@resource-id='im.vector.alpha:id/login_matrix_server_options_layout']/android.widget.EditText[2]")
 	public MobileElement identityServerEditText;
-	
+
 	/**
 	 * BOTTOM BAR
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/login_actions_bar")
 	public MobileElement loginActionBar;
-	
+
 	@iOSFindBy(xpath="//UIAApplication[1]/UIAWindow[1]/UIAScrollView[2]/UIAButton[@label='Log in']")
 	@AndroidFindBy(id="im.vector.alpha:id/button_login")
 	public MobileElement loginButton;
 	@AndroidFindBy(id="im.vector.alpha:id/button_register")
 	public MobileElement registerButton;
-	
+
 	/**
 	 * REGISTER CONFIRM MSGBOX
 	 */
@@ -142,7 +147,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement msgboxConfirmationNoButton;
 	@AndroidFindBy(id="android:id/button1")
 	public MobileElement msgboxConfirmationYesButton;
-	
+
 	/**
 	 * Start a registration to the captcha webview.
 	 * @throws InterruptedException 
@@ -157,17 +162,4 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 		waitUntilDisplayed(driver,"android:id/parentPanel", true, 10);
 		msgboxConfirmationYesButton.click();
 	}
-	/**
-	 * return true if the parentPanel is present and false if it's not
-	 * @return
-	 */
-	public Boolean isPresentTryAndCatch(MobileElement mobileElement){
-		try {
-			mobileElement.isEnabled();
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}
-	
 }

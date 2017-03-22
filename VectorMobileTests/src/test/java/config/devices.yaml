@@ -1,0 +1,27 @@
+---
+androiddevice1:
+    platformName: Android
+    deviceName: STZ_DE_12681 (Galaxy S4)
+    udid: a71011c8
+    platformVersion: 4.4.2
+  
+androiddevice2:
+    platformName: Android
+    deviceName: STZ_DE_11531 (Galaxy S3)
+    udid: 4df1a0ee7bf25fa3
+    platformVersion: "4.3"
+  
+iosdevice1:
+    platformName: iOS
+    deviceName: STZ_DE_13243 (iPhone 6S Plus)
+    udid: e75c0085c74a872846772a6b2ee56a86849a4d92
+    platformVersion: 9.3.5
+    automationName: XCUITest
+  
+iosdevice2:
+    platformName: iOS
+    deviceName: Matrix's iPhone (iPhone 5C)
+    udid: 2a418a9dbcd960d904a501bf558120625f96f409
+    platformVersion: 9.3.5
+    automationName: XCUITest
+...

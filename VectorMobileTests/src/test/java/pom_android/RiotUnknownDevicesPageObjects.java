@@ -14,7 +14,7 @@ import utility.TestUtilities;
 
 /**
  * Modal opened when a user send a message in a e2e room where there is unknown devices.
- * @author matrix
+ * @author jeangb
  */
 public class RiotUnknownDevicesPageObjects extends TestUtilities {
 	private AndroidDriver<MobileElement> driver;
@@ -63,16 +63,16 @@ public class RiotUnknownDevicesPageObjects extends TestUtilities {
 	@AndroidFindBy(id="android:id/buttonPanel")
 	public MobileElement buttonPanel;
 	
-	@AndroidFindBy(id="android:id/button2")
-	public MobileElement cancelButton;
 	@AndroidFindBy(id="android:id/button1")
+	public MobileElement sendAnywayButton;
+	@AndroidFindBy(id="android:id/button3")
 	public MobileElement okButton;
 	
 	public void checkUnknownDevicesModal(){
 		Assert.assertEquals(alertTitleTextView.getText(), "Room contains unknown devices", "Modal title is wrong.");
 		Assert.assertEquals(alertBodyMessageTextView.getText(), "This room contains unknown devices which have not been verified.\nThis means there is no guarantee that the devices belong to the users they claim to.\nWe recommend you go through the verification process for each device before continuing, but you can resend the message without verifying if you prefer.\n\nUnknown devices:", "Modal main message is wrong.");
 		Assert.assertTrue(unknownDevicesItemsList.size()>=1, "There is less than 1 device to verify");
-		Assert.assertEquals(cancelButton.getText(), "Cancel");
+		Assert.assertEquals(sendAnywayButton.getText(), "Send Anyway");
 		Assert.assertEquals(okButton.getText(), "OK");
 	}
 	

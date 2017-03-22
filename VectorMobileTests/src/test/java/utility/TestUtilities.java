@@ -21,8 +21,12 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.Connection;
+import io.appium.java_client.ios.IOSDriver;
+import pom_ios.RiotLoginAndRegisterPageObjects;
+import pom_ios.RiotRoomsListPageObjects;
 
 public class TestUtilities {
+	public static AppiumFactory appiumFactory=AppiumFactory.getInstance();
 	
 	public void ExplicitWait(AppiumDriver<MobileElement> driver, WebElement element){
 		(new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(element));
@@ -141,7 +145,7 @@ public class TestUtilities {
 	
 	public void captureImage(String imgUrl,MobileElement element) throws IOException{
 		new File(imgUrl).delete();
-		File screen = ((TakesScreenshot) AppiumFactory.getAndroidDriver2())
+		File screen = ((TakesScreenshot) appiumFactory.getAndroidDriver2())
                 .getScreenshotAs(OutputType.FILE);
 	    Point point = element.getLocation();
 
@@ -188,7 +192,7 @@ public class TestUtilities {
 		//System.out.println("s="+scrollStart);
 		Double screenHeightEnd = dimensions.getHeight() * 0.2;
 		int scrollEnd = screenHeightEnd.intValue();
-		//AppiumFactory.getAndroidDriver1().swipe(0,scrollStart,0,scrollEnd,2000);
+		//appiumFactory.getAndroidDriver1().swipe(0,scrollStart,0,scrollEnd,2000);
 		driver.swipe(0,scrollStart,0,scrollEnd,2000);
 	}
 	
@@ -206,4 +210,64 @@ public class TestUtilities {
             return false;
         }
     }
+	
+	/**
+	 * Log the good user if not.</br> Secure the test.
+	 * @param myDriver
+	 * @param username
+	 * @param pwd
+	 * @throws InterruptedException
+	 */
+	public void checkIfUserLoggedAndroid(AndroidDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException {
+		//if login page is displayed, then logged with the wanted user
+		System.out.println("Check if user "+username+" is logged in "+Constant.APPLICATION_NAME);
+		if(waitUntilDisplayed(myDriver, "im.vector.alpha:id/main_input_layout", false, 5)){
+			System.out.println("User "+username+" isn't logged, login forced.");
+			pom_android.RiotLoginAndRegisterPageObjects loginView = new pom_android.RiotLoginAndRegisterPageObjects(myDriver);
+			loginView.fillLoginForm(username,null, pwd);
+		}else{
+			//check if the wanted user is loged in
+			pom_android.RiotRoomsListPageObjects listRoom = new pom_android.RiotRoomsListPageObjects(myDriver);
+			listRoom.contextMenuButton.click();
+			String actualLoggedUser=listRoom.displayedUserMain.getText();
+			if(null==actualLoggedUser){
+				actualLoggedUser="";
+			}
+			if(!actualLoggedUser.equals(username)){
+				System.out.println("User "+username+" isn't logged. An other user is logged ("+actualLoggedUser+"), login with "+username+".");
+				myDriver.navigate().back();
+				listRoom.logOutAndLogin(username, pwd);
+			}else{
+				//close lateral menu
+				System.out.println("User "+username+" is logged.");
+				myDriver.navigate().back();
+			}
+		}
+	}
+	public void checkIfUserLoggedIos(IOSDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException {
+		//if login page is displayed, then logged with the wanted user
+		System.out.println("Check if user "+username+" is logged in "+Constant.APPLICATION_NAME);
+		if(waitUntilDisplayed(myDriver, "AuthenticationVCScrollViewContentView", false, 5)){
+			System.out.println("User "+username+" isn't logged, login forced.");
+			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(myDriver);
+			loginPage.fillLoginForm(username,null, pwd);
+			new RiotRoomsListPageObjects(myDriver);
+		}else{
+			//check if the wanted user is loged in
+			RiotRoomsListPageObjects listRoom = new RiotRoomsListPageObjects(myDriver);
+			listRoom.settingsButton.click();
+			String actualLoggedUser=listRoom.displayNameTextField.getText();
+			if(null==actualLoggedUser){
+				actualLoggedUser="";
+			}
+			if(!actualLoggedUser.equals(username)){
+				System.out.println("User "+username+" isn't logged. An other user is logged ("+actualLoggedUser+"), let's log in with "+username+".");
+				listRoom.logOutAndLoginFromSettingsView(username, pwd);
+			}else{
+				//close lateral menu
+				System.out.println("User "+username+" is logged.");
+				listRoom.backMenuButton.click();
+			}
+		}
+	}
 }

@@ -18,5 +18,5 @@ rm -rf Vector.xcworkspace/ || true
 pod install
 
 ../buildipa.sh
-
+mkdir out
 ./checkipa.sh out/Vector.ipa

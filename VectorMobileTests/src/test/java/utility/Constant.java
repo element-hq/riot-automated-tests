@@ -1,5 +1,9 @@
 package utility;
 
+import java.io.FileNotFoundException;
+
+import com.esotericsoftware.yamlbeans.YamlException;
+
 public class Constant {
 	public static final String FILE_TESTDATA = "testdata1.xlsx";
 	/*
@@ -10,30 +14,45 @@ public class Constant {
 	public static final String APPIUM_COMMON_PORT="4723";
 	public static final String WEBDRIVERAGENT_PORT="8080";
 	public static final String SERVER1_HTTP_ADDRESS="http://"+SERVER1_ADDRESS+":"+APPIUM_COMMON_PORT+"/wd/hub";
-	public static final String SERVER2_HTTP_ADDRESS="http://"+SERVER2_ADDRESS+":"+APPIUM_COMMON_PORT+"/wd/hub";//"http://127.0.0.1:4723/wd/hub";
-	/**
-	 * 0: servers aren't automatically started.</br>
-	 * 1: servers are automatically started with a CommandLine object. Appium server's logs aren't displayed in the console.</br>
-	 * 2: servers are automatically started with an AppiumDriverLocalService object. Appium server's logs are displayed in the console.</br>
-	 */
-	public static final int STARTING_SERVER_MODE=2;
+	public static final String SERVER2_HTTP_ADDRESS="http://"+SERVER2_ADDRESS+":"+APPIUM_COMMON_PORT+"/wd/hub";
+
+	public static final String getServer1HttpAddress() throws FileNotFoundException, YamlException{
+		if("2"==ReadConfigFile.getInstance().getConfMap().get("starting_server_mode"))
+			return AppiumServerStartAndStopService.service_url1;
+		else
+			return SERVER1_HTTP_ADDRESS;
+	}
+
+	public static final String getServer2HttpAddress() throws FileNotFoundException, YamlException{
+		if("2"==ReadConfigFile.getInstance().getConfMap().get("starting_server_mode"))
+			return AppiumServerStartAndStopService.service_url2;
+		else
+			return SERVER2_HTTP_ADDRESS;
+	}
+
 	/*
-	 * DEVICES
+	 * CONF
 	 */
-	public static final String ANDROID_DEVICE1_NAME = "a71011c8";
-	public static final String ANDROID_DEVICE2_NAME = "4df1a0ee7bf25fa3";
-	/*** iPhone 6+ STZ_DE_13243.*/
-	public static final String IOS_DEVICE1_UDID = "e75c0085c74a872846772a6b2ee56a86849a4d92";
-	/*** iPhone 5C STZ_DE_13208.*/
-	public static final String IOS_DEVICE2_UDID = "2a418a9dbcd960d904a501bf558120625f96f409";//1c7e0b4559589b57396a57f8eaa382c9bc42d8d7 //2a418a9dbcd960d904a501bf558120625f96f409 //99129ae17ce75bdc31f66f507725b2b98907a10d
-	
+	public static final String CONFIG_FILE = "src/test/java/config/config.yaml";
+	public static final String DEVICES_CONFIG_FILE ="src/test/java/config/devices.yaml";
+
 	/*
 	 * RIOT
 	 */
+	public static final String APPLICATION_NAME = "RIOT";
+	/*
+	 * 			iOS-specific
+	 */
+	public static final String APP_BUNDLE_ID = "im.vector.app";
+	public static final String PATH_TO_IOS_IPA="/buildipa/riot-ios/out/Vector.ipa";
+	/*
+	 * 			Android-specific
+	 */
 	public static final String PACKAGE_APP_NAME = "im.vector.alpha";
 	public static final String APPLICATION_LOGIN_ACTIVITY="im.vector.activity.LoginActivity";
-	public static final String APPLICATION_NAME = "RIOT";
-	
+	public static final String PATH_TO_ANDROID_APK="/buildapk/riot-android/out/Vector.apk";
+
+
 	/*
 	 * NODE JS AND APPIUM
 	 */
@@ -48,7 +67,7 @@ public class Constant {
 	public static final String DEFAULT_USERADRESS="@riotuser2:matrix.org";
 	public static final String DEFAULT_MATRIX_SERVER="https://matrix.org";
 	public static final String DEFAULT_IDENTITY_SERVER="https://vector.im";
-	
+
 	/*
 	 * E2E ENCRYPTION
 	 */

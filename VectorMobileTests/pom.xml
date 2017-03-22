@@ -1,77 +1,125 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.amdocs</groupId>
-  <artifactId>riotmobiletests</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>riotmobiletests</name>
-  <description>automated functional tests for riot mobiles applications</description>
-  <dependencies>
-  	<dependency>
-  		<groupId>io.appium</groupId>
-  		<artifactId>java-client</artifactId>
-  		<version>4.1.2</version>
-  		<scope>test</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.testng</groupId>
-  		<artifactId>testng</artifactId>
-  		<version>LATEST</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.poi</groupId>
-  		<artifactId>poi-ooxml</artifactId>
-  		<version>3.15</version>
-  		<scope>test</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>com.hotwire.image-assert</groupId>
-  		<artifactId>image-assert</artifactId>
-  		<version>1.0.4</version>
-  	</dependency>
-  	<dependency>
-    <groupId>nu.pattern</groupId>
-    <artifactId>opencv</artifactId>
-    <version>2.4.9-4</version>
-</dependency>
-<dependency>
-	<groupId>com.github.genium-framework</groupId>
-	<artifactId>Appium-Support</artifactId>
-	<version>LATEST</version>
-</dependency>
-  </dependencies>
-  <build>
-            <sourceDirectory>${basedir}/src</sourceDirectory>
-            <testSourceDirectory>${basedir}/test</testSourceDirectory>
-  	<plugins>
-  		<plugin>
-  			<groupId>org.testng</groupId>
-  			<artifactId>testng</artifactId>
-  			<version>6.8</version>
-  		</plugin>
-  		<plugin>
-  			<groupId>org.apache.maven.plugins</groupId>
-  			<artifactId>maven-javadoc-plugin</artifactId>
-  			<version>2.10.4</version>
-  			        <configuration>
-          <reportOutputDirectory>${project.reporting.outputDirectory}/doc</reportOutputDirectory>
-          <destDir>myapidocs</destDir>
-
-        </configuration>
-  		</plugin>
-  		<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.8</version>
-                  			        <configuration>
-          <reportOutputDirectory>${project.reporting.outputDirectory}/doc</reportOutputDirectory>
-          <destDir>myapidocs</destDir>
-        </configuration>
-            </plugin>
-  	</plugins>
-  </build>
-  <properties>
-     <project.reporting.outputDirectory>
-        ./test-output
-    </project.reporting.outputDirectory>
-  </properties>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.amdocs</groupId>
+	<artifactId>riotmobiletests</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>riotmobiletests</name>
+	<description>automated functional tests for riot mobiles applications</description>
+	<dependencies>
+		<dependency>
+			<groupId>com.beust</groupId>
+			<artifactId>jcommander</artifactId>
+			<version>1.58</version>
+		</dependency>
+		<dependency>
+			<groupId>io.appium</groupId>
+			<artifactId>java-client</artifactId>
+			<version>4.1.2</version>
+			<!-- <scope>test</scope> -->
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>LATEST</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.15</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.hotwire.image-assert</groupId>
+			<artifactId>image-assert</artifactId>
+			<version>1.0.4</version>
+		</dependency>
+		<dependency>
+			<groupId>nu.pattern</groupId>
+			<artifactId>opencv</artifactId>
+			<version>2.4.9-4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.genium-framework</groupId>
+			<artifactId>Appium-Support</artifactId>
+			<version>LATEST</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.esotericsoftware.yamlbeans/yamlbeans -->
+		<dependency>
+			<groupId>com.esotericsoftware.yamlbeans</groupId>
+			<artifactId>yamlbeans</artifactId>
+			<version>LATEST</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<sourceDirectory>../src/test/java</sourceDirectory>
+		<testSourceDirectory>../src/test/java</testSourceDirectory>
+		<plugins>
+			<plugin> <!-- Compiler -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin> <!-- Test launching -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.19</version>
+				<configuration> 
+					<properties>
+						<property>
+							<name>surefire.testng.verbose</name>
+							<value>10</value>
+						</property>
+					</properties>
+					<suiteXmlFiles> <!-- Suite testng xml file to consider for test execution -->
+						<suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
+					</suiteXmlFiles>
+					<source>1.8</source>
+					<target>1.8</target>
+					<compilerArguments>
+						<encoding>${project.build.sourceEncoding}</encoding>
+					</compilerArguments>
+				</configuration>
+			</plugin>
+			<!-- TestNG -->
+			<plugin>
+				<groupId>org.testng</groupId>
+				<artifactId>testng</artifactId>
+				<version>6.8</version>
+			</plugin>
+			<!-- Java doc -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.4</version>
+				<configuration>
+					<reportOutputDirectory>${project.reporting.outputDirectory}/doc</reportOutputDirectory>
+					<destDir>myapidocs</destDir>
+				</configuration>
+			</plugin>
+			<!-- Reports -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.8</version>
+				<configuration>
+					<reportOutputDirectory>${project.reporting.outputDirectory}/doc</reportOutputDirectory>
+					<destDir>myapidocs</destDir>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<properties>
+		<project.reporting.outputDirectory>./test-output</project.reporting.outputDirectory>
+	</properties>
+	<url>https://github.com/vector-im/riot-automated-tests</url>
+	<organization>
+		<name>Vector Creations Ltd</name>
+	</organization>
 </project>
