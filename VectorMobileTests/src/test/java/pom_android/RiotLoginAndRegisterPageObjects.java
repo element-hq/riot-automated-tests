@@ -33,7 +33,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 			e.printStackTrace();
 		}
 	}
-	/**
+	/*
 	 * Riot logo
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/login_large_logo")
@@ -41,7 +41,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	/**
 	 * MAIN LOGIN FORM
 	 */
-	/**
+	/*
 	 * 		login part
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/main_input_layout")
@@ -71,7 +71,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 		loginButton.click();
 	}
 
-	/**
+	/*
 	 * 		register part
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/creation_inputs_layout")
@@ -85,7 +85,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	@AndroidFindBy(id="im.vector.alpha:id/creation_password2")
 	public MobileElement pwd2EditRegisterText;
 
-	/**
+	/*
 	 * 		forget password part
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/forget_password_inputs_layout")
@@ -107,8 +107,17 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement customServerOptionsCheckBox;
 	@AndroidFindBy(id="im.vector.alpha:id/login_forgot_password")
 	public MobileElement forgotPwdButton;
+	
+	/*
+	 * Verifying email page
+	 */
+	@AndroidFindBy(id="im.vector.alpha:id/flow_progress_message_textview")
+	public MobileElement emailSentMessageTextView;
+	@AndroidFindBy(id="im.vector.alpha:id/button_forgot_email_validate")
+	public MobileElement iVerifiedMyMailButton;
+	
 
-	/**
+	/*
 	 * LOGIN MATRIX SERVER CUSTOM OPTIONS
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/login_matrix_server_options_layout")
@@ -124,7 +133,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	@AndroidFindBy(xpath="//android.widget.LinearLayout[@resource-id='im.vector.alpha:id/login_matrix_server_options_layout']/android.widget.EditText[2]")
 	public MobileElement identityServerEditText;
 
-	/**
+	/*
 	 * BOTTOM BAR
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/login_actions_bar")
@@ -136,7 +145,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	@AndroidFindBy(id="im.vector.alpha:id/button_register")
 	public MobileElement registerButton;
 
-	/**
+	/*
 	 * REGISTER CONFIRM MSGBOX
 	 */
 	@AndroidFindBy(id="android:id/parentPanel")

@@ -10,9 +10,11 @@ import java.util.Date;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.interactions.Keyboard;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -30,6 +32,7 @@ import utility.ScreenshotUtility;
 
 @Listeners({ ScreenshotUtility.class })
 public class RiotLoginTests extends RiotParentTest{
+	private String mailTest="riotusertest1@gmail.com";
 	
 	@Test(groups={"1driver_android","loginpage"})
 	public void simpleLogin() throws Exception {
@@ -144,15 +147,49 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver_android","loginpage"})
 	public void fillForgotPasswordWithAllowedCharacters(){
 		String mailTest="riot@gmail.com";
-		String newPwdTest="riotuser";
-		String confirmPwdTest="riotuser";
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
+		appiumFactory.getAndroidDriver1().hideKeyboard();
 		loginPage.forgotPwdButton.click();
 		loginPage.mailResetPwdEditText.setValue(mailTest);
-		loginPage.newPwdResetPwdEditText.setValue(newPwdTest);
-		loginPage.confirmNewPwdResetPwdEditText.setValue(confirmPwdTest);
+		loginPage.newPwdResetPwdEditText.setValue(Constant.DEFAULT_USERPWD);
+		loginPage.confirmNewPwdResetPwdEditText.setValue(Constant.DEFAULT_USERPWD);
 		loginPage.sendResetEmailButton.click();
 		Assert.assertTrue(loginPage.inputsLoginLayout.isDisplayed(), "The Riot login page is not displayed.");
+	}
+	
+	/**
+	 * Cover issue https://github.com/vector-im/riot-android/issues/1053
+	 * 1. Hit 'Forgot password?'
+	 * 2. Fill the form with existing mail, and matching passwords
+	 * Check the controls of the following screen.
+	 * 3. Click on the 'I Have verified my mal' without actually verifying the mail
+	 * Check that the screen is the same
+	 * @throws InterruptedException 
+	 */
+	@Test(groups={"1driver_android","loginpage"})
+	public void checkMailSentForForgotPasswordPageTest() throws InterruptedException{
+		//1. Hit 'Forgot password?'
+		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
+		appiumFactory.getAndroidDriver1().hideKeyboard();
+		loginPage.forgotPwdButton.click();
+		
+		//2. Fill the form with existing mail, and matching passwords
+		loginPage.mailResetPwdEditText.setValue(mailTest);
+		loginPage.newPwdResetPwdEditText.setValue(Constant.DEFAULT_USERPWD);
+		loginPage.confirmNewPwdResetPwdEditText.setValue(Constant.DEFAULT_USERPWD);
+		loginPage.sendResetEmailButton.click();
+		//Check the controls of the following screen.
+		waitUntilDisplayed(appiumFactory.getAndroidDriver1(), "im.vector.alpha:id/search_progress", false, 10);
+		Assert.assertEquals(loginPage.emailSentMessageTextView.getText(), "An email has been sent to "+mailTest+". Once you've followed the link it contains, click below.");
+		Assert.assertTrue(isPresentTryAndCatch(loginPage.iVerifiedMyMailButton),"'I have verified my email address' button is not here.");
+		Assert.assertEquals(loginPage.iVerifiedMyMailButton.getText(), "I have verified my email address");
+		
+		//3. Click on the 'I Have verified my mal' without actually verifying the mail
+		loginPage.iVerifiedMyMailButton.click();
+		waitUntilDisplayed(appiumFactory.getAndroidDriver1(), "im.vector.alpha:id/search_progress", false, 10);
+		Assert.assertTrue(isPresentTryAndCatch(loginPage.emailSentMessageTextView),"'Mail sent to [address] isn't displayed");
+		appiumFactory.getAndroidDriver1().pressKeyCode(AndroidKeyCode.BACK);
+		appiumFactory.getAndroidDriver1().pressKeyCode(AndroidKeyCode.BACK);
 	}
 	
 	@Test(groups={"1driver_android","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
