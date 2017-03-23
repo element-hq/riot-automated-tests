@@ -7,6 +7,7 @@ import org.testng.Assert;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.SwipeElementDirection;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
@@ -91,6 +92,46 @@ private AppiumDriver<MobileElement> driver;
 	public List<MobileElement> roomsList_bis;
 	
 	/**
+	 * Check that room is in a room category (favorites, people, rooms, etc). </br>
+	 * TODO maybe scroll to the end of the list to check the room ?
+	 * @param roomNameTest
+	 * @param category
+	 */
+	public Boolean checkRoomInCategory(String roomNameTest, String category) {
+		System.out.println("Looking for room "+roomNameTest+" in the category "+category);
+		List<MobileElement>roomsAndSection=driver.findElementsByXPath("//XCUIElementTypeTable[@name='RecentsVCTableView']/*");
+		
+		int indexLastElement=roomsAndSection.size()-1;
+		Boolean categoryFound=false, otherCategoryFound=false, roomFound=false;
+		int actualIndex=0;
+		do {
+			if(roomsAndSection.get(actualIndex).getTagName().equals("XCUIElementTypeOther")){
+				if(roomsAndSection.get(actualIndex).findElementByClassName("XCUIElementTypeStaticText").getText().equals(category)){
+					categoryFound=true;
+				}
+			}
+			actualIndex++;
+		} while (!categoryFound && actualIndex<indexLastElement);
+		if(!categoryFound){
+			System.out.println("Categorie "+category+ " not found.");
+		}else{
+			do {
+				if(roomsAndSection.get(actualIndex).getTagName().equals("XCUIElementTypeOther")){
+					if(roomsAndSection.get(actualIndex).findElementByClassName("XCUIElementTypeStaticText").getText().equals(category)){
+						otherCategoryFound=true;
+					}
+				}else{
+					if(roomsAndSection.get(actualIndex).findElementByAccessibilityId("TitleLabel").getText().equals(roomNameTest)){
+						roomFound=true;
+					}
+				}
+				actualIndex++;
+			} while (!otherCategoryFound && !roomFound && actualIndex<indexLastElement);
+		}
+		return roomFound;
+		
+	}
+	/**
 	 * Wait until there is at least 1 room in the rooms list.
 	 * @throws InterruptedException
 	 */
@@ -120,6 +161,45 @@ private AppiumDriver<MobileElement> driver;
 	}
 	
 	/**
+	 * Click on the context menu on a room, then choose one of the item : dm, notifications, favourite, bottom, close
+	 * @param roomName
+	 * @param item: dm, notifications, favourite, bottom, close
+	 * @throws InterruptedException 
+	 */
+	public void clickOnSwipedMenuOnRoom(String roomName, String item) throws InterruptedException {
+		MobileElement roomItem=getRoomByName(roomName);
+		if(null==roomItem){
+			System.out.println( "Room "+roomName+" not found, impossible to swipe on it.");
+		}else{
+			//swipe on the room item
+			roomItem.swipe(SwipeElementDirection.LEFT, 5, 200, 10);
+			//click on the button revealed by the swipe
+			int indexButton=4;
+			switch (item) {
+			case "dm":
+				indexButton=0;
+				break;
+			case "notifications":
+				indexButton=1;
+				break;
+			case "favourite":
+				indexButton=2;
+				break;
+			case "bottom":
+				indexButton=3;
+				break;
+			case "close":
+				indexButton=4;
+				break;
+			default:
+				Assert.fail("Wrong parameter item: "+item);
+				break;
+			}
+			roomItem.findElementsByClassName("XCUIElementTypeButton").get(indexButton).click();
+		}	
+	}
+	
+	/**
 	 * Return the last received message of a room by his name.</br>
 	 * Message can be text or event. </br>
 	 * Return null if no message found.
@@ -137,6 +217,37 @@ private AppiumDriver<MobileElement> driver;
 			}
 		} catch (Exception e) {
 			return null;
+		}
+	}
+	
+	/**
+	 * Send back the badge number of a room by his name.</br>
+	 * Return null if no badge.
+	 * @param myRoomName
+	 * @return
+	 * @throws InterruptedException 
+	 */
+	public Integer getBadgeNumberByRoomName(String myRoomName) throws InterruptedException{
+		MobileElement badge;
+		try {
+			badge=getRoomByName(myRoomName).findElementByAccessibilityId("MissedNotifAndUnreadBadge");
+			return Integer.parseInt(badge.getText());
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Wait until badge of the room is incremented.
+	 * @param myRoomName
+	 * @param currentBadge
+	 * @throws InterruptedException
+	 */
+	public void waitForRoomToReceiveNewMessage(String myRoomName, int currentBadge) throws InterruptedException{
+		if(0==currentBadge){
+			ExplicitWait(driver, getRoomByName(myRoomName).findElementByAccessibilityId("MissedNotifAndUnreadBadge"));
+		}else{
+			waitUntilPropertyIsSet(getRoomByName(myRoomName).findElementByAccessibilityId("MissedNotifAndUnreadBadge"), "value", String.valueOf(currentBadge+1), true, 5);	
 		}
 	}
 	

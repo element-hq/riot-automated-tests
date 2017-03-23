@@ -241,12 +241,12 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 
 	/**
 	 * Wait until badge of the room is incremented.
-	 * @param myRommName
+	 * @param myRoomName
 	 * @param currentBadge
 	 * @throws InterruptedException
 	 */
-	public void waitForRoomToReceiveNewMessage(String myRommName, int currentBadge) throws InterruptedException{
-		waitUntilDisplayed(driver,"//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_unread_count' and @text='"+Integer.sum(currentBadge, 1)+"']", true, 5);
+	public void waitForRoomToReceiveNewMessage(String myRoomName, int currentBadge) throws InterruptedException{
+		waitUntilDisplayed(driver,"//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRoomName+"']/../android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_unread_count' and @text='"+Integer.sum(currentBadge, 1)+"']", true, 5);
 	}
 
 	/*

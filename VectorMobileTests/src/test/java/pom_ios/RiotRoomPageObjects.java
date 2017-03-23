@@ -172,6 +172,18 @@ public class RiotRoomPageObjects extends TestUtilities{
 	}
 	
 	/**
+	 * Return the content text of a bubble as a MobileElement.
+	 */
+	public MobileElement getTimeStampByBubble(MobileElement bubble){
+		try {
+			return bubble.findElementByAccessibilityId("timestampLabel");
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+	}
+	
+	/**
 	 * Wait until progress bar in the post is still displayed.
 	 * @param bubbleCell
 	 * @param maxToWait
@@ -201,6 +213,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 			Thread.sleep(500);secondsWaited=(float) (secondsWaited+0.5);
 		}
 	}
+	
 	/**
 	 * Wait for a new post to arrive in the room.
 	 * @param maxSecondsToWait

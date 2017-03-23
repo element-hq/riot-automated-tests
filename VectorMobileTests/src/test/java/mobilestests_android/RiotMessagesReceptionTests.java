@@ -19,6 +19,7 @@ import utility.ScreenshotUtility;
 public class RiotMessagesReceptionTests extends RiotParentTest{
 	private String msgFromUpUser="UP";
 	private String roomId="!SBpfTGBlKgELgoLALQ%3Amatrix.org";
+	private String pictureURL="mxc://matrix.org/gpQYPbjoqVeTWCGivjRshIni";
 	private String roomTest="msg rcpt 4 automated tests";
 	private String riotUserDisplayNameA="riotuser4";
 	private String riotUserDisplayNameB="riotuser5";
@@ -26,7 +27,6 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	private String riotSenderAccessToken;
 	
 	/**
-	 * Required : user must be logged in room and notifications are On on this room </br>
 	 * Receive a message in a room from an other user. </br>
 	 * Asserts that badge is set to 1 or incremented on the room's item in the rooms list.</br>
 	 * @throws InterruptedException 
@@ -34,7 +34,6 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 */
 	@Test(groups={"messageReceivedInList","1checkuser","1driver_android"},priority=1)
 	public void checkBadgeAndMessageOnRoomItem() throws InterruptedException, IOException{
-		//TODO invite user in the room if room not present
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		//get the current badge on the room.
 		Integer currentBadge=riotRoomsList.getBadgeNumberByRoomName(roomTest);
@@ -131,7 +130,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	}
 	
 	/**
-	 * Open a room, and receive a image sent by an other user.</br>
+	 * 1. Receive a image sent by an other user.</br>
 	 * Check that image is correctly uploaded.</br>
 	 * Check that a timestamp is visible on the last post.
 	 * @throws IOException 
@@ -139,8 +138,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 */
 	@Test(dependsOnGroups="roomOpenned",groups={"1checkuser","1driver_android"},priority=5)
 	public void checkImageMessageOnRoomPage() throws IOException, InterruptedException{
-		String pictureURL="mxc://matrix.org/gpQYPbjoqVeTWCGivjRshIni";
-		//send picture of already uploaded picture
+		//1. Receive a image sent by an other user.
 		HttpsRequestsToMatrix.sendPicture(riotSenderAccessToken, roomId, pictureURL);
 		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		Thread.sleep(500);
