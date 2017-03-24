@@ -72,7 +72,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	}
 
 	/*
-	 * 		register part
+	 * 		register 1 part
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/creation_inputs_layout")
 	public MobileElement inputsRegisteringLayout;
@@ -84,6 +84,13 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement pwd1EditRegisterText;
 	@AndroidFindBy(id="im.vector.alpha:id/creation_password2")
 	public MobileElement pwd2EditRegisterText;
+	/*
+	 * 		register 2 part
+	 */
+	@AndroidFindBy(id="im.vector.alpha:id/registration_email")
+	public MobileElement mailRegisterEditText;
+	@AndroidFindBy(id="im.vector.alpha:id/registration_phone_number_value")
+	public MobileElement phoneNumberRegisterEditText;
 
 	/*
 	 * 		forget password part
@@ -144,6 +151,10 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement loginButton;
 	@AndroidFindBy(id="im.vector.alpha:id/button_register")
 	public MobileElement registerButton;
+	@AndroidFindBy(id="im.vector.alpha:id/button_skip")
+	public MobileElement skipButton;
+	@AndroidFindBy(id="im.vector.alpha:id/button_submit")
+	public MobileElement submitButton;
 
 	/*
 	 * REGISTER CONFIRM MSGBOX

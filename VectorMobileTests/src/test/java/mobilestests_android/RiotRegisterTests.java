@@ -7,6 +7,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import io.appium.java_client.android.AndroidKeyCode;
 import pom_android.RiotCaptchaPageObject;
 import pom_android.RiotLoginAndRegisterPageObjects;
 import pom_android.RiotRoomsListPageObjects;
@@ -108,6 +109,37 @@ public class RiotRegisterTests extends RiotParentTest {
 		registerPage.identityServerEditText.clear();
 		//Assert that the register button is not clickable
 		Assert.assertFalse(registerPage.registerButton.isEnabled(), "The register button is not disabled after clearing the custom server URLs");
+	}
+	
+	/**
+	 * Cover issue https://github.com/vector-im/riot-android/issues/1063
+	 * 1. Hit the register button.
+	 * 2. Fill the first form with valid displayName and matching passwords.
+	 * 3. Fill the second form with an unvalid phone number.
+	 * 4. Hit submit button
+	 * Check that the form isn't sent.
+	 * @throws InterruptedException 
+	 */
+	@Test(groups={"1driver_android"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
+	public void registerWithUnvalidPhoneNumberTest(String phoneNumber) throws InterruptedException{
+		restartApplication(appiumFactory.getAndroidDriver1());
+		//Start of the test
+		int userNamesuffix = 1 + (int)(Math.random() * ((10000 - 1) + 1));
+		String displayNameTest=(new StringBuilder("riotuser").append(userNamesuffix)).toString();
+		
+		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
+		//1. Hit the register button.
+		registerPage.registerButton.click();
+		//2. Fill the first form with valid displayName and matching passwords.
+		registerPage.userNameRegisterEditText.setValue(displayNameTest);
+		registerPage.pwd1EditRegisterText.setValue(Constant.DEFAULT_USERPWD);
+		registerPage.pwd2EditRegisterText.setValue(Constant.DEFAULT_USERPWD);
+		registerPage.registerButton.click();
+		//3. Fill the second form with an invalid phone number  && 4. Hit submit button
+		registerPage.phoneNumberRegisterEditText.setValue(phoneNumber);
+		registerPage.submitButton.click();
+		//Check that the form isn't sent.
+		Assert.assertTrue(isPresentTryAndCatch(registerPage.skipButton), "The form is no longer displayed.");
 	}
 	
 	/**

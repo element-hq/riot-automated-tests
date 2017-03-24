@@ -28,8 +28,11 @@ public class RiotRegisterTests extends RiotParentTest{
 	 * Check that the form isn't sent.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver_ios"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
+	@Test(groups={"1driver_ios","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void registerWithUnvalidPhoneNumberTest(String phoneNumber) throws InterruptedException{
+		//back to login
+		restartApplication(appiumFactory.getiOsDriver1());
+		//start of the test
 		int userNamesuffix = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String displayNameTest=(new StringBuilder("riotuser").append(userNamesuffix)).toString();
 		RiotLoginAndRegisterPageObjects loginRegisterView= new RiotLoginAndRegisterPageObjects(appiumFactory.getiOsDriver1());
@@ -39,16 +42,13 @@ public class RiotRegisterTests extends RiotParentTest{
 		loginRegisterView.emailTextField.setValue(displayNameTest);
 		loginRegisterView.passwordTextField.setValue(Constant.DEFAULT_USERPWD);
 		loginRegisterView.repeatPasswordTextField.setValue(Constant.DEFAULT_USERPWD+"\n");
-		//3. Fill the second form with a phone number exceeding 17 characters && 4. Hit submit button
+		//3. Fill the second form with an invalid phone number  && 4. Hit submit button
 		loginRegisterView.phoneNumberTextField.setValue(phoneNumber+"\n");
 		//Check that the form isn't sent.
 		Assert.assertTrue(waitUntilDisplayed(appiumFactory.getiOsDriver1(), "Registration Failed", true, 2), "'Registration failed' popup isn't displayed.");
 		Assert.assertTrue(waitUntilDisplayed(appiumFactory.getiOsDriver1(), "This doesn't look like a valid phone number", true, 2), "Msg about not valid phone number isn't displayed.");
-		//back to login
-		loginRegisterView.backButton.click();
-		loginRegisterView.loginNavBarButton.click();
 	}
-	
+
 	/**
 	 * Log-out the user if it can't see the login page.
 	 * @throws InterruptedException
