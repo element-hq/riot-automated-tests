@@ -40,10 +40,14 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	@iOSFindBy(accessibility="AuthenticationVCNavigationBar")
 	public MobileElement navigationBar;
 	@iOSFindBy(accessibility="Register")
-	public MobileElement registerButton;
+	public MobileElement registerNavBarButton;
 	@iOSFindBy(accessibility="AuthenticationVCCancelAuthFallbackButton")
 	public MobileElement cancelButton;
-
+	@iOSFindBy(accessibility="Back")
+	public MobileElement backButton;
+	@iOSFindBy(accessibility="Log in")
+	public MobileElement loginNavBarButton;
+	
 	/*
 	 * AUTHENTICATION VIEW : auth forms, forgot password forms...
 	 */

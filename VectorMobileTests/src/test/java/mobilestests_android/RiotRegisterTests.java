@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import pom_android.RiotCaptchaPageObject;
 import pom_android.RiotLoginAndRegisterPageObjects;
 import pom_android.RiotRoomsListPageObjects;
+import utility.Constant;
 import utility.DataproviderClass;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -120,10 +121,9 @@ public class RiotRegisterTests extends RiotParentTest {
 		//creation of a "unique" username by adding a randomize number to the username.
 		int userNamesuffix = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String userNameTest=(new StringBuilder("riotuser").append(userNamesuffix)).toString();
-		String pwdTest="riotuser";
 		
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
-		registerPage.fillRegisterForm("", userNameTest,pwdTest, pwdTest);
+		registerPage.fillRegisterForm("", userNameTest,Constant.DEFAULT_USERPWD, Constant.DEFAULT_USERPWD);
 		RiotCaptchaPageObject captchaPage = new RiotCaptchaPageObject(appiumFactory.getAndroidDriver1());
 		captchaPage.notARobotCheckBox.click();
 		captchaPage.selectAllImages();
