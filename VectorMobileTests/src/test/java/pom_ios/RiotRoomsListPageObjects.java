@@ -281,6 +281,19 @@ private AppiumDriver<MobileElement> driver;
 		 return new RiotRoomPageObjects(driver);
 	 }
 	
+	/**
+	 * Start a new chat with a user and returns the new created room. 
+	 * @param displayNameOrMatrixId
+	 * @return RiotRoomPageObjects
+	 */
+	public RiotRoomPageObjects startChatWithUser(String displayNameOrMatrixId){
+		plusRoomButton.click();
+		startChatButton.click();
+		RiotNewChatPageObjects newChatA = new RiotNewChatPageObjects(appiumFactory.getiOsDriver1());
+		newChatA.searchAndSelectMember(displayNameOrMatrixId);
+		return new RiotRoomPageObjects(driver);
+	}
+	
 	/*
 	 * SETTINGS VIEW
 	 */
