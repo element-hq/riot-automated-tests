@@ -5,6 +5,8 @@ import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
 import pom_ios.RiotCallingPageObjects;
 import pom_ios.RiotIncomingCallPageObjects;
 import pom_ios.RiotRoomPageObjects;
@@ -16,6 +18,8 @@ import utility.ScreenshotUtility;
 @Listeners({ ScreenshotUtility.class })
 public class RiotVoipTests extends RiotParentTest{
 	private String roomNameTest="1:1_voip_automated_tests";
+	private String conferenceRoomTest="voip_conference_automated_tests";
+	private String unwantedRoomTest="VoIP Conference";
 	private String riotuser1DisplayName="riotuser12";
 	private String riotuser2DisplayName="riotuser13";
 
@@ -242,6 +246,50 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertTrue(roomPage1.getTextViewFromBubble(roomPage1.getLastBubble()).getText().contains(riotuser1DisplayName+" ended the call"));
 		roomPage1.menuBackButton.click();
 	}
+	
+	/**
+	 * Cover this issue https://github.com/vector-im/riot-ios/issues/953.</br>
+	 * 0. Prerequisite: check that there is no VoIP Conference named room in the list.
+	 * 1. Open room conferenceRoomTest: this room have >2 users </br>
+	 * 2. Start a voice call</br>
+	 * 3. From calling layout, hang up the call</br>
+	 * 4. Hit the back button to return in the rooms list.</br>
+	 * Verify that no 'VoIP Conference' has been created.</br>
+	 * @throws InterruptedException 
+	 * 
+	 */
+	@Test(groups={"1driver_ios","1checkuser"}, description="test on conference",priority=6)
+	public void hangUpAudioConference() throws InterruptedException{
+		RiotRoomsListPageObjects riotRoomsList1= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		//0. Prerequisite: check that there is no VoIP Conference named room in the list.
+		while (null!=riotRoomsList1.getRoomByName(unwantedRoomTest)) {
+			riotRoomsList1.clickOnSwipedMenuOnRoom(unwantedRoomTest, "close");
+		}
+		//1. Open room conferenceRoomTest: this room have >2 users
+		riotRoomsList1.getRoomByName(conferenceRoomTest).click();
+		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
+		
+		//2. Start a voice call
+		roomPage1.startVoiceCall();
+		RiotCallingPageObjects callingPage1 = new RiotCallingPageObjects(appiumFactory.getiOsDriver1());
+		
+		//3. From calling layout, hang up the call
+		callingPage1.hangUpButton.click();
+		//4. Hit the back button to return in the rooms list.
+		roomPage1.menuBackButton.click();
+		
+		//Verify that no 'VoIP Conference' has been created.
+		MobileElement unWantedRoom=riotRoomsList1.getRoomByName(unwantedRoomTest);
+		
+		//tearDown
+		if(null!=unWantedRoom){
+			do {
+				riotRoomsList1.clickOnSwipedMenuOnRoom(unwantedRoomTest, "close");
+			} while (null!=riotRoomsList1.getRoomByName(unwantedRoomTest));
+		}
+		Assert.assertNull(unWantedRoom, "A room "+unwantedRoomTest+ " has been created after a Voip Conference (and deleted since).");
+	}
+	
 	
 	/**
 	 * Log the good user if not.</br> Secure the test.
