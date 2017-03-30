@@ -195,7 +195,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 		//3. User A write something in the message bar but don't send it.
 		roomA.messageZoneEditText.setValue(notSentMsg);
 		//Test that the typing indicator indicates '[user1] is typing..." with device B.
-		Assert.assertEquals(roomB.notificationMessage.getText(), riotUserDisplayNameA+" is typing...");
+		Assert.assertEquals(roomB.notificationMessage.getText(), riotUserDisplayNameA+" is typing…");
 		Assert.assertTrue(roomB.notificationMessage.isDisplayed(),"Typing indicator isn't displayed on device B");
 		
 		//4. Type an other msg and clear it with user 4 in the message bar.
