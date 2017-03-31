@@ -25,7 +25,7 @@ import io.appium.java_client.ios.IOSDriver;
 import pom_ios.RiotLoginAndRegisterPageObjects;
 import pom_ios.RiotRoomsListPageObjects;
 
-public class TestUtilities {
+public class TestUtilities extends MatrixUtilities{
 	public static AppiumFactory appiumFactory=AppiumFactory.getInstance();
 	
 	public void ExplicitWait(AppiumDriver<MobileElement> driver, WebElement element){

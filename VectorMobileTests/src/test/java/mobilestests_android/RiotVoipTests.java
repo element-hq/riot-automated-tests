@@ -24,7 +24,6 @@ public class RiotVoipTests extends RiotParentTest{
 	private String roomNameTest2="1:1 room auto tests 2";
 	private String riotuser1DisplayName="riotuser12";
 	private String riotuser2DisplayName="riotuser13";
-	private String riotuser2MatrixId="@riotuser13:matrix.org";
 	
 	/**
 	 * 1. Launch an audio call from a room </br>
@@ -51,7 +50,7 @@ public class RiotVoipTests extends RiotParentTest{
 		//2. From the call layout, hit the room link button
 		callingView.chatLinkButton.click();
 		//Check the pending call view on the room view.
-		voipRoom.checkPendingCallView(true, "Calling...");
+		voipRoom.checkPendingCallView(true, "Calling…");
 		//assert on messages
 		Assert.assertTrue(voipRoom.getTextViewFromPost(voipRoom.getLastPost()).getText().contains("placed a voice call."),"No '[user] placed a voice call' message in the room.");
 		
@@ -91,7 +90,7 @@ public class RiotVoipTests extends RiotParentTest{
 		RiotCallingPageObjects callingView= new RiotCallingPageObjects(appiumFactory.getAndroidDriver1());
 		callingView.chatLinkButton.click();
 		//asserts on pending view
-		voipRoom.checkPendingCallView(true, "Calling...");
+		voipRoom.checkPendingCallView(true, "Calling…");
 		//assert on messages
 		Assert.assertTrue(voipRoom.getTextViewFromPost(voipRoom.getLastPost()).getText().contains("placed a video call."),"No '[user] placed a voice call' message in the room.");
 		//come back in call view by touching pending call view
@@ -308,7 +307,7 @@ public class RiotVoipTests extends RiotParentTest{
 		voipRoomDevice1.moreOptionsButton.click();
 		voipRoomDevice1.roomDetailsMenuItem.click();
 		RiotRoomDetailsPageObjects newRoomDetailsDevice1 = new RiotRoomDetailsPageObjects(appiumFactory.getAndroidDriver1());
-		newRoomDetailsDevice1.addParticipant(riotuser2MatrixId);
+		newRoomDetailsDevice1.addParticipant(getMatrixIdFromDisplayName(riotuser2DisplayName));
 		ExplicitWait(appiumFactory.getAndroidDriver1(), newRoomDetailsDevice1.menuBackButton);
 		newRoomDetailsDevice1.menuBackButton.click();
 		//accept invitation with device 2
@@ -384,19 +383,6 @@ public class RiotVoipTests extends RiotParentTest{
 		//go back to the room
 		roomDevice1.menuBackButton.click();
 		roomDevice2.menuBackButton.click();
-	}
-	
-	/**
-	 * Invite riotuser2 by riotuser1 on room voiptest.
-	 * Accept invitation with riotuser2.
-	 * @throws IOException 
-	 */
-	@Deprecated
-	@AfterGroups("invitationneeded")
-	private void inviteUser2ToRoom() throws IOException{
-		String accessTokenDevice2="MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI4Y2lkIHVzZXJfaWQgPSBAcmlvdHVzZXIzOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzg3NzkwMjM2ODcKMDAyZnNpZ25hdHVyZSC8Xnf2FrXx45wz9isY2objlIVMQ0BR0mwDwP0ucxBb6wo";
-		String roomId="!AcqGzXlGcDgpUAUTvS:matrix.org";
-		HttpsRequestsToMatrix.joinRoom(accessTokenDevice2, roomId);
 	}
 
 	/**

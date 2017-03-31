@@ -32,7 +32,7 @@ public class RiotCallingPageObjects extends TestUtilities{
 	public MobileElement incomingCallStatus;
 	
 	public void waitUntilCallTook() throws InterruptedException{
-		waitUntilDisplayed(driver, "//*[@resource-id='im.vector.alpha:id/incoming_call_title' and text='Call connecting...']", false, 5);
+		waitUntilDisplayed(driver, "//*[@resource-id='im.vector.alpha:id/incoming_call_title' and text='Call connecting…']", false, 5);
 	}
 	/**
 	 * Asserts true or false if the view is displayed.

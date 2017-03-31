@@ -26,7 +26,7 @@ import utility.ScreenshotUtility;
 public class RiotManagingRoomMembersTests extends RiotParentTest{
 	private String testRoom="Common riotusers auto tests";
 	private String matchingWithKnownContactFilter1="riot";
-	private String invitedUser="@riotuser16:matrix.org";
+	private String invitedUserDisplayName="riotuser16";
 	private String riotUserDisplayName="riotuser15";
 
 	/**
@@ -197,7 +197,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		//2. Invite a participant
 		roomPage.inviteMembersButton.click();
 		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(appiumFactory.getAndroidDriver1());
-		roomDetails1.addParticipant(invitedUser);
+		roomDetails1.addParticipant(getMatrixIdFromDisplayName(invitedUserDisplayName));
 		roomDetails1.waitUntilInvitedCategorieIsDisplayed(true);
 
 		//3. Remove this participant from the room details

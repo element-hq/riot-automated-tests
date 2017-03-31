@@ -23,7 +23,6 @@ import utility.ScreenshotUtility;
 public class RiotDirectMessagesTests extends RiotParentTest{
 	private String riotuser1DisplayName="riotuser6";
 	private String riotuser2DisplayName="riotuser7";
-	private String riotuser2MatrixId="@riotuser7:matrix.org";
 //	private String riotuser3DisplayName="riotuser8";
 //	private String riotuser3MatrixId="@riotuser8:matrix.org";
 //	private String tmpRoomName="tmp room DM";
@@ -40,7 +39,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		RiotRoomsListPageObjects roomsListA = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		RiotRoomsListPageObjects roomsListB = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
 		//1. Start a chat with someone on device/user A
-		RiotRoomPageObjects roomPageA=roomsListA.startChatWithUser(riotuser2MatrixId);
+		RiotRoomPageObjects roomPageA=roomsListA.startChatWithUser(getMatrixIdFromDisplayName(riotuser2DisplayName));
 		
 		//2. Accept the invitation with device/user B
 		roomsListB.previewInvitation(riotuser1DisplayName);

@@ -31,7 +31,6 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 	private String oneToOneRoomWithEncryption="1:1e2e_automated tests";
 	private String encrypted_msg_1="msg sent in encrypted room";
 	private String encrypted_msg_2="this msg will be decrypted";
-	private String participant2Adress="@riotuser10:matrix.org";
 	private String participant1DisplayName="riotuser9";
 	private String participant2DisplayName="riotuser10";	
 
@@ -96,7 +95,7 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 		//3. Send invitation to user on Device 2 and device 2 accepts.
 		roomPage1.openRoomDetails.click();
 		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(appiumFactory.getiOsDriver1());
-		roomDetails1.addParticipant(participant2Adress);
+		roomDetails1.addParticipant(getMatrixIdFromDisplayName(participant2DisplayName));
 		roomDetails1.menuBackButton.click();
 		//accept invitation with device 2
 		roomsList2.previewInvitation(roomWithEncryption);
