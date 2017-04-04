@@ -144,7 +144,7 @@ public class RiotVoipTests extends RiotParentTest{
 		//From device 1, check that the calling view is closed.
 		callingView1.isDisplayed(false);
 		//From device 2, check that last message is a 'ended call' event on the rooms list page
-		Assert.assertEquals(roomsList2.getReceivedMessageByRoomName(roomNameTest), riotuser2DisplayName+" ended the call");
+		Assert.assertEquals(roomsList2.getLastEventByRoomName(roomNameTest,false), riotuser2DisplayName+" ended the call");
 		//From device 1, check that last message is a 'ended call' event on the room page
 		Assert.assertTrue(room1.getTextViewFromBubble(room1.getLastBubble()).getText().contains(riotuser2DisplayName+" ended the call"));
 		room1.menuBackButton.click();
@@ -192,7 +192,7 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertFalse(callingPage1.isDisplayed(false),"Calling view is still displayed on device 1 after call is ended");
 		Assert.assertFalse(callingPage2.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
 		//Check that "[user] ended the call" event is displayed on room view and room list view.
-		Assert.assertEquals(roomsList2.getReceivedMessageByRoomName(roomNameTest), riotuser2DisplayName+" ended the call");
+		Assert.assertEquals(roomsList2.getLastEventByRoomName(roomNameTest,false), riotuser2DisplayName+" ended the call");
 		//From device 1, check that last message is a 'ended call' event on the room page
 		Assert.assertTrue(roomPage1.getTextViewFromBubble(roomPage1.getLastBubble()).getText().contains(riotuser2DisplayName+" ended the call"));
 		roomPage1.menuBackButton.click();
@@ -241,7 +241,7 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertFalse(callingPage1.isDisplayed(false),"Calling view is still displayed on device 1 after call is ended");
 		Assert.assertFalse(callingPage2.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
 		//Check that "[user] ended the call" event is displayed on room view and room list view.
-		Assert.assertEquals(roomsList2.getReceivedMessageByRoomName(roomNameTest), riotuser1DisplayName+" ended the call");
+		Assert.assertEquals(roomsList2.getLastEventByRoomName(roomNameTest,false), riotuser1DisplayName+" ended the call");
 		//From device 1, check that last message is a 'ended call' event on the room page
 		Assert.assertTrue(roomPage1.getTextViewFromBubble(roomPage1.getLastBubble()).getText().contains(riotuser1DisplayName+" ended the call"));
 		roomPage1.menuBackButton.click();

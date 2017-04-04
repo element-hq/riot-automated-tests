@@ -203,14 +203,14 @@ private AppiumDriver<MobileElement> driver;
 	 * Return the last received message of a room by his name.</br>
 	 * Message can be text or event. </br>
 	 * Return null if no message found.
-	 * @param myRoomName
+	 * @param myRoomName, withUser
 	 * @return
 	 * @throws InterruptedException 
 	 */
-	public String getReceivedMessageByRoomName(String myRoomName) throws InterruptedException{
+	public String getLastEventByRoomName(String myRoomName, Boolean withUser) throws InterruptedException{
 		String messageWithUsername= getRoomByName(myRoomName).findElementByAccessibilityId("LastEventDescription").getText();
 		try {
-			if(messageWithUsername.indexOf(":")!=-1){
+			if(messageWithUsername.indexOf(":")!=-1&&!withUser){
 				return messageWithUsername.substring(messageWithUsername.indexOf(":")+2, messageWithUsername.length());
 			}else{
 				return messageWithUsername;
@@ -310,6 +310,8 @@ private AppiumDriver<MobileElement> driver;
 	/*
 	 * USER SETTINGS
 	 */
+	@iOSFindBy(accessibility="SettingsVCProfilPictureCell")
+	public MobileElement profilePictureCell;
 	@iOSFindBy(accessibility="SettingsVCDisplayNameTextField")
 	public MobileElement displayNameTextField;
 	@iOSFindBy(accessibility="SettingsVCChangePwdStaticText")
@@ -329,6 +331,19 @@ private AppiumDriver<MobileElement> driver;
 		displayNameTextField.click();
 		displayNameTextField.clear();
 		displayNameTextField.setValue(newDisplayName);
+	}
+	
+	/**
+	 * From the settings view, hit the profile picture item, and change the avatar by taking a new picture.</br>
+	 * It doesn't click on the save button.
+	 * @throws InterruptedException 
+	 */
+	public void changeAvatarFromSettings() throws InterruptedException{
+		profilePictureCell.click();
+		RiotCameraPageObjects cameraPage = new RiotCameraPageObjects(appiumFactory.getiOsDriver1());
+		cameraPage.cameraCaptureButton.click();
+		waitUntilDisplayed(driver, "OK", true, 10);
+		cameraPage.okButton.click();
 	}
 	
 	/**

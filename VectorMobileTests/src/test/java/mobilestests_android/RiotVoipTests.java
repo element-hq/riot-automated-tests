@@ -178,7 +178,7 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertFalse(callingViewDevice2.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
 		//check end call events on messages
 		Assert.assertEquals(voipRoomDevice1.getTextViewFromPost(voipRoomDevice1.getLastPost()).getText(),riotuser2DisplayName+" ended the call.");
-		Assert.assertEquals(riotListDevice2.getReceivedMessageByRoomName(roomNameTest),riotuser2DisplayName+" ended the call.");
+		Assert.assertEquals(riotListDevice2.getLastEventByRoomName(roomNameTest,false),riotuser2DisplayName+" ended the call.");
 		//come back in rooms list on device 1
 		voipRoomDevice1.menuBackButton.click();
 	}
@@ -226,7 +226,7 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertFalse(callingViewDevice2.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
 		//check end call events on messages
 		Assert.assertEquals(voipRoomDevice1.getTextViewFromPost(voipRoomDevice1.getLastPost()).getText(),riotuser2DisplayName+" ended the call.");
-		Assert.assertEquals(riotListDevice2.getReceivedMessageByRoomName(roomNameTest),riotuser2DisplayName+" ended the call.");
+		Assert.assertEquals(riotListDevice2.getLastEventByRoomName(roomNameTest,false),riotuser2DisplayName+" ended the call.");
 		//come back in rooms list on device 1
 		voipRoomDevice1.menuBackButton.click();
 	}

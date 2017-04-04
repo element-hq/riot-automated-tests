@@ -87,7 +87,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 		Assert.assertNotNull(riotRoomsList.getBadgeNumberByRoomName(roomTest), "There is no badge on this room.");
 		Assert.assertEquals((int)riotRoomsList.getBadgeNumberByRoomName(roomTest),currentBadge+1, "Badge number wasn't incremented after receiving the message");	
 		//Assertion on the message.
-		Assert.assertEquals(riotRoomsList.getReceivedMessageByRoomName(roomTest), msgFromUpUser, "Received message on the room item isn't the same as sended by matrix.");
+		Assert.assertEquals(riotRoomsList.getLastEventByRoomName(roomTest,false), msgFromUpUser, "Received message on the room item isn't the same as sended by matrix.");
 	}
 
 	/**

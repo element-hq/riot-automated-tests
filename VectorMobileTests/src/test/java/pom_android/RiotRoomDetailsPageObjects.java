@@ -10,6 +10,7 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import io.appium.java_client.pagefactory.iOSFindBy;
 import utility.TestUtilities;
 
 public class RiotRoomDetailsPageObjects extends TestUtilities{
@@ -167,6 +168,8 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 	/*
 	 * 				FILES TAB
 	 */
+	@AndroidFindBy(xpath="//android.widget.ListView[@resource-id='im.vector.alpha:id/listView_messages']/android.widget.RelativeLayout")
+	public List<MobileElement> attachedFilesList;
 	
 	/*
 	 * 				SETTINGS TAB

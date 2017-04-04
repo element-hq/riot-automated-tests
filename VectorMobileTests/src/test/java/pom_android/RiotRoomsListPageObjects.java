@@ -216,10 +216,10 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	 * @param myRoomName
 	 * @return
 	 */
-	public String getReceivedMessageByRoomName(String myRoomName){
+	public String getLastEventByRoomName(String myRoomName,Boolean withUser){
 		try {
 			String messageWithUsername =driver.findElement(By.xpath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRoomName+"']/../..//android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_roomMessage']")).getText();
-			if(messageWithUsername.indexOf(":")!=-1){
+			if(messageWithUsername.indexOf(":")!=-1&&!withUser){
 				return messageWithUsername.substring(messageWithUsername.indexOf(":")+2, messageWithUsername.length());
 			}else{
 				return messageWithUsername;

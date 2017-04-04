@@ -7,6 +7,7 @@ import org.openqa.selenium.support.PageFactory;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidKeyCode;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import utility.TestUtilities;
@@ -56,6 +57,30 @@ public class RiotSettingsPageObjects extends TestUtilities{
 		if(checked && "OFF".equals(status) || false==checked && "ON".equals(status)){
 			checkBox.click();
 		}
+	}
+	
+	/**
+	 * From the settings view, hit the profile picture item, and change the avatar by taking a new picture.</br>
+	 * @throws InterruptedException 
+	 */
+	public void changeAvatarFromSettings() throws InterruptedException{
+		getSettingsItemByName("Profile Picture").click();
+		RiotCameraPageObjects cameraPreview = new RiotCameraPageObjects(driver);
+		cameraPreview.triggerCameraButton.click();//take a photo
+		waitUntilDisplayed(driver,"im.vector.alpha:id/medias_picker_preview_layout", true, 5);
+		cameraPreview.confirmPickingPictureButton.click();
+	}
+	
+	/**
+	 * From the settings view, erase the display name and set a new one.</br>
+	 * It doesn't click on the save button.
+	 * @param newDisplayName
+	 */
+	public void changeDisplayNameFromSettings(String newDisplayName){
+		getSettingsItemByName("Display Name").click();
+		driver.findElementById("android:id/edit").clear();
+		driver.findElementById("android:id/edit").setValue(newDisplayName+"\n");
+		driver.findElementById("android:id/button1").click();
 	}
 	
 	/**
