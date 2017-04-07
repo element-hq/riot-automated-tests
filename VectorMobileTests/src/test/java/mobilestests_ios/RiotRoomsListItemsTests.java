@@ -75,6 +75,6 @@ private String riotUserDisplayName="riotuser11";
 	 */
 	@BeforeGroups("checkuser")
 	private void checkIfUserLogged() throws InterruptedException, FileNotFoundException, YamlException{
-		super.checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
+		super.checkIfUserLoggedAndHomeServerSetUpIos(appiumFactory.getiOsDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
 	}
 }

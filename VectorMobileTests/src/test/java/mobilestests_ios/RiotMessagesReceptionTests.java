@@ -183,7 +183,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 
 	@BeforeGroups("1checkuser")
 	private void checkIfUser1Logged() throws InterruptedException, FileNotFoundException, YamlException{
-		super.checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);
+		super.checkIfUserLoggedAndHomeServerSetUpIos(appiumFactory.getiOsDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);
 	}
 	/**
 	 * Log the good user if not.</br> Secure the test.
@@ -196,8 +196,8 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 */
 	@BeforeGroups("2checkuser")
 	private void checkIfUsersLogged() throws InterruptedException, FileNotFoundException, YamlException{
-		super.checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);
-		super.checkIfUserLoggedIos(appiumFactory.getiOsDriver2(), riotUserDisplayNameB, Constant.DEFAULT_USERPWD);
+		super.checkIfUserLoggedAndHomeServerSetUpIos(appiumFactory.getiOsDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);
+		super.checkIfUserLoggedAndHomeServerSetUpIos(appiumFactory.getiOsDriver2(), riotUserDisplayNameB, Constant.DEFAULT_USERPWD);
 	}
 
 	/**

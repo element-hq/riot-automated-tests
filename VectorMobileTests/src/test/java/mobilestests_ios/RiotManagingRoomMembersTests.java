@@ -229,6 +229,6 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 */
 	@BeforeGroups("1checkuser")
 	private void checkIfUser1Logged() throws InterruptedException, FileNotFoundException, YamlException{
-		checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
+		checkIfUserLoggedAndHomeServerSetUpIos(appiumFactory.getiOsDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
 	}
 }

@@ -102,7 +102,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 */
 	@BeforeGroups("2checkuser")
 	private void checkIfUsersLogged() throws InterruptedException, FileNotFoundException, YamlException{
-		super.checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
-		super.checkIfUserLoggedIos(appiumFactory.getiOsDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
+		super.checkIfUserLoggedAndHomeServerSetUpIos(appiumFactory.getiOsDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
+		super.checkIfUserLoggedAndHomeServerSetUpIos(appiumFactory.getiOsDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
 	}
 }

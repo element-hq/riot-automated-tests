@@ -305,12 +305,12 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@BeforeGroups("1checkuser")
 	private void checkIfUser1Logged() throws InterruptedException, FileNotFoundException, YamlException{
-		checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
+		checkIfUserLoggedAndHomeServerSetUpIos(appiumFactory.getiOsDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
 	}
 	
 	@BeforeGroups("2checkuser")
 	private void checkIfUser2Logged() throws InterruptedException, FileNotFoundException, YamlException{
-		checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
-		checkIfUserLoggedIos(appiumFactory.getiOsDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
+		checkIfUserLoggedAndHomeServerSetUpIos(appiumFactory.getiOsDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
+		checkIfUserLoggedAndHomeServerSetUpIos(appiumFactory.getiOsDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
 	}
 }

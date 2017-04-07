@@ -261,7 +261,7 @@ public class TestUtilities extends MatrixUtilities{
 		}
 	}
 
-	public void checkIfUserLoggedIos(IOSDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException, FileNotFoundException, YamlException {
+	public void checkIfUserLoggedAndHomeServerSetUpIos(IOSDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException, FileNotFoundException, YamlException {
 		String expectedHomeServer=null;
 		if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
 			expectedHomeServer=ReadConfigFile.getInstance().getConfMap().get("homeserver");
