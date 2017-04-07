@@ -79,7 +79,7 @@ public class RiotLoginTests extends RiotParentTest{
 		Assert.assertEquals(loginPage.homeServerStaticText.getText(), homeServerTextView);
 		Assert.assertEquals(loginPage.identityServerStaticText.getText(), identityServerTextView);
 		Assert.assertEquals(loginPage.homeServerTextField.getText(), Constant.DEFAULT_MATRIX_SERVER_URL);
-		Assert.assertEquals(loginPage.identityServerTextField.getText(), Constant.DEFAULT_IDENTITY_SERVER);
+		Assert.assertEquals(loginPage.identityServerTextField.getText(), Constant.DEFAULT_IDENTITY_SERVER_URL);
 		loginPage.customServerOptionsCheckBox.click();
 	}
 

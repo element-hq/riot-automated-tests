@@ -76,7 +76,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	 */
 	public void logUser(String usernameOrEmail, String phoneNumber,String password) throws FileNotFoundException, YamlException, InterruptedException{
 		if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
-			logUserWithCustomHomeServer(usernameOrEmail, phoneNumber,password,MatrixUtilities.getCustomHomeServerURL(),Constant.DEFAULT_IDENTITY_SERVER);
+			logUserWithCustomHomeServer(usernameOrEmail, phoneNumber,password,MatrixUtilities.getCustomHomeServerURL(),Constant.DEFAULT_IDENTITY_SERVER_URL);
 		}else{
 			logUserWithDefaultHomeServer(usernameOrEmail, phoneNumber,password);
 		}
@@ -131,8 +131,8 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 			msgboxConfirmationYesButton.click();
 		}
 		if(null!=hsAddress&&!homeServerEditText.getText().equals(hsAddress)){
-			homeServerEditText.clear();homeServerEditText.setValue(hsAddress);
-			//driver.hideKeyboard();
+			homeServerEditText.click();//homeServerEditText.clear();
+			homeServerEditText.sendKeys(hsAddress);//homeServerEditText.setValue(hsAddress);
 			((AndroidDeviceActionShortcuts) driver).pressKeyCode(AndroidKeyCode.ENTER);
 			if(isPresentTryAndCatch(titleTemplateFromWarningTrustRemoteServerLayout)){
 				msgboxConfirmationYesButton.click();
@@ -144,7 +144,8 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-			identityServerEditText.clear();identityServerEditText.setValue(isAddress);
+			//identityServerEditText.clear();
+			identityServerEditText.sendKeys(isAddress);
 		}
 	}
 

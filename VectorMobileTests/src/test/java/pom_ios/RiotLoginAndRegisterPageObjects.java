@@ -94,7 +94,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public void logUser(String usernameOrEmail, String phoneNumber,String password){
 		try {
 			if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
-				logUserWithCustomHomeServer(usernameOrEmail, phoneNumber,password,MatrixUtilities.getCustomHomeServerURL(),Constant.DEFAULT_IDENTITY_SERVER);
+				logUserWithCustomHomeServer(usernameOrEmail, phoneNumber,password,MatrixUtilities.getCustomHomeServerURL(),Constant.DEFAULT_IDENTITY_SERVER_URL);
 			}else{
 				logUserWithDefaultHomeServer(usernameOrEmail, phoneNumber,password);
 			}
