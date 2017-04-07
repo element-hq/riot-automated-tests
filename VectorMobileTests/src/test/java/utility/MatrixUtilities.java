@@ -23,4 +23,16 @@ public class MatrixUtilities {
 			return null;
 		}
 	}
+	
+	public static String getCustomHomeServerURL(){
+		String address = null,port = null;
+		try {
+			address = ReadConfigFile.getInstance().getConfMap().get("homeserver_address");
+			port=ReadConfigFile.getInstance().getConfMap().get("homeserver_port");
+		} catch (FileNotFoundException | YamlException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new StringBuilder("https://").append(address).append(":").append(port).toString();
+	}
 }

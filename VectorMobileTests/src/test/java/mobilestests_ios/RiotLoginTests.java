@@ -28,7 +28,7 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver_ios","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void loginAndLogoutiOsTest(String sUserName,String sPassword)  throws Exception {
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getiOsDriver1());
-		loginPage.fillLoginForm(sUserName,null, sPassword);
+		loginPage.logUser(sUserName,null, sPassword);
 
 		//Wait for the main page (rooms list) to be opened, and log out.
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
@@ -78,7 +78,7 @@ public class RiotLoginTests extends RiotParentTest{
 		loginPage.customServerOptionsCheckBox.click();
 		Assert.assertEquals(loginPage.homeServerStaticText.getText(), homeServerTextView);
 		Assert.assertEquals(loginPage.identityServerStaticText.getText(), identityServerTextView);
-		Assert.assertEquals(loginPage.homeServerTextField.getText(), Constant.DEFAULT_MATRIX_SERVER);
+		Assert.assertEquals(loginPage.homeServerTextField.getText(), Constant.DEFAULT_MATRIX_SERVER_URL);
 		Assert.assertEquals(loginPage.identityServerTextField.getText(), Constant.DEFAULT_IDENTITY_SERVER);
 		loginPage.customServerOptionsCheckBox.click();
 	}
@@ -161,7 +161,7 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver_ios","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void fillLoginFormWithUnvalidPhoneNumberTest(String emailOrUserName, String phoneNumber, String pwd) throws InterruptedException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getiOsDriver1());
-		loginPage.fillLoginForm(emailOrUserName,phoneNumber, pwd);
+		loginPage.logUser(emailOrUserName,phoneNumber, pwd);
 		Assert.assertFalse(waitUntilDisplayed(appiumFactory.getiOsDriver1(),"RecentsVCTableView", false, 2), "Riot rooms list page is opened and shouldn't");
 		appiumFactory.getiOsDriver1().resetApp();
 	}

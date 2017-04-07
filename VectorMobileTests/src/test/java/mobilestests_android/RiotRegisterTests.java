@@ -7,7 +7,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import io.appium.java_client.android.AndroidKeyCode;
 import pom_android.RiotCaptchaPageObject;
 import pom_android.RiotLoginAndRegisterPageObjects;
 import pom_android.RiotRoomsListPageObjects;

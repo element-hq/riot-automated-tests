@@ -7,8 +7,11 @@ starting_server_mode: 2
 development_team: 7J4U792NQT
 code_sign_identity: iPhone Developer
 
-#riotuserup access token
-riotuserup_access_token: MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI5Y2lkIHVzZXJfaWQgPSBAcmlvdHVzZXJ1cDptYXRyaXgub3JnCjAwMTZjaWQgdHlwZSA9IGFjY2VzcwowMDIxY2lkIG5vbmNlID0gWlFGdVEmWmxEOUojeEY7ZwowMDJmc2lnbmF0dXJlIEtFCnEbPGm-PRwjzwBoiz3Lw4gpl_aI29SqmzO9YVKBCg
+#homeserver in use for the tests: matrix.org, jeangb.org
+homeserver: jeangb.org
 
-#homeserver in use for the tests
-homeserver: matrix.org
+#does homeserver have same ip address than appium servers
+homeserverlocal: true
+
+homeserver_address: 192.168.2.52
+homeserver_port: 8448

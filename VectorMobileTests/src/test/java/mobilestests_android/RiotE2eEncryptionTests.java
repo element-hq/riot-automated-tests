@@ -1,5 +1,6 @@
 package mobilestests_android;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 
 import org.testng.Assert;
@@ -7,6 +8,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import com.esotericsoftware.yamlbeans.YamlException;
 
 import pom_android.RiotCallingPageObjects;
 import pom_android.RiotIncomingCallPageObjects;
@@ -423,10 +426,12 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 	 * @param username
 	 * @param pwd
 	 * @throws InterruptedException 
+	 * @throws YamlException 
+	 * @throws FileNotFoundException 
 	 */
 	@BeforeGroups({"1checkuser"})
-	private void checkIfUser1Logged() throws InterruptedException{
-		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), participant1DisplayName, Constant.DEFAULT_USERPWD);
+	private void checkIfUser1Logged() throws InterruptedException, FileNotFoundException, YamlException{
+		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver1(), participant1DisplayName, Constant.DEFAULT_USERPWD);
 	}
 	/**
 	 * Log the good user if not.</br> Secure the test.
@@ -434,9 +439,11 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 	 * @param username
 	 * @param pwd
 	 * @throws InterruptedException 
+	 * @throws YamlException 
+	 * @throws FileNotFoundException 
 	 */
 	@BeforeGroups({"2checkusers"})
-	private void checkIfUser2Logged() throws InterruptedException{
-		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver2(), participant2DisplayName, Constant.DEFAULT_USERPWD);
+	private void checkIfUser2Logged() throws InterruptedException, FileNotFoundException, YamlException{
+		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver2(), participant2DisplayName, Constant.DEFAULT_USERPWD);
 	}
 }

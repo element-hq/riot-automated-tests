@@ -41,7 +41,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * @throws YamlException 
 	 * @throws FileNotFoundException 
 	 */
-	@Test(groups={"2drivers_android","checkuser","check_contacts_permission"}, description="direct message test")
+	@Test(groups={"2drivers_android","2checkusers_android","check_contacts_permission"}, description="direct message test")
 	public void startChatWithOneUserTwice() throws InterruptedException, FileNotFoundException, YamlException{
 		int randInt = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomMsg=(new StringBuilder("direct chat test").append(randInt)).toString();
@@ -100,7 +100,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Check that the new room doesn't have a little green man on both devices.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers_android","checkuser","check_contacts_permission"}, description="direct message test")
+	@Test(groups={"2drivers_android","2checkusers_android","check_contacts_permission"}, description="direct message test")
 	public void startChatWithMoreThanTwoUsers() throws InterruptedException{
 		String roomNameFromDevice1=riotuser2DisplayName+" and "+riotuser3DisplayName;
 
@@ -140,7 +140,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Check that the new room doesn't have a little green man.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers_android","checkuser","check_contacts_permission"}, description="direct message test")
+	@Test(groups={"2drivers_android","2checkusers_android","check_contacts_permission"}, description="direct message test")
 	public void createRoomWithOneUser() throws InterruptedException{
 		RiotRoomsListPageObjects roomsListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		RiotRoomsListPageObjects roomsListDevice2=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
@@ -183,7 +183,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Check that the DM tag is changed on device 1.</br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers_android","checkuser","check_contacts_permission"})
+	@Test(groups={"2drivers_android","2checkusers_android","check_contacts_permission"})
 	public void tagAndUntagDirectMessageRoom() throws InterruptedException{
 		RiotRoomsListPageObjects roomsListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		RiotRoomsListPageObjects roomsListDevice2=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
@@ -265,11 +265,13 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * @param username
 	 * @param pwd
 	 * @throws InterruptedException 
+	 * @throws YamlException 
+	 * @throws FileNotFoundException 
 	 */
-	@BeforeGroups("checkuser")
-	private void checkIfUserLogged() throws InterruptedException{
-		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
-		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
+	@BeforeGroups("2checkusers_android")
+	private void checkIfUserLogged() throws InterruptedException, FileNotFoundException, YamlException{
+		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
+		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
 	}
 
 	/**

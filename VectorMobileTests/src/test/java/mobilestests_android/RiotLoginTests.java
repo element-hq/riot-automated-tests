@@ -3,22 +3,24 @@ package mobilestests_android;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.interactions.Keyboard;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import com.esotericsoftware.yamlbeans.YamlException;
 
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
@@ -38,7 +40,7 @@ public class RiotLoginTests extends RiotParentTest{
 	public void simpleLogin() throws Exception {
 		String sUserName="riotuser2", sPassword="riotuser";
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
-		loginPage.fillLoginForm(sUserName, null,sPassword);
+		loginPage.logUser(sUserName, null,sPassword);
 	}
 
 	/**
@@ -47,7 +49,7 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver_android","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void loginAndLogoutTest(String sUserName,String sPassword)  throws Exception {
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
-		loginPage.fillLoginForm(sUserName, null,sPassword);
+		loginPage.logUser(sUserName, null,sPassword);
 		//Wait for the main page (rooms list) to be opened, and log out.
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		Assert.assertTrue(mainPage.roomsExpandableListView.isDisplayed(), "Rooms list ins't displayed after login.");
@@ -86,7 +88,7 @@ public class RiotLoginTests extends RiotParentTest{
 		loginPage.customServerOptionsCheckBox.click();
 		Assert.assertEquals(loginPage.homeServerTextView.getText(), homeServerTextView);
 		Assert.assertEquals(loginPage.identityServerTextView.getText(), identityServerTextView);
-		Assert.assertEquals(loginPage.homeServerEditText.getText(), Constant.DEFAULT_MATRIX_SERVER);
+		Assert.assertEquals(loginPage.homeServerEditText.getText(), Constant.DEFAULT_MATRIX_SERVER_URL);
 		Assert.assertEquals(loginPage.identityServerEditText.getText(), Constant.DEFAULT_IDENTITY_SERVER);
 	}
 	
@@ -193,9 +195,9 @@ public class RiotLoginTests extends RiotParentTest{
 	}
 	
 	@Test(groups={"1driver_android","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
-	public void fillLoginFormWithUnvalidPhoneNumberTest(String emailOrUserName, String phoneNumber, String pwd) throws InterruptedException{
+	public void fillLoginFormWithUnvalidPhoneNumberTest(String emailOrUserName, String phoneNumber, String pwd) throws InterruptedException, FileNotFoundException, YamlException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
-		loginPage.fillLoginForm(emailOrUserName, phoneNumber, pwd);
+		loginPage.logUser(emailOrUserName, phoneNumber, pwd);
 		Assert.assertFalse(waitUntilDisplayed(appiumFactory.getAndroidDriver1(),"im.vector.alpha:id/fragment_recents_list", false, 2), "Riot rooms list page is opened and shouldn't");
 		appiumFactory.getAndroidDriver1().resetApp();
 	}

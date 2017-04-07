@@ -320,6 +320,13 @@ private AppiumDriver<MobileElement> driver;
 	public MobileElement signOutAlertDialogButtonConfirm;
 	@iOSFindBy(accessibility="SettingsVCSignoutAlertActionCancel")
 	public MobileElement signOutAlertDialogButtonCancel;
+	/*
+	 * ADVANCED
+	 */
+	@iOSFindBy(accessibility="SettingsVCConfigStaticText")
+	public MobileElement configStaticText;
+	
+	
 	
 	
 	/**
@@ -375,14 +382,14 @@ private AppiumDriver<MobileElement> driver;
 	 * Log-out from Riot with the lateral menu.
 	 */
 	public void logOutFromRoomsList(){
-		this.settingsButton.click();
+		settingsButton.click();
 		logOutFromSettingsView();
 	}
 	/**
 	 * Log-out from Riot from the settings view.
 	 */
 	public void logOutFromSettingsView(){
-		this.signOutButton.click();
+		signOutButton.click();
 		signOutAlertDialogButtonConfirm.click();
 	}
 	/**
@@ -391,24 +398,25 @@ private AppiumDriver<MobileElement> driver;
 	 * @param username
 	 * @param pwd
 	 * @return new RiotRoomsListPageObjects
+	 * @throws InterruptedException 
 	 */
-	public RiotRoomsListPageObjects logOutAndLogin(String username, String pwd) {
-		this.logOutFromRoomsList();
+	public RiotRoomsListPageObjects logOutAndLogin(String username, String pwd) throws InterruptedException {
+		logOutFromRoomsList();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
-		loginPage.fillLoginForm(username,null, pwd);
+		loginPage.logUser(username, null, pwd);
 		return new RiotRoomsListPageObjects(driver);
 	}
+	
 	/**
-	 * Log out from the rooms list, log in with the parameters.</br>
+	 * Log out from the rooms list, log in with the parameters, and with custom homeserver.</br>
 	 * Return a RiotRoomsListPageObjects POM.</br> Can be used to renew the encryption keys.
 	 * @param username
 	 * @param pwd
 	 * @return new RiotRoomsListPageObjects
+	 * @throws InterruptedException 
 	 */
-	public RiotRoomsListPageObjects logOutAndLoginFromSettingsView(String username, String pwd) {
-		this.logOutFromSettingsView();
-		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
-		loginPage.fillLoginForm(username,null, pwd);
-		return new RiotRoomsListPageObjects(driver);
+	public RiotRoomsListPageObjects logOutAndLoginFromSettingsView(String username, String pwd) throws InterruptedException {
+		logOutFromSettingsView();
+		return logOutAndLogin(username,pwd);
 	}
 }

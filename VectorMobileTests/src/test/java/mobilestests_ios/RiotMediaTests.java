@@ -1,9 +1,13 @@
 package mobilestests_ios;
 
+import java.io.FileNotFoundException;
+
 import org.testng.Assert;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import com.esotericsoftware.yamlbeans.YamlException;
 
 import pom_ios.RiotMediaViewerPageObjects;
 import pom_ios.RiotRoomDetailsPageObjects;
@@ -61,9 +65,11 @@ private String roomWithPhoto="attached photos";
 	 * @param username
 	 * @param pwd
 	 * @throws InterruptedException 
+	 * @throws YamlException 
+	 * @throws FileNotFoundException 
 	 */
 	@BeforeGroups("checkuser")
-	private void checkIfUserLogged() throws InterruptedException{
+	private void checkIfUserLogged() throws InterruptedException, FileNotFoundException, YamlException{
 		super.checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
 	}
 }

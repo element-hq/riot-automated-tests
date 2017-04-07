@@ -1,5 +1,6 @@
 package mobilestests_ios;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 
 import org.testng.Assert;
@@ -7,6 +8,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import com.esotericsoftware.yamlbeans.YamlException;
 
 import pom_ios.RiotRoomPageObjects;
 import pom_ios.RiotRoomsListPageObjects;
@@ -94,9 +97,11 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * @param username
 	 * @param pwd
 	 * @throws InterruptedException 
+	 * @throws YamlException 
+	 * @throws FileNotFoundException 
 	 */
 	@BeforeGroups("2checkuser")
-	private void checkIfUsersLogged() throws InterruptedException{
+	private void checkIfUsersLogged() throws InterruptedException, FileNotFoundException, YamlException{
 		super.checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
 		super.checkIfUserLoggedIos(appiumFactory.getiOsDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
 	}

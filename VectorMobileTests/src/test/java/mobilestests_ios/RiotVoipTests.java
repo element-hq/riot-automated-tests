@@ -1,11 +1,14 @@
 package mobilestests_ios;
 
+import java.io.FileNotFoundException;
+
 import org.testng.Assert;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import io.appium.java_client.AppiumDriver;
+import com.esotericsoftware.yamlbeans.YamlException;
+
 import io.appium.java_client.MobileElement;
 import pom_ios.RiotCallingPageObjects;
 import pom_ios.RiotIncomingCallPageObjects;
@@ -297,14 +300,16 @@ public class RiotVoipTests extends RiotParentTest{
 	 * @param username
 	 * @param pwd
 	 * @throws InterruptedException 
+	 * @throws YamlException 
+	 * @throws FileNotFoundException 
 	 */
 	@BeforeGroups("1checkuser")
-	private void checkIfUser1Logged() throws InterruptedException{
+	private void checkIfUser1Logged() throws InterruptedException, FileNotFoundException, YamlException{
 		checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
 	}
 	
 	@BeforeGroups("2checkuser")
-	private void checkIfUser2Logged() throws InterruptedException{
+	private void checkIfUser2Logged() throws InterruptedException, FileNotFoundException, YamlException{
 		checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
 		checkIfUserLoggedIos(appiumFactory.getiOsDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
 	}

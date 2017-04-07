@@ -1,13 +1,21 @@
 package pom_ios;
 
+import java.io.FileNotFoundException;
+
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.PageFactory;
 
+import com.esotericsoftware.yamlbeans.YamlException;
+
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.SwipeElementDirection;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
+import utility.Constant;
+import utility.MatrixUtilities;
+import utility.ReadConfigFile;
 import utility.TestUtilities;
 
 /**
@@ -83,7 +91,22 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	 * @param password
 	 * TODO: works need to be done here because if the password is null, the login won't happen.
 	 */
-	public void fillLoginForm(String usernameOrEmail, String phoneNumber,String password){
+	public void logUser(String usernameOrEmail, String phoneNumber,String password){
+		try {
+			if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+				logUserWithCustomHomeServer(usernameOrEmail, phoneNumber,password,MatrixUtilities.getCustomHomeServerURL(),Constant.DEFAULT_IDENTITY_SERVER);
+			}else{
+				logUserWithDefaultHomeServer(usernameOrEmail, phoneNumber,password);
+			}
+		} catch (FileNotFoundException | YamlException | InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Fill login form, and hit the login button.
+	 */
+	public void logUserWithDefaultHomeServer(String usernameOrEmail, String phoneNumber,String password){
 		if(null!=usernameOrEmail && usernameOrEmail.length()!=0)
 			emailOrUserNameTextField.setValue(usernameOrEmail);
 		if(null!=phoneNumber && phoneNumber.length()!=0)
@@ -93,8 +116,63 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 			driver.getKeyboard().sendKeys(Keys.RETURN);
 			passwordTextField.setValue(password+"\n");
 		}
-	//	loginButton.click();
 	}
+	/**
+	 * Fill login form, custom server options, and hit the login button.
+	 * @param usernameOrEmail
+	 * @param phoneNumber
+	 * @param password
+	 * @param hs
+	 * @param is
+	 */
+	public void logUserWithCustomHomeServer(String usernameOrEmail, String phoneNumber,String password, String hs, String is) throws InterruptedException{
+		if(null!=usernameOrEmail && usernameOrEmail.length()!=0)
+			emailOrUserNameTextField.setValue(usernameOrEmail);
+		if(null!=phoneNumber && phoneNumber.length()!=0)
+			phoneNumberTextField.setValue(phoneNumber);
+		if(null!=password && password.length()!=0)
+		{
+			driver.getKeyboard().sendKeys(Keys.RETURN);
+			passwordTextField.setValue(password);
+		}
+		setUpHomeServerAndIdentityServer(hs, is);
+		loginButton.click();
+		if(isPresentTryAndCatch(warningTrustRemoteServerAlert)){
+			trustButtonFromTrustRemoteServerAlert.click();
+		}
+	}
+	
+	/**
+	 * Fill the login form, doesn't hit the login button.
+	 */
+	public void fillLoginForm(String usernameOrEmail, String phoneNumber,String password){
+		
+	}
+	
+	/**
+	 * Hit use custom server options checkbox, then fill home server and identity server fields.</br>
+	 * Doesn't hit login button.
+	 * @throws InterruptedException 
+	 */
+	public void setUpHomeServerAndIdentityServer(String hsAddress, String isAddress){
+		//driver.swipe
+		passwordTextField.swipe(SwipeElementDirection.UP,100);
+		customServerOptionsCheckBox.click();
+		if(isPresentTryAndCatch(warningTrustRemoteServerAlert)){
+			trustButtonFromTrustRemoteServerAlert.click();
+		}
+		if(null!=hsAddress&&!homeServerTextField.getText().equals(hsAddress)){
+			homeServerTextField.clear();homeServerTextField.setValue(hsAddress);
+			driver.getKeyboard().sendKeys(Keys.ENTER);
+			if(isPresentTryAndCatch(warningTrustRemoteServerAlert)){
+				trustButtonFromTrustRemoteServerAlert.click();
+			}
+		}
+		if(null!=isAddress&&!identityServerTextField.getText().equals(isAddress)){
+			identityServerStaticText.clear();identityServerStaticText.setValue(hsAddress);
+		}
+	}
+	
 	/*
 	 * 		register part
 	 */
@@ -147,6 +225,11 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement identityServerStaticText;
 	@iOSFindBy(accessibility="AuthenticationVCISTextField")
 	public MobileElement identityServerTextField;
+	//Could not verify identity of remote server warning layout
+	@iOSFindBy(accessibility="Could not verify identity of remote server.")
+	public MobileElement warningTrustRemoteServerAlert;
+	@iOSFindBy(accessibility="Trust")
+	public MobileElement trustButtonFromTrustRemoteServerAlert;
 
 	/*
 	 * DIALOG ALERT

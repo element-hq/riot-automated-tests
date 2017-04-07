@@ -1,8 +1,12 @@
 package mobilestests_android;
 
+import java.io.FileNotFoundException;
+
 import org.testng.Assert;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
+
+import com.esotericsoftware.yamlbeans.YamlException;
 
 import pom_android.RiotMediaViewerPageObjects;
 import pom_android.RiotRoomDetailsPageObjects;
@@ -26,7 +30,7 @@ public class RiotMediaTests extends RiotParentTest{
 	 * Check that the photo is opened in the image viewer.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver_android","1ccheckuser"})
+	@Test(groups={"1driver_android","1checkuser"})
 	public void openPhotoFromFilesTabTest() throws InterruptedException{
 		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		//1. Open room roomtest.
@@ -58,7 +62,7 @@ public class RiotMediaTests extends RiotParentTest{
 	 * @throws InterruptedException 
 	 */
 	@BeforeGroups("1checkuser")
-	private void checkIfUserLogged() throws InterruptedException{
-		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
+	private void checkIfUserLogged() throws InterruptedException, FileNotFoundException, YamlException{
+		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
 	}
 }

@@ -1,5 +1,6 @@
 package mobilestests_ios;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 
 import org.testng.Assert;
@@ -7,6 +8,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import com.esotericsoftware.yamlbeans.YamlException;
 
 import io.appium.java_client.MobileElement;
 import pom_ios.RiotContactPickerPageObjects;
@@ -221,9 +224,11 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * @param username
 	 * @param pwd
 	 * @throws InterruptedException 
+	 * @throws YamlException 
+	 * @throws FileNotFoundException 
 	 */
 	@BeforeGroups("1checkuser")
-	private void checkIfUser1Logged() throws InterruptedException{
+	private void checkIfUser1Logged() throws InterruptedException, FileNotFoundException, YamlException{
 		checkIfUserLoggedIos(appiumFactory.getiOsDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
 	}
 }

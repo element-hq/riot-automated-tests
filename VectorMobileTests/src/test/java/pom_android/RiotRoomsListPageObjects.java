@@ -1,11 +1,14 @@
 package pom_android;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
+
+import com.esotericsoftware.yamlbeans.YamlException;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
@@ -272,7 +275,9 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	public MobileElement signOutButton;
 	@AndroidFindBy(id="im.vector.alpha:id/home_menu_main_displayname")
 	public MobileElement displayedUserMain;
-
+	@AndroidFindBy(id="im.vector.alpha:id/home_menu_main_matrix_id")
+	public MobileElement displayedUserMatrixId;
+	
 	@AndroidFindBy(xpath="//android.widget.FrameLayout//android.widget.CheckedTextView[@text='Copyright']")//copyright button
 	public MobileElement openCopyrightButton;
 
@@ -353,9 +358,14 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	public RiotRoomsListPageObjects logOutAndLogin(String username, String password) throws InterruptedException{
 		this.logOut();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
-		loginPage.fillLoginForm(username, null,password);
+		try {
+			loginPage.logUser(username, null,password);
+		} catch (FileNotFoundException | YamlException e) {
+			e.printStackTrace();
+		}
 		return new RiotRoomsListPageObjects(driver);
 	}
+	
 	public RiotSettingsPageObjects openRiotSettingsFromLateralMenu() throws InterruptedException{
 		this.contextMenuButton.click();
 		this.settingsButton.click();

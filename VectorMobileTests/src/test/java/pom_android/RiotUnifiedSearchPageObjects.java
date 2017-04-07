@@ -16,11 +16,11 @@ import utility.TestUtilities;
 /**
  * Page opened after hitting the search button from the rooms list.
  */
-public class RiotSearchFromRoomsListPageObjects extends TestUtilities{
+public class RiotUnifiedSearchPageObjects extends TestUtilities{
 private AndroidDriver<MobileElement> driver;
 private int search_timeout=30;
 
-	public RiotSearchFromRoomsListPageObjects(AppiumDriver<MobileElement> myDriver){
+	public RiotUnifiedSearchPageObjects(AppiumDriver<MobileElement> myDriver){
 		driver=(AndroidDriver<MobileElement>) myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 		ExplicitWait(driver,this.mainView);
@@ -72,7 +72,7 @@ private int search_timeout=30;
 	}
 	
 	public Boolean waitUntilSearchFinished() throws InterruptedException {
-		return waitUntilDisplayed(driver, "im.vector.alpha:id/search_in_progress_view", false, search_timeout);
+		return waitUntilDisplayed(driver, "XCUIElementTypeActivityIndicator", false, search_timeout);
 	}
 
 	/*
@@ -172,9 +172,4 @@ private int search_timeout=30;
 		if(displayNameAndMatrixId!=null)Assert.assertEquals(peopleToCheck.findElementById("im.vector.alpha:id/filtered_list_name").getText(), displayNameAndMatrixId);
 		if(status!=null)Assert.assertEquals(peopleToCheck.findElementById("im.vector.alpha:id/filtered_list_status").getText(), status);
 	}
-
-
-	
-	
-	
 }

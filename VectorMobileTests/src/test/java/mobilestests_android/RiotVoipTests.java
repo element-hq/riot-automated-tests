@@ -1,12 +1,14 @@
 package mobilestests_android;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.testng.Assert;
-import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import com.esotericsoftware.yamlbeans.YamlException;
 
 import pom_android.RiotCallingPageObjects;
 import pom_android.RiotIncomingCallPageObjects;
@@ -14,7 +16,6 @@ import pom_android.RiotRoomDetailsPageObjects;
 import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
 import utility.Constant;
-import utility.HttpsRequestsToMatrix;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
@@ -391,15 +392,17 @@ public class RiotVoipTests extends RiotParentTest{
 	 * @param username
 	 * @param pwd
 	 * @throws InterruptedException 
+	 * @throws YamlException 
+	 * @throws FileNotFoundException 
 	 */
 	@BeforeGroups("1checkuser")
-	private void checkIfUser1Logged() throws InterruptedException{
-		checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
+	private void checkIfUser1Logged() throws InterruptedException, FileNotFoundException, YamlException{
+		checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
 	}
 	
 	@BeforeGroups("2checkuser")
-	private void checkIfUser2Logged() throws InterruptedException{
-		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
-		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
+	private void checkIfUser2Logged() throws InterruptedException, FileNotFoundException, YamlException{
+		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
+		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
 	}
 }

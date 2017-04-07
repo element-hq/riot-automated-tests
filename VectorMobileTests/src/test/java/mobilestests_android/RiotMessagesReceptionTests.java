@@ -1,11 +1,14 @@
 package mobilestests_android;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import com.esotericsoftware.yamlbeans.YamlException;
 
 import io.appium.java_client.MobileElement;
 import pom_android.RiotRoomPageObjects;
@@ -215,10 +218,12 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 * @param username
 	 * @param pwd
 	 * @throws InterruptedException 
+	 * @throws YamlException 
+	 * @throws FileNotFoundException 
 	 */
 	@BeforeGroups("1checkuser")
-	private void checkIfUserLogged() throws InterruptedException{
-		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);
+	private void checkIfUserLogged() throws InterruptedException, FileNotFoundException, YamlException{
+		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);
 	}
 	/**
 	 * Log the good user if not.</br> Secure the test.
@@ -226,11 +231,13 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 * @param username
 	 * @param pwd
 	 * @throws InterruptedException 
+	 * @throws YamlException 
+	 * @throws FileNotFoundException 
 	 */
 	@BeforeGroups("2checkuser")
-	private void checkIfUser2Logged() throws InterruptedException{
-		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);
-		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver2(), riotUserDisplayNameB, Constant.DEFAULT_USERPWD);
+	private void checkIfUser2Logged() throws InterruptedException, FileNotFoundException, YamlException{
+		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);
+		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver2(), riotUserDisplayNameB, Constant.DEFAULT_USERPWD);
 	}
 	
 	/**
