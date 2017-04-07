@@ -1,26 +1,34 @@
 package mobilestests_android;
 
+import java.io.FileNotFoundException;
+
 import org.openqa.selenium.ScreenOrientation;
 import org.testng.Assert;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import com.esotericsoftware.yamlbeans.YamlException;
+
 import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
-import pom_android.RiotSearchFromRoomsListPageObjects;
+import pom_android.RiotUnifiedSearchPageObjects;
 import pom_android.RiotSettingsPageObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
+/**
+ * Tests on unified search, and search in rooms.
+ * @author jeangb
+ */
 @Listeners({ ScreenshotUtility.class })
 public class RiotSearchTests extends RiotParentTest{
 	private String riotUserDisplayName="riotuser15";
 	
 	/**
 	 * Search in ROOMS and MESSAGES tab in search from recent.</br> 
-	 * Validate the issue https://github.com/vector-im/riot-android/issues/934 to. </br>
+	 * Validate the issue https://github.com/vector-im/riot-android/issues/934 too. </br>
 	 * 1. Create a room with a random name.</br>
 	 * 2. Post a random msg within</br>
 	 * 3. From the rooms list hit the search button</br>
@@ -34,7 +42,7 @@ public class RiotSearchTests extends RiotParentTest{
 	 * @throws InterruptedException 
 	 */
 	@Test(groups={"1driver_android","1checkuser_and_contact_permission",}, priority=0,description="test on the search from the rooms list")
-	public void searchRoomsAndMessages() throws InterruptedException{
+	public void globalSearchRoomsAndMessages() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		int randInt2 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomRoomName=(new StringBuilder("room_search").append(randInt1)).toString();
@@ -53,11 +61,11 @@ public class RiotSearchTests extends RiotParentTest{
 		roomsList.searchButton.click();
 		
 		//4. Search in ROOMS tab the random name given in step1
-		RiotSearchFromRoomsListPageObjects searchInRoomsList = new RiotSearchFromRoomsListPageObjects(appiumFactory.getAndroidDriver1());
+		RiotUnifiedSearchPageObjects searchInRoomsList = new RiotUnifiedSearchPageObjects(appiumFactory.getAndroidDriver1());
 		searchInRoomsList.roomsTab.click();
 		searchInRoomsList.launchASearch(randomRoomName,true);
 		
-		//Check that only 1 result shown up and Check that the room previously created shown up
+		//Check that only 1 result show up and Check that the room previously created shows up
 		Assert.assertEquals(searchInRoomsList.getRoomsLayout(true).size(), 1);
 		searchInRoomsList.checkRoomItemFromResult(1,randomRoomName,randomMsg);
 		//Check that the room previously created doesn't appears in browse directory
@@ -100,14 +108,14 @@ public class RiotSearchTests extends RiotParentTest{
 	 * @throws InterruptedException 
 	 */
 	@Test(groups={"1driver_android","1checkuser_and_contact_permission"}, priority=1,description="test on the search from the rooms list with non existent searches")
-	public void searchForNonExistentMsgAndRoom() throws InterruptedException{
+	public void globalSearchForNonExistentMsgAndRoom() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomName=(new StringBuilder("randomsearch_").append(randInt1)).toString();
 		
 		//1. From the rooms list hit the search button
 		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		roomsList.searchButton.click();
-		RiotSearchFromRoomsListPageObjects searchInRoomsList = new RiotSearchFromRoomsListPageObjects(appiumFactory.getAndroidDriver1());
+		RiotUnifiedSearchPageObjects searchInRoomsList = new RiotUnifiedSearchPageObjects(appiumFactory.getAndroidDriver1());
 		
 		//2. Search in ROOMS tab a random name
 		searchInRoomsList.roomsTab.click();
@@ -145,10 +153,12 @@ public class RiotSearchTests extends RiotParentTest{
 	 * @param username
 	 * @param pwd
 	 * @throws InterruptedException 
+	 * @throws YamlException 
+	 * @throws FileNotFoundException 
 	 */
 	@BeforeGroups("1checkuser_and_contact_permission")
-	private void checkIfUserLogged() throws InterruptedException{
-		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
+	private void checkIfUserLogged() throws InterruptedException, FileNotFoundException, YamlException{
+		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
 		checkContactPermissionChecked();
 	}
 	
