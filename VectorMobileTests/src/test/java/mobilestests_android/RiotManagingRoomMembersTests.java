@@ -1,5 +1,6 @@
 package mobilestests_android;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 
 import org.testng.Assert;
@@ -7,6 +8,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import com.esotericsoftware.yamlbeans.YamlException;
 
 import io.appium.java_client.MobileElement;
 import pom_android.RiotContactPickerPageObjects;
@@ -26,7 +29,7 @@ import utility.ScreenshotUtility;
 public class RiotManagingRoomMembersTests extends RiotParentTest{
 	private String testRoom="Common riotusers auto tests";
 	private String matchingWithKnownContactFilter1="riot";
-	private String invitedUser="@riotuser16:matrix.org";
+	private String invitedUserDisplayName="riotuser16";
 	private String riotUserDisplayName="riotuser15";
 
 	/**
@@ -197,7 +200,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		//2. Invite a participant
 		roomPage.inviteMembersButton.click();
 		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(appiumFactory.getAndroidDriver1());
-		roomDetails1.addParticipant(invitedUser);
+		roomDetails1.addParticipant(getMatrixIdFromDisplayName(invitedUserDisplayName));
 		roomDetails1.waitUntilInvitedCategorieIsDisplayed(true);
 
 		//3. Remove this participant from the room details
@@ -216,10 +219,12 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * @param username
 	 * @param pwd
 	 * @throws InterruptedException 
+	 * @throws YamlException 
+	 * @throws FileNotFoundException 
 	 */
 	@BeforeGroups("1checkuser")
-	private void checkIfUserLogged() throws InterruptedException{
-		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
+	private void checkIfUserLogged() throws InterruptedException, FileNotFoundException, YamlException{
+		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver1(), riotUserDisplayName, Constant.DEFAULT_USERPWD);
 	}
 	
 	@AfterMethod(alwaysRun=true)

@@ -1,14 +1,23 @@
 package pom_android;
 
+import java.io.FileNotFoundException;
+
 import org.openqa.selenium.support.PageFactory;
+
+import com.esotericsoftware.yamlbeans.YamlException;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidDeviceActionShortcuts;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidKeyCode;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
+import utility.Constant;
+import utility.MatrixUtilities;
+import utility.ReadConfigFile;
 import utility.TestUtilities;
 
 /**
@@ -33,7 +42,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 			e.printStackTrace();
 		}
 	}
-	/**
+	/*
 	 * Riot logo
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/login_large_logo")
@@ -41,7 +50,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	/**
 	 * MAIN LOGIN FORM
 	 */
-	/**
+	/*
 	 * 		login part
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/main_input_layout")
@@ -57,9 +66,49 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement passwordEditText;
 
 	/**
-	 * Simple login without doing any verifications.
+	 * Simple login without doing any verifications.</br>
+	 * Fill the custom server options if necessary.
 	 * @param usernameOrEmail
 	 * @param password
+	 * @throws InterruptedException 
+	 * @throws YamlException 
+	 * @throws FileNotFoundException 
+	 */
+	public void logUser(String usernameOrEmail, String phoneNumber,String password) throws FileNotFoundException, YamlException, InterruptedException{
+		if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+			logUserWithCustomHomeServer(usernameOrEmail, phoneNumber,password,MatrixUtilities.getCustomHomeServerURL(),Constant.DEFAULT_IDENTITY_SERVER);
+		}else{
+			logUserWithDefaultHomeServer(usernameOrEmail, phoneNumber,password);
+		}
+	}
+	
+	/**
+	 * Fill login form, and hit the login button.
+	 */
+	public void logUserWithDefaultHomeServer(String usernameOrEmail, String phoneNumber,String password){
+		fillLoginForm(usernameOrEmail, phoneNumber, password);
+		loginButton.click();
+	}
+	
+	/**
+	 * Fill login form, custom server options, and hit the login button.
+	 * @param usernameOrEmail
+	 * @param phoneNumber
+	 * @param password
+	 * @param hs
+	 * @param is
+	 * @throws InterruptedException
+	 */
+	public void logUserWithCustomHomeServer(String usernameOrEmail, String phoneNumber,String password, String hs, String is) throws InterruptedException{
+		fillLoginForm(usernameOrEmail, phoneNumber, password);
+		setUpHomeServerAndIdentityServer(hs, is);
+		loginButton.click();
+		if(isPresentTryAndCatch(titleTemplateFromWarningTrustRemoteServerLayout)){
+			msgboxConfirmationYesButton.click();
+		}
+	}
+	/**
+	 * Fill the login form, doesn't hit the login button.
 	 */
 	public void fillLoginForm(String usernameOrEmail, String phoneNumber,String password){
 		if(null!=usernameOrEmail && usernameOrEmail.length()!=0)
@@ -68,11 +117,39 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 			phoneNumberEditText.setValue(phoneNumber);
 		if(null!=password && password.length()!=0)
 			passwordEditText.setValue(password);
-		loginButton.click();
+	}
+	/**
+	 * Hit use custom server options checkbox, then fill home server and identity server fields.</br>
+	 * Doesn't hit login button.
+	 * @throws InterruptedException 
+	 */
+	public void setUpHomeServerAndIdentityServer(String hsAddress, String isAddress) throws InterruptedException{
+		driver.hideKeyboard();
+		customServerOptionsCheckBox.click();
+		//if warning alert "Could not verify identity of remote server" is displayed
+		if(isPresentTryAndCatch(titleTemplateFromWarningTrustRemoteServerLayout)){
+			msgboxConfirmationYesButton.click();
+		}
+		if(null!=hsAddress&&!homeServerEditText.getText().equals(hsAddress)){
+			homeServerEditText.clear();homeServerEditText.setValue(hsAddress);
+			//driver.hideKeyboard();
+			((AndroidDeviceActionShortcuts) driver).pressKeyCode(AndroidKeyCode.ENTER);
+			if(isPresentTryAndCatch(titleTemplateFromWarningTrustRemoteServerLayout)){
+				msgboxConfirmationYesButton.click();
+			}
+		}
+		if(null!=isAddress&&!identityServerEditText.getText().equals(isAddress)){
+			try {
+				driver.hideKeyboard();
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			identityServerEditText.clear();identityServerEditText.setValue(isAddress);
+		}
 	}
 
-	/**
-	 * 		register part
+	/*
+	 * 		register 1 part
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/creation_inputs_layout")
 	public MobileElement inputsRegisteringLayout;
@@ -84,8 +161,15 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement pwd1EditRegisterText;
 	@AndroidFindBy(id="im.vector.alpha:id/creation_password2")
 	public MobileElement pwd2EditRegisterText;
+	/*
+	 * 		register 2 part
+	 */
+	@AndroidFindBy(id="im.vector.alpha:id/registration_email")
+	public MobileElement mailRegisterEditText;
+	@AndroidFindBy(id="im.vector.alpha:id/registration_phone_number_value")
+	public MobileElement phoneNumberRegisterEditText;
 
-	/**
+	/*
 	 * 		forget password part
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/forget_password_inputs_layout")
@@ -107,8 +191,17 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement customServerOptionsCheckBox;
 	@AndroidFindBy(id="im.vector.alpha:id/login_forgot_password")
 	public MobileElement forgotPwdButton;
+	
+	/*
+	 * Verifying email page
+	 */
+	@AndroidFindBy(id="im.vector.alpha:id/flow_progress_message_textview")
+	public MobileElement emailSentMessageTextView;
+	@AndroidFindBy(id="im.vector.alpha:id/button_forgot_email_validate")
+	public MobileElement iVerifiedMyMailButton;
+	
 
-	/**
+	/*
 	 * LOGIN MATRIX SERVER CUSTOM OPTIONS
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/login_matrix_server_options_layout")
@@ -116,15 +209,21 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	//home server
 	@AndroidFindBy(xpath="//android.widget.LinearLayout[@resource-id='im.vector.alpha:id/login_matrix_server_options_layout']/android.widget.TextView[1]")
 	public MobileElement homeServerTextView;
-	@AndroidFindBy(xpath="//android.widget.LinearLayout[@resource-id='im.vector.alpha:id/login_matrix_server_options_layout']/android.widget.EditText[1]")
+	@AndroidFindBy(id="im.vector.alpha:id/login_matrix_server_url")
 	public MobileElement homeServerEditText;
 	//identity server
 	@AndroidFindBy(xpath="//android.widget.LinearLayout[@resource-id='im.vector.alpha:id/login_matrix_server_options_layout']/android.widget.TextView[2]")
 	public MobileElement identityServerTextView;
-	@AndroidFindBy(xpath="//android.widget.LinearLayout[@resource-id='im.vector.alpha:id/login_matrix_server_options_layout']/android.widget.EditText[2]")
+	@AndroidFindBy(id="im.vector.alpha:id/login_identity_url")
 	public MobileElement identityServerEditText;
-
-	/**
+	//Could not verify identity of remote server warning layout
+	@AndroidFindBy(id="im.vector.alpha:id/title_template")
+	public MobileElement titleTemplateFromWarningTrustRemoteServerLayout;
+	@AndroidFindBy(id="im.vector.alpha:id/ssl_user_id")
+	public MobileElement hsURLFromWarningTrustRemoteServer;
+	
+	
+	/*
 	 * BOTTOM BAR
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/login_actions_bar")
@@ -135,8 +234,12 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement loginButton;
 	@AndroidFindBy(id="im.vector.alpha:id/button_register")
 	public MobileElement registerButton;
+	@AndroidFindBy(id="im.vector.alpha:id/button_skip")
+	public MobileElement skipButton;
+	@AndroidFindBy(id="im.vector.alpha:id/button_submit")
+	public MobileElement submitButton;
 
-	/**
+	/*
 	 * REGISTER CONFIRM MSGBOX
 	 */
 	@AndroidFindBy(id="android:id/parentPanel")

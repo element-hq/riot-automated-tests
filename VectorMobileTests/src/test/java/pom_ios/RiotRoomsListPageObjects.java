@@ -7,6 +7,7 @@ import org.testng.Assert;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.SwipeElementDirection;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
@@ -91,6 +92,46 @@ private AppiumDriver<MobileElement> driver;
 	public List<MobileElement> roomsList_bis;
 	
 	/**
+	 * Check that room is in a room category (favorites, people, rooms, etc). </br>
+	 * TODO maybe scroll to the end of the list to check the room ?
+	 * @param roomNameTest
+	 * @param category
+	 */
+	public Boolean checkRoomInCategory(String roomNameTest, String category) {
+		System.out.println("Looking for room "+roomNameTest+" in the category "+category);
+		List<MobileElement>roomsAndSection=driver.findElementsByXPath("//XCUIElementTypeTable[@name='RecentsVCTableView']/*");
+		
+		int indexLastElement=roomsAndSection.size()-1;
+		Boolean categoryFound=false, otherCategoryFound=false, roomFound=false;
+		int actualIndex=0;
+		do {
+			if(roomsAndSection.get(actualIndex).getTagName().equals("XCUIElementTypeOther")){
+				if(roomsAndSection.get(actualIndex).findElementByClassName("XCUIElementTypeStaticText").getText().equals(category)){
+					categoryFound=true;
+				}
+			}
+			actualIndex++;
+		} while (!categoryFound && actualIndex<indexLastElement);
+		if(!categoryFound){
+			System.out.println("Categorie "+category+ " not found.");
+		}else{
+			do {
+				if(roomsAndSection.get(actualIndex).getTagName().equals("XCUIElementTypeOther")){
+					if(roomsAndSection.get(actualIndex).findElementByClassName("XCUIElementTypeStaticText").getText().equals(category)){
+						otherCategoryFound=true;
+					}
+				}else{
+					if(roomsAndSection.get(actualIndex).findElementByAccessibilityId("TitleLabel").getText().equals(roomNameTest)){
+						roomFound=true;
+					}
+				}
+				actualIndex++;
+			} while (!otherCategoryFound && !roomFound && actualIndex<indexLastElement);
+		}
+		return roomFound;
+		
+	}
+	/**
 	 * Wait until there is at least 1 room in the rooms list.
 	 * @throws InterruptedException
 	 */
@@ -120,23 +161,93 @@ private AppiumDriver<MobileElement> driver;
 	}
 	
 	/**
+	 * Click on the context menu on a room, then choose one of the item : dm, notifications, favourite, bottom, close
+	 * @param roomName
+	 * @param item: dm, notifications, favourite, bottom, close
+	 * @throws InterruptedException 
+	 */
+	public void clickOnSwipedMenuOnRoom(String roomName, String item) throws InterruptedException {
+		MobileElement roomItem=getRoomByName(roomName);
+		if(null==roomItem){
+			System.out.println( "Room "+roomName+" not found, impossible to swipe on it.");
+		}else{
+			//swipe on the room item
+			roomItem.swipe(SwipeElementDirection.LEFT, 5, 200, 10);
+			//click on the button revealed by the swipe
+			int indexButton=4;
+			switch (item) {
+			case "dm":
+				indexButton=0;
+				break;
+			case "notifications":
+				indexButton=1;
+				break;
+			case "favourite":
+				indexButton=2;
+				break;
+			case "bottom":
+				indexButton=3;
+				break;
+			case "close":
+				indexButton=4;
+				break;
+			default:
+				Assert.fail("Wrong parameter item: "+item);
+				break;
+			}
+			roomItem.findElementsByClassName("XCUIElementTypeButton").get(indexButton).click();
+		}	
+	}
+	
+	/**
 	 * Return the last received message of a room by his name.</br>
 	 * Message can be text or event. </br>
 	 * Return null if no message found.
-	 * @param myRoomName
+	 * @param myRoomName, withUser
 	 * @return
 	 * @throws InterruptedException 
 	 */
-	public String getReceivedMessageByRoomName(String myRoomName) throws InterruptedException{
+	public String getLastEventByRoomName(String myRoomName, Boolean withUser) throws InterruptedException{
 		String messageWithUsername= getRoomByName(myRoomName).findElementByAccessibilityId("LastEventDescription").getText();
 		try {
-			if(messageWithUsername.indexOf(":")!=-1){
+			if(messageWithUsername.indexOf(":")!=-1&&!withUser){
 				return messageWithUsername.substring(messageWithUsername.indexOf(":")+2, messageWithUsername.length());
 			}else{
 				return messageWithUsername;
 			}
 		} catch (Exception e) {
 			return null;
+		}
+	}
+	
+	/**
+	 * Send back the badge number of a room by his name.</br>
+	 * Return null if no badge.
+	 * @param myRoomName
+	 * @return
+	 * @throws InterruptedException 
+	 */
+	public Integer getBadgeNumberByRoomName(String myRoomName) throws InterruptedException{
+		MobileElement badge;
+		try {
+			badge=getRoomByName(myRoomName).findElementByAccessibilityId("MissedNotifAndUnreadBadge");
+			return Integer.parseInt(badge.getText());
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Wait until badge of the room is incremented.
+	 * @param myRoomName
+	 * @param currentBadge
+	 * @throws InterruptedException
+	 */
+	public void waitForRoomToReceiveNewMessage(String myRoomName, int currentBadge) throws InterruptedException{
+		if(0==currentBadge){
+			ExplicitWait(driver, getRoomByName(myRoomName).findElementByAccessibilityId("MissedNotifAndUnreadBadge"));
+		}else{
+			waitUntilPropertyIsSet(getRoomByName(myRoomName).findElementByAccessibilityId("MissedNotifAndUnreadBadge"), "value", String.valueOf(currentBadge+1), true, 5);	
 		}
 	}
 	
@@ -170,6 +281,19 @@ private AppiumDriver<MobileElement> driver;
 		 return new RiotRoomPageObjects(driver);
 	 }
 	
+	/**
+	 * Start a new chat with a user and returns the new created room. 
+	 * @param displayNameOrMatrixId
+	 * @return RiotRoomPageObjects
+	 */
+	public RiotRoomPageObjects startChatWithUser(String displayNameOrMatrixId){
+		plusRoomButton.click();
+		startChatButton.click();
+		RiotNewChatPageObjects newChatA = new RiotNewChatPageObjects(appiumFactory.getiOsDriver1());
+		newChatA.searchAndSelectMember(displayNameOrMatrixId);
+		return new RiotRoomPageObjects(driver);
+	}
+	
 	/*
 	 * SETTINGS VIEW
 	 */
@@ -186,6 +310,8 @@ private AppiumDriver<MobileElement> driver;
 	/*
 	 * USER SETTINGS
 	 */
+	@iOSFindBy(accessibility="SettingsVCProfilPictureCell")
+	public MobileElement profilePictureCell;
 	@iOSFindBy(accessibility="SettingsVCDisplayNameTextField")
 	public MobileElement displayNameTextField;
 	@iOSFindBy(accessibility="SettingsVCChangePwdStaticText")
@@ -194,6 +320,13 @@ private AppiumDriver<MobileElement> driver;
 	public MobileElement signOutAlertDialogButtonConfirm;
 	@iOSFindBy(accessibility="SettingsVCSignoutAlertActionCancel")
 	public MobileElement signOutAlertDialogButtonCancel;
+	/*
+	 * ADVANCED
+	 */
+	@iOSFindBy(accessibility="SettingsVCConfigStaticText")
+	public MobileElement configStaticText;
+	
+	
 	
 	
 	/**
@@ -205,6 +338,19 @@ private AppiumDriver<MobileElement> driver;
 		displayNameTextField.click();
 		displayNameTextField.clear();
 		displayNameTextField.setValue(newDisplayName);
+	}
+	
+	/**
+	 * From the settings view, hit the profile picture item, and change the avatar by taking a new picture.</br>
+	 * It doesn't click on the save button.
+	 * @throws InterruptedException 
+	 */
+	public void changeAvatarFromSettings() throws InterruptedException{
+		profilePictureCell.click();
+		RiotCameraPageObjects cameraPage = new RiotCameraPageObjects(appiumFactory.getiOsDriver1());
+		cameraPage.cameraCaptureButton.click();
+		waitUntilDisplayed(driver, "OK", true, 10);
+		cameraPage.okButton.click();
 	}
 	
 	/**
@@ -236,14 +382,14 @@ private AppiumDriver<MobileElement> driver;
 	 * Log-out from Riot with the lateral menu.
 	 */
 	public void logOutFromRoomsList(){
-		this.settingsButton.click();
+		settingsButton.click();
 		logOutFromSettingsView();
 	}
 	/**
 	 * Log-out from Riot from the settings view.
 	 */
 	public void logOutFromSettingsView(){
-		this.signOutButton.click();
+		signOutButton.click();
 		signOutAlertDialogButtonConfirm.click();
 	}
 	/**
@@ -252,24 +398,25 @@ private AppiumDriver<MobileElement> driver;
 	 * @param username
 	 * @param pwd
 	 * @return new RiotRoomsListPageObjects
+	 * @throws InterruptedException 
 	 */
-	public RiotRoomsListPageObjects logOutAndLogin(String username, String pwd) {
-		this.logOutFromRoomsList();
+	public RiotRoomsListPageObjects logOutAndLogin(String username, String pwd) throws InterruptedException {
+		logOutFromRoomsList();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
-		loginPage.fillLoginForm(username,null, pwd);
+		loginPage.logUser(username, null, pwd);
 		return new RiotRoomsListPageObjects(driver);
 	}
+	
 	/**
-	 * Log out from the rooms list, log in with the parameters.</br>
+	 * Log out from the rooms list, log in with the parameters, and with custom homeserver.</br>
 	 * Return a RiotRoomsListPageObjects POM.</br> Can be used to renew the encryption keys.
 	 * @param username
 	 * @param pwd
 	 * @return new RiotRoomsListPageObjects
+	 * @throws InterruptedException 
 	 */
-	public RiotRoomsListPageObjects logOutAndLoginFromSettingsView(String username, String pwd) {
-		this.logOutFromSettingsView();
-		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
-		loginPage.fillLoginForm(username,null, pwd);
-		return new RiotRoomsListPageObjects(driver);
+	public RiotRoomsListPageObjects logOutAndLoginFromSettingsView(String username, String pwd) throws InterruptedException {
+		logOutFromSettingsView();
+		return logOutAndLogin(username,pwd);
 	}
 }

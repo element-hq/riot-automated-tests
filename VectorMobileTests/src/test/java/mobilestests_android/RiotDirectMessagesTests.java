@@ -1,5 +1,6 @@
 package mobilestests_android;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 
 import org.testng.Assert;
@@ -7,6 +8,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import com.esotericsoftware.yamlbeans.YamlException;
 
 import pom_android.RiotContactPickerPageObjects;
 import pom_android.RiotNewChatPageObjects;
@@ -26,9 +29,7 @@ import utility.ScreenshotUtility;
 public class RiotDirectMessagesTests extends RiotParentTest{
 	private String riotuser1DisplayName="riotuser6";
 	private String riotuser2DisplayName="riotuser7";
-	private String riotuser2MatrixId="@riotuser7:matrix.org";
 	private String riotuser3DisplayName="riotuser8";
-	private String riotuser3MatrixId="@riotuser8:matrix.org";
 	private String tmpRoomName="tmp room DM";
 
 	/**
@@ -37,9 +38,11 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Check that the new room doesn't have a little green man on both devices.</br>
 	 * Try to start a newt chat with this same member : check that the previous room is opened instead.
 	 * @throws InterruptedException
+	 * @throws YamlException 
+	 * @throws FileNotFoundException 
 	 */
-	@Test(groups={"2drivers_android","checkuser","check_contacts_permission"}, description="direct message test")
-	public void startChatWithOneUserTwice() throws InterruptedException{
+	@Test(groups={"2drivers_android","2checkusers_android","check_contacts_permission"}, description="direct message test")
+	public void startChatWithOneUserTwice() throws InterruptedException, FileNotFoundException, YamlException{
 		int randInt = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomMsg=(new StringBuilder("direct chat test").append(randInt)).toString();
 
@@ -53,7 +56,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		roomsListDevice1.startChatCheckedTextView.click();
 		//invite a member
 		RiotContactPickerPageObjects inviteViewDevice1=new RiotContactPickerPageObjects(appiumFactory.getAndroidDriver1());
-		inviteViewDevice1.searchAndSelectMember(riotuser2MatrixId);
+		inviteViewDevice1.searchAndSelectMember(getMatrixIdFromDisplayName(riotuser2DisplayName));
 		RiotNewChatPageObjects newChatViewDevice1= new RiotNewChatPageObjects(appiumFactory.getAndroidDriver1());
 		newChatViewDevice1.confirmRoomCreationButton.click();
 		//Room is created, then go back in rooms list
@@ -81,7 +84,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		roomsListDevice1.startChatCheckedTextView.click();
 		//invite a member
 		inviteViewDevice1=new RiotContactPickerPageObjects(appiumFactory.getAndroidDriver1());
-		inviteViewDevice1.searchAndSelectMember(riotuser2MatrixId);
+		inviteViewDevice1.searchAndSelectMember(getMatrixIdFromDisplayName(riotuser2DisplayName));
 		newChatViewDevice1= new RiotNewChatPageObjects(appiumFactory.getAndroidDriver1());
 		newChatViewDevice1.confirmRoomCreationButton.click();
 		//check that the previously create room is opened instead of being created again.
@@ -97,7 +100,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Check that the new room doesn't have a little green man on both devices.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers_android","checkuser","check_contacts_permission"}, description="direct message test")
+	@Test(groups={"2drivers_android","2checkusers_android","check_contacts_permission"}, description="direct message test")
 	public void startChatWithMoreThanTwoUsers() throws InterruptedException{
 		String roomNameFromDevice1=riotuser2DisplayName+" and "+riotuser3DisplayName;
 
@@ -108,11 +111,11 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		roomsListDevice1.startChatCheckedTextView.click();
 		//invite a first member
 		RiotContactPickerPageObjects inviteViewDevice1=new RiotContactPickerPageObjects(appiumFactory.getAndroidDriver1());
-		inviteViewDevice1.searchAndSelectMember(riotuser2MatrixId);
+		inviteViewDevice1.searchAndSelectMember(getMatrixIdFromDisplayName(riotuser2DisplayName));
 		RiotNewChatPageObjects newChatViewDevice1= new RiotNewChatPageObjects(appiumFactory.getAndroidDriver1());
 		newChatViewDevice1.addMemberItemListView.click();
 		//invite a second member
-		inviteViewDevice1.searchAndSelectMember(riotuser3MatrixId);
+		inviteViewDevice1.searchAndSelectMember(getMatrixIdFromDisplayName(riotuser3DisplayName));
 		newChatViewDevice1.confirmRoomCreationButton.click();
 
 		//Room is created, then go back in rooms list
@@ -137,7 +140,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Check that the new room doesn't have a little green man.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers_android","checkuser","check_contacts_permission"}, description="direct message test")
+	@Test(groups={"2drivers_android","2checkusers_android","check_contacts_permission"}, description="direct message test")
 	public void createRoomWithOneUser() throws InterruptedException{
 		RiotRoomsListPageObjects roomsListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		RiotRoomsListPageObjects roomsListDevice2=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
@@ -149,7 +152,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		newRoomDevice1.inviteMembersButton.click();
 		RiotRoomDetailsPageObjects roomDetailsDevice1 = new RiotRoomDetailsPageObjects(appiumFactory.getAndroidDriver1());
 		//add a participant from the details
-		roomDetailsDevice1.addParticipant(riotuser2MatrixId);
+		roomDetailsDevice1.addParticipant(getMatrixIdFromDisplayName(riotuser2DisplayName));
 		//go back to the rooms list
 		roomDetailsDevice1.menuBackButton.click();
 		newRoomDevice1.menuBackButton.click();
@@ -180,7 +183,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Check that the DM tag is changed on device 1.</br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers_android","checkuser","check_contacts_permission"})
+	@Test(groups={"2drivers_android","2checkusers_android","check_contacts_permission"})
 	public void tagAndUntagDirectMessageRoom() throws InterruptedException{
 		RiotRoomsListPageObjects roomsListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		RiotRoomsListPageObjects roomsListDevice2=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
@@ -194,7 +197,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		newRoomDevice1.inviteMembersButton.click();
 		RiotRoomDetailsPageObjects roomDetailsDevice1 = new RiotRoomDetailsPageObjects(appiumFactory.getAndroidDriver1());
 		//add a participant from the details
-		roomDetailsDevice1.addParticipant(riotuser2MatrixId);
+		roomDetailsDevice1.addParticipant(getMatrixIdFromDisplayName(riotuser2DisplayName));
 		roomDetailsDevice1.menuBackButton.click();
 		newRoomDevice1.menuBackButton.click();
 
@@ -262,11 +265,13 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * @param username
 	 * @param pwd
 	 * @throws InterruptedException 
+	 * @throws YamlException 
+	 * @throws FileNotFoundException 
 	 */
-	@BeforeGroups("checkuser")
-	private void checkIfUserLogged() throws InterruptedException{
-		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
-		super.checkIfUserLoggedAndroid(appiumFactory.getAndroidDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
+	@BeforeGroups("2checkusers_android")
+	private void checkIfUserLogged() throws InterruptedException, FileNotFoundException, YamlException{
+		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
+		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
 	}
 
 	/**

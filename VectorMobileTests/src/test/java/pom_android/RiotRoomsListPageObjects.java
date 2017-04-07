@@ -1,11 +1,14 @@
 package pom_android;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
+
+import com.esotericsoftware.yamlbeans.YamlException;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
@@ -216,10 +219,10 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	 * @param myRoomName
 	 * @return
 	 */
-	public String getReceivedMessageByRoomName(String myRoomName){
+	public String getLastEventByRoomName(String myRoomName,Boolean withUser){
 		try {
 			String messageWithUsername =driver.findElement(By.xpath("//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRoomName+"']/../..//android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_roomMessage']")).getText();
-			if(messageWithUsername.indexOf(":")!=-1){
+			if(messageWithUsername.indexOf(":")!=-1&&!withUser){
 				return messageWithUsername.substring(messageWithUsername.indexOf(":")+2, messageWithUsername.length());
 			}else{
 				return messageWithUsername;
@@ -241,12 +244,12 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 
 	/**
 	 * Wait until badge of the room is incremented.
-	 * @param myRommName
+	 * @param myRoomName
 	 * @param currentBadge
 	 * @throws InterruptedException
 	 */
-	public void waitForRoomToReceiveNewMessage(String myRommName, int currentBadge) throws InterruptedException{
-		waitUntilDisplayed(driver,"//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRommName+"']/../android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_unread_count' and @text='"+Integer.sum(currentBadge, 1)+"']", true, 5);
+	public void waitForRoomToReceiveNewMessage(String myRoomName, int currentBadge) throws InterruptedException{
+		waitUntilDisplayed(driver,"//android.widget.ExpandableListView//android.widget.TextView[@text='"+myRoomName+"']/../android.widget.TextView[@resource-id='im.vector.alpha:id/roomSummaryAdapter_unread_count' and @text='"+Integer.sum(currentBadge, 1)+"']", true, 5);
 	}
 
 	/*
@@ -272,7 +275,9 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	public MobileElement signOutButton;
 	@AndroidFindBy(id="im.vector.alpha:id/home_menu_main_displayname")
 	public MobileElement displayedUserMain;
-
+	@AndroidFindBy(id="im.vector.alpha:id/home_menu_main_matrix_id")
+	public MobileElement displayedUserMatrixId;
+	
 	@AndroidFindBy(xpath="//android.widget.FrameLayout//android.widget.CheckedTextView[@text='Copyright']")//copyright button
 	public MobileElement openCopyrightButton;
 
@@ -353,9 +358,14 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	public RiotRoomsListPageObjects logOutAndLogin(String username, String password) throws InterruptedException{
 		this.logOut();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
-		loginPage.fillLoginForm(username, null,password);
+		try {
+			loginPage.logUser(username, null,password);
+		} catch (FileNotFoundException | YamlException e) {
+			e.printStackTrace();
+		}
 		return new RiotRoomsListPageObjects(driver);
 	}
+	
 	public RiotSettingsPageObjects openRiotSettingsFromLateralMenu() throws InterruptedException{
 		this.contextMenuButton.click();
 		this.settingsButton.click();

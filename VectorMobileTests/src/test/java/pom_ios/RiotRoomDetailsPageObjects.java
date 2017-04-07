@@ -186,6 +186,9 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 	/*
 	 * FILES TAB
 	 */
+	@iOSFindBy(accessibility="FilesSearchTableViewCell")
+	public List<MobileElement> attachedFilesList;
+	
 	
 	/*
 	 * SETTINGS TAB

@@ -3,6 +3,7 @@ package utility;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -17,6 +18,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.esotericsoftware.yamlbeans.YamlException;
+
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
@@ -25,9 +28,9 @@ import io.appium.java_client.ios.IOSDriver;
 import pom_ios.RiotLoginAndRegisterPageObjects;
 import pom_ios.RiotRoomsListPageObjects;
 
-public class TestUtilities {
+public class TestUtilities extends MatrixUtilities{
 	public static AppiumFactory appiumFactory=AppiumFactory.getInstance();
-	
+
 	public void ExplicitWait(AppiumDriver<MobileElement> driver, WebElement element){
 		(new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(element));
 		System.out.println((Object) element.getTagName()+" clickable");
@@ -36,7 +39,7 @@ public class TestUtilities {
 		(new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOf(element));
 		System.out.println((Object) element.getTagName()+" displayed");
 	}
-	
+
 	/**
 	 * return true if the parentPanel is present and false if it's not
 	 * @return
@@ -49,12 +52,12 @@ public class TestUtilities {
 			return false;
 		}
 	}
-	
+
 	public static void ExplicitWaitToBeVisible(AndroidDriver<MobileElement> driver, MobileElement element, Integer timeToWait){
 		(new WebDriverWait(driver, timeToWait)).until(ExpectedConditions.visibilityOf(element));
 		System.out.println((Object) element.getTagName()+" displayed");
 	}
-	
+
 	/**
 	 * Wait @param maxSecondsToWait for the @param id to appear or not, using try and catch.
 	 * @param idOrXpath
@@ -91,7 +94,7 @@ public class TestUtilities {
 					}else{
 						driver.findElement(By.id(idOrXpath));
 					}
-					
+
 				}
 				isDisplayed=true;
 			} catch (Exception e) {
@@ -101,7 +104,7 @@ public class TestUtilities {
 		System.out.println("Seconds to wait "+idOrXpath+" to "+verb+": "+secondsWaited+". "+methodUsed+ ". Device "+driver.getCapabilities().getCapability("deviceName"));
 		return isDisplayed;
 	}
-	
+
 	/**
 	 * Wait until @param propertyValue of @param propertyName is @param set.
 	 * @param driver
@@ -123,7 +126,7 @@ public class TestUtilities {
 		System.out.println("Seconds to wait element property '"+propertyName+ "' to "+msgFound+" value "+propertyValue+": "+secondsWaited);
 		return found;
 	}
-	
+
 	/**
 	 * Check if connection is NONE and swith to WIFI in that case.
 	 */
@@ -142,49 +145,49 @@ public class TestUtilities {
 			driver.setConnection(Connection.NONE);
 		}
 	}
-	
+
 	public void captureImage(String imgUrl,MobileElement element) throws IOException{
 		new File(imgUrl).delete();
 		File screen = ((TakesScreenshot) appiumFactory.getAndroidDriver2())
-                .getScreenshotAs(OutputType.FILE);
-	    Point point = element.getLocation();
+				.getScreenshotAs(OutputType.FILE);
+		Point point = element.getLocation();
 
-	    //get element dimension
-	    int width = element.getSize().getWidth();
-	    int height = element.getSize().getHeight();
+		//get element dimension
+		int width = element.getSize().getWidth();
+		int height = element.getSize().getHeight();
 
-	    BufferedImage img = ImageIO.read(screen);
-	    BufferedImage dest = img.getSubimage(point.getX(), point.getY(), width,
-	                                                                 height);
-	    ImageIO.write(dest, "png", screen);
-	    File file = new File(imgUrl);
-	    FileUtils.copyFile(screen, file);
+		BufferedImage img = ImageIO.read(screen);
+		BufferedImage dest = img.getSubimage(point.getX(), point.getY(), width,
+				height);
+		ImageIO.write(dest, "png", screen);
+		File file = new File(imgUrl);
+		FileUtils.copyFile(screen, file);
 	}
-	
-	public Boolean compareImages(String image1, String image2) throws IOException{
-	    File fileInput = new File(image1);
-	    File fileOutPut = new File(image2);
 
-	    BufferedImage bufileInput = ImageIO.read(fileInput);
-	    DataBuffer dafileInput = bufileInput.getData().getDataBuffer();
-	    int sizefileInput = dafileInput.getSize();                     
-	    BufferedImage bufileOutPut = ImageIO.read(fileOutPut);
-	    DataBuffer dafileOutPut = bufileOutPut.getData().getDataBuffer();
-	    int sizefileOutPut = dafileOutPut.getSize();
-	    Boolean matchFlag = true;
-	    if(sizefileInput == sizefileOutPut) {                         
-	       for(int j=0; j<sizefileInput; j++) {
-	             if(dafileInput.getElem(j) != dafileOutPut.getElem(j)) {
-	                   matchFlag = false;
-	                   break;
-	             }
-	        }
-	    }
-	    else                            
-	       matchFlag = false;
-	    return matchFlag;
-	 }
-	
+	public Boolean compareImages(String image1, String image2) throws IOException{
+		File fileInput = new File(image1);
+		File fileOutPut = new File(image2);
+
+		BufferedImage bufileInput = ImageIO.read(fileInput);
+		DataBuffer dafileInput = bufileInput.getData().getDataBuffer();
+		int sizefileInput = dafileInput.getSize();                     
+		BufferedImage bufileOutPut = ImageIO.read(fileOutPut);
+		DataBuffer dafileOutPut = bufileOutPut.getData().getDataBuffer();
+		int sizefileOutPut = dafileOutPut.getSize();
+		Boolean matchFlag = true;
+		if(sizefileInput == sizefileOutPut) {                         
+			for(int j=0; j<sizefileInput; j++) {
+				if(dafileInput.getElem(j) != dafileOutPut.getElem(j)) {
+					matchFlag = false;
+					break;
+				}
+			}
+		}
+		else                            
+			matchFlag = false;
+		return matchFlag;
+	}
+
 	public void scrollToBottom(AppiumDriver<MobileElement> driver){
 		Dimension dimensions = driver.manage().window().getSize();
 		Double screenHeightStart = dimensions.getHeight() * 0.9;
@@ -195,79 +198,119 @@ public class TestUtilities {
 		//appiumFactory.getAndroidDriver1().swipe(0,scrollStart,0,scrollEnd,2000);
 		driver.swipe(0,scrollStart,0,scrollEnd,2000);
 	}
-	
+
 	public boolean doubleTapElement(MobileElement element, AppiumDriver<MobileElement> driver) {
-        int x,y;
-        try {
-            x = element.getCenter().getX();
-            y = element.getCenter().getY();
-            driver.tap(1, x, y, 0);
-            try{Thread.sleep(0);}catch (Exception e1) {}
-            driver.tap(1, x, y, 0);
-            try{Thread.sleep(0);}catch (Exception e1) {}
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-	
+		int x,y;
+		try {
+			x = element.getCenter().getX();
+			y = element.getCenter().getY();
+			driver.tap(1, x, y, 0);
+			try{Thread.sleep(0);}catch (Exception e1) {}
+			driver.tap(1, x, y, 0);
+			try{Thread.sleep(0);}catch (Exception e1) {}
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 	/**
 	 * Log the good user if not.</br> Secure the test.
 	 * @param myDriver
 	 * @param username
 	 * @param pwd
-	 * @throws InterruptedException
 	 */
-	public void checkIfUserLoggedAndroid(AndroidDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException {
-		//if login page is displayed, then logged with the wanted user
+	public void checkIfUserLoggedAndHomeServerSetUpAndroid(AndroidDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException, FileNotFoundException, YamlException {
+		String expectedHomeServer;
+		if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+			expectedHomeServer=ReadConfigFile.getInstance().getConfMap().get("homeserver");
+		}else{
+			expectedHomeServer=Constant.DEFAULT_MATRIX_SERVER;
+		}
+		//If login page is displayed, then logged with the wanted user
 		System.out.println("Check if user "+username+" is logged in "+Constant.APPLICATION_NAME);
 		if(waitUntilDisplayed(myDriver, "im.vector.alpha:id/main_input_layout", false, 5)){
-			System.out.println("User "+username+" isn't logged, login forced.");
+			System.out.println("User "+username+" isn't logged, login forced on home server: "+expectedHomeServer);
 			pom_android.RiotLoginAndRegisterPageObjects loginView = new pom_android.RiotLoginAndRegisterPageObjects(myDriver);
-			loginView.fillLoginForm(username,null, pwd);
-		}else{
-			//check if the wanted user is loged in
+			loginView.logUser(username,null, pwd);
+			//If riot list isn't displayed, restart riot
+		}else{			
+			if(!waitUntilDisplayed(myDriver, "im.vector.alpha:id/fragment_recents_list", true, 0)){
+				restartApplication(myDriver);
+			}
 			pom_android.RiotRoomsListPageObjects listRoom = new pom_android.RiotRoomsListPageObjects(myDriver);
 			listRoom.contextMenuButton.click();
-			String actualLoggedUser=listRoom.displayedUserMain.getText();
-			if(null==actualLoggedUser){
-				actualLoggedUser="";
+			String actualLoggedUserDisplayName=listRoom.displayedUserMain.getText();
+			String actualLoggedMatrixId=listRoom.displayedUserMatrixId.getText();
+			String hs=actualLoggedMatrixId.substring(actualLoggedMatrixId.indexOf(":")+1, actualLoggedMatrixId.length());
+			if(null==actualLoggedUserDisplayName){
+				actualLoggedUserDisplayName="";
 			}
-			if(!actualLoggedUser.equals(username)){
-				System.out.println("User "+username+" isn't logged. An other user is logged ("+actualLoggedUser+"), login with "+username+".");
+			if(!actualLoggedUserDisplayName.equals(username) || !actualLoggedMatrixId.contains(expectedHomeServer)){
+				if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+					System.out.println("Wrong actual logged user: "+actualLoggedUserDisplayName+" or wrong homeserver: "+hs+". Let's log with user "+username+" on homeserver: "+expectedHomeServer);
+				}else{
+					System.out.println("Wrong actual logged user: "+actualLoggedUserDisplayName+". Let's log with user "+username+" on homeserver: "+expectedHomeServer);	
+				}
 				myDriver.navigate().back();
 				listRoom.logOutAndLogin(username, pwd);
 			}else{
-				//close lateral menu
-				System.out.println("User "+username+" is logged.");
+				System.out.println("User "+username+" is logged with expected homeserver: " +expectedHomeServer+". No need to log out and log in.");
 				myDriver.navigate().back();
 			}
 		}
 	}
-	public void checkIfUserLoggedIos(IOSDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException {
+
+	public void checkIfUserLoggedAndHomeServerSetUpIos(IOSDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException, FileNotFoundException, YamlException {
+		String expectedHomeServer=null;
+		if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+			expectedHomeServer=ReadConfigFile.getInstance().getConfMap().get("homeserver");
+		}else{
+			expectedHomeServer=Constant.DEFAULT_MATRIX_SERVER;
+		}
 		//if login page is displayed, then logged with the wanted user
 		System.out.println("Check if user "+username+" is logged in "+Constant.APPLICATION_NAME);
-		if(waitUntilDisplayed(myDriver, "AuthenticationVCScrollViewContentView", false, 5)){
-			System.out.println("User "+username+" isn't logged, login forced.");
+		if(waitUntilDisplayed(myDriver, "AuthenticationVCScrollViewContentView", false, 3)){
+			System.out.println("User "+username+" isn't logged, login forced on home server: "+expectedHomeServer);
 			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(myDriver);
-			loginPage.fillLoginForm(username,null, pwd);
+			loginPage.logUser(username,null, pwd);
 			new RiotRoomsListPageObjects(myDriver);
 		}else{
-			//check if the wanted user is loged in
+			//if riot list isn't displayed, restart riot
+			if(!waitUntilDisplayed(myDriver, "RecentsVCTableView", true, 0)){
+				restartApplication(myDriver);
+			}
 			RiotRoomsListPageObjects listRoom = new RiotRoomsListPageObjects(myDriver);
 			listRoom.settingsButton.click();
-			String actualLoggedUser=listRoom.displayNameTextField.getText();
-			if(null==actualLoggedUser){
-				actualLoggedUser="";
+			//check if the wanted user is loged in
+			String actualLoggedUserDisplayName=listRoom.displayNameTextField.getText();
+			String actualLoggedMatrixId=listRoom.configStaticText.getText();
+			String hs=actualLoggedMatrixId.substring(actualLoggedMatrixId.indexOf(":")+1, actualLoggedMatrixId.indexOf("Home server")-1);
+			if(null==actualLoggedUserDisplayName){
+				actualLoggedUserDisplayName="";
 			}
-			if(!actualLoggedUser.equals(username)){
-				System.out.println("User "+username+" isn't logged. An other user is logged ("+actualLoggedUser+"), let's log in with "+username+".");
+			//new
+			if(!actualLoggedUserDisplayName.equals(username) || !actualLoggedMatrixId.contains(expectedHomeServer)){
+				if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+					System.out.println("Wrong actual logged user: "+actualLoggedUserDisplayName+" or wrong homeserver: "+hs+". Let's log with user "+username+" on homeserver: "+expectedHomeServer);
+				}else{
+					System.out.println("Wrong actual logged user: "+actualLoggedUserDisplayName+". Let's log with user "+username+" on homeserver: "+expectedHomeServer);	
+				}
 				listRoom.logOutAndLoginFromSettingsView(username, pwd);
 			}else{
-				//close lateral menu
-				System.out.println("User "+username+" is logged.");
+				System.out.println("User "+username+" is logged with expected homeserver: " +expectedHomeServer+". No need to log out and log in.");
 				listRoom.backMenuButton.click();
 			}
 		}
+	}
+
+	/**
+	 * Close then open again the application.
+	 * @param myDriver
+	 */
+	public void restartApplication(AppiumDriver<MobileElement> myDriver) {
+		System.out.println("Restart "+Constant.APPLICATION_NAME);
+		myDriver.closeApp();
+		myDriver.launchApp();
 	}
 }

@@ -218,7 +218,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 		//return Iterables.getLast(this.postsListLayout);
 		int sizeList=postsListLayout.size();
 		if(sizeList>0){
-			return postsListLayout.get(postsListLayout.size()-1);
+			return postsListLayout.get(sizeList-1);
 		}else{
 			Assert.fail("Not a single post layout found in the room.");
 			return null;

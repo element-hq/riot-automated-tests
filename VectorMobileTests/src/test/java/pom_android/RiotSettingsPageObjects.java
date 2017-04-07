@@ -59,6 +59,30 @@ public class RiotSettingsPageObjects extends TestUtilities{
 	}
 	
 	/**
+	 * From the settings view, hit the profile picture item, and change the avatar by taking a new picture.</br>
+	 * @throws InterruptedException 
+	 */
+	public void changeAvatarFromSettings() throws InterruptedException{
+		getSettingsItemByName("Profile Picture").click();
+		RiotCameraPageObjects cameraPreview = new RiotCameraPageObjects(driver);
+		cameraPreview.triggerCameraButton.click();//take a photo
+		waitUntilDisplayed(driver,"im.vector.alpha:id/medias_picker_preview_layout", true, 5);
+		cameraPreview.confirmPickingPictureButton.click();
+	}
+	
+	/**
+	 * From the settings view, erase the display name and set a new one.</br>
+	 * It doesn't click on the save button.
+	 * @param newDisplayName
+	 */
+	public void changeDisplayNameFromSettings(String newDisplayName){
+		getSettingsItemByName("Display Name").click();
+		driver.findElementById("android:id/edit").clear();
+		driver.findElementById("android:id/edit").setValue(newDisplayName+"\n");
+		driver.findElementById("android:id/button1").click();
+	}
+	
+	/**
 	 * Return sections visible on the screen of the list.</br>
 	 * Sections are TextViews, can be: USER SETTINGS, LOCAL CONTACTS, NOTIFICATIONS...
 	 */

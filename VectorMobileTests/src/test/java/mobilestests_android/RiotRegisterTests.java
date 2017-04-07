@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import pom_android.RiotCaptchaPageObject;
 import pom_android.RiotLoginAndRegisterPageObjects;
 import pom_android.RiotRoomsListPageObjects;
+import utility.Constant;
 import utility.DataproviderClass;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -43,7 +44,7 @@ public class RiotRegisterTests extends RiotParentTest {
 		//Validate that the fields are still filled
 		Assert.assertFalse(registerPage.userNameRegisterEditText.getText().isEmpty(), "The username field from the register form is empty");
 		//(Impossible to test the password text lenght)
-		restartRiot();
+		restartApplication(appiumFactory.getAndroidDriver1());
 	}
 	
 	/**
@@ -66,7 +67,7 @@ public class RiotRegisterTests extends RiotParentTest {
 		//Validate the toast "Passwords don't match" : not possible with appium
 		//Validate that we are still on the register form
 		Assert.assertTrue(registerPage.inputsRegisteringLayout.isDisplayed(), "The register form is not displayed");
-		restartRiot();
+		restartApplication(appiumFactory.getAndroidDriver1());
 	}
 	
 	/**
@@ -91,7 +92,7 @@ public class RiotRegisterTests extends RiotParentTest {
 		//Validate the toasts : not possible with appium
 		//Validate that we are still on the register form
 		Assert.assertTrue(registerPage.isPresentTryAndCatch(registerPage.inputsRegisteringLayout), "The register form is not displayed");
-		restartRiot();
+		restartApplication(appiumFactory.getAndroidDriver1());
 	}
 	
 	/**
@@ -110,6 +111,37 @@ public class RiotRegisterTests extends RiotParentTest {
 	}
 	
 	/**
+	 * Cover issue https://github.com/vector-im/riot-android/issues/1063
+	 * 1. Hit the register button.
+	 * 2. Fill the first form with valid displayName and matching passwords.
+	 * 3. Fill the second form with an unvalid phone number.
+	 * 4. Hit submit button
+	 * Check that the form isn't sent.
+	 * @throws InterruptedException 
+	 */
+	@Test(groups={"1driver_android"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
+	public void registerWithUnvalidPhoneNumberTest(String phoneNumber) throws InterruptedException{
+		restartApplication(appiumFactory.getAndroidDriver1());
+		//Start of the test
+		int userNamesuffix = 1 + (int)(Math.random() * ((10000 - 1) + 1));
+		String displayNameTest=(new StringBuilder("riotuser").append(userNamesuffix)).toString();
+		
+		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
+		//1. Hit the register button.
+		registerPage.registerButton.click();
+		//2. Fill the first form with valid displayName and matching passwords.
+		registerPage.userNameRegisterEditText.setValue(displayNameTest);
+		registerPage.pwd1EditRegisterText.setValue(Constant.DEFAULT_USERPWD);
+		registerPage.pwd2EditRegisterText.setValue(Constant.DEFAULT_USERPWD);
+		registerPage.registerButton.click();
+		//3. Fill the second form with an invalid phone number  && 4. Hit submit button
+		registerPage.phoneNumberRegisterEditText.setValue(phoneNumber);
+		registerPage.submitButton.click();
+		//Check that the form isn't sent.
+		Assert.assertTrue(isPresentTryAndCatch(registerPage.skipButton), "The form is no longer displayed.");
+	}
+	
+	/**
 	 * UIAUTOMATOR VIEW don't see the mosaic anymore.
 	 * Start a sign-in and enters a wrong captcha.</br>
 	 * Validate that the register can't go any further.
@@ -120,10 +152,9 @@ public class RiotRegisterTests extends RiotParentTest {
 		//creation of a "unique" username by adding a randomize number to the username.
 		int userNamesuffix = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String userNameTest=(new StringBuilder("riotuser").append(userNamesuffix)).toString();
-		String pwdTest="riotuser";
 		
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
-		registerPage.fillRegisterForm("", userNameTest,pwdTest, pwdTest);
+		registerPage.fillRegisterForm("", userNameTest,Constant.DEFAULT_USERPWD, Constant.DEFAULT_USERPWD);
 		RiotCaptchaPageObject captchaPage = new RiotCaptchaPageObject(appiumFactory.getAndroidDriver1());
 		captchaPage.notARobotCheckBox.click();
 		captchaPage.selectAllImages();
@@ -141,12 +172,6 @@ public class RiotRegisterTests extends RiotParentTest {
 		captchaPage.handleCaptchaWebView();
 	}
 	
-	private void restartRiot(){
-		//Restart the application
-		System.out.println("Restart the app");
-		appiumFactory.getAndroidDriver1().closeApp();
-		appiumFactory.getAndroidDriver1().launchApp();
-	}
 	
 	/**
 	 * Log-out the user if it can't see the login page.

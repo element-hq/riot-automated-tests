@@ -167,6 +167,8 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 	/*
 	 * 				FILES TAB
 	 */
+	@AndroidFindBy(xpath="//android.widget.ListView[@resource-id='im.vector.alpha:id/listView_messages']/android.widget.RelativeLayout")
+	public List<MobileElement> attachedFilesList;
 	
 	/*
 	 * 				SETTINGS TAB
