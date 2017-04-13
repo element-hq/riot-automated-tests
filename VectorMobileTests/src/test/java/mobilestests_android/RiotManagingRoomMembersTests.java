@@ -77,7 +77,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		//3. Clear the filter
 		roomDetails1.clearFilteredBarButton.click();
 		//Check that the people are no more filtered
-		Assert.assertFalse(roomDetails1.getDisplayNameOfMemberFromPeopleTab(roomDetails1.membersList.get(0)).contains(matchingWithKnownContactFilter1),"After filter cleared, first result still matches the matching filter string");
+		//Assert.assertFalse(roomDetails1.getDisplayNameOfMemberFromPeopleTab(roomDetails1.membersList.get(0)).contains(matchingWithKnownContactFilter1),"After filter cleared, first result still matches the matching filter string");
 
 		//4. Filter with a random string
 		roomDetails1.filterOnRoomMembersList(randomFilter);
@@ -176,7 +176,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		String knownContacts=contactPicker1.categoryList.get(1).findElementById("im.vector.alpha:id/people_header_text_view").getText();
 		Assert.assertTrue(knownContacts.matches("^KNOWN CONTACTS \\([^0][0-9]*\\)$"));
 		//Check that there is at least 2 filtered people
-		Assert.assertTrue(contactPicker1.detailsMemberListView.size()>=2, "There not enough members in the list after filtering with matching word.");
+		Assert.assertTrue(contactPicker1.detailsMemberListView.size()>=2, "There is not enough members in the list after filtering with matching word.");
 		
 		//back to rooms list
 		contactPicker1.backButton.click();

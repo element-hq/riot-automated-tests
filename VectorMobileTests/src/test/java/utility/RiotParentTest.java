@@ -114,11 +114,11 @@ public abstract class RiotParentTest extends TestUtilities {
 		}
 		if(null!=appiumFactory.getiOsDriver1()){
 			appiumFactory.getiOsDriver1().quit();
-			System.out.println("Ios DRIVER 1 quitted on ANDROID device "+ReadConfigFile.getInstance().getDevicesMap().get("iosdevice1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");	
+			System.out.println("Ios DRIVER 1 quitted on iOS device "+ReadConfigFile.getInstance().getDevicesMap().get("iosdevice1").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");	
 		}
 		if(null!=appiumFactory.getiOsDriver2()){
 			appiumFactory.getiOsDriver2().quit();
-			System.out.println("Ios DRIVER 2 quitted on ANDROID device "+ReadConfigFile.getInstance().getDevicesMap().get("iosdevice2").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");	
+			System.out.println("Ios DRIVER 2 quitted on iOS device "+ReadConfigFile.getInstance().getDevicesMap().get("iosdevice2").get("deviceName") +", closing application "+Constant.APPLICATION_NAME+".");	
 		}
 		//Stop the two appium's servers.
 		stop2AppiumServers();

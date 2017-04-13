@@ -165,7 +165,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		String knownContacts=contactPicker1.getCategoriesList().get(1).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText();
 		Assert.assertTrue(knownContacts.matches("^KNOWN CONTACTS \\([^0][0-9]*\\)$"));
 		//Check that there is at least 2 filtered people
-		Assert.assertTrue(contactPicker1.contactsOnlyList.size()>=2, "There not enough members in the list after filtering with matching word.");
+		Assert.assertTrue(contactPicker1.contactsOnlyList.size()>=2, "There is not enough members in the list after filtering with matching word.");
 		
 		//back to rooms list
 		contactPicker1.cancelButton.click();

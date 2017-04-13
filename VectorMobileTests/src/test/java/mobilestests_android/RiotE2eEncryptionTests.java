@@ -41,11 +41,13 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 	public void sendPhotoInEncryptedRoom() throws InterruptedException{
 		//1. Create room with Device 1 and enable encryption.
 		RiotRoomsListPageObjects roomsListDevice1 = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		roomsListDevice1.getRoomByName(oneToOneRoomWithEncryption);
+		roomsListDevice1.getRoomByName(oneToOneRoomWithEncryption).click();
 		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		roomPage1.closeWarningAlertAboutBetaStateOfE2e();
 		// 2. Send a photo
 		roomPage1.attachPhotoFromCamera("Small");
+		RiotUnknownDevicesPageObjects unknownDevicesModal1 = new RiotUnknownDevicesPageObjects(appiumFactory.getAndroidDriver1());
+		unknownDevicesModal1.okButton.click();
 		//verifies that it's displayed in the message list
 		Assert.assertTrue(roomPage1.waitAndCheckForMediaToBeUploaded(roomPage1.getLastPost(), 10), "Media wasn't uploaded after "+10+"s in encrypted room.");
 		org.openqa.selenium.Dimension takenPhoto=roomPage1.getAttachedImageByPost(roomPage1.getLastPost()).getSize();
@@ -381,9 +383,9 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 		case "startVoiceAndVideoCallInEncryptedRoom":
 			leaveRoomOn2DevicesFromRoomPageAfterTest(null,null);
 			break;
-		case "sendPhotoInEncryptedRoom":
-			leaveRoomOn1DeviceFromRoomPageAfterTest("Empty room");
-			break;
+//		case "sendPhotoInEncryptedRoom":
+//			leaveRoomOn1DeviceFromRoomPageAfterTest("Empty room");
+//			break;
 		default:
 			break;
 		}
