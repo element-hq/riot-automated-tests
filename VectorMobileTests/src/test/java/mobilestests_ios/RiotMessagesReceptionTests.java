@@ -15,13 +15,20 @@ import pom_ios.RiotRoomPageObjects;
 import pom_ios.RiotRoomsListPageObjects;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
+import utility.ReadConfigFile;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
 @Listeners({ ScreenshotUtility.class })
 public class RiotMessagesReceptionTests extends RiotParentTest{
 	private String msgFromUpUser="UP";
+	
 	private String roomId="!SBpfTGBlKgELgoLALQ%3Amatrix.org";
+	private String roomIdCustomHs="!LVRuDkmtSvMXfqSgLy%3Ajeangb.org";
+	
+	private String pictureURL="mxc://matrix.org/gpQYPbjoqVeTWCGivjRshIni";
+	private String pictureURLCustomHs="mxc://jeangb.org/mQULDSeUacWtxnGlSNBofySw";
+	
 	private String roomTest="msg rcpt 4 automated tests";
 	private String riotUserDisplayNameA="riotuser4";
 	private String riotUserDisplayNameB="riotuser5";
@@ -82,7 +89,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 		Integer currentBadge=riotRoomsList.getBadgeNumberByRoomName(roomTest);
 
 		//2. Receive a message in a room from an other user.
-		HttpsRequestsToMatrix.sendMessageInRoom(riotSenderAccessToken, roomId, msgFromUpUser);
+		HttpsRequestsToMatrix.sendMessageInRoom(riotSenderAccessToken, getRoomId(), msgFromUpUser);
 		if(currentBadge==null)currentBadge=0;
 		//wait until message is received
 		riotRoomsList.waitForRoomToReceiveNewMessage(roomTest, currentBadge);
@@ -181,6 +188,34 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 
 	}
 
+	private String getRoomId() {
+		try {
+			if("false".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+				return roomId;
+			}else{
+				return roomIdCustomHs;
+			}
+		} catch (FileNotFoundException | YamlException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+
+	@SuppressWarnings("unused")
+	private String getPictureURL() {
+		try {
+			if("false".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+				return pictureURL;
+			}else{
+				return pictureURLCustomHs;
+			}
+		} catch (FileNotFoundException | YamlException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	@BeforeGroups("1checkuser")
 	private void checkIfUser1Logged() throws InterruptedException, FileNotFoundException, YamlException{
 		super.checkIfUserLoggedAndHomeServerSetUpIos(appiumFactory.getiOsDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);

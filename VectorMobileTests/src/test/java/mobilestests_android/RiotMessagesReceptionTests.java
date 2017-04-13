@@ -15,14 +15,20 @@ import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
+import utility.ReadConfigFile;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
 @Listeners({ ScreenshotUtility.class })
 public class RiotMessagesReceptionTests extends RiotParentTest{
 	private String msgFromUpUser="UP";
+	
 	private String roomId="!SBpfTGBlKgELgoLALQ%3Amatrix.org";
+	private String roomIdCustomHs="!LVRuDkmtSvMXfqSgLy%3Ajeangb.org";
+	
 	private String pictureURL="mxc://matrix.org/gpQYPbjoqVeTWCGivjRshIni";
+	private String pictureURLCustomHs="mxc://jeangb.org/mQULDSeUacWtxnGlSNBofySw";
+	
 	private String roomTest="msg rcpt 4 automated tests";
 	private String riotUserDisplayNameA="riotuser4";
 	private String riotUserDisplayNameB="riotuser5";
@@ -41,7 +47,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 		//get the current badge on the room.
 		Integer currentBadge=riotRoomsList.getBadgeNumberByRoomName(roomTest);
 		//send a message to the room with an other user using https request to matrix.
-		HttpsRequestsToMatrix.sendMessageInRoom(riotSenderAccessToken, roomId, msgFromUpUser);
+		HttpsRequestsToMatrix.sendMessageInRoom(riotSenderAccessToken, getRoomId(), msgFromUpUser);
 		if(currentBadge==null)currentBadge=0;
 		//wait until message is received
 		riotRoomsList.waitForRoomToReceiveNewMessage(roomTest, currentBadge);
@@ -124,7 +130,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 		String messageTest2="this message have an avatar";
 		String messageTest3="this message doesn't have an avatar";
 		//send a message to the room with an other user using https request to matrix.
-		HttpsRequestsToMatrix.sendMessageInRoom(riotSenderAccessToken, roomId, messageTest);
+		HttpsRequestsToMatrix.sendMessageInRoom(riotSenderAccessToken, getRoomId(), messageTest);
 		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		testRoom.sendAMessage(messageTest2);Thread.sleep(500);
 		Assert.assertNotNull(testRoom.getUserAvatarByPost(testRoom.getLastPost()), "The last post doesn't have an avatar and should because it's the first post from the user");
@@ -142,7 +148,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	@Test(dependsOnGroups="roomOpenned",groups={"1checkuser","1driver_android"},priority=5)
 	public void checkImageMessageOnRoomPage() throws IOException, InterruptedException{
 		//1. Receive a image sent by an other user.
-		HttpsRequestsToMatrix.sendPicture(riotSenderAccessToken, roomId, pictureURL);
+		HttpsRequestsToMatrix.sendPicture(riotSenderAccessToken, getRoomId(), getPictureURL());
 		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		Thread.sleep(500);
 		MobileElement lastPost=testRoom.getLastPost();
@@ -212,6 +218,32 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 		roomB.menuBackButton.click();
 	}
 
+	private String getRoomId() {
+		try {
+			if("false".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+				return roomId;
+			}else{
+				return roomIdCustomHs;
+			}
+		} catch (FileNotFoundException | YamlException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private String getPictureURL() {
+		try {
+			if("false".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+				return pictureURL;
+			}else{
+				return pictureURLCustomHs;
+			}
+		} catch (FileNotFoundException | YamlException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	/**
 	 * Log the good user if not.</br> Secure the test.
 	 * @param myDriver

@@ -14,12 +14,15 @@ import pom_android.RiotRoomPageObjects;
 import pom_android.RiotRoomsListPageObjects;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
+import utility.ReadConfigFile;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
 @Listeners({ ScreenshotUtility.class })
 public class RiotRoomInvitationTests extends RiotParentTest{
 	private String roomId="!WnWDyMPdDkzMLHuGXK%3Amatrix.org";
+	private String roomIdCustomHs="!AoVlZJKRJGotpMJqYg%3Ajeangb.org";
+	
 	String riotUserDisplayName="riotuser16";
 	String riotInviterUserDisplayName="riotuserup";
 	String riotInviterAccessToken;
@@ -35,9 +38,9 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver_android","1checkuser"})
 	public void rejectInvitationToARoom() throws IOException, InterruptedException{
-		HttpsRequestsToMatrix.kickUser(riotInviterAccessToken, roomId, getMatrixIdFromDisplayName(riotUserDisplayName));
+		HttpsRequestsToMatrix.kickUser(riotInviterAccessToken, getRoomId(), getMatrixIdFromDisplayName(riotUserDisplayName));
 		Thread.sleep(1000);
-		HttpsRequestsToMatrix.sendInvitationToUser(riotInviterAccessToken, roomId, getMatrixIdFromDisplayName(riotUserDisplayName));
+		HttpsRequestsToMatrix.sendInvitationToUser(riotInviterAccessToken, getRoomId(), getMatrixIdFromDisplayName(riotUserDisplayName));
 		
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		ExplicitWait(appiumFactory.getAndroidDriver1(),riotRoomsList.invitesHeadingLayout);
@@ -64,9 +67,9 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver_android","1checkuser"})
 	public void cancelInvitationToARoom() throws IOException, InterruptedException{
-		HttpsRequestsToMatrix.kickUser(riotInviterAccessToken, roomId, getMatrixIdFromDisplayName(riotUserDisplayName));
+		HttpsRequestsToMatrix.kickUser(riotInviterAccessToken, getRoomId(), getMatrixIdFromDisplayName(riotUserDisplayName));
 		Thread.sleep(1000);
-		HttpsRequestsToMatrix.sendInvitationToUser(riotInviterAccessToken, roomId, getMatrixIdFromDisplayName(riotUserDisplayName));
+		HttpsRequestsToMatrix.sendInvitationToUser(riotInviterAccessToken, getRoomId(), getMatrixIdFromDisplayName(riotUserDisplayName));
 		
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		ExplicitWait(appiumFactory.getAndroidDriver1(),riotRoomsList.invitesHeadingLayout);
@@ -101,9 +104,9 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver_android","1checkuser"})
 	public void acceptInvitationToARoom() throws IOException, InterruptedException{
-		HttpsRequestsToMatrix.kickUser(riotInviterAccessToken, roomId, getMatrixIdFromDisplayName(riotUserDisplayName));
+		HttpsRequestsToMatrix.kickUser(riotInviterAccessToken, getRoomId(), getMatrixIdFromDisplayName(riotUserDisplayName));
 		Thread.sleep(1000);
-		HttpsRequestsToMatrix.sendInvitationToUser(riotInviterAccessToken, roomId, getMatrixIdFromDisplayName(riotUserDisplayName));
+		HttpsRequestsToMatrix.sendInvitationToUser(riotInviterAccessToken, getRoomId(), getMatrixIdFromDisplayName(riotUserDisplayName));
 		
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		ExplicitWait(appiumFactory.getAndroidDriver1(),riotRoomsList.invitesHeadingLayout);
@@ -145,9 +148,9 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver_android","1checkuser"})
 	public void acceptInvitationAndLeaveFromMenu() throws IOException, InterruptedException{
-		HttpsRequestsToMatrix.kickUser(riotInviterAccessToken, roomId, getMatrixIdFromDisplayName(riotUserDisplayName));
+		HttpsRequestsToMatrix.kickUser(riotInviterAccessToken, getRoomId(), getMatrixIdFromDisplayName(riotUserDisplayName));
 		Thread.sleep(1000);
-		HttpsRequestsToMatrix.sendInvitationToUser(riotInviterAccessToken, roomId, getMatrixIdFromDisplayName(riotUserDisplayName));
+		HttpsRequestsToMatrix.sendInvitationToUser(riotInviterAccessToken, getRoomId(), getMatrixIdFromDisplayName(riotUserDisplayName));
 		
 		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
 		ExplicitWait(appiumFactory.getAndroidDriver1(),riotRoomsList.invitesHeadingLayout);
@@ -196,6 +199,19 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		
 	}
 
+	private String getRoomId() {
+		try {
+			if("false".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+				return roomId;
+			}else{
+				return roomIdCustomHs;
+			}
+		} catch (FileNotFoundException | YamlException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	/**
 	 * Log the good user if not.</br> Secure the test.
 	 * @param myDriver

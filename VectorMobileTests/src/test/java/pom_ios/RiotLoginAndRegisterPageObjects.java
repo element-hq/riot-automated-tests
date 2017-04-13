@@ -94,7 +94,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public void logUser(String usernameOrEmail, String phoneNumber,String password){
 		try {
 			if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
-				logUserWithCustomHomeServer(usernameOrEmail, phoneNumber,password,MatrixUtilities.getCustomHomeServerURL(),Constant.DEFAULT_IDENTITY_SERVER_URL);
+				logUserWithCustomHomeServer(usernameOrEmail, phoneNumber,password,MatrixUtilities.getCustomHomeServerURL(false),Constant.DEFAULT_IDENTITY_SERVER_URL);
 			}else{
 				logUserWithDefaultHomeServer(usernameOrEmail, phoneNumber,password);
 			}
@@ -156,7 +156,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	 */
 	public void setUpHomeServerAndIdentityServer(String hsAddress, String isAddress){
 		//driver.swipe
-		passwordTextField.swipe(SwipeElementDirection.UP,100);
+		passwordTextField.swipe(SwipeElementDirection.DOWN,100);
 		customServerOptionsCheckBox.click();
 		if(isPresentTryAndCatch(warningTrustRemoteServerAlert)){
 			trustButtonFromTrustRemoteServerAlert.click();
