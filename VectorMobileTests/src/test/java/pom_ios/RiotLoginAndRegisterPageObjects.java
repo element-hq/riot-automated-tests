@@ -90,8 +90,9 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	 * @param usernameOrEmail
 	 * @param password
 	 * TODO: works need to be done here because if the password is null, the login won't happen.
+	 * @throws InterruptedException 
 	 */
-	public void logUser(String usernameOrEmail, String phoneNumber,String password){
+	public void logUser(String usernameOrEmail, String phoneNumber,String password) throws InterruptedException{
 		try {
 			if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
 				logUserWithCustomHomeServer(usernameOrEmail, phoneNumber,password,MatrixUtilities.getCustomHomeServerURL(false),Constant.DEFAULT_IDENTITY_SERVER_URL);
@@ -100,6 +101,17 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 			}
 		} catch (FileNotFoundException | YamlException | InterruptedException e) {
 			e.printStackTrace();
+		}
+		//wait until login page isn't displayed to see if 'Riot would like to send you notifications' alert is displayed.
+		waitUntilDisplayed(driver, "AuthenticationVCView", false, 60);
+		if(isPresentTryAndCatch(alertBox)){
+			System.out.println("Hit OK button on alert permission about notification");
+			dialogOkButton.click();
+			waitUntilDisplayed(driver, "XCUIElementTypeActivityIndicator", false, 30);
+			if(isPresentTryAndCatch(alertBox)){
+				System.out.println("Hit Yes button on alert permission about sending crash informations");
+				dialogYesButton.click();
+			}
 		}
 	}
 	
@@ -236,10 +248,15 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	 */
 	@iOSFindBy(xpath="//XCUIElementTypeAlert[@name='Error']")
 	public MobileElement errorMsgBox;
+	@iOSFindBy(className="XCUIElementTypeAlert")
+	public MobileElement alertBox;
 	@iOSFindBy(accessibility="Passwords don't match")
 	public MobileElement pwdDontMatchStaticText;
 	@iOSFindBy(accessibility="OK")
 	public MobileElement dialogOkButton;
+	@iOSFindBy(accessibility="HomeVCUseGoogleAnalyticsAlertActionYes")
+	public MobileElement dialogYesButton;
+	
 
 	/*
 	 * CAPTCHA
