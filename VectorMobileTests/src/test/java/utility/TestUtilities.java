@@ -84,7 +84,9 @@ public class TestUtilities extends MatrixUtilities{
 		}
 		float secondsWaited=0;
 		do {
-			if(maxSecondsToWait!=0){Thread.sleep(500);secondsWaited=(float) (secondsWaited+0.5);}
+			if(maxSecondsToWait!=0){
+				//Thread.sleep(500);
+				secondsWaited=(float) (secondsWaited+0.5);}
 			try {
 				if(isXpath){
 					driver.findElementByXPath(idOrXpath);

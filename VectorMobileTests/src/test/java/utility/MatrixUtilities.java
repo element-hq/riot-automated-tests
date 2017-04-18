@@ -11,14 +11,20 @@ import com.esotericsoftware.yamlbeans.YamlException;
 public class MatrixUtilities {
 
 	public static String getMatrixIdFromDisplayName(String displayName){
-			try {
-				return new StringBuilder("@").append(displayName).append(":").append(ReadConfigFile.getInstance().getConfMap().get("homeserver")).toString();
-			} catch (FileNotFoundException | YamlException e) {
-				e.printStackTrace();
-				return null;
-			}
+		return new StringBuilder("@").append(displayName).append(":").append(getHomeServerName()).toString();
 	}
-	
+
+	public static String getHomeServerName(){
+		try {
+			if("false".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+				return Constant.DEFAULT_MATRIX_SERVER;
+			}else{
+				return ReadConfigFile.getInstance().getConfMap().get("homeserver");
+			}
+		} catch (FileNotFoundException | YamlException e) {
+			return null;
+		}
+	}
 	/**
 	 * Return custom home server URL.</br>
 	 * If fromLocal = true, return URL with 'localhost'.
@@ -40,7 +46,7 @@ public class MatrixUtilities {
 			return new StringBuilder("https://").append(address).append(":").append(port).toString();
 		}		
 	}
-	
+
 	/**
 	 * According to homeserverlocal value in config.yaml, return default home server or custome one.
 	 * @return
