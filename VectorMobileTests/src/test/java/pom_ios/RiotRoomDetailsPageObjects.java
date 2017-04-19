@@ -48,7 +48,7 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 	 * TABS: MEMBERS, FILES, SETTINGS
 	 */
 	/**
-	 * Contains the 3 tabs : members, files, settings.
+	 * Contains the 3 tabs : members, files, settings. </br>
 	 */
 	@iOSFindBy(xpath="//XCUIElementTypeApplication/XCUIElementTypeWindow//XCUIElementTypeOther[count(XCUIElementTypeStaticText)=3]")
 	public MobileElement tabsTypeOther;

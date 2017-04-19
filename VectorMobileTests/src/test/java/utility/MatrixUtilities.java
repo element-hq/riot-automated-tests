@@ -14,6 +14,10 @@ public class MatrixUtilities {
 		return new StringBuilder("@").append(displayName).append(":").append(getHomeServerName()).toString();
 	}
 
+	/**
+	 * Return homeserver name (ex: 'matrix.org'), depending of the homeserver choosed for the test, matrix.org or custome one.
+	 * @return
+	 */
 	public static String getHomeServerName(){
 		try {
 			if("false".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
@@ -48,7 +52,7 @@ public class MatrixUtilities {
 	}
 
 	/**
-	 * According to homeserverlocal value in config.yaml, return default home server or custome one.
+	 * According to homeserverlocal value in config.yaml, return default home server or custom one.
 	 * @return
 	 */
 	public static String getHomeServerUrlForRequestToMatrix(){

@@ -33,16 +33,16 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	private String riotUserDisplayName="riotuser15";
 
 	/**
-	 * 1. Open room testRoom and open his details, then people tab.
-	 * Check that text of the filter edittext is correct.
-	 * Check that the filter button isn't present
-	 * 2. Enter a filter in the "Filter room members" edittext.
-	 * Check that the people are correctly filtered.
-	 * Check that the filter button is present
-	 * 3. Clear the filter
-	 * Check that the people are no more filtered
-	 * 4. Filter with a random string
-	 * Check that the list of filtered members is empty and no results textview is displayed.
+	 * 1. Open room testRoom and open his details, then people tab. </br>
+	 * Check that text of the filter edittext is correct. </br>
+	 * Check that the filter button isn't present </br>
+	 * 2. Enter a filter in the "Filter room members" edittext. </br>
+	 * Check that the people are correctly filtered. </br>
+	 * Check that the filter button is present </br>
+	 * 3. Clear the filter </br>
+	 * Check that the people are no more filtered </br>
+	 * 4. Filter with a random string </br>
+	 * Check that the list of filtered members is empty and no results textview is displayed. </br>
 	 * @throws InterruptedException
 	 */
 	@Test(groups={"1driver_android","1checkuser"})
@@ -92,12 +92,12 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	}
 
 	/**
-	 * 1. Open room testRoom and open his details, then people tab.
-	 * 2. Hit the addMember button
-	 * Check that the ContactPicker page is open and check the default layout
-	 * 3. Enter a random string in the search bar
-	 * Check that the text of the first item is equal to the random string
-	 * Check that the item of the LOCAL CONTACTS categorie is (0)
+	 * 1. Open room testRoom and open his details, then people tab. </br>
+	 * 2. Hit the addMember button </br>
+	 * Check that the ContactPicker page is open and check the default layout </br>
+	 * 3. Enter a random string in the search bar </br>
+	 * Check that the text of the first item is equal to the random string </br>
+	 * Check that the item of the LOCAL CONTACTS categorie is (0) </br>
 	 * Check that the item of the KNOWN CONTACTS categorie is (0) (https://github.com/vector-im/riot-android/issues/923)
 	 * @throws InterruptedException 
 	 */
@@ -140,11 +140,11 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	}
 
 	/**
-	 * 1. Open room testRoom and open his details, then people tab.
-	 * 2. Hit the addMember button
-	 * 3. Enter in the search bar a word matching known contacts
-	 * Check that KNOWN CONTACTS categorie is displayed
-	 * Check that known contacts are as many as the number indicated in the category
+	 * 1. Open room testRoom and open his details, then people tab. </br>
+	 * 2. Hit the addMember button </br>
+	 * 3. Enter in the search bar a word matching known contacts </br>
+	 * Check that KNOWN CONTACTS categorie is displayed </br>
+	 * Check that known contacts are as many as the number indicated in the category </br>
 	 * Check that there is at least 2 filtered people
 	 * @throws InterruptedException 
 	 */
@@ -185,10 +185,10 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	}
 
 	/**
-	 * 1. Create a room.
-	 * 2. Invite a participant
-	 * 3. Remove this participant from the room details
-	 * Check that there is no more INVITED category
+	 * 1. Create a room. </br>
+	 * 2. Invite a participant </br>
+	 * 3. Remove this participant from the room details </br>
+	 * Check that there is no more INVITED category </br>
 	 * @throws InterruptedException
 	 */
 	@Test(groups={"1driver_android","1checkuser"})

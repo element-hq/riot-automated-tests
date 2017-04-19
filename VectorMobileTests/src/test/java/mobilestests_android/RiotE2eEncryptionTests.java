@@ -32,8 +32,8 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 	private String participant2DisplayName="riotuser10";	
 
 	/**
-	 * 1. Open room roomWithEncryption.
-	 * 2. Send a photo
+	 * 1. Open room roomWithEncryption.</br>
+	 * 2. Send a photo</br>
 	 * Check that the photo is correctly uploaded. 
 	 * @throws InterruptedException 
 	 */
@@ -57,17 +57,17 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 	}
 
 	/**
-	 * 1. Open room roomWithEncryption with Device 1.
-	 * 2. Open room roomWithEncryption with Device 2.
-	 * 3. Start a VOICE call with Device 2.
-	 * Check that an incoming layout is displayed on device 1.
-	 * 4. Accept call with device 1.
-	 * 5. Hang-out after a few seconds.
-	 * Check that calling layout is closed on both devices.
-	 * 6. Start a VIDEO call with Device 2.
-	 * Check that an incoming layout is displayed on device 1.
-	 * 7. Accept call with device 1.
-	 * 8. Hang-out after a few seconds.
+	 * 1. Open room roomWithEncryption with Device 1.</br>
+	 * 2. Open room roomWithEncryption with Device 2.</br>
+	 * 3. Start a VOICE call with Device 2.</br>
+	 * Check that an incoming layout is displayed on device 1.</br>
+	 * 4. Accept call with device 1.</br>
+	 * 5. Hang-out after a few seconds.</br>
+	 * Check that calling layout is closed on both devices.</br>
+	 * 6. Start a VIDEO call with Device 2.</br>
+	 * Check that an incoming layout is displayed on device 1.</br>
+	 * 7. Accept call with device 1.</br>
+	 * 8. Hang-out after a few seconds.</br>
 	 * Check that calling layout is closed on both devices.
 	 * @throws InterruptedException 
 	 */
@@ -140,13 +140,13 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 	}
 
 	/**
-	 * 1. Create room with Device 1 and enable encryption.
-	 * Check that the last event in the room is about turning e2e encryption
-	 * 2. Sent a message.
-	 * 3. Send invitation to user on Device 2 and device 2 accepts.
-	 * Check that user on Device 2 can't read the msg sent by Device 1 before he joined.
-	 * 4. Send a message with device 2
-	 * Check that user on device 1 can decrypt and read the message.
+	 * 1. Create room with Device 1 and enable encryption.</br>
+	 * Check that the last event in the room is about turning e2e encryption</br>
+	 * 2. Sent a message.</br>
+	 * 3. Send invitation to user on Device 2 and device 2 accepts.</br>
+	 * Check that user on Device 2 can't read the msg sent by Device 1 before he joined.</br>
+	 * 4. Send a message with device 2</br>
+	 * Check that user on device 1 can decrypt and read the message.</br>
 	 * @throws InterruptedException 
 	 * @throws IllegalAccessException 
 	 * @throws InstantiationException 
@@ -215,13 +215,13 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 	}
 
 	/**
-	 * 1. Log out / login for renew the keys 
-	 * 2. Device 1 open room oneToOneRoomWithEncryption
-	 * 3. Take a picture and attach it to the room
-	 * Check that the 'Room contains unknown devices' modal is opened
-	 * 4. Click OK on the modal
-	 * 5. Click "Resend all" on the notification area of the room page
-	 * Check that the file is actually uploaded.
+	 * 1. Log out / login for renew the keys </br>
+	 * 2. Device 1 open room oneToOneRoomWithEncryption</br>
+	 * 3. Take a picture and attach it to the room</br>
+	 * Check that the 'Room contains unknown devices' modal is opened</br>
+	 * 4. Click OK on the modal</br>
+	 * 5. Click "Resend all" on the notification area of the room page</br>
+	 * Check that the file is actually uploaded.</br>
 	 * @throws InterruptedException 
 	 */
 	@Test(groups={"1driver_android"}, priority=1,description="Test the Warn Unknown Devices modal with a file upload")
@@ -256,20 +256,20 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 	}
 
 	/**
-	 * 1. Device 2 logout/log in to renew his keys 
-	 * 2. Device 1 open room oneToOneRoomWithEncryption
-	 * 3. Device 2 open room oneToOneRoomWithEncryption
-	 * 4. Device 1 send a message
-	 * Check that message is not sent with device 2
-	 * Check that the 'Room contains unknown devices' modal is opened
-	 * 5. Hit the verify button on the first item of the list.
-	 * Check that 'Verify device' modal is opened.
-	 * 6. Hit the 'I verify that the keys match' button
-	 * Check that the first button of the first device item is 'unverify'
-	 * 7. Click on the OK button from the 'Room contains unknown devices' modal
-	 * Check the message in the notification area, on the room page. 
-	 * 8. Click on Resend all
-	 * Check that message is sent in the room with device 2
+	 * 1. Device 2 logout/log in to renew his keys </br>
+	 * 2. Device 1 open room oneToOneRoomWithEncryption </br>
+	 * 3. Device 2 open room oneToOneRoomWithEncryption </br>
+	 * 4. Device 1 send a message </br>
+	 * Check that message is not sent with device 2 </br>
+	 * Check that the 'Room contains unknown devices' modal is opened </br>
+	 * 5. Hit the verify button on the first item of the list. </br>
+	 * Check that 'Verify device' modal is opened. </br>
+	 * 6. Hit the 'I verify that the keys match' button </br>
+	 * Check that the first button of the first device item is 'unverify' </br>
+	 * 7. Click on the OK button from the 'Room contains unknown devices' modal </br>
+	 * Check the message in the notification area, on the room page.  </br>
+	 * 8. Click on Resend all </br>
+	 * Check that message is sent in the room with device 2 </br>
 	 * @throws InterruptedException 
 	 * @throws IllegalAccessException 
 	 * @throws InstantiationException 
@@ -331,14 +331,14 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 	}
 
 	/**
-	 * 1. Log out / login for renew the keys 
-	 * 2. Device 1 open room oneToOneRoomWithEncryption
-	 * 3. Start a voice call
-	 * Check that the call layout isn't displayed
-	 * Check that the 'Room contains unknown devices' modal is opened
-	 * 4. Click OK on the modal
-	 * 5. Start a call
-	 * Check that the call is made
+	 * 1. Log out / login for renew the keys  </br>
+	 * 2. Device 1 open room oneToOneRoomWithEncryption </br>
+	 * 3. Start a voice call </br>
+	 * Check that the call layout isn't displayed </br>
+	 * Check that the 'Room contains unknown devices' modal is opened </br>
+	 * 4. Click OK on the modal </br>
+	 * 5. Start a call </br>
+	 * Check that the call is made </br>
 	 * 6. Cancel it
 	 * @throws InterruptedException 
 	 */

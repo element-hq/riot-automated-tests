@@ -20,12 +20,12 @@ import utility.ScreenshotUtility;
 public class RiotRegisterTests extends RiotParentTest{
 
 	/**
-	 * Cover issue https://github.com/vector-im/riot-ios/issues/1125
-	 * 1. Hit the register button.
-	 * 2. Fill the first form with valid displayName and matching passwords.
-	 * 3. Fill the second form with an unvalid phone number.
-	 * 4. Hit submit button
-	 * Check that the form isn't sent.
+	 * Cover issue https://github.com/vector-im/riot-ios/issues/1125 </br>
+	 * 1. Hit the register button. </br>
+	 * 2. Fill the first form with valid displayName and matching passwords. </br>
+	 * 3. Fill the second form with an unvalid phone number. </br>
+	 * 4. Hit submit button </br>
+	 * Check that the form isn't sent. </br>
 	 * @throws InterruptedException 
 	 */
 	@Test(groups={"1driver_ios","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)

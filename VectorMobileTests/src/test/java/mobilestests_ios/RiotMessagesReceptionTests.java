@@ -36,13 +36,13 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	private String riotSenderAccessToken;
 
 	/**
-	 * Validates issue https://github.com/vector-im/riot-ios/issues/809
-	 * 1. Open roomtest with device A.
-	 * 2. Open roomtest with device B.
-	 * 3. User A write something in the message bar but don't send it.
-	 * Test that the typing indicator indicates '[user1] is typing..." with device B.
-	 * 4. Type an other msg and clear it with user 4 in the message bar.
-	 * Test that the typing indicator is empty on device B.
+	 * Validates issue https://github.com/vector-im/riot-ios/issues/809 </br>
+	 * 1. Open roomtest with device A. </br>
+	 * 2. Open roomtest with device B. </br>
+	 * 3. User A write something in the message bar but don't send it. </br>
+	 * Test that the typing indicator indicates '[user1] is typing..." with device B. </br>
+	 * 4. Type an other msg and clear it with user 4 in the message bar. </br>
+	 * Test that the typing indicator is empty on device B. </br>
 	 * @throws InterruptedException 
 	 */
 	@Test(groups={"2drivers_ios","2checkuser"})//@Test(groups="2drivers_ios")
@@ -113,7 +113,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	}
 	/**
 	 * Receive a text message in a room from an other user. </br>
-	 * 1. Open room roomName
+	 * 1. Open room roomName </br>
 	 * Asserts that badge is set to 1 or incremented on the room's item in the rooms list.</br>
 	 * Asserts that badge isn't displayed anymore on the room item when going back to rooms list.
 	 * @throws InterruptedException 

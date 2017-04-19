@@ -76,7 +76,7 @@ public class RiotLoginTests extends RiotParentTest{
 	}
 	
 	/**
-	 * Check the custom server options and verify the form.
+	 * Check the custom server options and verify the form. </br>
 	 */
 	@Test(groups={"1driver_android","loginpage"})
 	public void customServerOptionsCheck(){
@@ -93,7 +93,7 @@ public class RiotLoginTests extends RiotParentTest{
 	}
 	
 	/**
-	 * Check the reset password form.
+	 * Check the reset password form. </br>
 	 * Doesn't verifies the reset password function.
 	 */
 	@Test(groups={"1driver_android","loginpage"})
@@ -160,11 +160,11 @@ public class RiotLoginTests extends RiotParentTest{
 	}
 	
 	/**
-	 * Cover issue https://github.com/vector-im/riot-android/issues/1053
-	 * 1. Hit 'Forgot password?'
-	 * 2. Fill the form with existing mail, and matching passwords
-	 * Check the controls of the following screen.
-	 * 3. Click on the 'I Have verified my mal' without actually verifying the mail
+	 * Cover issue https://github.com/vector-im/riot-android/issues/1053 </br>
+	 * 1. Hit 'Forgot password?' </br>
+	 * 2. Fill the form with existing mail, and matching passwords </br>
+	 * Check the controls of the following screen. </br>
+	 * 3. Click on the 'I Have verified my mal' without actually verifying the mail </br>
 	 * Check that the screen is the same
 	 * @throws InterruptedException 
 	 */

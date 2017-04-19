@@ -108,7 +108,7 @@ public class RiotLoginTests extends RiotParentTest{
 	}
 
 	/**
-	 * Will fail because of https://github.com/vector-im/riot-ios/issues/898
+	 * Will fail because of https://github.com/vector-im/riot-ios/issues/898 </br>
 	 * Fill the form with forbidden characters. </br>
 	 * Iterates on several datas. </br>
 	 * Verifies that the form is not sent.
@@ -137,7 +137,7 @@ public class RiotLoginTests extends RiotParentTest{
 	}
 
 	/**
-	 * Will fail because of https://github.com/vector-im/riot-ios/issues/898
+	 * Will fail because of https://github.com/vector-im/riot-ios/issues/898 </br>
 	 * Fill the forgot password form with corrects (but with fake mail) characters. </br>
 	 * Check that the login form is displayed then.
 	 * @throws InterruptedException 

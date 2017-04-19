@@ -25,14 +25,14 @@ public class RiotRoomsListItemsTests extends RiotParentTest{
 	private String roomNameTest="auto test list items";
 	private String riotUserDisplayName="riotuser11";
 		/**
-		 * Tests that some events are not displayed in the last event label on the rooms list.
-		 * 1. Open room roomNameTest
-		 * 2. Send a message
-		 * 3. Change user avatar
-		 * 4. Change user display name
-		 * 5. Come back on the rooms list.
-		 * Check that the last event is the msg sent in step 2.
-		 * 6.  Set the old display name
+		 * Tests that some events are not displayed in the last event label on the rooms list. </br>
+		 * 1. Open room roomNameTest </br>
+		 * 2. Send a message </br>
+		 * 3. Change user avatar </br>
+		 * 4. Change user display name </br>
+		 * 5. Come back on the rooms list. </br>
+		 * Check that the last event is the msg sent in step 2. </br>
+		 * 6.  Set the old display name </br>
 		 * @throws InterruptedException 
 		 */
 		@Test(groups={"1driver_android","1checkuser"})

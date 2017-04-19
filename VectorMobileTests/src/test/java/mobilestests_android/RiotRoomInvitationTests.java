@@ -29,7 +29,7 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	String roomName="invitation auto tests";
 	
 	/**
-	 * Required : the test user hasn't received any invitation.
+	 * Required : the test user hasn't received any invitation. </br>
 	 * Receive an invitation to a room. </br>
 	 * Check that riot allows the user to accept or decline the invitation.</br>
 	 * Check that the invitation is closed when accepted.</br>
@@ -55,7 +55,7 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	}
 	
 	/**
-	 * Required : the test user hasn't received any invitation.
+	 * Required : the test user hasn't received any invitation. </br>
 	 * Receive an invitation to a room. </br>
 	 * Check that riot allows the user to accept or decline the invitation.</br>
 	 * Click preview to preview the room.</br>
@@ -90,7 +90,7 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	}
 
 	/**
-	 * Required : the test user hasn't received any invitation.
+	 * Required : the test user hasn't received any invitation. </br>
 	 * Receive an invitation to a room. </br>
 	 * Check that riot allows the user to accept or decline the invitation.</br>
 	 * Click preview to preview the room.</br>
@@ -134,7 +134,7 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	}
 	
 	/**
-	 * Required : the test user hasn't received any invitation.
+	 * Required : the test user hasn't received any invitation. </br>
 	 * Receive an invitation to a room. </br>
 	 * Check that riot allows the user to accept or decline the invitation.</br>
 	 * Click preview to preview the room.</br>

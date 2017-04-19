@@ -72,7 +72,7 @@ public class RiotCallingPageObjects extends TestUtilities{
 	}
 	
 	/**
-	 * Double tap on the hangup button. Usefull from a video call layout since the interface with button is quicly hidden. 
+	 * Double tap on the hangup button. </br> Usefull from a video call layout since the interface with button is quicly hidden. 
 	 */
 	public void hangUpWithDoubleTap(){
 		doubleTapElement(hangUpButton, driver);

@@ -32,9 +32,9 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	
 	/**
 	 * Cover this issue https://github.com/vector-im/riot-ios/issues/836 </br>
-	 * 1. Start a chat with someone on device/user A
-	 * 2. Accept the invitation with device/user B
-	 * Verify that call button in the right bottom is present
+	 * 1. Start a chat with someone on device/user A </br>
+	 * 2. Accept the invitation with device/user B </br>
+	 * Verify that call button in the right bottom is present </br>
 	 * @throws InterruptedException 
 	 */
 	@Test(groups={"2drivers_ios","22checkuser"})

@@ -155,7 +155,7 @@ public class RiotVoipTests extends RiotParentTest{
 
 	/**
 	 * Required : both devices have an user logged.
-	 * 1. Open a room
+	 * 1. Open a room </br>
 	 * 2. Launch a voice call.</br>
 	 * With device 2, assert that the incomming call view is displayed and correct.</br>
 	 * 3. Accept the call from device 2, assert that the incomming call view is opened. </br>
@@ -202,8 +202,8 @@ public class RiotVoipTests extends RiotParentTest{
 	}
 	
 	/**
-	 * Required : both devices have an user logged.
-	 * 1. Open a room
+	 * Required : both devices have an user logged. </br>
+	 * 1. Open a room </br>
 	 * 2. Launch a video call.</br>
 	 * With device 2, assert that the incomming call view is displayed and correct.</br>
 	 * 3. Accept the call from device 2, assert that the incomming call view is opened. </br>
@@ -252,7 +252,7 @@ public class RiotVoipTests extends RiotParentTest{
 	
 	/**
 	 * Cover this issue https://github.com/vector-im/riot-ios/issues/953.</br>
-	 * 0. Prerequisite: check that there is no VoIP Conference named room in the list.
+	 * 0. Prerequisite: check that there is no VoIP Conference named room in the list. </br>
 	 * 1. Open room conferenceRoomTest: this room have >2 users </br>
 	 * 2. Start a voice call</br>
 	 * 3. From calling layout, hang up the call</br>

@@ -61,7 +61,7 @@ public class RiotContactPickerPageObjects extends TestUtilities{
 	}
 	
 	/**
-	 * Enters a member adress, mail or else in the textbox, and click on the first item in the list. 
+	 * Enters a member adress, mail or else in the textbox, and click on the first item in the list.  </br>
 	 *	If nothing is found, doesn't click.
 	 */
 	public void searchAndSelectMember(String inviteeAddress){

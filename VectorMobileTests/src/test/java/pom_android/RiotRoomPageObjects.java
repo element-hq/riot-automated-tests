@@ -143,8 +143,8 @@ public class RiotRoomPageObjects extends TestUtilities{
 	}
 
 	/**
-	 * Check the room page layout.
-	 * TODO complete this function by inspirant of checkPreviewRoomLayout() 
+	 * Check the room page layout. </br>
+	 * TODO complete this function by inspirant of checkPreviewRoomLayout()  </br>
 	 * @param roomName
 	 * @throws InterruptedException 
 	 */
@@ -257,7 +257,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 			return null;
 		}
 	}
-	/**TODO use xpath instead of id because of https://github.com/appium/appium/issues/6269 issue
+	/**TODO use xpath instead of id because of https://github.com/appium/appium/issues/6269 issue </br>
 	 * Get the imageview attached from a linearLayout object message (first children of the listView_messages). </br> Return null if not found.
 	 * @param message
 	 * @return
@@ -270,7 +270,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 		}
 	}
 	/**
-	 * TODO use xpath instead of id because of https://github.com/appium/appium/issues/6269 issue
+	 * TODO use xpath instead of id because of https://github.com/appium/appium/issues/6269 issue </br>
 	 * Return the timestamp, example : 15:12. </br> Return null if not found.
 	 * @param postLinearLayout
 	 * @return
