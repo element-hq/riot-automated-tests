@@ -84,6 +84,21 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 	}
 	
 	/**
+	 * Return a member relativelayout using name of the member.
+	 * @param memberName
+	 * @return
+	 */
+	public MobileElement getMemberByName(String memberName){
+		try {
+			return driver.findElementByXPath("//android.widget.ExpandableListView[@resource-id='im.vector.alpha:id/room_details_members_exp_list_view']//android.widget.TextView[@resource-id='im.vector.alpha:id/filtered_list_name' and @text='"+memberName+"']/..");	
+		} catch (Exception e) {
+			System.out.println("No member found with name '"+memberName+"'");
+			return null;
+		}
+		
+	}
+	
+	/**
 	 * Check texts of the invite confirmation msgbox.
 	 * @throws InterruptedException 
 	 */

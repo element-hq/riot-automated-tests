@@ -12,6 +12,13 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 public class HttpsRequestsToMatrix {
+	/**
+	 * Logs a user and returns his fresh access token.
+	 * @param user
+	 * @param password
+	 * @return
+	 * @throws IOException
+	 */
 	public static String login(String user, String password) throws IOException{ 
 		String initialDeviceDisplayName="https://riot.im/app/ via Chrome on Mac OS";
 		String accessToken;
@@ -42,9 +49,13 @@ public class HttpsRequestsToMatrix {
 		executeUrl(url.toString(), "POST", null);
 	}
 
-	public static void leaveRoom(String accessToken, String roomId, String leavingUser) throws IOException{
-		//https://matrix.org/_matrix/client/r0/rooms/!ECguyzzDCnAZarUOSW%3Amatrix.org/leave?access_token=MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI4Y2lkIHVzZXJfaWQgPSBAcmlvdHVzZXIyOm1hdHJpeC5vcmcKMDAxNmNpZCB0eXBlID0gYWNjZXNzCjAwMWRjaWQgdGltZSA8IDE0Nzc2NTg3NDI5OTgKMDAyZnNpZ25hdHVyZSBapU0beWNgBCwjIb0CT16LUNT0F2jr0pm6qPAm7t0CEAo
+	public static void leaveRoom(String accessToken, String roomId) throws IOException{
 		StringBuilder url=new StringBuilder(MatrixUtilities.getHomeServerUrlForRequestToMatrix()).append("/_matrix/client/r0/rooms/").append(roomId).append("/leave").append("?access_token=").append(accessToken);
+		executeUrl(url.toString(), "POST", null);
+	}
+	
+	public static void forgetRoom(String accessToken, String roomId) throws IOException{
+		StringBuilder url=new StringBuilder(MatrixUtilities.getHomeServerUrlForRequestToMatrix()).append("/_matrix/client/r0/rooms/").append(roomId).append("/forget").append("?access_token=").append(accessToken);
 		executeUrl(url.toString(), "POST", null);
 	}
 	
@@ -69,6 +80,22 @@ public class HttpsRequestsToMatrix {
 		StringBuilder url=new StringBuilder(MatrixUtilities.getHomeServerUrlForRequestToMatrix()).append("/_matrix/client/r0/rooms/").append(roomId).append("/send/m.room.message/").append(token).append("?access_token=").append(accessToken);
 		String postJsonData="{\"body\":\"small_koala.jpg\",\"info\":{\"size\":29051,\"mimetype\":\"image/jpeg\",\"w\":205,\"h\":154},\"msgtype\":\"m.image\",\"url\":\""+pictureUrl+"\"}";
 		executeUrl(url.toString(), "PUT", postJsonData);
+	}
+	
+	/**
+	 * Create a room and return the roomId of the created room.
+	 * @param accessToken
+	 * @param roomName
+	 * @return
+	 * @throws IOException
+	 */
+	public static String createRoom(String accessToken, String roomName) throws IOException{
+		StringBuilder url=new StringBuilder(MatrixUtilities.getHomeServerUrlForRequestToMatrix()).append("/_matrix/client/r0/createRoom?access_token=").append(accessToken);
+		String postJsonData="{\"name\":\""+roomName+"\",\"preset\":\"private_chat\",\"visibility\":\"private\",\"initial_state\":[{\"content\":{\"guest_access\":\"can_join\"},\"type\":\"m.room.guest_access\",\"state_key\":\"\"}]}";
+		
+		String reponseStr=executeUrl(url.toString(), "POST", postJsonData).toString();
+		String roomId=reponseStr.substring(reponseStr.indexOf("room_id\":")+10,reponseStr.length()-2);
+		return roomId;
 	}
 	
 	private static StringBuffer executeUrl(String url, String typeRequete, String jsonData) throws IOException{
