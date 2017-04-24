@@ -180,7 +180,7 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 	 * @throws IOException
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers_android","22checkusers_android"})
+	@Test(groups={"2drivers_android","2checkusers_android"})
 	public void makeMemberModeratorTest() throws IOException, InterruptedException{
 		String tmpRoomName="moderator temp room";
 		//1. 2. 3. 4. 5.
@@ -229,11 +229,77 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 		Assert.assertNull(memberPageUserA.getActionItemByName("Remove from this room"), "There is a Kick action visible on user A's member details page and it shoudn't be.");
 		Assert.assertNull(memberPageUserA.getActionItemByName("Ban"), "There is a Ban action visible on user A's member details page and it shoudn't be.");
 		Assert.assertNull(memberPageUserA.getActionItemByName("Make moderator"), "There is a Make moderator action visible on user A's member details page and it shoudn't be.");
-		Assert.assertNull(memberPageUserA.getActionItemByName("Ban"), "There is a Ban action visible on user A's member details page and it shoudn't be.");
+		Assert.assertNull(memberPageUserA.getActionItemByName("Make admin"), "There is a Make admin action visible on user A's member details page and it shoudn't be.");
 	}
 
-	public void makeMemberAdminTest(){
-
+	/**
+	 * 1. Create room R with user A.</br>
+	 * 2. Invite user B. </br>
+	 * 3. Accept invitation with user B. </br>
+	 * 4. Open user B details page with user A and make him admin. </br>
+	 * Check that a confirmation dialog is opened. </br>
+	 * 5. Hit YES button.  </br>
+	 * Check that user A lost admin privileges on user B page (no more 'Make moderator' and 'Make admin' items). </br>
+	 * 6. Open user A details page with user B </br>
+	 * Check that user B don't have any admin privileges on user A page (no 'Make moderator' and 'Make admin' items). </br>
+	 * 7. Open user B details page with user B </br>
+	 * 8. Hit 'Reset to normal user' item action </br>
+	 * With user A check on user B's details page that he retrieves his privileges on user B (items 'Make moderator' and 'Make admin' items). </br>
+	 * @throws IOException 
+	 * @throws InterruptedException 
+	 */
+	@Test(groups={"2drivers_android","2checkusers_android"})
+	public void makeMemberAdminTest() throws IOException, InterruptedException{
+		String tmpRoomName="admin temp room";
+		//1. 2. 3
+		createRoomWith2MembersByRequestsToMatrix(tmpRoomName);
+		//Opening the created room with Riot 
+		RiotRoomsListPageObjects roomsListA=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
+		RiotRoomsListPageObjects roomsListB=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
+		roomsListA.getRoomByName(tmpRoomName).click();
+		roomsListB.getRoomByName(tmpRoomName).click();
+		RiotRoomPageObjects roomPageA=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
+		roomPageA.roomNameTextView.click();
+		roomPageA.activeMembersTextView.click();
+		RiotRoomDetailsPageObjects roomDetailsA = new RiotRoomDetailsPageObjects(appiumFactory.getAndroidDriver1());
+		
+		//4. Open user B details page with user A and make him admin him.
+		roomDetailsA.getMemberByName(riotUserBDisplayName).click();
+		RiotMemberDetailsPageObjects memberPageUserB=new RiotMemberDetailsPageObjects(appiumFactory.getAndroidDriver1());
+		//Ban user B
+		Assert.assertNotNull(memberPageUserB.getActionItemByName("Make admin"), "There is no Make admin action visible on user B's member details page.");
+		memberPageUserB.getActionItemByName("Make admin").click();
+		//Check that a confirmation dialog is opened. 
+		Assert.assertEquals(memberPageUserB.dialogMainMessageTextView.getText(), "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?");
+		
+		//5. Hit YES button.
+		memberPageUserB.dialogYesButton.click();
+		//Check that user A lost admin privileges on user B page (no more 'Make moderator' and 'Make admin' items).
+		Assert.assertNull(memberPageUserB.getActionItemByName("Make moderator"), "There is a Make moderator action visible on user A's member details page and it shoudn't be.");
+		Assert.assertNull(memberPageUserB.getActionItemByName("Make admin"), "There is a Make admin action visible on user A's member details page and it shoudn't be.");
+		
+		//6. Open user A details page with user B
+		RiotRoomPageObjects roomPageB=new RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
+		roomPageB.roomNameTextView.click();
+		roomPageB.activeMembersTextView.click();
+		RiotRoomDetailsPageObjects roomDetailsB = new RiotRoomDetailsPageObjects(appiumFactory.getAndroidDriver2());
+		roomDetailsB.getMemberByName(riotUserADisplayName).click();;
+		RiotMemberDetailsPageObjects memberPageUserA=new RiotMemberDetailsPageObjects(appiumFactory.getAndroidDriver2());
+		//Check that user B don't have any admin privileges on user A page (no 'Make moderator' and 'Make admin' items).
+		Assert.assertNull(memberPageUserA.getActionItemByName("Make moderator"), "There is a Make moderator action visible on user A's member details page and it shoudn't be.");
+		Assert.assertNull(memberPageUserA.getActionItemByName("Make admin"), "There is a Make admin action visible on user A's member details page and it shoudn't be.");
+		
+		//7. Open user B details page with user B 
+		memberPageUserA.menuBackButton.click();
+		roomDetailsB.getMemberByName(riotUserBDisplayName).click();
+		RiotMemberDetailsPageObjects memberPageUserBFromB=new RiotMemberDetailsPageObjects(appiumFactory.getAndroidDriver2());
+		
+		//8. Hit 'Reset to normal user' item action
+		Assert.assertNotNull(memberPageUserBFromB.getActionItemByName("Reset to normal user"), "There is no Reset to normal user action visible on user B's member details page.");
+		memberPageUserBFromB.getActionItemByName("Reset to normal user").click();
+		//With user A check on user B's details page that he retrieves his privileges on user B (items 'Make moderator' and 'Make admin' items).
+		Assert.assertNotNull(memberPageUserB.getActionItemByName("Make moderator"), "There is no Make moderator action visible on user B's member details page.");
+		Assert.assertNotNull(memberPageUserB.getActionItemByName("Make admin"), "There is no Make admin action visible on user B's member details page.");
 	}
 
 	/**
@@ -260,7 +326,6 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 		//1. Create room R with user A.
 		riotUserAAccessToken=HttpsRequestsToMatrix.login(riotUserADisplayName, Constant.DEFAULT_USERPWD);
 		testRoomId=HttpsRequestsToMatrix.createRoom(riotUserAAccessToken, roomName);
-		System.out.println(testRoomId);
 		//2. Invite user B. 
 		HttpsRequestsToMatrix.sendInvitationToUser(riotUserAAccessToken, testRoomId, MatrixUtilities.getMatrixIdFromDisplayName(riotUserBDisplayName));
 		//3. Accept invitation with user B.
@@ -301,6 +366,9 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 			break;
 		case "makeMemberModeratorTest":
 			leaveAndForgetRoomWith3Users();
+			break;
+		case "makeMemberAdminTest":
+			leaveAndForgetRoomWith2Users();
 			break;
 		default:
 			break;

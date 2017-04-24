@@ -67,4 +67,15 @@ public class RiotMemberDetailsPageObjects extends TestUtilities{
 		}
 	}
 	
+	/*
+	 * DIALOG 
+	 */
+	@AndroidFindBy(id="android:id/parentPanel")
+	public MobileElement dialogMainLinearLayout;
+	@AndroidFindBy(id="android:id/message")
+	public MobileElement dialogMainMessageTextView;
+	@AndroidFindBy(id="android:id/button2")
+	public MobileElement dialogNoButton;
+	@AndroidFindBy(id="android:id/button1")
+	public MobileElement dialogYesButton;
 }
