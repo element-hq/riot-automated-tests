@@ -7,6 +7,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeGroups;
 
+import io.appium.java_client.remote.IOSMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 
 public abstract class RiotParentTest extends TestUtilities {
@@ -137,9 +138,8 @@ public abstract class RiotParentTest extends TestUtilities {
 			capabilities.setCapability(MobileCapabilityType.DEVICE_NAME,iosDevice1.get(MobileCapabilityType.DEVICE_NAME));
 			capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME,iosDevice1.get(MobileCapabilityType.PLATFORM_NAME));
 			capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, iosDevice1.get(MobileCapabilityType.PLATFORM_VERSION));
-			capabilities.setCapability("bundleId", "im.vector.app");
+			capabilities.setCapability(IOSMobileCapabilityType.BUNDLE_ID, "im.vector.app");
 			capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME,iosDevice1.get(MobileCapabilityType.AUTOMATION_NAME));
-			capabilities.setCapability("realDeviceLogger", "/usr/local/lib/node_modules/deviceconsole/deviceconsole");
 			capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
 			capabilities.setCapability(MobileCapabilityType.FULL_RESET, false);
 			capabilities.setCapability("xcodeOrgId", ReadConfigFile.getInstance().getConfMap().get("development_team"));
@@ -170,12 +170,11 @@ public abstract class RiotParentTest extends TestUtilities {
 		//capabilities.setCapability("bundleId", "im.vector.app");
 		//XCUITest is used because Appium Ios driver doesn't support xcode version 8.0
 		capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME,iosDevice1.get(MobileCapabilityType.AUTOMATION_NAME));
-		capabilities.setCapability("realDeviceLogger", "/usr/local/lib/node_modules/deviceconsole/deviceconsole");
 		capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
 		capabilities.setCapability(MobileCapabilityType.FULL_RESET, false);
 		capabilities.setCapability("xcodeOrgId", ReadConfigFile.getInstance().getConfMap().get("development_team"));
 		capabilities.setCapability("xcodeSigningId", ReadConfigFile.getInstance().getConfMap().get("code_sign_identity"));
-		capabilities.setCapability("autoDismissAlerts", false);
+		capabilities.setCapability(IOSMobileCapabilityType.AUTO_DISMISS_ALERTS, false);
 		capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 1200);
 		//		capabilities.setCapability("autoWebview", true);
 
@@ -199,16 +198,15 @@ public abstract class RiotParentTest extends TestUtilities {
 			capabilities1.setCapability(MobileCapabilityType.DEVICE_NAME,iosDevice1.get(MobileCapabilityType.DEVICE_NAME));
 			capabilities1.setCapability(MobileCapabilityType.PLATFORM_NAME,iosDevice1.get(MobileCapabilityType.PLATFORM_NAME));
 			capabilities1.setCapability(MobileCapabilityType.PLATFORM_VERSION, iosDevice1.get(MobileCapabilityType.PLATFORM_VERSION));
-			capabilities1.setCapability("bundleId", "im.vector.app");//app
+			capabilities1.setCapability(IOSMobileCapabilityType.BUNDLE_ID, "im.vector.app");
 			//capabilities.setCapability(MobileCapabilityType.APP,"/Users/matrix/Documents/apps/ipa/Vector-d5ce6ff019a3e6b06a20bcc849ab57074e31e773-build1399.ipa");
 			//XCUITest is used because Appium Ios driver doesn't support xcode version 8.0
 			capabilities1.setCapability(MobileCapabilityType.AUTOMATION_NAME,iosDevice1.get(MobileCapabilityType.AUTOMATION_NAME));
-			capabilities1.setCapability("realDeviceLogger", "/usr/local/lib/node_modules/deviceconsole/deviceconsole");
 			capabilities1.setCapability(MobileCapabilityType.NO_RESET, true);
 			capabilities1.setCapability(MobileCapabilityType.FULL_RESET, false);
 			capabilities1.setCapability("xcodeOrgId", ReadConfigFile.getInstance().getConfMap().get("development_team"));
 			capabilities1.setCapability("xcodeSigningId", ReadConfigFile.getInstance().getConfMap().get("code_sign_identity"));
-			capabilities1.setCapability("autoDismissAlerts", false);
+			capabilities1.setCapability(IOSMobileCapabilityType.AUTO_DISMISS_ALERTS, false);
 			capabilities1.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 1200);
 
 			appiumFactory.setiOSDriver1(new URL(Constant.getServer1HttpAddress()), capabilities1);
@@ -223,7 +221,7 @@ public abstract class RiotParentTest extends TestUtilities {
 			capabilities2.setCapability(MobileCapabilityType.DEVICE_NAME,iosDevice2.get(MobileCapabilityType.DEVICE_NAME));
 			capabilities2.setCapability(MobileCapabilityType.PLATFORM_NAME,iosDevice2.get(MobileCapabilityType.PLATFORM_NAME));
 			capabilities2.setCapability(MobileCapabilityType.PLATFORM_VERSION, iosDevice2.get(MobileCapabilityType.PLATFORM_VERSION));
-			capabilities2.setCapability("bundleId", "im.vector.app");//app
+			capabilities2.setCapability(IOSMobileCapabilityType.BUNDLE_ID, "im.vector.app");//app
 			//capabilities.setCapability(MobileCapabilityType.APP,"/Users/matrix/Documents/apps/ipa/Vector-d5ce6ff019a3e6b06a20bcc849ab57074e31e773-build1399.ipa");
 			//XCUITest is used because Appium Ios driver doesn't support xcode version 8.0
 			capabilities2.setCapability(MobileCapabilityType.AUTOMATION_NAME,iosDevice2.get(MobileCapabilityType.AUTOMATION_NAME));
