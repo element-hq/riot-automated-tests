@@ -37,7 +37,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 * Verify that call button in the right bottom is present </br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers_ios","22checkuser"})
+	@Test(groups={"2drivers_ios","2checkuser"})
 	public void checkCallButtonPresenceAfterInvitedUserJoinTest() throws InterruptedException{
 		RiotRoomsListPageObjects roomsListA = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		RiotRoomsListPageObjects roomsListB = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
