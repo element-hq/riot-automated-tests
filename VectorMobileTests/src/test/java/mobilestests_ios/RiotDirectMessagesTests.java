@@ -42,7 +42,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		RiotRoomsListPageObjects roomsListA = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
 		RiotRoomsListPageObjects roomsListB = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
 		//1. Start a chat with someone on device/user A
-		RiotRoomPageObjects roomPageA=roomsListA.startChatWithUser(getMatrixIdFromDisplayName(riotuser2DisplayName));
+		RiotRoomPageObjects roomPageA=roomsListA.startChat(getMatrixIdFromDisplayName(riotuser2DisplayName));
 		
 		//2. Accept the invitation with device/user B
 		roomsListB.previewInvitation(riotuser1DisplayName);

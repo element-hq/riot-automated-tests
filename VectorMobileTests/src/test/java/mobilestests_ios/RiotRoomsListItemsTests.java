@@ -11,6 +11,7 @@ import com.esotericsoftware.yamlbeans.YamlException;
 
 import pom_ios.RiotRoomPageObjects;
 import pom_ios.RiotRoomsListPageObjects;
+import pom_ios.RiotSettingsPageObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -48,20 +49,20 @@ private String riotUserDisplayName="riotuser11";
 		roomPage.sendAMessage(randomMsg);
 		//3. Change user avatar
 		roomPage.menuBackButton.click();
-		roomsList.settingsButton.click();
-		roomsList.changeAvatarFromSettings();
+		RiotSettingsPageObjects settingsPage = roomsList.openRiotSettings();
+		settingsPage.changeAvatarFromSettings();
 		//4. Change user display name
-		roomsList.changeDisplayNameFromSettings(newDisplayName);
-		roomsList.saveNavBarButton.click();
+		settingsPage.changeDisplayNameFromSettings(newDisplayName);
+		settingsPage.saveNavBarButton.click();
 		//5. Come back on the rooms list.
-		roomsList.backMenuButton.click();
+		settingsPage.backMenuButton.click();
 		//Check that the last event is the msg sent in step 2
 		Assert.assertEquals(roomsList.getLastEventByRoomName(roomNameTest,true), newDisplayName+": "+randomMsg);
 		//6.  Set the old display name
-		roomsList.settingsButton.click();
-		roomsList.changeDisplayNameFromSettings(riotUserDisplayName);
-		roomsList.saveNavBarButton.click();
-		roomsList.backMenuButton.click();
+		settingsPage = roomsList.openRiotSettings();
+		settingsPage.changeDisplayNameFromSettings(riotUserDisplayName);
+		settingsPage.saveNavBarButton.click();
+		settingsPage.backMenuButton.click();
 	}
 	
 	/**

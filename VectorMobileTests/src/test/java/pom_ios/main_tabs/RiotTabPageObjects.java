@@ -1,45 +1,41 @@
-package pom_ios;
+package pom_ios.main_tabs;
 
 import java.util.List;
 
-import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.SwipeElementDirection;
 import io.appium.java_client.ios.IOSDriver;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
+import pom_ios.RiotLoginAndRegisterPageObjects;
 import pom_ios.RiotSettingsPageObjects;
 import utility.TestUtilities;
 
-@Deprecated
-public class RiotRoomsListPageObjects extends TestUtilities{
-private AppiumDriver<MobileElement> driver;
-	
-	public RiotRoomsListPageObjects(AppiumDriver<MobileElement> myDriver) {
-		driver= myDriver;
-		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
-		//ExplicitWait(driver,this.roomsAndCategoriesList);
-		try {
-			//waitUntilDisplayed((IOSDriver<MobileElement>) driver,"RecentsVCTableView", true, 5);
-			waitUntilDisplayed((IOSDriver<MobileElement>) driver,"RecentsVCTableView", true, 5);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+public abstract class RiotTabPageObjects extends TestUtilities {
+	protected IOSDriver<MobileElement> driver;
+	public RiotTabPageObjects(AppiumDriver<MobileElement> myDriver){
+		driver= (IOSDriver<MobileElement>) myDriver;
 	}
+	
 	/*
-	 * NAVIGATION BAR
+	 * NAVIGATION BAR.
 	 */
-	@iOSFindBy(accessibility="Messages")
+	@iOSFindBy(className="XCUIElementTypeNavigationBar")
 	public MobileElement navigationBar;
 	@iOSFindBy(accessibility="settings icon")
 	public MobileElement settingsButton;
-	@iOSFindBy(xpath="//XCUIElementTypeNavigationBar[@name='Messages']/XCUIElementTypeStaticText")
-	public MobileElement navigationBarStaticText;
 	@iOSFindBy(accessibility="search icon")
 	public MobileElement searchButton;
+	
+	/**
+	 * Return the static text containing the name of the tab.
+	 * @return
+	 */
+	public MobileElement getNavigationBarStaticText(){
+		return navigationBar.findElementByClassName("XCUIElementTypeStaticText");
+	}
 	
 	/**
 	 * Hit the settings button in the navigation bar and returns a RiotSettingsPageObjects.
@@ -49,6 +45,68 @@ private AppiumDriver<MobileElement> driver;
 		settingsButton.click();
 		return new RiotSettingsPageObjects(driver);
 	}
+	/**
+	 * Log-out from Riot with the lateral menu.
+	 */
+	public void logOutFromRoomsList(){
+		RiotSettingsPageObjects settingsPage = openRiotSettings();
+		settingsPage.logOutFromSettingsView();
+	}
+	
+	/**
+	 * Log out from the rooms list, log in with the parameters.</br>
+	 * Return a RiotRoomsListPageObjects POM.</br> Can be used to renew the encryption keys.
+	 * @param username
+	 * @param pwd
+	 * @return new RiotRoomsListPageObjects
+	 * @throws InterruptedException 
+	 */
+	public RiotHomePageTabObjects logOutAndLogin(String username, String pwd) throws InterruptedException {
+		logOutFromRoomsList();
+		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
+		loginPage.logUser(username, null, pwd);
+		return new RiotHomePageTabObjects(driver);
+	}
+	
+	/*
+	 * MAIN PAGE: INVITES, ROOMS, CONTACTS, depending of the tab.
+	 */
+	/**
+	 * Main view of the tab. His Accessibility id change according to the tab.
+	 */
+	protected MobileElement tabMainView;
+	
+	/*
+	 * 		FILTER BAR.
+	 */
+	@iOSFindBy(className="XCUIElementTypeSearchField")
+	public MobileElement filterBarSearchField;
+	@iOSFindBy(accessibility="Clear text")
+	public MobileElement clearTextFilterBarButton;
+	@iOSFindBy(accessibility="Clear text")
+	public MobileElement cancelFilterBarButton;
+	
+	/**
+	 * Swipe down on the main tab view to make appear the filter bar.
+	 */
+	public void displayFilterBarBySwipingDown(){
+		//tabMainView.
+		int mainViewHeight=tabMainView.getSize().getHeight();
+		int mainViewWidth=tabMainView.getSize().getWidth();
+		//TouchAction swipeDown = new IOSTouchAction(driver);
+		//swipeDown.longPress(tabMainView).moveTo(mainViewHeight, mainViewWidth);
+		//swipeDown.press(roomsTableView).moveTo(mainViewHeight, mainViewWidth).release();
+		tabMainView.swipe(SwipeElementDirection.DOWN,mainViewHeight/2,mainViewWidth/2, 0);
+	}
+	
+	/**
+	 * Send text in the filter bar.
+	 * @param filterText
+	 */
+	public void useFilterBar(String filterText){
+		filterBarSearchField.setValue(filterText);
+	}
+	
 	/*
 	 * INVITES
 	 */
@@ -90,17 +148,16 @@ private AppiumDriver<MobileElement> driver;
 	}
 	
 	/*
-	 * ROOMS
-	 */
-	@iOSFindBy(accessibility="RecentsVCTableView")
-	public MobileElement roomsAndCategoriesListTable;
-	@iOSFindBy(xpath="//XCUIElementTypeTable[@name='RecentsVCTableView']/XCUIElementTypeCell")
-	public List<MobileElement> roomsList;
-	/**
-	 * Faster than roomsList.
+	 * ROOMS.
 	 */
 	@iOSFindBy(accessibility="RecentTableViewCell")
-	public List<MobileElement> roomsList_bis;
+	public List<MobileElement>roomsCellsList;
+	
+	/**
+	 * TableView containing the rooms cells. His Accessibility id change according to the tab.
+	 */
+	protected MobileElement roomsTableView;
+	
 	
 	/**
 	 * Check that room is in a room category (favorites, people, rooms, etc). </br>
@@ -150,23 +207,37 @@ private AppiumDriver<MobileElement> driver;
 		int timewaited=0;
 		int nbRooms;
 		do {
-			nbRooms=roomsList.size();
+			nbRooms=roomsCellsList.size();
 			if(nbRooms==0)Thread.sleep(500);
 			timewaited++;
 		} while (nbRooms==0 && timewaited<=10);
 	}
+	
 	/**
-	 * Return a room as a MobileElement.</br>
+	 * Return a room as a MobileElement using his title.</br>
 	 * Return null if not found.
 	 * @param myRoomName
-	 * @return 
-	 * @throws InterruptedException 
+	 * @return
 	 */
-	public MobileElement getRoomByName(String myRoomName) throws InterruptedException{
-		waitUntilDisplayed(driver, "ROOMS",true, 10);
+	public MobileElement getRoomByName(String myRoomName){
 		try {
-			return roomsAndCategoriesListTable.findElementByXPath("//XCUIElementTypeCell[@name='RecentTableViewCell']/XCUIElementTypeStaticText[@name='TitleLabel' and @value='"+myRoomName+"']/..");
+			return roomsTableView.findElementByXPath("//XCUIElementTypeCell[@name='RecentTableViewCell']/XCUIElementTypeStaticText[@name='TitleLabel' and @value='"+myRoomName+"']/..");
 		} catch (Exception e) {
+			System.out.println("No room found with name "+myRoomName);
+			return null;
+		}
+	}
+	
+	/**
+	 * Return a room as a MobileElement using his index.
+	 * @param index
+	 * @return
+	 */
+	public MobileElement getRoomByIndex(int index){
+		try {
+			return roomsCellsList.get(index);
+		} catch (Exception e) {
+			System.out.println("No room at index "+index);
 			return null;
 		}
 	}
@@ -187,21 +258,11 @@ private AppiumDriver<MobileElement> driver;
 			//click on the button revealed by the swipe
 			int indexButton=4;
 			switch (item) {
-			case "dm":
-				indexButton=0;
-				break;
-			case "notifications":
-				indexButton=1;
-				break;
-			case "favourite":
-				indexButton=2;
-				break;
-			case "bottom":
-				indexButton=3;
-				break;
-			case "close":
-				indexButton=4;
-				break;
+			case "dm":indexButton=0;break;
+			case "notifications":indexButton=1;break;
+			case "favourite":indexButton=2;break;
+			case "bottom":indexButton=3;break;
+			case "close":indexButton=4;break;
 			default:
 				Assert.fail("Wrong parameter item: "+item);
 				break;
@@ -261,70 +322,73 @@ private AppiumDriver<MobileElement> driver;
 			waitUntilPropertyIsSet(getRoomByName(myRoomName).findElementByAccessibilityId("MissedNotifAndUnreadBadge"), "value", String.valueOf(currentBadge+1), true, 5);	
 		}
 	}
-	
 	/*
-	 * BOTTOM
+	 * FLOATING BUTTONS OR DIALOGS .
 	 */
 	@iOSFindBy(accessibility="create_room")
-	public MobileElement plusRoomButton;
+	public MobileElement createRoomButton;
 	
 	/*
-	 * START / CREATE ROOM SHEET. Opened after click on plus button.
+	 * BOTTOM: TABS.
 	 */
-	@iOSFindBy(accessibility="HomeVCCreateRoomAlertActionStart chat")
-	public MobileElement startChatSheetButton;
-	@iOSFindBy(accessibility="HomeVCCreateRoomAlertActionCreate room")
-	public MobileElement createRoomSheetButton;
-	@iOSFindBy(accessibility="HomeVCCreateRoomAlertActionCancel")
-	public MobileElement cancelCreationSheetButton;
+	@iOSFindBy(className="XCUIElementTypeTabBar")
+	public MobileElement tabBar;
 	
 	/**
-	 * Create a new room : click on plus button, then create room item. </br>
-	 * Return a RiotRoomPageObjects object.
+	 * Return a list of the 4 tabs: Home, Favourite, People, Rooms as MobileElements.
 	 * @return
 	 */
-	public RiotRoomPageObjects createRoom(){
-		 plusRoomButton.click();
-		 if(driver.findElementByClassName("XCUIElementTypeCollectionView")==null){
-			 plusRoomButton.click();
-		 }
-		 createRoomSheetButton.click();
-		 return new RiotRoomPageObjects(driver);
-	 }
-	
-	/**
-	 * Start a new chat with a user and returns the new created room. 
-	 * @param displayNameOrMatrixId
-	 * @return RiotRoomPageObjects
-	 */
-	public RiotRoomPageObjects startChat(String displayNameOrMatrixId){
-		plusRoomButton.click();
-		startChatSheetButton.click();
-		RiotNewChatPageObjects newChatA = new RiotNewChatPageObjects(appiumFactory.getiOsDriver1());
-		newChatA.searchAndSelectMember(displayNameOrMatrixId);
-		return new RiotRoomPageObjects(driver);
+	public List<MobileElement> listTabs(){
+		return tabBar.findElementsByClassName("XCUIElementTypeButton");
+	}
+	public MobileElement getHomeTab(){
+		return listTabs().get(0);
+	}
+	public MobileElement getFavouritesTab(){
+		return listTabs().get(1);
+	}
+	public MobileElement getPeopleTab(){
+		return listTabs().get(2);
+	}
+	public MobileElement getRoomsTab(){
+		return listTabs().get(3);
 	}
 	
 	/**
-	 * Log-out from Riot with the lateral menu.
-	 */
-	public void logOutFromRoomsList(){
-		RiotSettingsPageObjects settingsPage = openRiotSettings();
-		settingsPage.logOutFromSettingsView();
-	}
-	
-	/**
-	 * Log out from the rooms list, log in with the parameters.</br>
-	 * Return a RiotRoomsListPageObjects POM.</br> Can be used to renew the encryption keys.
-	 * @param username
-	 * @param pwd
-	 * @return new RiotRoomsListPageObjects
+	 * Click on the HOME PAGE tab and return a new RiotHomePageObjects.
 	 * @throws InterruptedException 
 	 */
-	public RiotRoomsListPageObjects logOutAndLogin(String username, String pwd) throws InterruptedException {
-		logOutFromRoomsList();
-		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
-		loginPage.logUser(username, null, pwd);
-		return new RiotRoomsListPageObjects(driver);
+	public RiotHomePageTabObjects openHomePageTab() throws InterruptedException{
+		System.out.println("Hit HOME PAGE tab.");
+		getHomeTab().click();
+		return new RiotHomePageTabObjects(driver);
+	}
+	
+	/**
+	 * Click on the FAVOURITES tab and return a new RiotFavouritesTabPageObjects.
+	 * @throws InterruptedException 
+	 */
+	public RiotFavouritesTabPageObjects openFavouriteTab() throws InterruptedException{
+		System.out.println("Hit FAVOURITES tab.");
+		getFavouritesTab().click();
+		return new RiotFavouritesTabPageObjects(driver);
+	}
+	/**
+	 * Click on the PEOPLE tab and return a new RiotFavouritesTabPageObjects.
+	 * @throws InterruptedException 
+	 */
+	public RiotPeopleTabPageObjects openPeopleTab() throws InterruptedException{
+		System.out.println("Hit PEOPLE tab.");
+		getPeopleTab().click();
+		return new RiotPeopleTabPageObjects(driver);
+	}
+	/**
+	 * Click on the ROOM tab and return a new RiotRoomsTabPageObjects.
+	 * @throws InterruptedException 
+	 */
+	public RiotRoomsTabPageObjects openRoomsTab() throws InterruptedException{
+		System.out.println("Hit ROOMS tab.");
+		getRoomsTab().click();
+		return new RiotRoomsTabPageObjects(driver);
 	}
 }

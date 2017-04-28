@@ -153,7 +153,7 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 		Assert.assertTrue(roomPageA.getTextViewFromBubble(roomPageA.getLastBubble()).getText().contains(riotUserADisplayName+" kicked "+riotUserBDisplayName));
 
 		//5. Invite user B
-		roomPageA.getUserAvatarByPost(roomPageA.getBubbleByIndex(roomPageA.bubblesList.size()-2)).click();
+		//roomPageA.getUserAvatarByPost(roomPageA.getBubbleByIndex(roomPageA.bubblesList.size()-2)).click();
 		Assert.assertNotNull(memberPageUserB.getActionItemByName("Invite"), "There is no Invite action visible on user B's member details page.");
 		memberPageUserB.getActionItemByName("Invite").click();
 		//Check that user B is invited.

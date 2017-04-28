@@ -27,6 +27,7 @@ import io.appium.java_client.android.Connection;
 import io.appium.java_client.ios.IOSDriver;
 import pom_ios.RiotLoginAndRegisterPageObjects;
 import pom_ios.RiotRoomsListPageObjects;
+import pom_ios.RiotSettingsPageObjects;
 
 public class TestUtilities extends MatrixUtilities{
 	public static AppiumFactory appiumFactory=AppiumFactory.getInstance();
@@ -283,10 +284,10 @@ public class TestUtilities extends MatrixUtilities{
 				restartApplication(myDriver);
 			}
 			RiotRoomsListPageObjects listRoom = new RiotRoomsListPageObjects(myDriver);
-			listRoom.settingsButton.click();
+			RiotSettingsPageObjects settingsPage=listRoom.openRiotSettings();
 			//check if the wanted user is loged in
-			String actualLoggedUserDisplayName=listRoom.displayNameTextField.getText();
-			String actualLoggedMatrixId=listRoom.configStaticText.getText();
+			String actualLoggedUserDisplayName=settingsPage.displayNameTextField.getText();
+			String actualLoggedMatrixId=settingsPage.configStaticText.getText();
 			String hs=actualLoggedMatrixId.substring(actualLoggedMatrixId.indexOf(":")+1, actualLoggedMatrixId.indexOf("Home server")-1);
 			if(null==actualLoggedUserDisplayName){
 				actualLoggedUserDisplayName="";
@@ -298,10 +299,10 @@ public class TestUtilities extends MatrixUtilities{
 				}else{
 					System.out.println("Wrong actual logged user: "+actualLoggedUserDisplayName+". Let's log with user "+username+" on homeserver: "+expectedHomeServer);	
 				}
-				listRoom.logOutAndLoginFromSettingsView(username, pwd);
+				settingsPage.logOutAndLoginFromSettingsView(username, pwd);
 			}else{
 				System.out.println("User "+username+" is logged with expected homeserver: " +expectedHomeServer+". No need to log out and log in.");
-				listRoom.backMenuButton.click();
+				settingsPage.backMenuButton.click();
 			}
 		}
 	}
