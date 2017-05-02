@@ -359,13 +359,23 @@ public class RiotRoomPageObjects extends TestUtilities{
 	 * From the room page, go into the details of the room and hit leave button.
 	 */
 	public void leaveRoom() {
-		openDetailView();
-		RiotRoomDetailsPageObjects details1= new RiotRoomDetailsPageObjects(driver);
+		RiotRoomDetailsPageObjects details1=openDetailView();
 		details1.settingsTab.click();
 		details1.leaveButton.click();
 		details1.confirmLeaveFromAlertButton.click();
-		details1= new RiotRoomDetailsPageObjects(driver);
-		details1.menuBackButton.click();
+		//details1= new RiotRoomDetailsPageObjects(driver);
+//		try {
+//			Thread.sleep(500);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+		try {
+			waitUntilDisplayed(driver, "Back", true, 5);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		menuBackButton.click();
 	}
 	/**
 	 * Open the detail view from the page.</br>

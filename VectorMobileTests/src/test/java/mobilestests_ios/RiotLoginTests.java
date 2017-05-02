@@ -8,7 +8,7 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import pom_ios.RiotLoginAndRegisterPageObjects;
-import pom_ios.RiotRoomsListPageObjects;
+import pom_ios.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.DataproviderClass;
 import utility.RiotParentTest;
@@ -31,21 +31,21 @@ public class RiotLoginTests extends RiotParentTest{
 		loginPage.logUser(sUserName,null, sPassword);
 
 		//Wait for the main page (rooms list) to be opened, and log out.
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		mainPage.logOutFromRoomsList();
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		homePage.logOutFromRoomsList();
 		Assert.assertTrue(waitUntilDisplayed(appiumFactory.getiOsDriver1(), "AuthenticationVCView", true, 15), "The login page isn't displayed after the log-out.");
 		//Assert.assertTrue(loginPage.authenticationView.isEnabled(), "The login page isn't displayed after the log-out.");
 	}
 
 	@Test(groups={"1driver_ios","loginpage"})
-	public void simpleLogin(){
+	public void simpleLogin() throws InterruptedException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getiOsDriver1());
 		loginPage.emailOrUserNameTextField.setValue("riotuser2");
 		loginPage.passwordTextField.setValue("riotuser");
 		loginPage.loginButton.click();
 
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		mainPage.logOutFromRoomsList();
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		homePage.logOutFromRoomsList();
 	}
 
 	/**
@@ -174,8 +174,8 @@ public class RiotLoginTests extends RiotParentTest{
 	private void logOutIfNecessary() throws InterruptedException{
 		if(false==waitUntilDisplayed(appiumFactory.getiOsDriver1(),"AuthenticationVCView", true, 5)){
 			System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
-			RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-			mainPage.logOutFromRoomsList();
+			RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+			homePage.logOutFromRoomsList();
 		}
 	}
 }

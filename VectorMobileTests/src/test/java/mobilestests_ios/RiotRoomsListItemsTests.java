@@ -10,8 +10,8 @@ import org.testng.annotations.Test;
 import com.esotericsoftware.yamlbeans.YamlException;
 
 import pom_ios.RiotRoomPageObjects;
-import pom_ios.RiotRoomsListPageObjects;
 import pom_ios.RiotSettingsPageObjects;
+import pom_ios.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -41,15 +41,15 @@ private String riotUserDisplayName="riotuser11";
 		String randomMsg=(new StringBuilder("last event msg").append(randInt)).toString();
 		String newDisplayName=riotUserDisplayName+"-";
 		
-		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
 		//1. Open room roomNameTest
-		roomsList.getRoomByName(roomNameTest).click();
+		homePage.getRoomByName(roomNameTest).click();
 		RiotRoomPageObjects roomPage = new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		//2. Send a message
 		roomPage.sendAMessage(randomMsg);
 		//3. Change user avatar
 		roomPage.menuBackButton.click();
-		RiotSettingsPageObjects settingsPage = roomsList.openRiotSettings();
+		RiotSettingsPageObjects settingsPage = homePage.openRiotSettings();
 		settingsPage.changeAvatarFromSettings();
 		//4. Change user display name
 		settingsPage.changeDisplayNameFromSettings(newDisplayName);
@@ -57,9 +57,9 @@ private String riotUserDisplayName="riotuser11";
 		//5. Come back on the rooms list.
 		settingsPage.backMenuButton.click();
 		//Check that the last event is the msg sent in step 2
-		Assert.assertEquals(roomsList.getLastEventByRoomName(roomNameTest,true), newDisplayName+": "+randomMsg);
+		Assert.assertEquals(homePage.getLastEventByRoomName(roomNameTest,true), newDisplayName+": "+randomMsg);
 		//6.  Set the old display name
-		settingsPage = roomsList.openRiotSettings();
+		settingsPage = homePage.openRiotSettings();
 		settingsPage.changeDisplayNameFromSettings(riotUserDisplayName);
 		settingsPage.saveNavBarButton.click();
 		settingsPage.backMenuButton.click();

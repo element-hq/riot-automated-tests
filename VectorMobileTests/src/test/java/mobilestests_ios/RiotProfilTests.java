@@ -9,8 +9,8 @@ import org.testng.annotations.Test;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 
-import pom_ios.RiotRoomsListPageObjects;
 import pom_ios.RiotSettingsPageObjects;
+import pom_ios.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -39,17 +39,17 @@ public class RiotProfilTests extends RiotParentTest{
 	@Test(groups={"1driver_ios","checkuser"})
 	public void changePasswordWithCorrectsInputsFromSettingsTest() throws InterruptedException{
 		String newPwd="newPwd";
-		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
 		//1. Open settings from rooms list.
-		RiotSettingsPageObjects settingsPage = roomsList1.openRiotSettings();
+		RiotSettingsPageObjects settingsPage = homePage.openRiotSettings();
 		//2. Click on 'Change Password' from USER SETTINGS section & 3. Change the password
 		settingsPage.changePasswordFromSettings(Constant.DEFAULT_USERPWD, newPwd,true);
 		//4. Log out & 5. Login with the new password
 		settingsPage.backMenuButton.click();
-		roomsList1=roomsList1.logOutAndLogin(testUser, newPwd);
+		homePage=homePage.logOutAndLogin(testUser, newPwd);
 		//6. Open settings and change password by setting the first one.
 		waitUntilDisplayed(appiumFactory.getiOsDriver1(), "settings icon", true, 5);
-		settingsPage = roomsList1.openRiotSettings();
+		settingsPage = homePage.openRiotSettings();
 		settingsPage.changePasswordFromSettings(newPwd,Constant.DEFAULT_USERPWD,true);
 		settingsPage.backMenuButton.click();
 	}
@@ -64,9 +64,9 @@ public class RiotProfilTests extends RiotParentTest{
 	@Test(groups={"1driver_ios","checkuser"})
 	public void changePasswordWithWrongInputsFromSettingsTest() throws InterruptedException{
 		String newPwd="newPwd", wrongPwd="fakePwd";
-		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
 		//1. Open settings from rooms list.
-		RiotSettingsPageObjects settingsPage = roomsList1.openRiotSettings();
+		RiotSettingsPageObjects settingsPage = homePage.openRiotSettings();
 		//2. Click on 'Change Password' from USER SETTINGS section & 3. Change the password
 		settingsPage.changePasswordFromSettings(wrongPwd, newPwd,false);
 		settingsPage.backMenuButton.click();
@@ -80,14 +80,15 @@ public class RiotProfilTests extends RiotParentTest{
 	 * 5. Open settings again </br>
 	 * Check that the new display name is correctly set. </br>
 	 * 6. Set the old display name, hit Save Button, then back button.
+	 * @throws InterruptedException 
 	 */
 	@Test(groups={"1driver_ios","checkuser"})
-	public void changeDisplayNameFromSettingsTest(){
+	public void changeDisplayNameFromSettingsTest() throws InterruptedException{
 		String displayNameBeforeChange;
 		String newDisplayName="newOne";
-		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
 		//1. Open settings from rooms list.
-		RiotSettingsPageObjects settingsPage = roomsList1.openRiotSettings();
+		RiotSettingsPageObjects settingsPage = homePage.openRiotSettings();
 		//2. Click on 'Display Name' from USER SETTINGS section.
 		displayNameBeforeChange=settingsPage.displayNameTextField.getText();
 		//3. Set a new one, hit the Done button.
@@ -96,7 +97,7 @@ public class RiotProfilTests extends RiotParentTest{
 		settingsPage.saveNavBarButton.click();
 		settingsPage.backMenuButton.click();
 		//5. Open settings again
-		settingsPage = roomsList1.openRiotSettings();
+		settingsPage = homePage.openRiotSettings();
 		//Check that the new display name is correctly set.
 		Assert.assertEquals(settingsPage.displayNameTextField.getText(), newDisplayName);
 		//6. Set the old display name, hit Save Button, then back button.

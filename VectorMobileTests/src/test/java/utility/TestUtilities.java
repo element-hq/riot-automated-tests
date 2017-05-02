@@ -26,8 +26,8 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.Connection;
 import io.appium.java_client.ios.IOSDriver;
 import pom_ios.RiotLoginAndRegisterPageObjects;
-import pom_ios.RiotRoomsListPageObjects;
 import pom_ios.RiotSettingsPageObjects;
+import pom_ios.main_tabs.RiotHomePageTabObjects;
 
 public class TestUtilities extends MatrixUtilities{
 	public static AppiumFactory appiumFactory=AppiumFactory.getInstance();
@@ -58,7 +58,7 @@ public class TestUtilities extends MatrixUtilities{
 		(new WebDriverWait(driver, timeToWait)).until(ExpectedConditions.visibilityOf(element));
 		System.out.println((Object) element.getTagName()+" displayed");
 	}
-
+	
 	/**
 	 * Wait @param maxSecondsToWait for the @param id to appear or not, using try and catch.
 	 * @param idOrXpath
@@ -277,14 +277,14 @@ public class TestUtilities extends MatrixUtilities{
 			System.out.println("User "+username+" isn't logged, login forced on home server: "+expectedHomeServer);
 			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(myDriver);
 			loginPage.logUser(username,null, pwd);
-			new RiotRoomsListPageObjects(myDriver);
+			new RiotHomePageTabObjects(myDriver);
 		}else{
 			//if riot list isn't displayed, restart riot
 			if(!waitUntilDisplayed(myDriver, "RecentsVCTableView", true, 0)){
 				restartApplication(myDriver);
 			}
-			RiotRoomsListPageObjects listRoom = new RiotRoomsListPageObjects(myDriver);
-			RiotSettingsPageObjects settingsPage=listRoom.openRiotSettings();
+			RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(myDriver);
+			RiotSettingsPageObjects settingsPage=homePage.openRiotSettings();
 			//check if the wanted user is loged in
 			String actualLoggedUserDisplayName=settingsPage.displayNameTextField.getText();
 			String actualLoggedMatrixId=settingsPage.configStaticText.getText();

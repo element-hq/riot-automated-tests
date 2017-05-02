@@ -12,7 +12,7 @@ import com.esotericsoftware.yamlbeans.YamlException;
 import pom_ios.RiotMediaViewerPageObjects;
 import pom_ios.RiotRoomDetailsPageObjects;
 import pom_ios.RiotRoomPageObjects;
-import pom_ios.RiotRoomsListPageObjects;
+import pom_ios.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -35,9 +35,9 @@ private String roomWithPhoto="attached photos";
 	 */
 	@Test(groups={"1driver_ios","checkuser"})
 	public void openPhotoFromFilesTabTest() throws InterruptedException{
-		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
 		//1. Open room roomtest.
-		roomsList1.getRoomByName(roomWithPhoto).click();
+		homePage.getRoomByName(roomWithPhoto).click();
 		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		//2. Open room details, then FILES tab.
 		roomPage1.openDetailView();

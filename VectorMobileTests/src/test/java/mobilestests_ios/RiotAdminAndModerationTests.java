@@ -18,7 +18,7 @@ import io.appium.java_client.ios.IOSTouchAction;
 import pom_ios.RiotMemberDetailsPageObjects;
 import pom_ios.RiotRoomDetailsPageObjects;
 import pom_ios.RiotRoomPageObjects;
-import pom_ios.RiotRoomsListPageObjects;
+import pom_ios.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
 import utility.MatrixUtilities;
@@ -58,9 +58,9 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 
 		//4. Open user B details page and ban him.
 		//Opening the created room with Riot 
-		RiotRoomsListPageObjects roomsListA=new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects hpA = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
 		//RiotRoomsListPageObjects roomsListB=new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
-		roomsListA.getRoomByName(tmpRoomName).click();
+		hpA.getRoomByName(tmpRoomName).click();
 		//roomsListB.getRoomByName(tmpRoomName).click();
 		RiotRoomPageObjects roomPageA = new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		//		roomPageA.openDetailView();
@@ -129,10 +129,10 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 		//1. 2. 3
 		createRoomWith2MembersByRequestsToMatrix(tmpRoomName);
 		//Opening the created room with Riot
-		RiotRoomsListPageObjects roomsListA=new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		RiotRoomsListPageObjects roomsListB=new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
-		roomsListA.getRoomByName(tmpRoomName).click();
-		roomsListB.getRoomByName(tmpRoomName).click();
+		RiotHomePageTabObjects hpA = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects hpB = new RiotHomePageTabObjects(appiumFactory.getiOsDriver2());
+		hpA.getRoomByName(tmpRoomName).click();
+		hpB.getRoomByName(tmpRoomName).click();
 		RiotRoomPageObjects roomPageA=new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		roomPageA.openDetailView();
 		RiotRoomDetailsPageObjects roomDetailsA = new RiotRoomDetailsPageObjects(appiumFactory.getiOsDriver1());
@@ -161,7 +161,7 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 		Assert.assertTrue(roomPageA.getTextViewFromBubble(roomPageA.getLastBubble()).getText().contains(riotUserADisplayName+" invited "+riotUserBDisplayName));
 
 		//6. Accept invitation with user B. 
-		roomsListB.previewInvitation(tmpRoomName);
+		hpB.previewInvitation(tmpRoomName);
 		RiotRoomPageObjects roomPageB = new RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
 		roomPageB.joinRoomButton.click();
 		roomPageB.waitForBubblesToBeDisplayed();

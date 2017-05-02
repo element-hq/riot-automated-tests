@@ -13,7 +13,7 @@ import io.appium.java_client.MobileElement;
 import pom_ios.RiotCallingPageObjects;
 import pom_ios.RiotIncomingCallPageObjects;
 import pom_ios.RiotRoomPageObjects;
-import pom_ios.RiotRoomsListPageObjects;
+import pom_ios.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -41,8 +41,8 @@ public class RiotVoipTests extends RiotParentTest{
 		restartApplication(appiumFactory.getiOsDriver1());
 		
 		//1. Launch an audio call from a room
-		RiotRoomsListPageObjects roomsList= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		roomsList.getRoomByName(roomNameTest).click();;
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		homePage.getRoomByName(roomNameTest).click();;
 		RiotRoomPageObjects room1=new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		room1.startVoiceCall();
 		RiotCallingPageObjects callingView1=new RiotCallingPageObjects(appiumFactory.getiOsDriver1());
@@ -85,8 +85,8 @@ public class RiotVoipTests extends RiotParentTest{
 		restartApplication(appiumFactory.getiOsDriver1());
 		
 		//1. Launch an video call from a room
-		RiotRoomsListPageObjects roomsList= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		roomsList.getRoomByName(roomNameTest).click();;
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		homePage.getRoomByName(roomNameTest).click();;
 		RiotRoomPageObjects room1=new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		room1.startVideoCall();
 		RiotCallingPageObjects callingView1=new RiotCallingPageObjects(appiumFactory.getiOsDriver1());
@@ -130,9 +130,9 @@ public class RiotVoipTests extends RiotParentTest{
 		restartApplication(appiumFactory.getiOsDriver2());
 		
 		//1. Open a room, launch a voice call.
-		RiotRoomsListPageObjects roomsList1= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		RiotRoomsListPageObjects roomsList2= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
-		roomsList1.getRoomByName(roomNameTest).click();;
+		RiotHomePageTabObjects homePage1 = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects homePage2 = new RiotHomePageTabObjects(appiumFactory.getiOsDriver2());
+		homePage1.getRoomByName(roomNameTest).click();;
 		RiotRoomPageObjects room1=new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		room1.startVoiceCall();
 		//check that call layout is diplayed on device 1
@@ -147,7 +147,7 @@ public class RiotVoipTests extends RiotParentTest{
 		//From device 1, check that the calling view is closed.
 		callingView1.isDisplayed(false);
 		//From device 2, check that last message is a 'ended call' event on the rooms list page
-		Assert.assertEquals(roomsList2.getLastEventByRoomName(roomNameTest,false), riotuser2DisplayName+" ended the call");
+		Assert.assertEquals(homePage2.getLastEventByRoomName(roomNameTest,false), riotuser2DisplayName+" ended the call");
 		//From device 1, check that last message is a 'ended call' event on the room page
 		Assert.assertTrue(room1.getTextViewFromBubble(room1.getLastBubble()).getText().contains(riotuser2DisplayName+" ended the call"));
 		room1.menuBackButton.click();
@@ -169,10 +169,10 @@ public class RiotVoipTests extends RiotParentTest{
 		restartApplication(appiumFactory.getiOsDriver1());
 		restartApplication(appiumFactory.getiOsDriver2());
 		
-		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
+		RiotHomePageTabObjects homePage1 = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects homePage2 = new RiotHomePageTabObjects(appiumFactory.getiOsDriver2());
 		//1. Open a room
-		roomsList1.getRoomByName(roomNameTest).click();
+		homePage1.getRoomByName(roomNameTest).click();
 		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		
 		//2. Launch a voice call.
@@ -195,7 +195,7 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertFalse(callingPage1.isDisplayed(false),"Calling view is still displayed on device 1 after call is ended");
 		Assert.assertFalse(callingPage2.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
 		//Check that "[user] ended the call" event is displayed on room view and room list view.
-		Assert.assertEquals(roomsList2.getLastEventByRoomName(roomNameTest,false), riotuser2DisplayName+" ended the call");
+		Assert.assertEquals(homePage2.getLastEventByRoomName(roomNameTest,false), riotuser2DisplayName+" ended the call");
 		//From device 1, check that last message is a 'ended call' event on the room page
 		Assert.assertTrue(roomPage1.getTextViewFromBubble(roomPage1.getLastBubble()).getText().contains(riotuser2DisplayName+" ended the call"));
 		roomPage1.menuBackButton.click();
@@ -217,10 +217,10 @@ public class RiotVoipTests extends RiotParentTest{
 		restartApplication(appiumFactory.getiOsDriver1());
 		restartApplication(appiumFactory.getiOsDriver2());
 		
-		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		RiotRoomsListPageObjects roomsList2 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
+		RiotHomePageTabObjects homePage1 = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects homePage2 = new RiotHomePageTabObjects(appiumFactory.getiOsDriver2());
 		//1. Open a room
-		roomsList1.getRoomByName(roomNameTest).click();
+		homePage1.getRoomByName(roomNameTest).click();
 		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		
 		//2. Launch a voice call.
@@ -244,7 +244,7 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertFalse(callingPage1.isDisplayed(false),"Calling view is still displayed on device 1 after call is ended");
 		Assert.assertFalse(callingPage2.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
 		//Check that "[user] ended the call" event is displayed on room view and room list view.
-		Assert.assertEquals(roomsList2.getLastEventByRoomName(roomNameTest,false), riotuser1DisplayName+" ended the call");
+		Assert.assertEquals(homePage2.getLastEventByRoomName(roomNameTest,false), riotuser1DisplayName+" ended the call");
 		//From device 1, check that last message is a 'ended call' event on the room page
 		Assert.assertTrue(roomPage1.getTextViewFromBubble(roomPage1.getLastBubble()).getText().contains(riotuser1DisplayName+" ended the call"));
 		roomPage1.menuBackButton.click();
@@ -263,13 +263,13 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver_ios","1checkuser"}, description="test on conference",priority=6)
 	public void hangUpAudioConference() throws InterruptedException{
-		RiotRoomsListPageObjects riotRoomsList1= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects homePage1 = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
 		//0. Prerequisite: check that there is no VoIP Conference named room in the list.
-		while (null!=riotRoomsList1.getRoomByName(unwantedRoomTest)) {
-			riotRoomsList1.clickOnSwipedMenuOnRoom(unwantedRoomTest, "close");
+		while (null!=homePage1.getRoomByName(unwantedRoomTest)) {
+			homePage1.clickOnSwipedMenuOnRoom(unwantedRoomTest, "close");
 		}
 		//1. Open room conferenceRoomTest: this room have >2 users
-		riotRoomsList1.getRoomByName(conferenceRoomTest).click();
+		homePage1.getRoomByName(conferenceRoomTest).click();
 		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		
 		//2. Start a voice call
@@ -282,13 +282,13 @@ public class RiotVoipTests extends RiotParentTest{
 		roomPage1.menuBackButton.click();
 		
 		//Verify that no 'VoIP Conference' has been created.
-		MobileElement unWantedRoom=riotRoomsList1.getRoomByName(unwantedRoomTest);
+		MobileElement unWantedRoom=homePage1.getRoomByName(unwantedRoomTest);
 		
 		//tearDown
 		if(null!=unWantedRoom){
 			do {
-				riotRoomsList1.clickOnSwipedMenuOnRoom(unwantedRoomTest, "close");
-			} while (null!=riotRoomsList1.getRoomByName(unwantedRoomTest));
+				homePage1.clickOnSwipedMenuOnRoom(unwantedRoomTest, "close");
+			} while (null!=homePage1.getRoomByName(unwantedRoomTest));
 		}
 		Assert.assertNull(unWantedRoom, "A room "+unwantedRoomTest+ " has been created after a Voip Conference (and deleted since).");
 	}
