@@ -26,14 +26,27 @@ public class RiotPeopleTabPageObjects extends RiotTabPageObjects{
 	public MobileElement peopleTabView;
 
 	/*
-	 * ROOMS LIST.
+	 * ROOMS AND PEOPLE LIST.
 	 */
 	/**
 	 * Table view of rooms items. </br> Contains a list of 'RecentTableViewCell' cells.
 	 */
 	@iOSFindBy(accessibility="PeopleVCTableView")
 	public MobileElement peopleTabRoomsTableView;
+	
+	//TODO
+	@iOSFindBy(accessibility="???")
+	public MobileElement peopleList;
 
+	/**
+	 * TODO
+	 * Return a people item from the people list, as a MobileElement.
+	 * @param peopleDisplayName
+	 * @return
+	 */
+	public MobileElement getPeopleByName(String peopleDisplayName){
+		return null;
+	}
 	/*
 	 * FLOATING BUTTONS OR DIALOGS .
 	 */
@@ -43,7 +56,7 @@ public class RiotPeopleTabPageObjects extends RiotTabPageObjects{
 	 * @return RiotRoomPageObjects
 	 */
 	public RiotRoomPageObjects startChat(String displayNameOrMatrixId){
-		createRoomButton.click();
+		createRoomFloatingButton.click();
 		RiotNewChatPageObjects newChatA = new RiotNewChatPageObjects(appiumFactory.getiOsDriver1());
 		newChatA.searchAndSelectMember(displayNameOrMatrixId);
 		return new RiotRoomPageObjects(driver);

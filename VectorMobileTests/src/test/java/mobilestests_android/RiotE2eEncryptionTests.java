@@ -155,7 +155,7 @@ public class RiotE2eEncryptionTests extends RiotParentTest{
 	public void tryReadEncryptedMessageSentAfterJoining() throws InterruptedException, InstantiationException, IllegalAccessException{
 		//1. Create room with Device 1 and enable encryption.
 		RiotRoomsListPageObjects roomsListDevice1 = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		roomsListDevice1.plusRoomButton.click();
+		roomsListDevice1.createRoomFloatingButton.click();
 		roomsListDevice1.createRoomCheckedTextView.click();
 		RiotRoomPageObjects newRoomDevice1= new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		//Open room details

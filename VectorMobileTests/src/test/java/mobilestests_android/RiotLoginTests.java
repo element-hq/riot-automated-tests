@@ -52,7 +52,7 @@ public class RiotLoginTests extends RiotParentTest{
 		loginPage.logUser(sUserName, null,sPassword);
 		//Wait for the main page (rooms list) to be opened, and log out.
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		Assert.assertTrue(mainPage.roomsExpandableListView.isDisplayed(), "Rooms list ins't displayed after login.");
+		Assert.assertTrue(mainPage.roomsListView.isDisplayed(), "Rooms list ins't displayed after login.");
 		mainPage.logOut();
 		Assert.assertTrue(loginPage.inputsLoginLayout.isDisplayed(), "The login page isn't displayed after the log-out.");
 	}

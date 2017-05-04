@@ -51,6 +51,8 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 		if(currentBadge==null)currentBadge=0;
 		//wait until message is received
 		riotRoomsList.waitForRoomToReceiveNewMessage(roomTest, currentBadge);
+		//Assertion on the unread indicator.
+		Assert.assertTrue(riotRoomsList.doesRoomHaveUnreadIndicator(roomTest), "There is no unread indicator on this room.");
 		//Assertion on the badge
 		Assert.assertNotNull(riotRoomsList.getBadgeNumberByRoomName(roomTest), "There is no badge on this room.");
 		Assert.assertEquals((int)riotRoomsList.getBadgeNumberByRoomName(roomTest),currentBadge+1, "Badge number wasn't incremented after receiving the message");	

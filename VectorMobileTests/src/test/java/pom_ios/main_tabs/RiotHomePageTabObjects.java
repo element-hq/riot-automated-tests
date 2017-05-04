@@ -53,9 +53,9 @@ public class RiotHomePageTabObjects extends RiotTabPageObjects{
 	 * @return
 	 */
 	public RiotRoomPageObjects createRoom(){
-		createRoomButton.click();
+		createRoomFloatingButton.click();
 		if(driver.findElementByClassName("XCUIElementTypeCollectionView")==null){
-			createRoomButton.click();
+			createRoomFloatingButton.click();
 		}
 		createRoomSheetButton.click();
 		return new RiotRoomPageObjects(driver);
@@ -67,7 +67,7 @@ public class RiotHomePageTabObjects extends RiotTabPageObjects{
 	 * @return RiotRoomPageObjects
 	 */
 	public RiotRoomPageObjects startChat(String displayNameOrMatrixId){
-		createRoomButton.click();
+		createRoomFloatingButton.click();
 		startChatSheetButton.click();
 		RiotNewChatPageObjects newChatA = new RiotNewChatPageObjects(appiumFactory.getiOsDriver1());
 		newChatA.searchAndSelectMember(displayNameOrMatrixId);

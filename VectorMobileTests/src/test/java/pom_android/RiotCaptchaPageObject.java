@@ -18,7 +18,6 @@ public class RiotCaptchaPageObject extends TestUtilities{
 		driver=(AndroidDriver<MobileElement>) myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 		Thread.sleep(2000);
-		//ExplicitWait(driver,this.roomsExpandableListView);
 		try {
 			waitUntilDisplayed(driver,"im.vector.alpha:id/account_creation_message", true, 5);
 		} catch (InterruptedException e) {

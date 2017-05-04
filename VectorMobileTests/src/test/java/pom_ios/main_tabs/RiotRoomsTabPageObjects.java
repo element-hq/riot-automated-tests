@@ -42,9 +42,9 @@ public class RiotRoomsTabPageObjects extends RiotTabPageObjects {
 	 * @return
 	 */
 	public RiotRoomPageObjects createRoom(){
-		createRoomButton.click();
+		createRoomFloatingButton.click();
 		if(driver.findElementByClassName("XCUIElementTypeCollectionView")==null){
-			createRoomButton.click();
+			createRoomFloatingButton.click();
 		}
 		return new RiotRoomPageObjects(driver);
 	}

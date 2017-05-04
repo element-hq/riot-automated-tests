@@ -26,6 +26,7 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	public MobileElement navigationBar;
 	@iOSFindBy(accessibility="settings icon")
 	public MobileElement settingsButton;
+	/** Search button openning the unified search. */
 	@iOSFindBy(accessibility="search icon")
 	public MobileElement searchButton;
 	
@@ -55,7 +56,7 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	
 	/**
 	 * Log out from the rooms list, log in with the parameters.</br>
-	 * Return a RiotRoomsListPageObjects POM.</br> Can be used to renew the encryption keys.
+	 * Return a RiotHomePageTabObjects POM.</br> Can be used to renew the encryption keys.
 	 * @param username
 	 * @param pwd
 	 * @return new RiotRoomsListPageObjects
@@ -325,8 +326,9 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	/*
 	 * FLOATING BUTTONS OR DIALOGS .
 	 */
+	/** "+" floating button  */
 	@iOSFindBy(accessibility="create_room")
-	public MobileElement createRoomButton;
+	public MobileElement createRoomFloatingButton;
 	
 	/*
 	 * BOTTOM: TABS.
@@ -390,5 +392,17 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 		System.out.println("Hit ROOMS tab.");
 		getRoomsTab().click();
 		return new RiotRoomsTabPageObjects(driver);
+	}
+	
+	/**
+	 * Return the unread counter badge as a String from a tab button of the bottom bar.
+	 * @param tabButtonLayout
+	 * @return
+	 */
+	public String getUnreadCounterBadgeFromTab(MobileElement tabButtonLayout){
+		String buttonTextValue=tabButtonLayout.getText();
+		if (null==buttonTextValue)
+			System.out.println("There is no unread counter badge on this tab button "+tabButtonLayout.getTagName());
+		return tabButtonLayout.getText();
 	}
 }

@@ -211,7 +211,7 @@ public class RiotMiscTests extends RiotParentTest{
 	public void checkUserDisplayName() throws IOException, InterruptedException{
 		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(driver);
 		mainPage.contextMenuButton.click();
-		Assert.assertEquals(mainPage.displayedUserMain.getText(), "Roger");
+		Assert.assertEquals(mainPage.userDisplayNameFromLateralMenu.getText(), "Roger");
 	}
 
 	/**
