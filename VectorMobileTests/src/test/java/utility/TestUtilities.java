@@ -67,6 +67,7 @@ public class TestUtilities extends MatrixUtilities{
 	 * @throws InterruptedException 
 	 */
 	public Boolean waitUntilDisplayed(AppiumDriver<MobileElement> driver,String idOrXpath, Boolean displayed,int maxSecondsToWait) throws InterruptedException {
+		long start = System.currentTimeMillis();
 		Boolean isDisplayed = false;
 		Boolean isXpath=false;
 		String methodUsed="Method used : byId";
@@ -83,11 +84,7 @@ public class TestUtilities extends MatrixUtilities{
 		}else{
 			verb="disappear";
 		}
-		float secondsWaited=0;
 		do {
-			if(maxSecondsToWait!=0){
-				//Thread.sleep(500);
-				secondsWaited=(float) (secondsWaited+0.5);}
 			try {
 				if(isXpath){
 					driver.findElementByXPath(idOrXpath);
@@ -97,14 +94,13 @@ public class TestUtilities extends MatrixUtilities{
 					}else{
 						driver.findElement(By.id(idOrXpath));
 					}
-
 				}
 				isDisplayed=true;
 			} catch (Exception e) {
 				isDisplayed=false;
 			}
-		} while (displayed!=isDisplayed && secondsWaited<maxSecondsToWait);
-		System.out.println("Seconds to wait "+idOrXpath+" to "+verb+": "+secondsWaited+". "+methodUsed+ ". Device "+driver.getCapabilities().getCapability("deviceName"));
+		} while (displayed!=isDisplayed && (System.currentTimeMillis()-start)/1000F<maxSecondsToWait);
+		System.out.println("Time to wait "+idOrXpath+" to "+verb+": "+(System.currentTimeMillis()-start)/1000F+" seconds. "+methodUsed+ ". Device "+driver.getCapabilities().getCapability("deviceName"));
 		return isDisplayed;
 	}
 
@@ -243,8 +239,8 @@ public class TestUtilities extends MatrixUtilities{
 			}
 			pom_android.RiotRoomsListPageObjects listRoom = new pom_android.RiotRoomsListPageObjects(myDriver);
 			listRoom.contextMenuButton.click();
-			String actualLoggedUserDisplayName=listRoom.displayedUserMain.getText();
-			String actualLoggedMatrixId=listRoom.displayedUserMatrixId.getText();
+			String actualLoggedUserDisplayName=listRoom.userDisplayNameFromLateralMenu.getText();
+			String actualLoggedMatrixId=listRoom.userMatrixIdFromLateralMenu.getText();
 			String hs=actualLoggedMatrixId.substring(actualLoggedMatrixId.indexOf(":")+1, actualLoggedMatrixId.length());
 			if(null==actualLoggedUserDisplayName){
 				actualLoggedUserDisplayName="";
