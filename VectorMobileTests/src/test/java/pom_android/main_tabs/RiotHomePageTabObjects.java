@@ -40,14 +40,60 @@ public class RiotHomePageTabObjects extends RiotTabPageObjects{
 	public List<WebElement> roomsHeader;
 	
 	/**
+	 * Swipe on the left on a room section.
+	 */
+	public void leftSwipeOnRoomSection(MobileElement roomSection){
+		int xStart, y;
+		xStart=roomSection.getLocation().getX()+roomSection.getSize().width-10;
+		y=roomSection.getLocation().getY()+roomSection.getSize().getHeight()/2;
+		driver.swipe(xStart, y, 0, y, 300);
+		//new TouchAction(driver).press(room.getLocation().getX(), room.getLocation().getY()).waitAction(500).moveTo(20, room.getLocation().getY()).perform();
+	}
+	
+	/**
+	 * Swipe on section until the room is found.
+	 * @param roomSection
+	 * @param roomName
+	 * @param swipeNumberMax
+	 * @return room
+	 */
+	public MobileElement swipeSectionUntilRoomDisplayed(MobileElement roomSection, String roomName, int swipeNumberMax){
+		int nbSwipeDone=0;
+		MobileElement room;
+		while (null==(room=getRoomByName(roomName)) && nbSwipeDone<swipeNumberMax) {
+			leftSwipeOnRoomSection(roomSection);
+			nbSwipeDone++;
+		}
+		if(null==room)
+			System.out.println("Room "+roomName+ " not found after "+nbSwipeDone+" swipes on his section.");
+		return room;
+	}
+	
+	/**
 	 * Hit a section using his name. Can be use to focus on the related rooms or collapse a section.
 	 * @param sectionName
 	 */
-	public void hitSection(String sectionName){
+	public void hitSectionHeader(String sectionName){
 		try {
 			driver.findElementByXPath("//android.widget.RelativeLayout/android.widget.TextView[contains(@text,'"+sectionName+"')]").click();
 		} catch (Exception e) {
 			Assert.fail("No section found with name: "+sectionName);
+		}
+	}
+	
+	/**
+	 * Return a room as a MobileElement. </br>
+	 * Return null if not found.
+	 * @param myRoomName
+	 * @return
+	 */
+	public MobileElement getRoomByName(String myRoomName){
+		try {
+			return (MobileElement) driver.findElementByXPath("//android.support.v7.widget.RecyclerView//android.widget.TextView[@text='"+myRoomName+"']/..");	
+			//return roomsListView.findElementByName(myRoomName);
+		} catch (Exception e) {
+			System.out.println("No room found with name "+myRoomName);
+			return null;
 		}
 	}
 	
