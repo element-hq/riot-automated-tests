@@ -11,6 +11,7 @@ import com.esotericsoftware.yamlbeans.YamlException;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidKeyCode;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import pom_android.RiotLoginAndRegisterPageObjects;
 import pom_android.RiotSettingsPageObjects;
@@ -31,8 +32,25 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	@AndroidFindBy(xpath="//android.view.View[@resource-id='im.vector.alpha:id/home_toolbar']/android.widget.ImageButton[@content-desc='Navigate up']")//Menu button (opens the lateral menu)
 	public MobileElement contextMenuButton;
 	/** Search button openning the unified search. */
-	@AndroidFindBy(id="im.vector.alpha:id/ic_action_search_room")
+	@Deprecated@AndroidFindBy(id="im.vector.alpha:id/ic_action_search_room")
 	public MobileElement searchButton;
+	public void openGlobalSearchLayout(){
+		driver.pressKeyCode(AndroidKeyCode.MENU);
+		globalSearchItemExpandedMenu.click();
+	}
+	/**
+	 * Filter bar.
+	 */
+	@AndroidFindBy(id="im.vector.alpha:id/search_src_text")
+	public MobileElement filterBarEditText;
+	
+	/**
+	 * Send text in the filter bar.
+	 * @param filterText
+	 */
+	public void useFilterBar(String filterText){
+		filterBarEditText.setValue(filterText);
+	}
 	
 	/*
 	 * LATERAL MENU
@@ -102,20 +120,6 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/fragment_container")
 	public MobileElement tabMainView;
-	
-	/*
-	 * 		FILTER BAR.
-	 */
-	@AndroidFindBy(id="im.vector.alpha:id/filter_input")
-	public MobileElement filterBarEditText;
-	
-	/**
-	 * Send text in the filter bar.
-	 * @param filterText
-	 */
-	public void useFilterBar(String filterText){
-		filterBarEditText.setValue(filterText);
-	}
 	
 	/*
 	 * INVITES
@@ -209,7 +213,7 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	 * Hit a section using his name. Can be use to focus on the related rooms or collapse a section.
 	 * @param sectionName
 	 */
-	public void hitSection(String sectionName){
+	public void hitSectionHeader(String sectionName){
 		try {
 			driver.findElementByXPath("//android.widget.RelativeLayout[@resource-id='im.vector.alpha:id/section_layout']/android.widget.TextView[contains(@text,'"+sectionName+"')]/..").click();
 		} catch (Exception e) {
@@ -355,7 +359,7 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	
 	public Boolean isDirectMessageByRoomName(String myRoomName){
 		try {
-			if(getRoomByName(myRoomName).findElementById("im.vector.alpha:id/room_avatar_direct_chat_icon")!=null)return true;
+			if(getRoomByName(myRoomName).findElementById("im.vector.alpha:id/direct_chat_indicator")!=null)return true;
 		} catch (Exception e) {
 			return false;
 		}
@@ -387,6 +391,16 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	public void waitUntilSpinnerDone(int secondsToWait) throws InterruptedException{
 		waitUntilDisplayed(driver, "im.vector.alpha:id/listView_spinner", false, secondsToWait);
 	}
+	
+	/*
+	 * 		Expanded menu opened after hitting menu android touch.
+	 */
+	@AndroidFindBy(id="im.vector.alpha:id/expanded_menu")
+	public MobileElement expandedMenu;
+	@AndroidFindBy(xpath="//android.widget.TextView[@resource-id='im.vector.alpha:id/title' and @text='Global search']/..")
+	public MobileElement globalSearchItemExpandedMenu;
+	@AndroidFindBy(xpath="//android.widget.TextView[@resource-id='im.vector.alpha:id/title' and @text='Mark all as read']/..")
+	public MobileElement markAllAsReadSearchItemExpandedMenu;
 	
 	/*
 	 * ALERT DIALOG

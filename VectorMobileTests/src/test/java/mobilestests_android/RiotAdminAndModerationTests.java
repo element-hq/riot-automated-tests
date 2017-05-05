@@ -15,9 +15,7 @@ import com.esotericsoftware.yamlbeans.YamlException;
 import pom_android.RiotMemberDetailsPageObjects;
 import pom_android.RiotRoomDetailsPageObjects;
 import pom_android.RiotRoomPageObjects;
-import pom_android.RiotRoomsListPageObjects;
 import pom_android.main_tabs.RiotHomePageTabObjects;
-import pom_android.main_tabs.RiotRoomsTabPageObjects;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
 import utility.MatrixUtilities;
@@ -60,10 +58,9 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 		//Opening the created room with Riot 
 		RiotHomePageTabObjects homePageA=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 		RiotHomePageTabObjects homePageB=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver2());
-		RiotRoomsTabPageObjects roomsListA=homePageA.openRoomsTab();
-		RiotRoomsTabPageObjects roomsListB=homePageB.openRoomsTab();
-		roomsListA.getRoomByName(tmpRoomName).click();
-		roomsListB.getRoomByName(tmpRoomName).click();
+		homePageA.swipeSectionUntilRoomDisplayed(homePageA.roomsSectionLayout, tmpRoomName, 10).click();
+		homePageB.swipeSectionUntilRoomDisplayed(homePageB.roomsSectionLayout, tmpRoomName, 10).click();
+		
 		RiotRoomPageObjects roomPageA=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		roomPageA.roomNameTextView.click();
 		roomPageA.activeMembersTextView.click();
@@ -125,10 +122,11 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 		//1. 2. 3
 		createRoomWith2MembersByRequestsToMatrix(tmpRoomName);
 		//Opening the created room with Riot 
-		RiotRoomsListPageObjects roomsListA=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		RiotRoomsListPageObjects roomsListB=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
-		roomsListA.getRoomByName(tmpRoomName).click();
-		roomsListB.getRoomByName(tmpRoomName).click();
+		RiotHomePageTabObjects homePageA=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotHomePageTabObjects homePageB=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver2());
+		homePageA.swipeSectionUntilRoomDisplayed(homePageA.roomsSectionLayout, tmpRoomName, 10).click();
+		homePageB.swipeSectionUntilRoomDisplayed(homePageB.roomsSectionLayout, tmpRoomName, 10).click();
+		
 		RiotRoomPageObjects roomPageA=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		roomPageA.roomNameTextView.click();
 		roomPageA.activeMembersTextView.click();
@@ -158,7 +156,7 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 		Assert.assertEquals(roomPageA.getTextViewFromPost(roomPageA.getLastPost()).getText(), riotUserADisplayName+" invited "+riotUserBDisplayName);
 
 		//6. Accept invitation with user B. 
-		roomsListB.previewInvitation(tmpRoomName);
+		homePageB.previewInvitation(tmpRoomName);
 		RiotRoomPageObjects roomPageB = new RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
 		roomPageB.joinRoomButton.click();
 		roomPageB.waitForPostsToBeDisplayed();
@@ -190,10 +188,10 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 		//1. 2. 3. 4. 5.
 		createRoomWith3MembersByRequestsToMatrix(tmpRoomName);
 		//Opening the created room with Riot 
-		RiotRoomsListPageObjects roomsListA=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		RiotRoomsListPageObjects roomsListB=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
-		roomsListA.getRoomByName(tmpRoomName).click();
-		roomsListB.getRoomByName(tmpRoomName).click();
+		RiotHomePageTabObjects homePageA=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotHomePageTabObjects homePageB=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver2());
+		homePageA.swipeSectionUntilRoomDisplayed(homePageA.roomsSectionLayout, tmpRoomName, 10).click();
+		homePageB.swipeSectionUntilRoomDisplayed(homePageB.roomsSectionLayout, tmpRoomName, 10).click();
 		RiotRoomPageObjects roomPageA=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		roomPageA.roomNameTextView.click();
 		roomPageA.activeMembersTextView.click();
@@ -258,10 +256,10 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 		//1. 2. 3
 		createRoomWith2MembersByRequestsToMatrix(tmpRoomName);
 		//Opening the created room with Riot 
-		RiotRoomsListPageObjects roomsListA=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		RiotRoomsListPageObjects roomsListB=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
-		roomsListA.getRoomByName(tmpRoomName).click();
-		roomsListB.getRoomByName(tmpRoomName).click();
+		RiotHomePageTabObjects homePageA=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotHomePageTabObjects homePageB=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver2());
+		homePageA.swipeSectionUntilRoomDisplayed(homePageA.roomsSectionLayout, tmpRoomName, 10).click();
+		homePageB.swipeSectionUntilRoomDisplayed(homePageB.roomsSectionLayout, tmpRoomName, 10).click();
 		RiotRoomPageObjects roomPageA=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		roomPageA.roomNameTextView.click();
 		roomPageA.activeMembersTextView.click();

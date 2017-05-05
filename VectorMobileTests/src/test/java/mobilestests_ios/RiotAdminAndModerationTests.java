@@ -14,7 +14,6 @@ import com.esotericsoftware.yamlbeans.YamlException;
 
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
-import io.appium.java_client.ios.IOSTouchAction;
 import pom_ios.RiotMemberDetailsPageObjects;
 import pom_ios.RiotRoomDetailsPageObjects;
 import pom_ios.RiotRoomPageObjects;
@@ -87,12 +86,12 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 		int y= beforeLastBubble.getLocation().getY();
 
 		System.out.println(x+" , "+y);
-		appiumFactory.getiOsDriver1().performTouchAction(new IOSTouchAction(appiumFactory.getiOsDriver1()).tap(x, y));
-		new IOSTouchAction(appiumFactory.getiOsDriver1()).tap(beforeLastBubble);
-		new IOSTouchAction(appiumFactory.getiOsDriver1()).tap(beforeLastBubble,100,10);
-		new IOSTouchAction(appiumFactory.getiOsDriver1()).tap(beforeLastBubble,100,10);
-		new IOSTouchAction(appiumFactory.getiOsDriver1()).tap(40, 260);
-		new IOSTouchAction(appiumFactory.getiOsDriver1()).tap(200, 275);
+//		appiumFactory.getiOsDriver1().performTouchAction(new IOSTouchAction(appiumFactory.getiOsDriver1()).tap(x, y));
+//		new IOSTouchAction(appiumFactory.getiOsDriver1()).tap(beforeLastBubble);
+//		new IOSTouchAction(appiumFactory.getiOsDriver1()).tap(beforeLastBubble,100,10);
+//		new IOSTouchAction(appiumFactory.getiOsDriver1()).tap(beforeLastBubble,100,10);
+//		new IOSTouchAction(appiumFactory.getiOsDriver1()).tap(40, 260);
+//		new IOSTouchAction(appiumFactory.getiOsDriver1()).tap(200, 275);
 
 		new TouchAction(appiumFactory.getiOsDriver1()).tap(beforeLastBubble,100,10);
 		new TouchAction(appiumFactory.getiOsDriver1()).tap(40, 260);

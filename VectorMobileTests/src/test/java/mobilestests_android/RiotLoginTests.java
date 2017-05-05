@@ -26,7 +26,7 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
 import pom_android.RiotLoginAndRegisterPageObjects;
-import pom_android.RiotRoomsListPageObjects;
+import pom_android.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.DataproviderClass;
 import utility.RiotParentTest;
@@ -51,9 +51,9 @@ public class RiotLoginTests extends RiotParentTest{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
 		loginPage.logUser(sUserName, null,sPassword);
 		//Wait for the main page (rooms list) to be opened, and log out.
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		Assert.assertTrue(mainPage.roomsListView.isDisplayed(), "Rooms list ins't displayed after login.");
-		mainPage.logOut();
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		Assert.assertTrue(homePage.roomsListView.isDisplayed(), "Rooms list ins't displayed after login.");
+		homePage.logOut();
 		Assert.assertTrue(loginPage.inputsLoginLayout.isDisplayed(), "The login page isn't displayed after the log-out.");
 	}
 	
@@ -294,8 +294,8 @@ public class RiotLoginTests extends RiotParentTest{
 		if (appiumFactory.getAndroidDriver1() instanceof AndroidDriver){
 			if(false==waitUntilDisplayed(appiumFactory.getAndroidDriver1(),"im.vector.alpha:id/main_input_layout", true, 5)){
 				System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
-				RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-				mainPage.logOut();
+				RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+				homePage.logOut();
 			}
 		}
 	}

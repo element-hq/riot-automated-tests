@@ -17,7 +17,7 @@
 			<groupId>io.appium</groupId>
 			<artifactId>java-client</artifactId>
 			<!-- <version>4.1.2</version> -->
-			<version>LATEST</version>
+			<version>4.1.2</version>
 			<!-- <scope>test</scope> -->
 		</dependency>
 		<dependency>

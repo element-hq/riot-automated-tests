@@ -29,8 +29,8 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
 import pom_android.RiotLegalStuffViewPageObject;
 import pom_android.RiotRoomPageObjects;
-import pom_android.RiotRoomsListPageObjects;
 import pom_android.RiotSearchFromRoomPageObjects;
+import pom_android.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.DataproviderClass;
 import utility.RiotParentTest;
@@ -64,14 +64,14 @@ public class RiotMiscTests extends RiotParentTest{
 
 	@Test(groups="1driver_android")
 	public void switchOrientationMode() throws InterruptedException{
-		driver.rotate(ScreenOrientation.LANDSCAPE);//Thread.sleep(2000);
-		(new WebDriverWait(driver, 15)).until(ExpectedConditions.presenceOfElementLocated(By.className("android.widget.FrameLayout")));
+		appiumFactory.getAndroidDriver1().rotate(ScreenOrientation.LANDSCAPE);//Thread.sleep(2000);
+		(new WebDriverWait(appiumFactory.getAndroidDriver1(), 15)).until(ExpectedConditions.presenceOfElementLocated(By.className("android.widget.FrameLayout")));
 		scrollWindowDown();
-		driver.rotate(ScreenOrientation.PORTRAIT);//Thread.sleep(2000);
-		(new WebDriverWait(driver, 15)).until(ExpectedConditions.presenceOfElementLocated(By.className("android.widget.FrameLayout")));
+		appiumFactory.getAndroidDriver1().rotate(ScreenOrientation.PORTRAIT);//Thread.sleep(2000);
+		(new WebDriverWait(appiumFactory.getAndroidDriver1(), 15)).until(ExpectedConditions.presenceOfElementLocated(By.className("android.widget.FrameLayout")));
 		scrollWindowDown();
-		driver.rotate(ScreenOrientation.LANDSCAPE);//Thread.sleep(2000);
-		(new WebDriverWait(driver, 15)).until(ExpectedConditions.presenceOfElementLocated(By.className("android.widget.FrameLayout")));
+		appiumFactory.getAndroidDriver1().rotate(ScreenOrientation.LANDSCAPE);//Thread.sleep(2000);
+		(new WebDriverWait(appiumFactory.getAndroidDriver1(), 15)).until(ExpectedConditions.presenceOfElementLocated(By.className("android.widget.FrameLayout")));
 		scrollWindowDown();
 	}
 	
@@ -99,8 +99,8 @@ public class RiotMiscTests extends RiotParentTest{
 		String testMessage1 = "this is an automated test on 1 line";
 		String testMessage2 = "this is an automated test on 2 lines: \n here's the second line";
 
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		mainPage.getRoomByName(testRoomName).click();
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage.getRoomByName(testRoomName).click();
 		RiotRoomPageObjects roomPage = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		roomPage.messageZoneEditText.sendKeys(testMessage1);
 		roomPage.sendMessageButton.click();
@@ -115,13 +115,13 @@ public class RiotMiscTests extends RiotParentTest{
 	 */
 	@Test(groups="1driver_android")
 	public void openRoomsMenuContexts() throws Exception {
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(driver);
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 
-		System.out.println("nb rooms"+ mainPage.roomsList.size());
-		for (WebElement room : mainPage.roomsList) {
+		System.out.println("nb rooms"+ homePage.roomsList.size());
+		for (WebElement room : homePage.roomsList) {
 			MobileElement roomSummary=(MobileElement) room.findElement(By.id("im.vector.alpha:id/roomSummaryAdapter_action_image"));
 			roomSummary.click();
-			((AndroidDeviceActionShortcuts) driver).pressKeyCode(AndroidKeyCode.BACK);
+			((AndroidDeviceActionShortcuts) appiumFactory.getAndroidDriver1()).pressKeyCode(AndroidKeyCode.BACK);
 		}
 	}
 
@@ -134,12 +134,12 @@ public class RiotMiscTests extends RiotParentTest{
 	public void searchForRoom() throws Exception{
 		String roomTestName="temp room";
 		//NEW WAY
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(driver);
-		mainPage.searchButton.click();
-		RiotSearchFromRoomPageObjects searchPage= new RiotSearchFromRoomPageObjects(driver);
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage.openGlobalSearchLayout();
+		RiotSearchFromRoomPageObjects searchPage= new RiotSearchFromRoomPageObjects(appiumFactory.getAndroidDriver1());
 		searchPage.searchEditText.setValue(roomTestName);
 		searchPage.getRoomByName(roomTestName).click();
-		RiotRoomPageObjects myRoom=new RiotRoomPageObjects(driver);
+		RiotRoomPageObjects myRoom=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		myRoom.menuBackButton.click();
 	}
 	
@@ -151,9 +151,9 @@ public class RiotMiscTests extends RiotParentTest{
 	public void quoteLastMessage() throws Exception{
 		String testRoomName = "temp room";
 
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(driver);
-		mainPage.getRoomByName(testRoomName).click();
-		RiotRoomPageObjects myRoom = new RiotRoomPageObjects(driver);
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage.getRoomByName(testRoomName).click();
+		RiotRoomPageObjects myRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		MobileElement lastMessage = myRoom.getLastPost();
 		lastMessage.click();
 		myRoom.getContextMenuByPost(lastMessage).click();
@@ -168,14 +168,14 @@ public class RiotMiscTests extends RiotParentTest{
 	public void voiceCallFromRoomTest() throws InterruptedException{
 		String testRoomName = "temp room";
 
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(driver);
-		mainPage.getRoomByName(testRoomName).click();
-		RiotRoomPageObjects myRoom = new RiotRoomPageObjects(driver);
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage.getRoomByName(testRoomName).click();
+		RiotRoomPageObjects myRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		myRoom.startCallButton.click();
 		myRoom.voiceCallFromMenuButton.click();
 		Thread.sleep(3000);
 		//back button
-		((AndroidDeviceActionShortcuts) driver).pressKeyCode(AndroidKeyCode.BACK);
+		((AndroidDeviceActionShortcuts) appiumFactory.getAndroidDriver1()).pressKeyCode(AndroidKeyCode.BACK);
 		myRoom.endCallButton.click();
 		myRoom.menuBackButton.click();
 	}
@@ -186,7 +186,7 @@ public class RiotMiscTests extends RiotParentTest{
 		// Set folder name to store screenshots.
 		destDir = "screenshots";
 		// Capture screenshot.
-		File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+		File scrFile = ((TakesScreenshot) appiumFactory.getAndroidDriver1()).getScreenshotAs(OutputType.FILE);
 		// Set date format to set It as screenshot file name.
 		dateFormat = new SimpleDateFormat("dd-MMM-yyyy__hh_mm_ssaa");
 		// Create folder under project with name "screenshots" provided to destDir.
@@ -209,9 +209,9 @@ public class RiotMiscTests extends RiotParentTest{
 	 */
 	@Test(groups="1driver_android")
 	public void checkUserDisplayName() throws IOException, InterruptedException{
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(driver);
-		mainPage.contextMenuButton.click();
-		Assert.assertEquals(mainPage.userDisplayNameFromLateralMenu.getText(), "Roger");
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage.contextMenuButton.click();
+		Assert.assertEquals(homePage.userDisplayNameFromLateralMenu.getText(), "Roger");
 	}
 
 	/**
@@ -220,19 +220,19 @@ public class RiotMiscTests extends RiotParentTest{
 	 */
 	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class,groups="1driver_android")
 	public void openLegalStuffFromPortraitAndLandscapeMode(String items, String expectedTitle) throws InterruptedException{
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(driver);
-		driver.rotate(ScreenOrientation.PORTRAIT);
-		mainPage.contextMenuButton.click();
-		mainPage.getItemMenuByName(items).click();
-		RiotLegalStuffViewPageObject copyrightPolicyView= new RiotLegalStuffViewPageObject(driver);
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		appiumFactory.getAndroidDriver1().rotate(ScreenOrientation.PORTRAIT);
+		homePage.contextMenuButton.click();
+		homePage.getItemMenuByName(items).click();
+		RiotLegalStuffViewPageObject copyrightPolicyView= new RiotLegalStuffViewPageObject(appiumFactory.getAndroidDriver1());
 		Assert.assertTrue(copyrightPolicyView.isPresentTryAndCatch(), "Copyright Policy view isn't open");
 		Assert.assertEquals(copyrightPolicyView.secondTitle.getAttribute("name"), expectedTitle);
 		copyrightPolicyView.okButton.click();
 
 		//open it again and turn the device in landscape mode : the panel should be still displayed
-		mainPage.contextMenuButton.click();Thread.sleep(1000);
-		mainPage.openCopyrightButton.click();
-		copyrightPolicyView= new RiotLegalStuffViewPageObject(driver);
+		homePage.contextMenuButton.click();Thread.sleep(1000);
+		homePage.openCopyrightButton.click();
+		copyrightPolicyView= new RiotLegalStuffViewPageObject(appiumFactory.getAndroidDriver1());
 		driver.rotate(ScreenOrientation.LANDSCAPE);
 		Thread.sleep(1500);
 		Assert.assertTrue(copyrightPolicyView.isPresentTryAndCatch(), items+" view isn't open");
@@ -253,7 +253,7 @@ public class RiotMiscTests extends RiotParentTest{
 	}
 
 	private void scrollWindowDown(){
-		Dimension dimensions = driver.manage().window().getSize();
+		Dimension dimensions = appiumFactory.getAndroidDriver1().manage().window().getSize();
 		Double screenHeightStart = dimensions.getHeight() * 0.5;
 		int scrollStart = screenHeightStart.intValue();
 		System.out.println("s="+scrollStart);

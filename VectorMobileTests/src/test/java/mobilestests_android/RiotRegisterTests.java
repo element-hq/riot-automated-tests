@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 import pom_android.RiotCaptchaPageObject;
 import pom_android.RiotLoginAndRegisterPageObjects;
-import pom_android.RiotRoomsListPageObjects;
+import pom_android.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.DataproviderClass;
 import utility.RiotParentTest;
@@ -182,8 +182,8 @@ public class RiotRegisterTests extends RiotParentTest {
 		System.out.println("Check if logout is needed for the test.");
 		if(false==waitUntilDisplayed(appiumFactory.getAndroidDriver1(),"im.vector.alpha:id/main_input_layout", true, 3)){
 			System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
-			RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-			mainPage.logOut();
+			RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+			homePage.logOut();
 		}
 	}
 }

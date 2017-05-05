@@ -232,15 +232,15 @@ public class TestUtilities extends MatrixUtilities{
 			System.out.println("User "+username+" isn't logged, login forced on home server: "+expectedHomeServer);
 			pom_android.RiotLoginAndRegisterPageObjects loginView = new pom_android.RiotLoginAndRegisterPageObjects(myDriver);
 			loginView.logUser(username,null, pwd);
-			//If riot list isn't displayed, restart riot
+			//If riot home page isn't displayed, restart riot
 		}else{			
-			if(!waitUntilDisplayed(myDriver, "im.vector.alpha:id/fragment_recents_list", true, 0)){
+			if(!waitUntilDisplayed(myDriver, "im.vector.alpha:id/home_toolbar", true, 0)){
 				restartApplication(myDriver);
 			}
-			pom_android.RiotRoomsListPageObjects listRoom = new pom_android.RiotRoomsListPageObjects(myDriver);
-			listRoom.contextMenuButton.click();
-			String actualLoggedUserDisplayName=listRoom.userDisplayNameFromLateralMenu.getText();
-			String actualLoggedMatrixId=listRoom.userMatrixIdFromLateralMenu.getText();
+			pom_android.main_tabs.RiotHomePageTabObjects homePage = new pom_android.main_tabs.RiotHomePageTabObjects(myDriver);
+			homePage.contextMenuButton.click();
+			String actualLoggedUserDisplayName=homePage.userDisplayNameFromLateralMenu.getText();
+			String actualLoggedMatrixId=homePage.userMatrixIdFromLateralMenu.getText();
 			String hs=actualLoggedMatrixId.substring(actualLoggedMatrixId.indexOf(":")+1, actualLoggedMatrixId.length());
 			if(null==actualLoggedUserDisplayName){
 				actualLoggedUserDisplayName="";
@@ -252,7 +252,7 @@ public class TestUtilities extends MatrixUtilities{
 					System.out.println("Wrong actual logged user: "+actualLoggedUserDisplayName+". Let's log with user "+username+" on homeserver: "+expectedHomeServer);	
 				}
 				myDriver.navigate().back();
-				listRoom.logOutAndLogin(username, pwd);
+				homePage.logOutAndLogin(username, pwd);
 			}else{
 				System.out.println("User "+username+" is logged with expected homeserver: " +expectedHomeServer+". No need to log out and log in.");
 				myDriver.navigate().back();
@@ -275,7 +275,7 @@ public class TestUtilities extends MatrixUtilities{
 			loginPage.logUser(username,null, pwd);
 			new RiotHomePageTabObjects(myDriver);
 		}else{
-			//if riot list isn't displayed, restart riot
+			//if riot home page isn't displayed, restart riot
 			if(!waitUntilDisplayed(myDriver, "RecentsVCTableView", true, 0)){
 				restartApplication(myDriver);
 			}

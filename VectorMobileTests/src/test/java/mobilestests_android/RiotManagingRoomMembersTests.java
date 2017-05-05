@@ -15,7 +15,7 @@ import io.appium.java_client.MobileElement;
 import pom_android.RiotContactPickerPageObjects;
 import pom_android.RiotRoomDetailsPageObjects;
 import pom_android.RiotRoomPageObjects;
-import pom_android.RiotRoomsListPageObjects;
+import pom_android.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -51,8 +51,8 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		String randomFilter=(new StringBuilder("filter_").append(randInt1)).toString();
 
 		//1. Open room testRoom and open his details.
-		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		roomsList1.getRoomByName(testRoom).click();
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage1.getRoomByName(testRoom).click();
 		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		roomPage1.collapseChatButton.click();
 		roomPage1.activeMembersTextView.click();
@@ -107,8 +107,8 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		String randomContactName=(new StringBuilder("contact_").append(randInt1)).toString();
 
 		//1. Open room testRoom and open his details.
-		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		roomsList1.getRoomByName(testRoom).click();
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage1.getRoomByName(testRoom).click();
 		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		roomPage1.collapseChatButton.click();
 		roomPage1.activeMembersTextView.click();
@@ -151,8 +151,8 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	@Test(groups={"1driver_android","1checkuser"})
 	public void contactPickerWithMatchingSearchOnKnownContact() throws InterruptedException{
 		//1. Open room testRoom and open his details.
-		RiotRoomsListPageObjects roomsList1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		roomsList1.getRoomByName(testRoom).click();
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage1.getRoomByName(testRoom).click();
 		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		roomPage1.collapseChatButton.click();
 		roomPage1.activeMembersTextView.click();
@@ -194,8 +194,8 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	@Test(groups={"1driver_android","1checkuser"})
 	public void inviteAndCancelInvitationTest() throws InterruptedException{
 		//1. Create a room.
-		RiotRoomsListPageObjects mainPage1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		RiotRoomPageObjects roomPage=mainPage1.createRoom();
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotRoomPageObjects roomPage=homePage1.createRoom();
 
 		//2. Invite a participant
 		roomPage.inviteMembersButton.click();

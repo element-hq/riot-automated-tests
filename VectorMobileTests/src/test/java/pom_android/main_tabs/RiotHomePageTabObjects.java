@@ -47,11 +47,11 @@ public class RiotHomePageTabObjects extends RiotTabPageObjects{
 		xStart=roomSection.getLocation().getX()+roomSection.getSize().width-10;
 		y=roomSection.getLocation().getY()+roomSection.getSize().getHeight()/2;
 		driver.swipe(xStart, y, 0, y, 300);
-		//new TouchAction(driver).press(room.getLocation().getX(), room.getLocation().getY()).waitAction(500).moveTo(20, room.getLocation().getY()).perform();
+		//new TouchAction(driver).press(xStart, y).waitAction(500).moveTo(0, 0).perform();
 	}
 	
 	/**
-	 * Swipe on section until the room is found.
+	 * Swipe on section until the room is found then returns it.
 	 * @param roomSection
 	 * @param roomName
 	 * @param swipeNumberMax
