@@ -244,7 +244,7 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	}
 	
 	/**
-	 * Click on the context menu on a room, then choose one of the item : dm, notifications, favourite, bottom, close
+	 * Swipe on a room to display context actions items, then choose one of the item : dm, notifications, favourite, bottom, close
 	 * @param roomName
 	 * @param item: dm, notifications, favourite, bottom, close
 	 * @throws InterruptedException 

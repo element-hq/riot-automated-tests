@@ -97,6 +97,24 @@ public class HttpsRequestsToMatrix {
 		String roomId=reponseStr.substring(reponseStr.indexOf("room_id\":")+10,reponseStr.length()-2);
 		return roomId;
 	}
+	/**
+	 * Create a direct chat room and return the roomId of the created room.
+	 * @param accessToken
+	 * @param invitedUserMatrixId
+	 * @return
+	 * @throws IOException
+	 */
+	public static String createDirectChatRoom(String accessToken, String invitedUserMatrixId) throws IOException{
+		StringBuilder url=new StringBuilder(MatrixUtilities.getHomeServerUrlForRequestToMatrix()).append("/_matrix/client/r0/createRoom?access_token=").append(accessToken);
+		String postJsonData="{\"preset\":\"trusted_private_chat\",\"visibility\":\"private\",\"invite\":[\""+invitedUserMatrixId+"\"],\"is_direct\":true,\"initial_state\":[{\"content\":{\"guest_access\":\"can_join\"},\"type\":\"m.room.guest_access\",\"state_key\":\"\"}]}";
+		String reponseStr=executeUrl(url.toString(), "POST", postJsonData).toString();
+		String roomId=reponseStr.substring(reponseStr.indexOf("room_id\":")+10,reponseStr.length()-2);
+		
+//		url=new StringBuilder(MatrixUtilities.getHomeServerUrlForRequestToMatrix()).append("/_matrix/client/r0/user/"+invitedUserMatrixId+"/account_data/m.direct?access_token=").append(accessToken);
+//		postJsonData="{\"@riotuser2:jeangb.org\":[\"!dSAquyGetQwxXygtOt:jeangb.org\"],\"}";
+//		reponseStr=executeUrl(url.toString(), "OPTIONS", null).toString();
+		return roomId;
+	}
 	
 	private static StringBuffer executeUrl(String url, String typeRequete, String jsonData) throws IOException{
 		// Create a trust manager that does not validate certificate chains

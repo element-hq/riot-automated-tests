@@ -8,6 +8,7 @@ import org.testng.Assert;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
@@ -60,7 +61,7 @@ public class RiotHomePageTabObjects extends RiotTabPageObjects{
 	public MobileElement swipeSectionUntilRoomDisplayed(MobileElement roomSection, String roomName, int swipeNumberMax){
 		int nbSwipeDone=0;
 		MobileElement room;
-		while (null==(room=getRoomByName(roomName)) && nbSwipeDone<swipeNumberMax) {
+		while (null==(room=getRoomFromSectionByName(roomSection,roomName)) && nbSwipeDone<swipeNumberMax) {
 			leftSwipeOnRoomSection(roomSection);
 			nbSwipeDone++;
 		}
@@ -94,6 +95,53 @@ public class RiotHomePageTabObjects extends RiotTabPageObjects{
 		} catch (Exception e) {
 			System.out.println("No room found with name "+myRoomName);
 			return null;
+		}
+	}
+	
+	/**
+	 * Search and returns a room from a section (Favourites, people, rooms, low priority).
+	 * @param section
+	 * @param myRoomName
+	 * @return
+	 */
+	public MobileElement getRoomFromSectionByName(MobileElement section,String myRoomName){
+		try {
+			return section.findElementByXPath("//android.widget.RelativeLayout[@resource-id='im.vector.alpha:id/circular_room_view']/android.widget.TextView[@text='"+myRoomName+"']");
+		} catch (Exception e) {
+			System.out.println("No room found with name "+myRoomName+ " in this section.");
+			return null;
+		}
+	}
+	
+	/**
+	 * Only for HOME PAGE. </br>
+	 * Check that room is in a room category (favorites, people, rooms, etc). </br>
+	 * TODO maybe scroll to the end of the list to check the room ?
+	 * @param roomNameTest
+	 * @param category : can be : Favourites, People, Rooms, Low priority
+	 */
+	public Boolean checkRoomInCategory(String roomNameTest, MobileElement roomSection, int nbSwipeTrials) {
+		System.out.println("Looking for room "+roomNameTest+" in the category "+roomSection);
+		return null!=swipeSectionUntilRoomDisplayed(roomSection, roomNameTest,nbSwipeTrials);
+	}
+	
+	/**
+	 * Click on the context menu on a room, then choose one of the item : Notifications, Favourite, De-prioritize, Direct Chat, Leave Conversation
+	 * @param roomName
+	 * @param item
+	 * @throws InterruptedException 
+	 */
+	public void clickOnContextMenuOnRoom(String roomName, String item) throws InterruptedException{
+		//open contxt menu on a room item
+		MobileElement roomItem=getRoomByName(roomName);
+		if(null!=roomItem){
+			TouchAction longPressAction = new TouchAction(driver);
+			longPressAction.longPress(roomItem, 500).perform();
+			//hit the item on the options
+			driver.findElementByXPath("//android.widget.ListView//android.widget.TextView[@text='"+item+"']/../..").click();
+			Assert.assertFalse(waitUntilDisplayed(driver,"//android.widget.ListView[count(android.widget.LinearLayout)=4]", false, 0), "Option windows isn't closed");	
+		}else{
+			System.out.println("No room found with name "+roomName+", impossible to click on item "+item+" on context menu.");
 		}
 	}
 	
