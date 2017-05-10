@@ -62,10 +62,10 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	 * @return new RiotRoomsListPageObjects
 	 * @throws InterruptedException 
 	 */
-	public RiotHomePageTabObjects logOutAndLogin(String username, String pwd) throws InterruptedException {
+	public RiotHomePageTabObjects logOutAndLogin(String username, String pwd, Boolean forceDefaultHs) throws InterruptedException {
 		logOutFromRoomsList();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
-		loginPage.logUser(username, null, pwd);
+		loginPage.logUser(username, null, pwd,forceDefaultHs);
 		return new RiotHomePageTabObjects(driver);
 	}
 	

@@ -40,7 +40,7 @@ public class RiotLoginTests extends RiotParentTest{
 	public void simpleLogin() throws Exception {
 		String sUserName="riotuser2", sPassword="riotuser";
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
-		loginPage.logUser(sUserName, null,sPassword);
+		loginPage.logUser(sUserName, null,sPassword,false);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver_android","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void loginAndLogoutTest(String sUserName,String sPassword)  throws Exception {
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
-		loginPage.logUser(sUserName, null,sPassword);
+		loginPage.logUser(sUserName, null,sPassword,false);
 		//Wait for the main page (rooms list) to be opened, and log out.
 		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 		Assert.assertTrue(homePage.roomsListView.isDisplayed(), "Rooms list ins't displayed after login.");
@@ -197,7 +197,7 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver_android","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void fillLoginFormWithUnvalidPhoneNumberTest(String emailOrUserName, String phoneNumber, String pwd) throws InterruptedException, FileNotFoundException, YamlException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
-		loginPage.logUser(emailOrUserName, phoneNumber, pwd);
+		loginPage.logUser(emailOrUserName, phoneNumber, pwd,false);
 		Assert.assertFalse(waitUntilDisplayed(appiumFactory.getAndroidDriver1(),"im.vector.alpha:id/fragment_recents_list", false, 2), "Riot rooms list page is opened and shouldn't");
 		appiumFactory.getAndroidDriver1().resetApp();
 	}

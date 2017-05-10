@@ -92,9 +92,9 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	 * TODO: works need to be done here because if the password is null, the login won't happen.
 	 * @throws InterruptedException 
 	 */
-	public void logUser(String usernameOrEmail, String phoneNumber,String password) throws InterruptedException{
+	public void logUser(String usernameOrEmail, String phoneNumber,String password, Boolean forceDefaultHs) throws InterruptedException{
 		try {
-			if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+			if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))&& false==forceDefaultHs){
 				logUserWithCustomHomeServer(usernameOrEmail, phoneNumber,password,MatrixUtilities.getCustomHomeServerURL(false),Constant.DEFAULT_IDENTITY_SERVER_URL);
 			}else{
 				logUserWithDefaultHomeServer(usernameOrEmail, phoneNumber,password);

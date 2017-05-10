@@ -324,7 +324,7 @@ private AppiumDriver<MobileElement> driver;
 	public RiotRoomsListPageObjects logOutAndLogin(String username, String pwd) throws InterruptedException {
 		logOutFromRoomsList();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
-		loginPage.logUser(username, null, pwd);
+		loginPage.logUser(username, null, pwd,false);
 		return new RiotRoomsListPageObjects(driver);
 	}
 }

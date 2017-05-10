@@ -220,8 +220,18 @@ public class TestUtilities extends MatrixUtilities{
 	 * @param pwd
 	 */
 	public void checkIfUserLoggedAndHomeServerSetUpAndroid(AndroidDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException, FileNotFoundException, YamlException {
+		checkIfUserLoggedAndHomeServerSetUpAndroid(myDriver, username, pwd, false);
+	}
+	/**
+	 * Log the good user if not.</br> Secure the test.
+	 * @param myDriver
+	 * @param username
+	 * @param pwd
+	 * @param forceDefaultHs : true to force using default matrix homeserver.
+	 */
+	public void checkIfUserLoggedAndHomeServerSetUpAndroid(AndroidDriver<MobileElement> myDriver, String username, String pwd, Boolean forceDefaultHs) throws InterruptedException, FileNotFoundException, YamlException {
 		String expectedHomeServer;
-		if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+		if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal")) && forceDefaultHs==false){
 			expectedHomeServer=ReadConfigFile.getInstance().getConfMap().get("homeserver");
 		}else{
 			expectedHomeServer=Constant.DEFAULT_MATRIX_SERVER;
@@ -231,7 +241,7 @@ public class TestUtilities extends MatrixUtilities{
 		if(waitUntilDisplayed(myDriver, "im.vector.alpha:id/main_input_layout", false, 5)){
 			System.out.println("User "+username+" isn't logged, login forced on home server: "+expectedHomeServer);
 			pom_android.RiotLoginAndRegisterPageObjects loginView = new pom_android.RiotLoginAndRegisterPageObjects(myDriver);
-			loginView.logUser(username,null, pwd);
+			loginView.logUser(username,null, pwd, forceDefaultHs);
 			//If riot home page isn't displayed, restart riot
 		}else{			
 			if(!waitUntilDisplayed(myDriver, "im.vector.alpha:id/home_toolbar", true, 0)){
@@ -252,17 +262,19 @@ public class TestUtilities extends MatrixUtilities{
 					System.out.println("Wrong actual logged user: "+actualLoggedUserDisplayName+". Let's log with user "+username+" on homeserver: "+expectedHomeServer);	
 				}
 				myDriver.navigate().back();
-				homePage.logOutAndLogin(username, pwd);
+				homePage.logOutAndLogin(username, pwd, forceDefaultHs);
 			}else{
 				System.out.println("User "+username+" is logged with expected homeserver: " +expectedHomeServer+". No need to log out and log in.");
 				myDriver.navigate().back();
 			}
 		}
 	}
-
 	public void checkIfUserLoggedAndHomeServerSetUpIos(IOSDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException, FileNotFoundException, YamlException {
+		checkIfUserLoggedAndHomeServerSetUpIos(myDriver, username, pwd, false);
+	}
+	public void checkIfUserLoggedAndHomeServerSetUpIos(IOSDriver<MobileElement> myDriver, String username, String pwd, Boolean forceDefaultHs) throws InterruptedException, FileNotFoundException, YamlException {
 		String expectedHomeServer=null;
-		if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+		if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))&& forceDefaultHs==false){
 			expectedHomeServer=ReadConfigFile.getInstance().getConfMap().get("homeserver");
 		}else{
 			expectedHomeServer=Constant.DEFAULT_MATRIX_SERVER;
@@ -272,7 +284,7 @@ public class TestUtilities extends MatrixUtilities{
 		if(waitUntilDisplayed(myDriver, "AuthenticationVCScrollViewContentView", false, 3)){
 			System.out.println("User "+username+" isn't logged, login forced on home server: "+expectedHomeServer);
 			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(myDriver);
-			loginPage.logUser(username,null, pwd);
+			loginPage.logUser(username,null, pwd,forceDefaultHs);
 			new RiotHomePageTabObjects(myDriver);
 		}else{
 			//if riot home page isn't displayed, restart riot
@@ -295,14 +307,13 @@ public class TestUtilities extends MatrixUtilities{
 				}else{
 					System.out.println("Wrong actual logged user: "+actualLoggedUserDisplayName+". Let's log with user "+username+" on homeserver: "+expectedHomeServer);	
 				}
-				settingsPage.logOutAndLoginFromSettingsView(username, pwd);
+				settingsPage.logOutAndLoginFromSettingsView(username, pwd,forceDefaultHs);
 			}else{
 				System.out.println("User "+username+" is logged with expected homeserver: " +expectedHomeServer+". No need to log out and log in.");
 				settingsPage.backMenuButton.click();
 			}
 		}
 	}
-
 	/**
 	 * Close then open again the application.
 	 * @param myDriver

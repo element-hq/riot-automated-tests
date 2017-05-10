@@ -239,7 +239,7 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 		RiotHomePageTabObjects homePage1 = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
 		RiotHomePageTabObjects homePage2 = new RiotHomePageTabObjects(appiumFactory.getiOsDriver2());
 		//1. Device 2 logout/log in to renew his keys 
-		homePage2=homePage2.logOutAndLogin(participant2DisplayName, Constant.DEFAULT_USERPWD);
+		homePage2=homePage2.logOutAndLogin(participant2DisplayName, Constant.DEFAULT_USERPWD,false);
 
 		//2. Device 1 open room oneToOneRoomWithEncryption
 		homePage1.getRoomByName(oneToOneRoomWithEncryption).click();
@@ -311,7 +311,7 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 	public void tryVoiceCallInE2eRoomWithUnknownDevicesTest() throws InterruptedException{
 		RiotHomePageTabObjects homePage1 = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
 		//1. Device 2 logout/log in to renew his keys 
-		homePage1=homePage1.logOutAndLogin(participant1DisplayName, Constant.DEFAULT_USERPWD);
+		homePage1=homePage1.logOutAndLogin(participant1DisplayName, Constant.DEFAULT_USERPWD,false);
 
 		//2. Device 1 open room oneToOneRoomWithEncryption
 		homePage1.getRoomByName(oneToOneRoomWithEncryption).click();
@@ -358,7 +358,7 @@ public class RiotE2eEncryptionTests_ios extends RiotParentTest{
 	public void sendPhotoInE2eRoomWithUnknownDevicesTest() throws InterruptedException{
 		RiotHomePageTabObjects homePage1 = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
 		//1. Device 1 logout/log in to renew his keys 
-		homePage1=homePage1.logOutAndLogin(participant1DisplayName, Constant.DEFAULT_USERPWD);
+		homePage1=homePage1.logOutAndLogin(participant1DisplayName, Constant.DEFAULT_USERPWD,false);
 
 		//2. Device 1 open room oneToOneRoomWithEncryption
 		homePage1.getRoomByName(oneToOneRoomWithEncryption).click();

@@ -7,6 +7,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
+import pom_ios.main_tabs.RiotHomePageTabObjects;
 import utility.TestUtilities;
 
 public class RiotSettingsPageObjects extends TestUtilities {
@@ -42,11 +43,11 @@ public class RiotSettingsPageObjects extends TestUtilities {
 	 * @return new RiotRoomsListPageObjects
 	 * @throws InterruptedException 
 	 */
-	public RiotRoomsListPageObjects logOutAndLoginFromSettingsView(String username, String pwd) throws InterruptedException {
+	public RiotHomePageTabObjects logOutAndLoginFromSettingsView(String username, String pwd,Boolean forceDefaultHs) throws InterruptedException {
 		logOutFromSettingsView();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
-		loginPage.logUser(username, null, pwd);
-		return new RiotRoomsListPageObjects(driver);
+		loginPage.logUser(username, null, pwd,forceDefaultHs);
+		return new RiotHomePageTabObjects(driver);
 	}
 	
 	/*

@@ -46,7 +46,7 @@ public class RiotProfilTests extends RiotParentTest{
 		settingsPage.changePasswordFromSettings(Constant.DEFAULT_USERPWD, newPwd,true);
 		//4. Log out & 5. Login with the new password
 		settingsPage.backMenuButton.click();
-		homePage=homePage.logOutAndLogin(testUser, newPwd);
+		homePage=homePage.logOutAndLogin(testUser, newPwd,false);
 		//6. Open settings and change password by setting the first one.
 		waitUntilDisplayed(appiumFactory.getiOsDriver1(), "settings icon", true, 5);
 		settingsPage = homePage.openRiotSettings();

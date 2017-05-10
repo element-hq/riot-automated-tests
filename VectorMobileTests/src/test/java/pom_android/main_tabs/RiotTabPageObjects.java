@@ -104,11 +104,11 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	 * @param pwd
 	 * @return new RiotRoomsListPageObjects
 	 */
-	public RiotHomePageTabObjects logOutAndLogin(String username, String password) throws InterruptedException{
+	public RiotHomePageTabObjects logOutAndLogin(String username, String password, Boolean forceDefaultHs) throws InterruptedException{
 		this.logOut();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
 		try {
-			loginPage.logUser(username, null,password);
+			loginPage.logUser(username, null,password,forceDefaultHs);
 		} catch (FileNotFoundException | YamlException e) {
 			e.printStackTrace();
 		}
@@ -210,7 +210,8 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	public List<MobileElement> roomsAndCategoriesList;
 	
 	/**
-	 * Hit a section using his name. Can be use to focus on the related rooms or collapse a section.
+	 * Hit a section using his name. Can be use to focus on the related rooms or collapse a section. </br>
+	 * Use capital letters for ROOMS tab.
 	 * @param sectionName
 	 */
 	public void hitSectionHeader(String sectionName){
@@ -317,6 +318,14 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 			return Integer.parseInt(badgeNumber);
 		} catch (Exception e) {
 			return null;
+		}
+	}
+	
+	public String getRoomName(MobileElement room){
+		if (null!=room) {
+			return room.findElementById("im.vector.alpha:id/public_room_name").getText();
+		}else{
+			return "";
 		}
 	}
 	/**

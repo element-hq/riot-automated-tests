@@ -200,14 +200,12 @@ public class RiotUxReworkTests extends RiotParentTest{
 		//forget room user A
 		HttpsRequestsToMatrix.forgetRoom(riotUserAAccessToken, testRoomId);
 	}
+	
 	/**
 	 * Log the good user if not.</br> Secure the test.
 	 * @param myDriver
 	 * @param username
 	 * @param pwd
-	 * @throws InterruptedException 
-	 * @throws YamlException 
-	 * @throws FileNotFoundException 
 	 */
 	@BeforeGroups("1checkuser")
 	private void checkIfUserLogged() throws InterruptedException, FileNotFoundException, YamlException{

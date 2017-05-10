@@ -388,7 +388,7 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 		this.logOut();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
 		try {
-			loginPage.logUser(username, null,password);
+			loginPage.logUser(username, null,password,false);
 		} catch (FileNotFoundException | YamlException e) {
 			e.printStackTrace();
 		}
