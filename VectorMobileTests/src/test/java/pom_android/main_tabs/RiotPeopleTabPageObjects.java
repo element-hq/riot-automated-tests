@@ -20,6 +20,10 @@ public class RiotPeopleTabPageObjects extends RiotTabPageObjects{
 	public RiotPeopleTabPageObjects(AppiumDriver<MobileElement> myDriver) throws InterruptedException {
 		super(myDriver);
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+		//if 'Riot permissions .... Allow Riot to access your contacts' pops up, close it.
+		if(waitUntilDisplayed(driver, "//android.widget.TextView[@resource-id='android:id/alertTitle' and @text='Information']", true, 1)){
+			driver.findElementById("android:id/button1").click();
+		}
 		Assert.assertTrue(waitUntilDisplayed((AndroidDriver<MobileElement>) driver,"im.vector.alpha:id/fragment_container", true, 5),"PeoplePage tab isn't open.");
 	}
 
