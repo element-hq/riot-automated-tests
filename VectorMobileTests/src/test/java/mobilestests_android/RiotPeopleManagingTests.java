@@ -21,12 +21,12 @@ import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
 /**
- * Tests on the members tab from the room details, and on the contact picker.
+ * Tests on the members tab from the room details, the contact picker and the contacts list from People tab.
  * @author jeang
  *
  */
 @Listeners({ ScreenshotUtility.class })
-public class RiotManagingRoomMembersTests extends RiotParentTest{
+public class RiotPeopleManagingTests extends RiotParentTest{
 	private String testRoom="Common riotusers auto tests";
 	private String matchingWithKnownContactFilter1="riot";
 	private String invitedUserDisplayName="riotuser16";
@@ -46,7 +46,7 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	 * @throws InterruptedException
 	 */
 	@Test(groups={"1driver_android","1checkuser"})
-	public void useFilterFieldOnPeopleTabTest() throws InterruptedException{
+	public void useFilterFieldOnRoomDetailsPeopleTabTest() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomFilter=(new StringBuilder("filter_").append(randInt1)).toString();
 
