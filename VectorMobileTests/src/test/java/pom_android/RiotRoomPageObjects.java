@@ -35,7 +35,7 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public MobileElement avatarImageView;
 	@AndroidFindBy(id="im.vector.alpha:id/action_bar_header_room_title")
 	public MobileElement roomNameTextViewCollapsed;
-	@AndroidFindBy(id="im.vector.alpha:id/action_bar_header_room_members")
+	@AndroidFindBy(id="im.vector.alpha:id/action_bar_header_room_members_text_view")
 	public MobileElement activeMembersTextView;
 	@AndroidFindBy(id="im.vector.alpha:id/action_bar_header_invite_members")
 	public MobileElement inviteMembersButton;

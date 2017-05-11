@@ -1,6 +1,8 @@
 package utility;
 
 import java.io.FileNotFoundException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 
@@ -35,10 +37,10 @@ public class MatrixUtilities {
 	 * @param fromLocal
 	 * @return
 	 */
-	public static String getCustomHomeServerURL(Boolean fromLocal){
+	public static String getLocalHomeServerUrl(Boolean fromLocal, Boolean useConfigFile){
 		String address = null,port = null;
 		try {
-			address = ReadConfigFile.getInstance().getConfMap().get("homeserver_address");
+			address = getLocalHomeServerAddress(useConfigFile);
 			port=ReadConfigFile.getInstance().getConfMap().get("homeserver_port");
 		} catch (FileNotFoundException | YamlException e) {
 			// TODO Auto-generated catch block
@@ -50,17 +52,30 @@ public class MatrixUtilities {
 			return new StringBuilder("https://").append(address).append(":").append(port).toString();
 		}		
 	}
+	
+	public static String getLocalHomeServerAddress(Boolean useConfigFile) throws FileNotFoundException, YamlException{
+		if (useConfigFile){
+			return ReadConfigFile.getInstance().getConfMap().get("homeserver_address");
+		}else{
+			try {
+				return InetAddress.getLocalHost().getHostAddress();
+			} catch (UnknownHostException e) {
+				System.out.println("Impossible to get machine IP address");
+				return null;
+			}
+		}
+	}
 
 	/**
 	 * According to homeserverlocal value in config.yaml, return default home server or custom one.
 	 * @return
 	 */
-	public static String getHomeServerUrlForRequestToMatrix(){
+	public static String getHomeServerUrlForRequestToMatrix(Boolean useConfigFileToGetHsAddress){
 		try {
 			if("false".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
 				return Constant.DEFAULT_MATRIX_SERVER_URL;
 			}else{
-				return getCustomHomeServerURL(true);
+				return getLocalHomeServerUrl(true, useConfigFileToGetHsAddress);
 			}
 		} catch (FileNotFoundException | YamlException e) {
 			e.printStackTrace();

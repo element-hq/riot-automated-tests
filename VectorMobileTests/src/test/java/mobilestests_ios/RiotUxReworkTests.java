@@ -12,9 +12,6 @@ import org.testng.annotations.Test;
 import com.esotericsoftware.yamlbeans.YamlException;
 
 import pom_ios.main_tabs.RiotHomePageTabObjects;
-import pom_ios.main_tabs.RiotHomePageTabObjects;
-import pom_ios.main_tabs.RiotPeopleTabPageObjects;
-import pom_ios.main_tabs.RiotRoomsTabPageObjects;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
 import utility.MatrixUtilities;

@@ -71,7 +71,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	 */
 	public void logUser(String usernameOrEmail, String phoneNumber,String password, Boolean forceDefaultHs) throws FileNotFoundException, YamlException, InterruptedException{
 		if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal")) && false==forceDefaultHs){
-			logUserWithCustomHomeServer(usernameOrEmail, phoneNumber,password,MatrixUtilities.getCustomHomeServerURL(false),Constant.DEFAULT_IDENTITY_SERVER_URL);
+			logUserWithCustomHomeServer(usernameOrEmail, phoneNumber,password,MatrixUtilities.getLocalHomeServerUrl(false,false),Constant.DEFAULT_IDENTITY_SERVER_URL);
 		}else{
 			logUserWithDefaultHomeServer(usernameOrEmail, phoneNumber,password);
 		}
