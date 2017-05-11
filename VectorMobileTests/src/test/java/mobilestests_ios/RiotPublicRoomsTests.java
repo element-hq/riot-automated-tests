@@ -34,7 +34,7 @@ private String riotUserADisplayName="riotuser1";
 	 * After each scroll, check that the last room isn't the same that the previous.
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver_ios","11checkuser"}, priority=0)
+	@Test(groups={"1driver_ios","1checkuser"}, priority=0)
 	public void checkPublicRoomsList() throws InterruptedException{
 		RiotHomePageTabObjects homePageTab = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
 		//1. Hit ROOMS tab.
