@@ -321,6 +321,11 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 		}
 	}
 	
+	/**
+	 * Returns the name of a room.
+	 * @param room
+	 * @return
+	 */
 	public String getRoomName(MobileElement room){
 		if (null!=room) {
 			return room.findElementById("im.vector.alpha:id/public_room_name").getText();

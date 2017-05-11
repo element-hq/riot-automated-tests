@@ -157,7 +157,7 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	/**
 	 * TableView containing the rooms cells. His Accessibility id change according to the tab.
 	 */
-	protected MobileElement roomsTableView;
+	public MobileElement roomsTableView;
 	
 	
 	/**
@@ -214,6 +214,14 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 		} while (nbRooms==0 && timewaited<=10);
 	}
 	
+	/**
+	 * Hit a section using his name. Can be use to focus on the related rooms or collapse a section. </br>
+	 * Use capital letters for ROOMS tab.
+	 * @param sectionName
+	 */
+	public void hitSectionHeader(String sectionName){
+		
+	}
 	/**
 	 * Return a room as a MobileElement using his title.</br>
 	 * Return null if not found.
@@ -310,6 +318,18 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 		}
 	}
 	
+	/**
+	 * Returns the name of a room.
+	 * @param room
+	 * @return
+	 */
+	public String getRoomName(MobileElement room){
+		if (null!=room) {
+			return room.findElementByAccessibilityId("TitleLabel").getText();
+		}else{
+			return "";
+		}
+	}
 	/**
 	 * Wait until badge of the room is incremented.
 	 * @param myRoomName

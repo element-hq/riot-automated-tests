@@ -288,7 +288,7 @@ public class TestUtilities extends MatrixUtilities{
 			new RiotHomePageTabObjects(myDriver);
 		}else{
 			//if riot home page isn't displayed, restart riot
-			if(!waitUntilDisplayed(myDriver, "RecentsVCTableView", true, 0)){
+			if(!waitUntilDisplayed(myDriver, "HomeVCView", true, 0)){
 				restartApplication(myDriver);
 			}
 			RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(myDriver);

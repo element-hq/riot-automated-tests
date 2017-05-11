@@ -1,11 +1,14 @@
 package pom_ios.main_tabs;
 
+import java.util.List;
+
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.ios.IOSDriver;
+import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
 import pom_ios.RiotRoomPageObjects;
@@ -32,6 +35,9 @@ public class RiotRoomsTabPageObjects extends RiotTabPageObjects {
 	 */
 	@iOSFindBy(accessibility="RoomsVCTableView")
 	public MobileElement roomsTabRoomsTableView;
+	
+	@iOSFindBy(accessibility="PublicRoomTableViewCell")
+	public List<MobileElement> publicRoomsList;
 
 	/*
 	 * FLOATING BUTTONS OR DIALOGS .
