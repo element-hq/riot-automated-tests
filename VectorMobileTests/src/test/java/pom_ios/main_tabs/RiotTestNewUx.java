@@ -20,7 +20,7 @@ public class RiotTestNewUx extends RiotParentTest{
 		riotRoomsTab.getRoomByName("room tests Jean").click();
 		RiotRoomPageObjects room=new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		room.menuBackButton.click();
-		riotRoomsTab.getFavouritesTab().click();
+		riotRoomsTab.favouriteTabBottomBarButton.click();
 	}
 	
 	@Test(groups={"1driver_ios"})

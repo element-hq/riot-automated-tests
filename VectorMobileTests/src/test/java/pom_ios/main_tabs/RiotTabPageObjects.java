@@ -24,10 +24,10 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	 */
 	@iOSFindBy(className="XCUIElementTypeNavigationBar")
 	public MobileElement navigationBar;
-	@iOSFindBy(accessibility="settings icon")
+	@iOSFindBy(accessibility="MasterTabBarControllerSettingsBarButton")
 	public MobileElement settingsButton;
 	/** Search button openning the unified search. */
-	@iOSFindBy(accessibility="search icon")
+	@iOSFindBy(accessibility="MasterTabBarControllerSearchBarButton")
 	public MobileElement searchButton;
 	
 	/**
@@ -363,18 +363,14 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	public List<MobileElement> listTabs(){
 		return tabBar.findElementsByClassName("XCUIElementTypeButton");
 	}
-	public MobileElement getHomeTab(){
-		return listTabs().get(0);
-	}
-	public MobileElement getFavouritesTab(){
-		return listTabs().get(1);
-	}
-	public MobileElement getPeopleTab(){
-		return listTabs().get(2);
-	}
-	public MobileElement getRoomsTab(){
-		return listTabs().get(3);
-	}
+	@iOSFindBy(accessibility="TabBarItemHome")
+	public MobileElement homeTabBottomBarButton;
+	@iOSFindBy(accessibility="TabBarItemFavourites")
+	public MobileElement favouriteTabBottomBarButton;
+	@iOSFindBy(accessibility="TabBarItemPeople")
+	public MobileElement peopleTabBottomBarButton;
+	@iOSFindBy(accessibility="TabBarItemRooms")
+	public MobileElement roomsTabBottomBarButton;
 	
 	/**
 	 * Click on the HOME PAGE tab and return a new RiotHomePageObjects.
@@ -382,7 +378,7 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	 */
 	public RiotHomePageTabObjects openHomePageTab() throws InterruptedException{
 		System.out.println("Hit HOME PAGE tab.");
-		getHomeTab().click();
+		homeTabBottomBarButton.click();
 		return new RiotHomePageTabObjects(driver);
 	}
 	
@@ -392,7 +388,7 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	 */
 	public RiotFavouritesTabPageObjects openFavouriteTab() throws InterruptedException{
 		System.out.println("Hit FAVOURITES tab.");
-		getFavouritesTab().click();
+		favouriteTabBottomBarButton.click();
 		return new RiotFavouritesTabPageObjects(driver);
 	}
 	/**
@@ -401,7 +397,7 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	 */
 	public RiotPeopleTabPageObjects openPeopleTab() throws InterruptedException{
 		System.out.println("Hit PEOPLE tab.");
-		getPeopleTab().click();
+		peopleTabBottomBarButton.click();
 		return new RiotPeopleTabPageObjects(driver);
 	}
 	/**
@@ -410,7 +406,7 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	 */
 	public RiotRoomsTabPageObjects openRoomsTab() throws InterruptedException{
 		System.out.println("Hit ROOMS tab.");
-		getRoomsTab().click();
+		roomsTabBottomBarButton.click();
 		return new RiotRoomsTabPageObjects(driver);
 	}
 	
