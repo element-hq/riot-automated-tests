@@ -15,13 +15,14 @@ import utility.TestUtilities;
 
 public class RiotRoomPageObjects extends TestUtilities{
 	private AndroidDriver<MobileElement> driver;
-	public RiotRoomPageObjects(AppiumDriver<MobileElement> myDriver){
+	public RiotRoomPageObjects(AppiumDriver<MobileElement> myDriver) {
 		PageFactory.initElements(new AppiumFieldDecorator(myDriver), this);
 		driver=(AndroidDriver<MobileElement>) myDriver;
 		//ExplicitWait(driver,this.messagesListView);
 		try {
-			waitUntilDisplayed(driver,"im.vector.alpha:id/listView_messages", true, 5);
+			Assert.assertTrue(waitUntilDisplayed(driver,"im.vector.alpha:id/listView_messages", true, 10), "No room page present");
 		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
