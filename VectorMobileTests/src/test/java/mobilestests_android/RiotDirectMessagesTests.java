@@ -139,12 +139,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		//create a new  room
 		RiotRoomPageObjects newRoomDevice1 = homePage1.createRoom();
 		//invite 1 member
-		newRoomDevice1.inviteMembersButton.click();
-		RiotRoomDetailsPageObjects roomDetailsDevice1 = new RiotRoomDetailsPageObjects(appiumFactory.getAndroidDriver1());
-		//add a participant from the details
-		roomDetailsDevice1.addParticipant(getMatrixIdFromDisplayName(riotuser2DisplayName));
-		//go back to the rooms list
-		roomDetailsDevice1.menuBackButton.click();
+		newRoomDevice1.addParticipantFromCollapsedActionBar(getMatrixIdFromDisplayName(riotuser2DisplayName));
 		newRoomDevice1.menuBackButton.click();
 		//assertion on the inviter device: the new room is NOT seen as an direct message room.
 		Assert.assertFalse(homePage1.isDirectMessageByRoomName(riotuser2DisplayName),"Room "+riotuser2DisplayName+" doesn't have a little green man on inviter device.");
@@ -182,7 +177,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		//put a room name
 		newRoomDevice1.changeRoomName(tmpRoomName);
 		//invite 1 member
-		newRoomDevice1.inviteMembersButton.click();
+		newRoomDevice1.openRoomMemberSettingsButton.click();
 		RiotRoomDetailsPageObjects roomDetailsDevice1 = new RiotRoomDetailsPageObjects(appiumFactory.getAndroidDriver1());
 		//add a participant from the details
 		roomDetailsDevice1.addParticipant(getMatrixIdFromDisplayName(riotuser2DisplayName));

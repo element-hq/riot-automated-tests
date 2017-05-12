@@ -35,11 +35,14 @@ public class RiotRoomPageObjects extends TestUtilities{
 	public MobileElement avatarImageView;
 	@AndroidFindBy(id="im.vector.alpha:id/action_bar_header_room_title")
 	public MobileElement roomNameTextViewCollapsed;
+	@AndroidFindBy(id="im.vector.alpha:id/action_bar_header_room_members_settings_view")
+	public MobileElement openRoomMemberSettingsButton;
 	@AndroidFindBy(id="im.vector.alpha:id/action_bar_header_room_members_text_view")
 	public MobileElement activeMembersTextView;
-	@AndroidFindBy(id="im.vector.alpha:id/action_bar_header_invite_members")
+	@AndroidFindBy(id="im.vector.alpha:id/action_bar_header_room_members_invite_view")
 	public MobileElement inviteMembersButton;
 
+	
 	@AndroidFindBy(id="im.vector.alpha:id/room_toolbar")//action bar : contains back, room name, topic,search, collapse and more options buttons.
 	public MobileElement actionBarView;
 	@AndroidFindBy(xpath="//android.widget.ImageButton[@content-desc='Navigate up']")
@@ -55,6 +58,25 @@ public class RiotRoomPageObjects extends TestUtilities{
 	@AndroidFindBy(xpath="//android.view.View[@resource-id='im.vector.alpha:id/room_toolbar']//android.widget.ImageView[@content-desc='More options']")
 	public MobileElement moreOptionsButton;
 
+	public void addParticipantFromCollapsedActionBar(String inviteeAddress) throws InterruptedException{
+		inviteMembersButton.click();
+		RiotContactPickerPageObjects inviteMember = new RiotContactPickerPageObjects(driver);
+		inviteMember.searchAndSelectMember(inviteeAddress);
+		checkInviteConfirmationMsgBox(inviteeAddress);
+		alertDialogButton2.click();
+		waitUntilDisplayed(driver, "//android.widget.ProgressBar", false, 10);
+	}
+	
+	/**
+	 * Check texts of the invite confirmation msgbox.
+	 * @throws InterruptedException 
+	 */
+	public void checkInviteConfirmationMsgBox(String memberAddress) throws InterruptedException{
+		waitUntilDisplayed(driver, "im.vector.alpha:id/parentPanel", true, 5);
+		Assert.assertEquals(inputDialogNameTextView.getText(), "Confirmation");
+		Assert.assertTrue(inputDialogTextView.getText().matches("^Are you sure you want to invite (\\S+) to this chat\\?$"));
+	}
+	
 	/*
 	 * ROOM NAME DIALOG : opened after hit on room name from collapsed action bar.
 	 */
@@ -412,9 +434,12 @@ public class RiotRoomPageObjects extends TestUtilities{
 	 */
 	@AndroidFindBy(id="android:id/button1")
 	public MobileElement alertDialogButton2;
-
-
-
+	@AndroidFindBy(id="im.vector.alpha:id/parentPanel")
+	public MobileElement inputDialogMainLayout;
+	@AndroidFindBy(id="im.vector.alpha:id/alertTitle")
+	public MobileElement inputDialogNameTextView;
+	@AndroidFindBy(id="android:id/message")
+	public MobileElement inputDialogTextView;
 
 	/*
 	 * Functions

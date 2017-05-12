@@ -198,7 +198,7 @@ public class RiotPeopleManagingTests extends RiotParentTest{
 		RiotRoomPageObjects roomPage=homePage1.createRoom();
 
 		//2. Invite a participant
-		roomPage.inviteMembersButton.click();
+		roomPage.openRoomMemberSettingsButton.click();
 		RiotRoomDetailsPageObjects roomDetails1=new RiotRoomDetailsPageObjects(appiumFactory.getAndroidDriver1());
 		roomDetails1.addParticipant(getMatrixIdFromDisplayName(invitedUserDisplayName));
 		roomDetails1.waitUntilInvitedCategorieIsDisplayed(true);

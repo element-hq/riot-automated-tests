@@ -32,6 +32,22 @@ public class RiotHomePageTabObjects extends RiotTabPageObjects{
 	 */
 	@iOSFindBy(accessibility="HomeVCTableView")
 	public MobileElement hpTabRoomsTableView;
+	
+	/**
+	 * TEMP !!!!!!!!!!
+	 * Return a room as a MobileElement using his title.</br>
+	 * Return null if not found.
+	 * @param myRoomName
+	 * @return
+	 */
+	public MobileElement getRoomByName(String myRoomName){
+		try {
+			return roomsTableView.findElementByXPath("//XCUIElementTypeCell/XCUIElementTypeStaticText[@name='TitleLabel' and @value='"+myRoomName+"']/..");
+		} catch (Exception e) {
+			System.out.println("No room found with name "+myRoomName);
+			return null;
+		}
+	}
 
 	/*
 	 * FLOATING BUTTONS OR DIALOGS .
