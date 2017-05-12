@@ -182,7 +182,7 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	 * @throws InterruptedException 
 	 */
 	public void rejectInvitation(String roomName) throws InterruptedException{
-		waitUntilDisplayed(driver, "im.vector.alpha:id/recents_groups_invitation_group", true, 30);
+		waitUntilDisplayed(driver, "im.vector.alpha:id/invite_view", true, 30);
 		try {
 			MobileElement roomInvitationLayout=getInvitationLayoutByName(roomName);
 			roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_reject_button").click();
