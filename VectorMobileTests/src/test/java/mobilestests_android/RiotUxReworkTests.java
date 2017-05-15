@@ -150,6 +150,48 @@ public class RiotUxReworkTests extends RiotParentTest{
 	}
 	
 	/**
+	 * 1. Open people tab </br>
+	 * 2. Hit LOCAL ADDRESS BOOK sticky header </br>
+	 * Local contact list is displayed </br>
+	 * 3. Hit CONVERSATIONS sticky header </br>
+	 * Conversations list is displayed </br>
+	 * 4. Open rooms tab </br>
+	 * 5. Hit ROOM DIRECTORY stikcy header </br>
+	 * Check that room directory section is displayed </br>
+	 * 6. Hit ROOMS stikcy header </br>
+	 * Check that rooms displayed
+	 * @throws InterruptedException 
+	 */
+	@Test(groups={"1driver_android","1checkuser"}, priority=4)
+	public void stickyHeaderTest() throws InterruptedException{
+		//1. Open people tab
+		RiotHomePageTabObjects homePageTab = new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotPeopleTabPageObjects peopleTab = homePageTab.openPeopleTab();
+		
+		//2. Hit LOCAL ADDRESS BOOK sticky heade
+		peopleTab.hitSectionHeader("LOCAL ADDRESS BOOK");
+		//Local contact list is displayed 
+		Assert.assertTrue(peopleTab.peopleList.size()>1, "Contacts list is empty");
+		
+		//3. Hit CONVERSATIONS sticky header
+		peopleTab.hitSectionHeader("CONVERSATIONS");
+		//Conversations list is displayed
+		Assert.assertTrue(peopleTab.roomsList.size()>1,"Conversations list is empty");
+		
+		//4. Open rooms tab 
+		RiotRoomsTabPageObjects roomsTab = peopleTab.openRoomsTab();
+		//5. Hit ROOM DIRECTORY stikcy header
+		roomsTab.hitSectionHeader("ROOM DIRECTORY");
+		//Check that room directory section is displayed
+		Assert.assertTrue(roomsTab.publicRoomsList.size()>1, "Rooms directory list is empty");
+		
+		// 6. Hit ROOMS stikcy header 
+		roomsTab.hitSectionHeader("ROOMS");
+		//Check that room section is displayed
+		Assert.assertTrue(roomsTab.roomsList.size()>1, "Rooms list is empty");
+	}
+	
+	/**
 	 * Create a room by using https requests to home server.
 	 * @param roomName
 	 * @throws IOException 
