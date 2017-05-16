@@ -15,44 +15,48 @@ import io.appium.java_client.MobileElement;
 import pom_ios.RiotContactPickerPageObjects;
 import pom_ios.RiotRoomDetailsPageObjects;
 import pom_ios.RiotRoomPageObjects;
-import pom_ios.RiotRoomsListPageObjects;
+import pom_ios.main_tabs.RiotHomePageTabObjects;
+import pom_ios.main_tabs.RiotPeopleTabPageObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
 /**
- * Tests on the members tab from the room details, and on the contact picker.
+ * Tests on the members tab from the room details, the contact picker and the contacts list from People tab.
  * @author jeang
  *
  */
 @Listeners({ ScreenshotUtility.class })
-public class RiotManagingRoomMembersTests extends RiotParentTest{
+public class RiotPeopleManagingTests extends RiotParentTest{
 	private String testRoom="Common riotusers auto tests";
 	private String matchingWithKnownContactFilter1="riot";
 	private String invitedUserDisplayName="riotuser16";
 	private String riotUserDisplayName="riotuser15";
 	
+	/*
+	 * 								ROOM DETAILS: PEOPLE TAB.
+	 */
 	/**
-	 * 1. Open room testRoom and open his details, then people tab.
-	 * Check that text of the filter edittext is correct.
-	 * Check that the filter button isn't present
-	 * 2. Enter a filter in the "Filter room members" edittext.
-	 * Check that the people are correctly filtered.
-	 * Check that the filter button is present
-	 * 3. Clear the filter
-	 * Check that the people are no more filtered
-	 * 4. Filter with a random string
-	 * Check that the list of filtered members is empty and no results textview is displayed.
+	 * 1. Open room testRoom and open his details, then people tab. </br>
+	 * Check that text of the filter edittext is correct. </br>
+	 * Check that the filter button isn't present </br>
+	 * 2. Enter a filter in the "Filter room members" edittext. </br>
+	 * Check that the people are correctly filtered. </br>
+	 * Check that the filter button is present </br>
+	 * 3. Clear the filter </br>
+	 * Check that the people are no more filtered </br>
+	 * 4. Filter with a random string </br>
+	 * Check that the list of filtered members is empty and no results textview is displayed. </br>
 	 * @throws InterruptedException
 	 */
 	@Test(groups={"1driver_ios","1checkuser"})
-	public void useFilterFieldOnPeopleTabTest() throws InterruptedException{
+	public void useFilterFieldOnRoomDetailsPeopleTabTest() throws InterruptedException{
 		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String randomFilter=(new StringBuilder("filter_").append(randInt1)).toString();
 		
 		//1. Open room testRoom and open his details.
-		RiotRoomsListPageObjects roomList1=new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		roomList1.getRoomByName(testRoom).click();
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		homePage.getRoomByName(testRoom).click();
 		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		RiotRoomDetailsPageObjects roomsDetails1=roomPage1.openDetailView();
 		
@@ -88,14 +92,17 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		roomPage1.menuBackButton.click();
 	}
 	
+	/*
+	 * 								CONTACT PICKER.
+	 */
 	/**
-	 * 1. Open room testRoom and open his details, then people tab.
-	 * 2. Hit the addMember button
-	 * Check that the ContactPicker page is open and check the default layout
-	 * 3. Enter a random string in the search bar
-	 * Check that the text of the first item is equal to the random string
-	 * Check that the item of the LOCAL CONTACTS categorie is (0)
-	 * Check that the item of the KNOWN CONTACTS categorie is (0) https://github.com/vector-im/riot-ios/issues/1017
+	 * 1. Open room testRoom and open his details, then people tab. </br>
+	 * 2. Hit the addMember button </br>
+	 * Check that the ContactPicker page is open and check the default layout </br>
+	 * 3. Enter a random string in the search bar </br>
+	 * Check that the text of the first item is equal to the random string </br>
+	 * Check that the item of the LOCAL CONTACTS categorie is (0) </br>
+	 * Check that the item of the KNOWN CONTACTS categorie is (0) https://github.com/vector-im/riot-ios/issues/1017 </br>
 	 * @throws InterruptedException
 	 */
 	@Test(groups={"1driver_ios","1checkuser"})
@@ -104,8 +111,8 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		String randomContactName=(new StringBuilder("contact_").append(randInt1)).toString();
 
 		//1. Open room testRoom and open his details.
-		RiotRoomsListPageObjects roomList1=new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		roomList1.getRoomByName(testRoom).click();
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		homePage.getRoomByName(testRoom).click();
 		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		RiotRoomDetailsPageObjects roomsDetails1=roomPage1.openDetailView();
 		
@@ -119,12 +126,11 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		contactPicker1.searchMemberEditText.setValue(randomContactName);
 		//Check that the text of the first item is equal to the random string
 		Assert.assertEquals(contactPicker1.getDisplayNameOfMemberFromContactPickerList(contactPicker1.contactsOnlyList.get(0)), randomContactName);
-		//Check that there is no KNOWN CONTACTS categorie
 		Assert.assertEquals(contactPicker1.getCategoriesList().size(), 2, "There is more than 2 categories.");
 		//Check that the item of the LOCAL CONTACTS categorie is (0)
 		Assert.assertEquals(contactPicker1.getCategoriesList().get(0).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText(), "LOCAL CONTACTS (0)");
 		Assert.assertEquals(contactPicker1.getCategoriesList().get(1).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText(), "KNOWN CONTACTS (0)");
-		Assert.assertEquals(contactPicker1.contactsOnlyList.size(), 1, "There is too much members found with a random string.");
+		Assert.assertEquals(contactPicker1.contactsOnlyList.size(), 0, "There is too much members found with a random string.");
 		
 		//back to rooms list
 		contactPicker1.cancelButton.click();
@@ -133,19 +139,19 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	}
 	
 	/**
-	 * 1. Open room testRoom and open his details, then people tab.
-	 * 2. Hit the addMember button
-	 * 3. Enter in the search bar a word matching known contacts
-	 * Check that KNOWN CONTACTS categorie is displayed
-	 * Check that known contacts are as many as the number indicated in the category
-	 * Check that there is at least 2 filtered people
+	 * 1. Open room testRoom and open his details, then people tab. </br>
+	 * 2. Hit the addMember button </br>
+	 * 3. Enter in the search bar a word matching known contacts </br>
+	 * Check that KNOWN CONTACTS categorie is displayed </br>
+	 * Check that known contacts are as many as the number indicated in the category </br>
+	 * Check that there is at least 2 filtered people </br>
 	 * @throws InterruptedException 
 	 */
 	@Test(groups={"1driver_ios","1checkuser"})
 	public void contactPickerWithMatchingSearchOnKnownContact() throws InterruptedException{
 		//1. Open room testRoom and open his details.
-		RiotRoomsListPageObjects roomList1=new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		roomList1.getRoomByName(testRoom).click();
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		homePage.getRoomByName(testRoom).click();
 		RiotRoomPageObjects roomPage1=new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		RiotRoomDetailsPageObjects roomsDetails1=roomPage1.openDetailView();
 		
@@ -161,11 +167,11 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		Assert.assertEquals(contactPicker1.getDisplayNameOfMemberFromContactPickerList(contactPicker1.contactsOnlyList.get(0)), matchingWithKnownContactFilter1);
 		//Check that KNOWN CONTACTS categorie is displayed
 		Assert.assertEquals(contactPicker1.getCategoriesList().size(), 2, "There is more than 2 categorie.");
-		Assert.assertTrue(contactPicker1.getCategoriesList().get(0).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText().matches("^LOCAL CONTACTS \\([0-9]*\\)$"));
 		String knownContacts=contactPicker1.getCategoriesList().get(1).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText();
+		Assert.assertTrue(contactPicker1.getCategoriesList().get(0).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText().matches("^LOCAL CONTACTS \\[0-9]*\\)$"));
 		Assert.assertTrue(knownContacts.matches("^KNOWN CONTACTS \\([^0][0-9]*\\)$"));
 		//Check that there is at least 2 filtered people
-		Assert.assertTrue(contactPicker1.contactsOnlyList.size()>=2, "There not enough members in the list after filtering with matching word.");
+		Assert.assertTrue(contactPicker1.contactsOnlyList.size()>=2, "There is not enough members in the list after filtering with matching word.");
 		
 		//back to rooms list
 		contactPicker1.cancelButton.click();
@@ -174,17 +180,17 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 	}
 	
 	/**
-	 * 1. Create a room.
-	 * 2. Invite a participant
-	 * 3. Remove this participant from the room details
-	 * Check that there is no more INVITED category
+	 * 1. Create a room. </br>
+	 * 2. Invite a participant </br>
+	 * 3. Remove this participant from the room details </br>
+	 * Check that there is no more INVITED category </br>
 	 * @throws InterruptedException
 	 */
 	@Test(groups={"1driver_ios","1checkuser"})
 	public void inviteAndCancelInvitationTest() throws InterruptedException{
 		//1. Create a room.
-		RiotRoomsListPageObjects roomList1=new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		RiotRoomPageObjects roomPage=roomList1.createRoom();
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		RiotRoomPageObjects roomPage=homePage.createRoom();
 		
 		//2. Invite a participant
 		roomPage.inviteMembersLink.click();
@@ -199,6 +205,45 @@ public class RiotManagingRoomMembersTests extends RiotParentTest{
 		
 		//4. Check that there is no more INVITED category
 		Assert.assertEquals(roomDetails1.membersList.size(), 1, "Invited category is still here");
+	}
+	
+	/*
+	 * 								PEOPLE TAB.
+	 */
+	/**
+	 * 1. Open PeopleTab </br>
+	 * 2. Scroll down to the end of people list </br>
+	 * Check that known contact list isn't displayed.
+	 * 3. Enter in the filter a matching word with KNOWN CONTACTS list.
+	 * Check that known contact list is displayed.
+	 * 4. Enter in the filter a random word matching nothing.
+	 * Check that known contact list is displayed.
+	 * @throws InterruptedException
+	 */
+	@Test(groups={"1driver_ios","1checkuser"})
+	public void displayKnownContactSectionOnPeopleTab() throws InterruptedException{
+		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
+		String notMachingAnythingWord=(new StringBuilder("random_").append(randInt1)).toString();
+
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		//1. Open PeopleTab 
+		RiotPeopleTabPageObjects peopleTab = homePage1.openPeopleTab();
+		
+		//2. Scroll down to the end of people list 
+		//peopleTab.scrollToBottom(appiumFactory.getiOsDriver1());
+		//Check that known contact list isn't displayed.
+		Assert.assertNull(peopleTab.getSectionHeaderByName("KNOWN CONTACTS"), "Known contacts sections is present and shouldn't be.");
+		
+		//3. Enter in the filter a matching word with KNOWN CONTACTS list
+		peopleTab.displayFilterBarBySwipingDown();
+		peopleTab.useFilterBar(notMachingAnythingWord,true);//appiumFactory.getiOsDriver1().hideKeyboard();
+		//Check that known contact list is displayed.
+		Assert.assertNotNull(peopleTab.getSectionHeaderByName("KNOWN CONTACTS"), "Known contacts sections should be present.");
+		
+		//4. Enter in the filter a random word matching nothing.
+		peopleTab.useFilterBar(matchingWithKnownContactFilter1,true);//appiumFactory.getiOsDriver1().hideKeyboard();
+		//Check that known contact list is displayed.
+		Assert.assertNotNull(peopleTab.getSectionHeaderByName("KNOWN CONTACTS"), "Known contacts sections should be present.");
 	}
 	
 	@AfterMethod(alwaysRun=true)

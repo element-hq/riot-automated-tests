@@ -15,7 +15,6 @@ public class RiotCameraPageObjects extends TestUtilities{
 		driver=(AndroidDriver<MobileElement>) myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 		Thread.sleep(2000);
-		//ExplicitWait(driver,this.roomsExpandableListView);
 		try {
 			waitUntilDisplayed(driver,"im.vector.alpha:id/medias_picker_preview_gallery_layout", true, 5);
 		} catch (InterruptedException e) {

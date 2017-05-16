@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import com.esotericsoftware.yamlbeans.YamlException;
 
 import pom_ios.RiotUnifiedSearchPageObjects;
-import pom_ios.RiotRoomsListPageObjects;
+import pom_ios.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -40,9 +40,9 @@ public class RiotSearchTests extends RiotParentTest{
 		int nbRooms=0;
 		
 		//1. Hit search button from rooms list.
-		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		nbRooms=roomsList.roomsList.size();
-		roomsList.searchButton.click();
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		nbRooms=homePage.roomsCellsList.size();
+		homePage.searchButton.click();
 		RiotUnifiedSearchPageObjects unifiedSearch = new RiotUnifiedSearchPageObjects(appiumFactory.getiOsDriver1());
 		
 		//2. In Rooms tab, launch a search with a random string.
@@ -57,7 +57,7 @@ public class RiotSearchTests extends RiotParentTest{
 		//Check that the global search page is closed: no more search tabs.
 		//Assert.assertFalse(isPresentTryAndCatch(unifiedSearch.tabsBarContainer), "Unified search is still opened after hitting Cancel button");
 		//Check that numbers of room in recents is the same that before step 1.
-		Assert.assertEquals(roomsList.roomsList.size(), nbRooms);
+		Assert.assertEquals(homePage.roomsCellsList.size(), nbRooms);
 	}
 	
 	/**

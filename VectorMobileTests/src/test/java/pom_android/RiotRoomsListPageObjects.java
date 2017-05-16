@@ -17,6 +17,7 @@ import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import utility.TestUtilities;
 
+@Deprecated
 public class RiotRoomsListPageObjects extends TestUtilities {
 	private AndroidDriver<MobileElement> driver;
 
@@ -35,7 +36,8 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	/*
 	 * INVITES
 	 */
-	@AndroidFindBy(xpath="//android.widget.TextView[@resource-id='im.vector.alpha:id/heading' and @text='INVITES']/../..")//invites collapsing bar
+	/** Invites collapsing bar. */
+	@AndroidFindBy(xpath="//android.widget.TextView[@resource-id='im.vector.alpha:id/heading' and @text='INVITES']/../..")
 	public MobileElement invitesHeadingLayout;
 
 	public MobileElement getInvitationLayoutByName(String roomName) throws InterruptedException{
@@ -81,7 +83,6 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 		} catch (Exception e) {
 			Assert.fail("No invitation found with room "+roomName);
 		}
-
 	}
 
 	/**
@@ -103,7 +104,7 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	 * ROOMS
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/fragment_recents_list")//expandable view containing all the rooms lists (favorites, rooms, low priority, etc).
-	public MobileElement roomsExpandableListView;
+	public MobileElement roomsListView;
 	/**
 	 * Contains only the rooms.
 	 */
@@ -152,7 +153,23 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 		} while (index<=roomsAndCategoriesList.size()-1 && roomFound==false && otherCategoryFound==false);
 		return roomFound;
 	}
-
+	
+	/**
+	 * TODO: this function isn't valid because the unread indicator is always present even if there is not unread message on the room. </br>
+	 * Return true if a room has an unread indicator.
+	 * @param myRoomName
+	 * @return
+	 */
+	@Deprecated
+	public Boolean doesRoomHaveUnreadIndicator(String myRoomName){
+		MobileElement roomItem = getRoomByName(myRoomName);
+		if(null==roomItem){
+			return false;
+		}else{
+			return !roomItem.findElementsById("im.vector.alpha:id/indicator_unread_message").isEmpty();
+		}
+	}
+	
 	/**
 	 * Return a room as a MobileElement. </br>
 	 * Return null if not found.
@@ -165,7 +182,6 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 		} catch (Exception e) {
 			return null;
 		}
-
 	}
 
 	/**
@@ -185,7 +201,6 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 		}else{
 			System.out.println("No room found with name "+roomName+", impossible to click on item "+item+" on context menu.");
 		}
-		
 	}
 
 	/**
@@ -265,18 +280,16 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	/*
 	 * LATERAL MENU
 	 */
-	//Logout button
-
-	@AndroidFindBy(id="im.vector.alpha:id/navigation_view")
-	public MobileElement lateralMenuLayout;
+	@AndroidFindBy(id="im.vector.alpha:id/design_navigation_view")
+	public MobileElement lateralMenuView;
 	@AndroidFindBy(xpath="//android.widget.FrameLayout//android.widget.CheckedTextView[@text='Settings']")////android.widget.CheckedTextView[@text='Logout']
 	public MobileElement settingsButton;
 	@AndroidFindBy(xpath="//android.widget.FrameLayout//android.widget.CheckedTextView[@text='Sign out']")////android.widget.CheckedTextView[@text='Logout']
 	public MobileElement signOutButton;
 	@AndroidFindBy(id="im.vector.alpha:id/home_menu_main_displayname")
-	public MobileElement displayedUserMain;
+	public MobileElement userDisplayNameFromLateralMenu;
 	@AndroidFindBy(id="im.vector.alpha:id/home_menu_main_matrix_id")
-	public MobileElement displayedUserMatrixId;
+	public MobileElement userMatrixIdFromLateralMenu;
 	
 	@AndroidFindBy(xpath="//android.widget.FrameLayout//android.widget.CheckedTextView[@text='Copyright']")//copyright button
 	public MobileElement openCopyrightButton;
@@ -285,9 +298,9 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	 * ALERT DIALOG
 	 */
 	@AndroidFindBy(id="android:id/parentPanel")
-	public MobileElement signOutPopUpPanel;
+	public MobileElement alertDialogParentPanel;
 	@AndroidFindBy(id="android:id/message")
-	public MobileElement signOutTitleTextView;
+	public MobileElement alertDialogMessage;
 	@AndroidFindBy(id="android:id/button1")
 	public MobileElement alertDialogButton2;
 	@AndroidFindBy(id="android:id/button2")
@@ -301,14 +314,14 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	 * @return
 	 */
 	public MobileElement getItemMenuByName(String name){
-		return lateralMenuLayout.findElementByName(name);
+		return lateralMenuView.findElementByName(name);
 	}
 
 	/**
 	 * '+' button at the bottom.</br> Open a listview with 'start chat' and 'create room'.
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/listView_create_room_view")
-	public MobileElement plusRoomButton;
+	public MobileElement createRoomFloatingButton;
 
 	/*
 	 * START CHAT / CREATE ROOM
@@ -330,8 +343,24 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 	 * @return
 	 */
 	public RiotRoomPageObjects createRoom(){
-		plusRoomButton.click();
+		createRoomFloatingButton.click();
 		createRoomCheckedTextView.click();
+		return new RiotRoomPageObjects(driver);
+	}
+	
+	/**
+	 * Start a new chat with a user and returns the new created room. 
+	 * @param displayNameOrMatrixId
+	 * @return RiotRoomPageObjects
+	 * @throws InterruptedException 
+	 */
+	public RiotRoomPageObjects startChat(String displayNameOrMatrixId) throws InterruptedException{
+		createRoomFloatingButton.click();
+		startChatCheckedTextView.click();
+		RiotContactPickerPageObjects inviteViewDevice1=new RiotContactPickerPageObjects(driver);
+		inviteViewDevice1.searchAndSelectMember(getMatrixIdFromDisplayName(displayNameOrMatrixId));
+		RiotNewChatPageObjects newChatViewDevice1= new RiotNewChatPageObjects(driver);
+		newChatViewDevice1.confirmRoomCreationButton.click();
 		return new RiotRoomPageObjects(driver);
 	}
 
@@ -342,7 +371,7 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 		this.contextMenuButton.click();
 		this.signOutButton.click();
 		//verifies that sign out pop up is displayed and correct
-		Assert.assertEquals(signOutTitleTextView.getText(), "For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.");
+		Assert.assertEquals(alertDialogMessage.getText(), "For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.");
 		Assert.assertTrue(alertDialogButton1.isDisplayed(),"Cancel button isn't displayed");
 		Assert.assertTrue(alertDialogButton2.isDisplayed(),"OK button isn't displayed");
 		alertDialogButton2.click();
@@ -359,7 +388,7 @@ public class RiotRoomsListPageObjects extends TestUtilities {
 		this.logOut();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
 		try {
-			loginPage.logUser(username, null,password);
+			loginPage.logUser(username, null,password,false);
 		} catch (FileNotFoundException | YamlException e) {
 			e.printStackTrace();
 		}

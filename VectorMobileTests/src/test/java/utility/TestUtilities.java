@@ -26,7 +26,8 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.Connection;
 import io.appium.java_client.ios.IOSDriver;
 import pom_ios.RiotLoginAndRegisterPageObjects;
-import pom_ios.RiotRoomsListPageObjects;
+import pom_ios.RiotSettingsPageObjects;
+import pom_ios.main_tabs.RiotHomePageTabObjects;
 
 public class TestUtilities extends MatrixUtilities{
 	public static AppiumFactory appiumFactory=AppiumFactory.getInstance();
@@ -57,7 +58,7 @@ public class TestUtilities extends MatrixUtilities{
 		(new WebDriverWait(driver, timeToWait)).until(ExpectedConditions.visibilityOf(element));
 		System.out.println((Object) element.getTagName()+" displayed");
 	}
-
+	
 	/**
 	 * Wait @param maxSecondsToWait for the @param id to appear or not, using try and catch.
 	 * @param idOrXpath
@@ -66,6 +67,7 @@ public class TestUtilities extends MatrixUtilities{
 	 * @throws InterruptedException 
 	 */
 	public Boolean waitUntilDisplayed(AppiumDriver<MobileElement> driver,String idOrXpath, Boolean displayed,int maxSecondsToWait) throws InterruptedException {
+		long start = System.currentTimeMillis();
 		Boolean isDisplayed = false;
 		Boolean isXpath=false;
 		String methodUsed="Method used : byId";
@@ -82,9 +84,7 @@ public class TestUtilities extends MatrixUtilities{
 		}else{
 			verb="disappear";
 		}
-		float secondsWaited=0;
 		do {
-			if(maxSecondsToWait!=0){Thread.sleep(500);secondsWaited=(float) (secondsWaited+0.5);}
 			try {
 				if(isXpath){
 					driver.findElementByXPath(idOrXpath);
@@ -94,14 +94,13 @@ public class TestUtilities extends MatrixUtilities{
 					}else{
 						driver.findElement(By.id(idOrXpath));
 					}
-
 				}
 				isDisplayed=true;
 			} catch (Exception e) {
 				isDisplayed=false;
 			}
-		} while (displayed!=isDisplayed && secondsWaited<maxSecondsToWait);
-		System.out.println("Seconds to wait "+idOrXpath+" to "+verb+": "+secondsWaited+". "+methodUsed+ ". Device "+driver.getCapabilities().getCapability("deviceName"));
+		} while (displayed!=isDisplayed && (System.currentTimeMillis()-start)/1000F<maxSecondsToWait);
+		System.out.println("Time to wait "+idOrXpath+" to "+verb+": "+(System.currentTimeMillis()-start)/1000F+" seconds. "+methodUsed+ ". Device "+driver.getCapabilities().getCapability("deviceName"));
 		return isDisplayed;
 	}
 
@@ -125,6 +124,19 @@ public class TestUtilities extends MatrixUtilities{
 		if (!found)msgFound="don't have";
 		System.out.println("Seconds to wait element property '"+propertyName+ "' to "+msgFound+" value "+propertyValue+": "+secondsWaited);
 		return found;
+	}
+	
+	/**
+	 * TODO: finish this function
+	 * Scroll to the end of the list. </br> Scroll until the text of the last element is the same than the one from previous loop.
+	 * </br> Should only work on android since on iOS invisible elements by the user are visible bar iOS automation framework.
+	 * @param driver
+	 * @param list
+	 * @param xpathToTextToCompare
+	 */
+	public void scrollToEndOfList(AppiumDriver<MobileElement> driver, MobileElement list, String xpathToTextToCompare){
+		String lastElementText=list.findElementByXPath("*[last()]"+xpathToTextToCompare).getText();
+		lastElementText.toString();
 	}
 
 	/**
@@ -221,8 +233,18 @@ public class TestUtilities extends MatrixUtilities{
 	 * @param pwd
 	 */
 	public void checkIfUserLoggedAndHomeServerSetUpAndroid(AndroidDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException, FileNotFoundException, YamlException {
+		checkIfUserLoggedAndHomeServerSetUpAndroid(myDriver, username, pwd, false);
+	}
+	/**
+	 * Log the good user if not.</br> Secure the test.
+	 * @param myDriver
+	 * @param username
+	 * @param pwd
+	 * @param forceDefaultHs : true to force using default matrix homeserver.
+	 */
+	public void checkIfUserLoggedAndHomeServerSetUpAndroid(AndroidDriver<MobileElement> myDriver, String username, String pwd, Boolean forceDefaultHs) throws InterruptedException, FileNotFoundException, YamlException {
 		String expectedHomeServer;
-		if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+		if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal")) && forceDefaultHs==false){
 			expectedHomeServer=ReadConfigFile.getInstance().getConfMap().get("homeserver");
 		}else{
 			expectedHomeServer=Constant.DEFAULT_MATRIX_SERVER;
@@ -232,16 +254,16 @@ public class TestUtilities extends MatrixUtilities{
 		if(waitUntilDisplayed(myDriver, "im.vector.alpha:id/main_input_layout", false, 5)){
 			System.out.println("User "+username+" isn't logged, login forced on home server: "+expectedHomeServer);
 			pom_android.RiotLoginAndRegisterPageObjects loginView = new pom_android.RiotLoginAndRegisterPageObjects(myDriver);
-			loginView.logUser(username,null, pwd);
-			//If riot list isn't displayed, restart riot
+			loginView.logUser(username,null, pwd, forceDefaultHs);
+			//If riot home page isn't displayed, restart riot
 		}else{			
-			if(!waitUntilDisplayed(myDriver, "im.vector.alpha:id/fragment_recents_list", true, 0)){
+			if(!waitUntilDisplayed(myDriver, "im.vector.alpha:id/home_toolbar", true, 0)){
 				restartApplication(myDriver);
 			}
-			pom_android.RiotRoomsListPageObjects listRoom = new pom_android.RiotRoomsListPageObjects(myDriver);
-			listRoom.contextMenuButton.click();
-			String actualLoggedUserDisplayName=listRoom.displayedUserMain.getText();
-			String actualLoggedMatrixId=listRoom.displayedUserMatrixId.getText();
+			pom_android.main_tabs.RiotHomePageTabObjects homePage = new pom_android.main_tabs.RiotHomePageTabObjects(myDriver);
+			homePage.contextMenuButton.click();
+			String actualLoggedUserDisplayName=homePage.userDisplayNameFromLateralMenu.getText();
+			String actualLoggedMatrixId=homePage.userMatrixIdFromLateralMenu.getText();
 			String hs=actualLoggedMatrixId.substring(actualLoggedMatrixId.indexOf(":")+1, actualLoggedMatrixId.length());
 			if(null==actualLoggedUserDisplayName){
 				actualLoggedUserDisplayName="";
@@ -253,17 +275,19 @@ public class TestUtilities extends MatrixUtilities{
 					System.out.println("Wrong actual logged user: "+actualLoggedUserDisplayName+". Let's log with user "+username+" on homeserver: "+expectedHomeServer);	
 				}
 				myDriver.navigate().back();
-				listRoom.logOutAndLogin(username, pwd);
+				homePage.logOutAndLogin(username, pwd, forceDefaultHs);
 			}else{
 				System.out.println("User "+username+" is logged with expected homeserver: " +expectedHomeServer+". No need to log out and log in.");
 				myDriver.navigate().back();
 			}
 		}
 	}
-
 	public void checkIfUserLoggedAndHomeServerSetUpIos(IOSDriver<MobileElement> myDriver, String username, String pwd) throws InterruptedException, FileNotFoundException, YamlException {
+		checkIfUserLoggedAndHomeServerSetUpIos(myDriver, username, pwd, false);
+	}
+	public void checkIfUserLoggedAndHomeServerSetUpIos(IOSDriver<MobileElement> myDriver, String username, String pwd, Boolean forceDefaultHs) throws InterruptedException, FileNotFoundException, YamlException {
 		String expectedHomeServer=null;
-		if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+		if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))&& forceDefaultHs==false){
 			expectedHomeServer=ReadConfigFile.getInstance().getConfMap().get("homeserver");
 		}else{
 			expectedHomeServer=Constant.DEFAULT_MATRIX_SERVER;
@@ -273,18 +297,18 @@ public class TestUtilities extends MatrixUtilities{
 		if(waitUntilDisplayed(myDriver, "AuthenticationVCScrollViewContentView", false, 3)){
 			System.out.println("User "+username+" isn't logged, login forced on home server: "+expectedHomeServer);
 			RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(myDriver);
-			loginPage.logUser(username,null, pwd);
-			new RiotRoomsListPageObjects(myDriver);
+			loginPage.logUser(username,null, pwd,forceDefaultHs);
+			new RiotHomePageTabObjects(myDriver);
 		}else{
-			//if riot list isn't displayed, restart riot
-			if(!waitUntilDisplayed(myDriver, "RecentsVCTableView", true, 0)){
+			//if riot home page isn't displayed, restart riot
+			if(!waitUntilDisplayed(myDriver, "HomeVCView", true, 0)){
 				restartApplication(myDriver);
 			}
-			RiotRoomsListPageObjects listRoom = new RiotRoomsListPageObjects(myDriver);
-			listRoom.settingsButton.click();
+			RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(myDriver);
+			RiotSettingsPageObjects settingsPage=homePage.openRiotSettings();
 			//check if the wanted user is loged in
-			String actualLoggedUserDisplayName=listRoom.displayNameTextField.getText();
-			String actualLoggedMatrixId=listRoom.configStaticText.getText();
+			String actualLoggedUserDisplayName=settingsPage.displayNameTextField.getText();
+			String actualLoggedMatrixId=settingsPage.configStaticText.getText();
 			String hs=actualLoggedMatrixId.substring(actualLoggedMatrixId.indexOf(":")+1, actualLoggedMatrixId.indexOf("Home server")-1);
 			if(null==actualLoggedUserDisplayName){
 				actualLoggedUserDisplayName="";
@@ -296,14 +320,13 @@ public class TestUtilities extends MatrixUtilities{
 				}else{
 					System.out.println("Wrong actual logged user: "+actualLoggedUserDisplayName+". Let's log with user "+username+" on homeserver: "+expectedHomeServer);	
 				}
-				listRoom.logOutAndLoginFromSettingsView(username, pwd);
+				settingsPage.logOutAndLoginFromSettingsView(username, pwd,forceDefaultHs);
 			}else{
 				System.out.println("User "+username+" is logged with expected homeserver: " +expectedHomeServer+". No need to log out and log in.");
-				listRoom.backMenuButton.click();
+				settingsPage.backMenuButton.click();
 			}
 		}
 	}
-
 	/**
 	 * Close then open again the application.
 	 * @param myDriver

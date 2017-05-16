@@ -15,8 +15,8 @@ import pom_android.RiotContactPickerPageObjects;
 import pom_android.RiotNewChatPageObjects;
 import pom_android.RiotRoomDetailsPageObjects;
 import pom_android.RiotRoomPageObjects;
-import pom_android.RiotRoomsListPageObjects;
 import pom_android.RiotSettingsPageObjects;
+import pom_android.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -49,24 +49,16 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		/*
 		 * FIRST PART
 		 */
-		RiotRoomsListPageObjects roomsListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		RiotRoomsListPageObjects roomsListDevice2=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotHomePageTabObjects homePage2=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver2());
 		//create a new "start chat" room
-		roomsListDevice1.plusRoomButton.click();
-		roomsListDevice1.startChatCheckedTextView.click();
-		//invite a member
-		RiotContactPickerPageObjects inviteViewDevice1=new RiotContactPickerPageObjects(appiumFactory.getAndroidDriver1());
-		inviteViewDevice1.searchAndSelectMember(getMatrixIdFromDisplayName(riotuser2DisplayName));
-		RiotNewChatPageObjects newChatViewDevice1= new RiotNewChatPageObjects(appiumFactory.getAndroidDriver1());
-		newChatViewDevice1.confirmRoomCreationButton.click();
-		//Room is created, then go back in rooms list
-		RiotRoomPageObjects newRoomDevice1= new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
+		RiotRoomPageObjects newRoomDevice1= homePage1.startChat(riotuser2DisplayName);
 		newRoomDevice1.menuBackButton.click();
 		//assertion on the inviter device: the new room is seen as an direct message room.
-		Assert.assertTrue(roomsListDevice1.isDirectMessageByRoomName(riotuser2DisplayName),"Room "+riotuser2DisplayName+" doesn't have a little green man on inviter device.");
+		Assert.assertTrue(homePage1.isDirectMessageByRoomName(riotuser2DisplayName),"Room "+riotuser2DisplayName+" doesn't have a little green man on inviter device.");
 		//assertion the invitee device (device 2)
 		//TODO: check little green man on invitation layout
-		roomsListDevice2.previewInvitation(riotuser1DisplayName);
+		homePage2.previewInvitation(riotuser1DisplayName);
 		RiotRoomPageObjects newRoomDevice2 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
 		newRoomDevice2.joinRoomButton.click();
 		//send a msg from device 2 as a proof for second part
@@ -75,17 +67,17 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		//appiumFactory.getAndroidDriver2().pressKeyCode(AndroidKeyCode.BACK);
 		newRoomDevice2.menuBackButton.click();
 		//assertion on the invitee device: the new room is seen as an direct message room.
-		Assert.assertTrue(roomsListDevice2.isDirectMessageByRoomName(riotuser1DisplayName),"Room "+riotuser1DisplayName+" doesn't have a little green man on invitee device.");
+		Assert.assertTrue(homePage2.isDirectMessageByRoomName(riotuser1DisplayName),"Room "+riotuser1DisplayName+" doesn't have a little green man on invitee device.");
 		/*
 		 * SECOND PART
 		 */
 		//create a new "start" room with the same member a second time.
-		roomsListDevice1.plusRoomButton.click();
-		roomsListDevice1.startChatCheckedTextView.click();
+		homePage1.createRoomFloatingButton.click();
+		homePage1.startChatCheckedTextView.click();
 		//invite a member
-		inviteViewDevice1=new RiotContactPickerPageObjects(appiumFactory.getAndroidDriver1());
+		RiotContactPickerPageObjects inviteViewDevice1=new RiotContactPickerPageObjects(appiumFactory.getAndroidDriver1());
 		inviteViewDevice1.searchAndSelectMember(getMatrixIdFromDisplayName(riotuser2DisplayName));
-		newChatViewDevice1= new RiotNewChatPageObjects(appiumFactory.getAndroidDriver1());
+		RiotNewChatPageObjects newChatViewDevice1= new RiotNewChatPageObjects(appiumFactory.getAndroidDriver1());
 		newChatViewDevice1.confirmRoomCreationButton.click();
 		//check that the previously create room is opened instead of being created again.
 		newRoomDevice1= new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
@@ -104,11 +96,11 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	public void startChatWithMoreThanTwoUsers() throws InterruptedException{
 		String roomNameFromDevice1=riotuser2DisplayName+" and "+riotuser3DisplayName;
 
-		RiotRoomsListPageObjects roomsListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		RiotRoomsListPageObjects roomsListDevice2=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotHomePageTabObjects homePage2=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver2());
 		//create a new "start chat" room
-		roomsListDevice1.plusRoomButton.click();
-		roomsListDevice1.startChatCheckedTextView.click();
+		homePage1.createRoomFloatingButton.click();
+		homePage1.startChatCheckedTextView.click();
 		//invite a first member
 		RiotContactPickerPageObjects inviteViewDevice1=new RiotContactPickerPageObjects(appiumFactory.getAndroidDriver1());
 		inviteViewDevice1.searchAndSelectMember(getMatrixIdFromDisplayName(riotuser2DisplayName));
@@ -122,16 +114,16 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		RiotRoomPageObjects newRoomDevice1= new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		newRoomDevice1.menuBackButton.click();
 		//assertion on the inviter device: the new room is NOT seen as an direct message room.
-		Assert.assertFalse(roomsListDevice1.isDirectMessageByRoomName(roomNameFromDevice1),"Room "+roomNameFromDevice1+" doesn't have a little green man on inviter device.");
+		Assert.assertFalse(homePage1.isDirectMessageByRoomName(roomNameFromDevice1),"Room "+roomNameFromDevice1+" doesn't have a little green man on inviter device.");
 		//assertion the invitee device (device 2)
 		//TODO: check little green man on invitation layout
-		roomsListDevice2.previewInvitation(riotuser1DisplayName);
+		homePage2.previewInvitation(riotuser1DisplayName);
 		RiotRoomPageObjects newRoomDevice2 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
 		newRoomDevice2.joinRoomButton.click();
 		ExplicitWait(appiumFactory.getAndroidDriver2(), newRoomDevice2.menuBackButton);
 		newRoomDevice2.menuBackButton.click();
 		//assertion on the invitee device: the new room is NOT seen as an direct message room.
-		Assert.assertFalse(roomsListDevice2.isDirectMessageByRoomName(riotuser1DisplayName),"Room "+riotuser1DisplayName+" doesn't have a little green man on invitee device.");
+		Assert.assertFalse(homePage2.isDirectMessageByRoomName(riotuser1DisplayName),"Room "+riotuser1DisplayName+" doesn't have a little green man on invitee device.");
 	}
 
 	/**
@@ -142,33 +134,26 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkusers_android","check_contacts_permission"}, description="direct message test")
 	public void createRoomWithOneUser() throws InterruptedException{
-		RiotRoomsListPageObjects roomsListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		RiotRoomsListPageObjects roomsListDevice2=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
-		//create a new "start chat" room
-		roomsListDevice1.plusRoomButton.click();
-		roomsListDevice1.createRoomCheckedTextView.click();
-		RiotRoomPageObjects newRoomDevice1 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotHomePageTabObjects homePage2=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver2());
+		//create a new  room
+		RiotRoomPageObjects newRoomDevice1 = homePage1.createRoom();
 		//invite 1 member
-		newRoomDevice1.inviteMembersButton.click();
-		RiotRoomDetailsPageObjects roomDetailsDevice1 = new RiotRoomDetailsPageObjects(appiumFactory.getAndroidDriver1());
-		//add a participant from the details
-		roomDetailsDevice1.addParticipant(getMatrixIdFromDisplayName(riotuser2DisplayName));
-		//go back to the rooms list
-		roomDetailsDevice1.menuBackButton.click();
+		newRoomDevice1.addParticipantFromCollapsedActionBar(getMatrixIdFromDisplayName(riotuser2DisplayName));
 		newRoomDevice1.menuBackButton.click();
 		//assertion on the inviter device: the new room is NOT seen as an direct message room.
-		Assert.assertFalse(roomsListDevice1.isDirectMessageByRoomName(riotuser2DisplayName),"Room "+riotuser2DisplayName+" doesn't have a little green man on inviter device.");
+		Assert.assertFalse(homePage1.isDirectMessageByRoomName(riotuser2DisplayName),"Room "+riotuser2DisplayName+" doesn't have a little green man on inviter device.");
 
 		//assertion the invitee device (device 2)
 		//TODO: check little green man on invitation layout
-		roomsListDevice2.previewInvitation(riotuser1DisplayName);
+		homePage2.previewInvitation(riotuser1DisplayName);
 		RiotRoomPageObjects newRoomDevice2 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
 		newRoomDevice2.joinRoomButton.click();
 		ExplicitWait(appiumFactory.getAndroidDriver2(), newRoomDevice2.menuBackButton);
 		//appiumFactory.getAndroidDriver2().pressKeyCode(AndroidKeyCode.BACK);
 		newRoomDevice2.menuBackButton.click();
 		//assertion on the invitee device: the new room is NOT seen as an direct message room.
-		Assert.assertFalse(roomsListDevice2.isDirectMessageByRoomName(riotuser1DisplayName),"Room "+riotuser1DisplayName+" doesn't have a little green man on invitee device.");
+		Assert.assertFalse(homePage2.isDirectMessageByRoomName(riotuser1DisplayName),"Room "+riotuser1DisplayName+" doesn't have a little green man on invitee device.");
 	}
 
 	/**
@@ -185,16 +170,14 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkusers_android","check_contacts_permission"})
 	public void tagAndUntagDirectMessageRoom() throws InterruptedException{
-		RiotRoomsListPageObjects roomsListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		RiotRoomsListPageObjects roomsListDevice2=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotHomePageTabObjects homePage2=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver2());
 		//1. Create a direct message room.
-		roomsListDevice1.plusRoomButton.click();
-		roomsListDevice1.createRoomCheckedTextView.click();
-		RiotRoomPageObjects newRoomDevice1 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
+		RiotRoomPageObjects newRoomDevice1 = homePage1.createRoom();
 		//put a room name
 		newRoomDevice1.changeRoomName(tmpRoomName);
 		//invite 1 member
-		newRoomDevice1.inviteMembersButton.click();
+		newRoomDevice1.openRoomMemberSettingsButton.click();
 		RiotRoomDetailsPageObjects roomDetailsDevice1 = new RiotRoomDetailsPageObjects(appiumFactory.getAndroidDriver1());
 		//add a participant from the details
 		roomDetailsDevice1.addParticipant(getMatrixIdFromDisplayName(riotuser2DisplayName));
@@ -202,7 +185,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		newRoomDevice1.menuBackButton.click();
 
 		//accept invitation from device 2.
-		roomsListDevice2.previewInvitation(tmpRoomName);
+		homePage2.previewInvitation(tmpRoomName);
 		RiotRoomPageObjects newRoomDevice2 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
 		newRoomDevice2.joinRoomButton.click();
 		//ExplicitWait(appiumFactory.getAndroidDriver2(), newRoomDevice2.menuBackButton);
@@ -210,18 +193,18 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		newRoomDevice2.menuBackButton.click();
 
 		//2. Tag it on DM on device 1
-		roomsListDevice1.clickOnContextMenuOnRoom(tmpRoomName, "Direct Chat");
-		Assert.assertTrue(roomsListDevice1.isDirectMessageByRoomName(tmpRoomName),"Room "+tmpRoomName+" doesn't have a little green man on inviter device.");
+		homePage1.clickOnContextMenuOnRoom(tmpRoomName, "Direct Chat");
+		Assert.assertTrue(homePage1.isDirectMessageByRoomName(tmpRoomName),"Room "+tmpRoomName+" doesn't have a little green man on inviter device.");
 		//3. Tag it on DM on device 2
-		roomsListDevice2.clickOnContextMenuOnRoom(tmpRoomName, "Direct Chat");
-		Assert.assertTrue(roomsListDevice2.isDirectMessageByRoomName(tmpRoomName),"Room "+tmpRoomName+" doesn't have a little green man on invitee device.");
+		homePage2.clickOnContextMenuOnRoom(tmpRoomName, "Direct Chat");
+		Assert.assertTrue(homePage2.isDirectMessageByRoomName(tmpRoomName),"Room "+tmpRoomName+" doesn't have a little green man on invitee device.");
 
 		//4. Untag it on DM on device 1
-		roomsListDevice1.clickOnContextMenuOnRoom(tmpRoomName, "Direct Chat");
-		Assert.assertFalse(roomsListDevice1.isDirectMessageByRoomName(tmpRoomName),"Room "+tmpRoomName+" have a little green man on inviter device.");
+		homePage1.clickOnContextMenuOnRoom(tmpRoomName, "Direct Chat");
+		Assert.assertFalse(homePage1.isDirectMessageByRoomName(tmpRoomName),"Room "+tmpRoomName+" have a little green man on inviter device.");
 		//5. Untag it on DM on device 2
-		roomsListDevice2.clickOnContextMenuOnRoom(tmpRoomName, "Direct Chat");
-		Assert.assertFalse(roomsListDevice2.isDirectMessageByRoomName(tmpRoomName),"Room "+tmpRoomName+" have a little green man on invitee device.");
+		homePage2.clickOnContextMenuOnRoom(tmpRoomName, "Direct Chat");
+		Assert.assertFalse(homePage2.isDirectMessageByRoomName(tmpRoomName),"Room "+tmpRoomName+" have a little green man on invitee device.");
 	}
 
 
@@ -247,16 +230,16 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	}
 
 	private void leaveRoomFromRoomsListAfterTest(String roomNameFromDevice1, String roomNameFromDevice2) throws InterruptedException{
-		RiotRoomsListPageObjects roomsListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		RiotRoomsListPageObjects roomsListDevice2=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotHomePageTabObjects homePage2=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver2());
 		System.out.println("Leave room "+roomNameFromDevice1+ " with device 1");
-		roomsListDevice1.leaveRoom(roomNameFromDevice1);
-		roomsListDevice1.waitUntilSpinnerDone(5);
+		homePage1.leaveRoom(roomNameFromDevice1);
+		homePage1.waitUntilSpinnerDone(5);
 		System.out.println("Leave room "+roomNameFromDevice2+ " with device 2");
-		roomsListDevice2.leaveRoom(roomNameFromDevice2);
-		roomsListDevice2.waitUntilSpinnerDone(5);
-		Assert.assertNull(roomsListDevice1.getRoomByName(roomNameFromDevice1), "Room "+roomNameFromDevice1+" is still displayed in the list in device 1.");
-		Assert.assertNull(roomsListDevice2.getRoomByName(roomNameFromDevice2), "Room "+roomNameFromDevice2+" is still displayed in the list in device 2.");
+		homePage2.leaveRoom(roomNameFromDevice2);
+		homePage2.waitUntilSpinnerDone(5);
+		Assert.assertNull(homePage1.getRoomByName(roomNameFromDevice1), "Room "+roomNameFromDevice1+" is still displayed in the list in device 1.");
+		Assert.assertNull(homePage2.getRoomByName(roomNameFromDevice2), "Room "+roomNameFromDevice2+" is still displayed in the list in device 2.");
 	}
 
 	/**
@@ -281,14 +264,14 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	@BeforeGroups("check_contacts_permission")
 	private void checkContactPermissionChecked() throws InterruptedException{
 		System.out.println("Check if contact permission is checked on device1.");
-		RiotRoomsListPageObjects roomsList1= new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		RiotSettingsPageObjects settingsView1= roomsList1.openRiotSettingsFromLateralMenu();
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotSettingsPageObjects settingsView1= homePage1.openRiotSettingsFromLateralMenu();
 		settingsView1.checkContactsPermissionIfNecessary(true);
 		settingsView1.actionBarBackButton.click();
 
 		System.out.println("Check if contact permission is checked on device2.");
-		RiotRoomsListPageObjects roomsList2= new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
-		RiotSettingsPageObjects settingsView2= roomsList2.openRiotSettingsFromLateralMenu();
+		RiotHomePageTabObjects homePage2=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotSettingsPageObjects settingsView2= homePage2.openRiotSettingsFromLateralMenu();
 		settingsView2.checkContactsPermissionIfNecessary(true);
 		settingsView2.actionBarBackButton.click();
 	}

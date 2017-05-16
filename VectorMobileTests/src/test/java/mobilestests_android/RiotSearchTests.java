@@ -11,9 +11,9 @@ import org.testng.annotations.Test;
 import com.esotericsoftware.yamlbeans.YamlException;
 
 import pom_android.RiotRoomPageObjects;
-import pom_android.RiotRoomsListPageObjects;
-import pom_android.RiotUnifiedSearchPageObjects;
 import pom_android.RiotSettingsPageObjects;
+import pom_android.RiotUnifiedSearchPageObjects;
+import pom_android.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -49,8 +49,8 @@ public class RiotSearchTests extends RiotParentTest{
 		String randomMsg=(new StringBuilder("msg_search").append(randInt2)).toString();
 		
 		//1. Create a room with a random name.
-		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		RiotRoomPageObjects newRoom= roomsList.createRoom();
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotRoomPageObjects newRoom= homePage.createRoom();
 		newRoom.changeRoomName(randomRoomName);
 		
 		//2. Post a random msg within
@@ -58,7 +58,7 @@ public class RiotSearchTests extends RiotParentTest{
 		
 		//3. From the rooms list hit the search button
 		newRoom.menuBackButton.click();
-		roomsList.searchButton.click();
+		homePage.openGlobalSearchLayout();
 		
 		//4. Search in ROOMS tab the random name given in step1
 		RiotUnifiedSearchPageObjects searchInRoomsList = new RiotUnifiedSearchPageObjects(appiumFactory.getAndroidDriver1());
@@ -91,7 +91,7 @@ public class RiotSearchTests extends RiotParentTest{
 		
 		//teardown : leave room
 		searchInRoomsList.menuBackButton.click();
-		roomsList.leaveRoom(randomRoomName);
+		homePage.leaveRoom(randomRoomName);
 		Thread.sleep(500);
 	}
 	
@@ -113,8 +113,8 @@ public class RiotSearchTests extends RiotParentTest{
 		String randomName=(new StringBuilder("randomsearch_").append(randInt1)).toString();
 		
 		//1. From the rooms list hit the search button
-		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		roomsList.searchButton.click();
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage.openGlobalSearchLayout();
 		RiotUnifiedSearchPageObjects searchInRoomsList = new RiotUnifiedSearchPageObjects(appiumFactory.getAndroidDriver1());
 		
 		//2. Search in ROOMS tab a random name
@@ -168,8 +168,8 @@ public class RiotSearchTests extends RiotParentTest{
 	 */
 	private void checkContactPermissionChecked() throws InterruptedException{
 		System.out.println("Check if contact permission is checked on device1.");
-		RiotRoomsListPageObjects roomsList1= new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		RiotSettingsPageObjects settingsView1= roomsList1.openRiotSettingsFromLateralMenu();
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotSettingsPageObjects settingsView1= homePage.openRiotSettingsFromLateralMenu();
 		settingsView1.checkContactsPermissionIfNecessary(true);
 		settingsView1.actionBarBackButton.click();
 	}

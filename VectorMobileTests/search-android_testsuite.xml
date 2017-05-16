@@ -3,7 +3,7 @@
 <suite name="Search tests for Android">
   <test name="Test">
     <classes>
-      <class name="mobilestests_android.RiotSearchTests"/>
+      <class name="mobilestests_ios.RiotMessagesReceptionTests"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

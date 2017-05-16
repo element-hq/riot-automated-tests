@@ -67,7 +67,7 @@ public class Constant {
 	public static final String DEFAULT_USERADRESS="@riotuser2:matrix.org";
 	public static final String DEFAULT_MATRIX_SERVER_URL="https://matrix.org";
 	public static final String DEFAULT_MATRIX_SERVER="matrix.org";
-	public static final String DEFAULT_IDENTITY_SERVER="https://vector.im";
+	public static final String DEFAULT_IDENTITY_SERVER_URL="https://vector.im";
 
 	/*
 	 * E2E ENCRYPTION

@@ -48,7 +48,7 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 	 * TABS: MEMBERS, FILES, SETTINGS
 	 */
 	/**
-	 * Contains the 3 tabs : members, files, settings.
+	 * Contains the 3 tabs : members, files, settings. </br>
 	 */
 	@iOSFindBy(xpath="//XCUIElementTypeApplication/XCUIElementTypeWindow//XCUIElementTypeOther[count(XCUIElementTypeStaticText)=3]")
 	public MobileElement tabsTypeOther;
@@ -85,7 +85,6 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 	public MobileElement clearFilteredBarButton;
 	
 	//MEMBERS LIST
-	///AppiumAUT/XCUIElementTypeApplication/XCUIElementTypeWindow/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTable
 	@iOSFindBy(accessibility="RoomParticipantsVCTableView")
 	public MobileElement membersTableView;
 	@iOSFindBy(accessibility="ContactTableViewCell")
@@ -105,6 +104,21 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 		addParticipantButton.click();
 		RiotContactPickerPageObjects contactPicker = new RiotContactPickerPageObjects(driver);
 		contactPicker.searchAndSelectMember(participant2Adress);
+	}
+	
+	/**
+	 * Return a member relativelayout using name of the member.
+	 * @param memberName
+	 * @return
+	 */
+	public MobileElement getMemberByName(String memberName){
+		try {
+			return membersTableView.findElementByXPath("//XCUIElementTypeCell[@name='ContactTableViewCell']/XCUIElementTypeStaticText[@name='MemberDisplayName' and @value='"+memberName+"']/..");	
+		} catch (Exception e) {
+			System.out.println("No member found with name '"+memberName+"'");
+			return null;
+		}
+		
 	}
 	
 	/**

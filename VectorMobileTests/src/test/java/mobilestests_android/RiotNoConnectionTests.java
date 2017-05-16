@@ -10,7 +10,7 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.Connection;
 import pom_android.RiotLoginAndRegisterPageObjects;
 import pom_android.RiotRoomPageObjects;
-import pom_android.RiotRoomsListPageObjects;
+import pom_android.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -47,11 +47,11 @@ public class RiotNoConnectionTests extends RiotParentTest{
 		String expectedNotificationMessage="Connectivity to the server has been lost.";
 		
 		loginForSetup();
-		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 		//Verifies that messages are still here : there is more than one.
-		Assert.assertFalse(riotRoomsList.roomsList.isEmpty(), "None room displayed in the rooms list.");
+		Assert.assertFalse(homePage.roomsList.isEmpty(), "None room displayed in the rooms list.");
 		//Open the first room.
-		riotRoomsList.getRoomByName(roomNameTest).click();
+		homePage.getRoomByName(roomNameTest).click();
 		RiotRoomPageObjects myRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		//Verifies that the warning message is displayed in the bottom of the messages.
 		Assert.assertTrue(isPresentTryAndCatch(myRoom.notificationMessage),"The notification message is not displayed");
@@ -81,9 +81,9 @@ public class RiotNoConnectionTests extends RiotParentTest{
 		String roomNameTest="temp room";
 		
 		loginForSetup();
-		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 		//Open the first room.
-		riotRoomsList.getRoomByName(roomNameTest).click();
+		homePage.getRoomByName(roomNameTest).click();
 		//cut internet
 		forceWifiOfIfNeeded(appiumFactory.getAndroidDriver1());
 		RiotRoomPageObjects myRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
@@ -93,8 +93,8 @@ public class RiotNoConnectionTests extends RiotParentTest{
 		//Restart the application
 		restartApplication(appiumFactory.getAndroidDriver1());
 		//Reopen the room
-		riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		riotRoomsList.getRoomByName(roomNameTest).click();
+		homePage = new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage.getRoomByName(roomNameTest).click();
 		//bring back internet
 		appiumFactory.getAndroidDriver1().setConnection(Connection.WIFI);
 		//Asserts that riot proposes to send the unsent message
@@ -125,9 +125,9 @@ public class RiotNoConnectionTests extends RiotParentTest{
 		String roomNameTest="temp room";
 		
 		loginForSetup();
-		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 		//Open the first room.
-		riotRoomsList.getRoomByName(roomNameTest).click();
+		homePage.getRoomByName(roomNameTest).click();
 		//cut internet
 		forceWifiOfIfNeeded(appiumFactory.getAndroidDriver1());
 		RiotRoomPageObjects myRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
@@ -140,8 +140,8 @@ public class RiotNoConnectionTests extends RiotParentTest{
 		//Restart the application
 	    restartApplication(appiumFactory.getAndroidDriver1());
 		//Reopen the room
-		riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		riotRoomsList.getRoomByName(roomNameTest).click();
+		homePage = new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage.getRoomByName(roomNameTest).click();
 		//bring back internet
 		appiumFactory.getAndroidDriver1().setConnection(Connection.WIFI);
 		//verifies that the upload failed icon is present in the last message
@@ -193,8 +193,8 @@ public class RiotNoConnectionTests extends RiotParentTest{
 	
 	private void logoutForSetup() throws InterruptedException{
 		if (!waitUntilDisplayed(appiumFactory.getAndroidDriver1(), "im.vector.alpha:id/login_inputs_layout", true, 5)){
-			RiotRoomsListPageObjects mainPage= new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-			mainPage.logOut();
+			RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+			homePage.logOut();
 		}
 	}
 }

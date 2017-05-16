@@ -9,9 +9,9 @@ import org.testng.annotations.Test;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 
-import pom_android.RiotRoomsListPageObjects;
-import pom_android.RiotSettingsPageObjects;
 import pom_android.RiotRoomPageObjects;
+import pom_android.RiotSettingsPageObjects;
+import pom_android.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -25,14 +25,14 @@ public class RiotRoomsListItemsTests extends RiotParentTest{
 	private String roomNameTest="auto test list items";
 	private String riotUserDisplayName="riotuser11";
 		/**
-		 * Tests that some events are not displayed in the last event label on the rooms list.
-		 * 1. Open room roomNameTest
-		 * 2. Send a message
-		 * 3. Change user avatar
-		 * 4. Change user display name
-		 * 5. Come back on the rooms list.
-		 * Check that the last event is the msg sent in step 2.
-		 * 6.  Set the old display name
+		 * Tests that some events are not displayed in the last event label on the rooms list. </br>
+		 * 1. Open room roomNameTest </br>
+		 * 2. Send a message </br>
+		 * 3. Change user avatar </br>
+		 * 4. Change user display name </br>
+		 * 5. Come back on the rooms list. </br>
+		 * Check that the last event is the msg sent in step 2. </br>
+		 * 6.  Set the old display name </br>
 		 * @throws InterruptedException 
 		 */
 		@Test(groups={"1driver_android","1checkuser"})
@@ -41,16 +41,16 @@ public class RiotRoomsListItemsTests extends RiotParentTest{
 			String randomMsg=(new StringBuilder("last event msg").append(randInt)).toString();
 			String newDisplayName=riotUserDisplayName+"-";
 			
-			RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
+			RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 			//1. Open room roomNameTest
-			roomsList.getRoomByName(roomNameTest).click();
+			homePage.getRoomByName(roomNameTest).click();
 			RiotRoomPageObjects roomPage = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 			//2. Send a message
 			roomPage.sendAMessage(randomMsg);
 			//3. Change user avatar
 			roomPage.menuBackButton.click();
-			roomsList.contextMenuButton.click();
-			roomsList.settingsButton.click();
+			homePage.contextMenuButton.click();
+			homePage.settingsButton.click();
 			RiotSettingsPageObjects settingsPage= new RiotSettingsPageObjects(appiumFactory.getAndroidDriver1());
 			settingsPage.changeAvatarFromSettings();
 			//4. Change user display name
@@ -58,10 +58,10 @@ public class RiotRoomsListItemsTests extends RiotParentTest{
 			//5. Come back on the rooms list.
 			settingsPage.actionBarBackButton.click();
 			//Check that the last event is the msg sent in step 2
-			Assert.assertEquals(roomsList.getLastEventByRoomName(roomNameTest,true), newDisplayName+": "+randomMsg);
+			Assert.assertEquals(homePage.getLastEventByRoomName(roomNameTest,true), newDisplayName+": "+randomMsg);
 			//6.  Set the old display name
-			roomsList.contextMenuButton.click();
-			roomsList.settingsButton.click();
+			homePage.contextMenuButton.click();
+			homePage.settingsButton.click();
 			settingsPage.changeDisplayNameFromSettings(riotUserDisplayName);
 			settingsPage.actionBarBackButton.click();
 		}

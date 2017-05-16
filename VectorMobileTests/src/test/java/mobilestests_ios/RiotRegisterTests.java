@@ -6,7 +6,7 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import pom_ios.RiotLoginAndRegisterPageObjects;
-import pom_ios.RiotRoomsListPageObjects;
+import pom_ios.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.DataproviderClass;
 import utility.RiotParentTest;
@@ -20,12 +20,12 @@ import utility.ScreenshotUtility;
 public class RiotRegisterTests extends RiotParentTest{
 
 	/**
-	 * Cover issue https://github.com/vector-im/riot-ios/issues/1125
-	 * 1. Hit the register button.
-	 * 2. Fill the first form with valid displayName and matching passwords.
-	 * 3. Fill the second form with an unvalid phone number.
-	 * 4. Hit submit button
-	 * Check that the form isn't sent.
+	 * Cover issue https://github.com/vector-im/riot-ios/issues/1125 </br>
+	 * 1. Hit the register button. </br>
+	 * 2. Fill the first form with valid displayName and matching passwords. </br>
+	 * 3. Fill the second form with an unvalid phone number. </br>
+	 * 4. Hit submit button </br>
+	 * Check that the form isn't sent. </br>
 	 * @throws InterruptedException 
 	 */
 	@Test(groups={"1driver_ios","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
@@ -57,8 +57,8 @@ public class RiotRegisterTests extends RiotParentTest{
 	private void logOutIfNecessary() throws InterruptedException{
 		if(false==waitUntilDisplayed(appiumFactory.getiOsDriver1(),"AuthenticationVCView", true, 5)){
 			System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
-			RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-			mainPage.logOutFromRoomsList();
+			RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+			homePage.logOutFromRoomsList();
 		}
 	}
 }

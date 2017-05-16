@@ -16,6 +16,7 @@
 		<dependency>
 			<groupId>io.appium</groupId>
 			<artifactId>java-client</artifactId>
+			<!-- <version>4.1.2</version> -->
 			<version>4.1.2</version>
 			<!-- <scope>test</scope> -->
 		</dependency>
@@ -77,9 +78,9 @@
 							<value>10</value>
 						</property>
 					</properties>
-					<suiteXmlFiles> <!-- Suite testng xml file to consider for test execution -->
+	<!--  				<suiteXmlFiles> Suite testng xml file to consider for test execution
 						<suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
-					</suiteXmlFiles>
+					</suiteXmlFiles> -->
 					<source>1.8</source>
 					<target>1.8</target>
 					<compilerArguments>

@@ -8,7 +8,7 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import pom_ios.RiotLoginAndRegisterPageObjects;
-import pom_ios.RiotRoomsListPageObjects;
+import pom_ios.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.DataproviderClass;
 import utility.RiotParentTest;
@@ -28,24 +28,24 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver_ios","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void loginAndLogoutiOsTest(String sUserName,String sPassword)  throws Exception {
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getiOsDriver1());
-		loginPage.logUser(sUserName,null, sPassword);
+		loginPage.logUser(sUserName,null, sPassword,false);
 
 		//Wait for the main page (rooms list) to be opened, and log out.
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		mainPage.logOutFromRoomsList();
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		homePage.logOutFromRoomsList();
 		Assert.assertTrue(waitUntilDisplayed(appiumFactory.getiOsDriver1(), "AuthenticationVCView", true, 15), "The login page isn't displayed after the log-out.");
 		//Assert.assertTrue(loginPage.authenticationView.isEnabled(), "The login page isn't displayed after the log-out.");
 	}
 
 	@Test(groups={"1driver_ios","loginpage"})
-	public void simpleLogin(){
+	public void simpleLogin() throws InterruptedException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getiOsDriver1());
 		loginPage.emailOrUserNameTextField.setValue("riotuser2");
 		loginPage.passwordTextField.setValue("riotuser");
 		loginPage.loginButton.click();
 
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		mainPage.logOutFromRoomsList();
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		homePage.logOutFromRoomsList();
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class RiotLoginTests extends RiotParentTest{
 		Assert.assertEquals(loginPage.homeServerStaticText.getText(), homeServerTextView);
 		Assert.assertEquals(loginPage.identityServerStaticText.getText(), identityServerTextView);
 		Assert.assertEquals(loginPage.homeServerTextField.getText(), Constant.DEFAULT_MATRIX_SERVER_URL);
-		Assert.assertEquals(loginPage.identityServerTextField.getText(), Constant.DEFAULT_IDENTITY_SERVER);
+		Assert.assertEquals(loginPage.identityServerTextField.getText(), Constant.DEFAULT_IDENTITY_SERVER_URL);
 		loginPage.customServerOptionsCheckBox.click();
 	}
 
@@ -108,7 +108,7 @@ public class RiotLoginTests extends RiotParentTest{
 	}
 
 	/**
-	 * Will fail because of https://github.com/vector-im/riot-ios/issues/898
+	 * Will fail because of https://github.com/vector-im/riot-ios/issues/898 </br>
 	 * Fill the form with forbidden characters. </br>
 	 * Iterates on several datas. </br>
 	 * Verifies that the form is not sent.
@@ -137,7 +137,7 @@ public class RiotLoginTests extends RiotParentTest{
 	}
 
 	/**
-	 * Will fail because of https://github.com/vector-im/riot-ios/issues/898
+	 * Will fail because of https://github.com/vector-im/riot-ios/issues/898 </br>
 	 * Fill the forgot password form with corrects (but with fake mail) characters. </br>
 	 * Check that the login form is displayed then.
 	 * @throws InterruptedException 
@@ -161,7 +161,7 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver_ios","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void fillLoginFormWithUnvalidPhoneNumberTest(String emailOrUserName, String phoneNumber, String pwd) throws InterruptedException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getiOsDriver1());
-		loginPage.logUser(emailOrUserName,phoneNumber, pwd);
+		loginPage.logUser(emailOrUserName,phoneNumber, pwd,false);
 		Assert.assertFalse(waitUntilDisplayed(appiumFactory.getiOsDriver1(),"RecentsVCTableView", false, 2), "Riot rooms list page is opened and shouldn't");
 		appiumFactory.getiOsDriver1().resetApp();
 	}
@@ -174,8 +174,8 @@ public class RiotLoginTests extends RiotParentTest{
 	private void logOutIfNecessary() throws InterruptedException{
 		if(false==waitUntilDisplayed(appiumFactory.getiOsDriver1(),"AuthenticationVCView", true, 5)){
 			System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
-			RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-			mainPage.logOutFromRoomsList();
+			RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+			homePage.logOutFromRoomsList();
 		}
 	}
 }

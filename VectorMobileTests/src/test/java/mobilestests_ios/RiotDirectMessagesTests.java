@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 import com.esotericsoftware.yamlbeans.YamlException;
 
 import pom_ios.RiotRoomPageObjects;
-import pom_ios.RiotRoomsListPageObjects;
+import pom_ios.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -32,20 +32,20 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 	
 	/**
 	 * Cover this issue https://github.com/vector-im/riot-ios/issues/836 </br>
-	 * 1. Start a chat with someone on device/user A
-	 * 2. Accept the invitation with device/user B
-	 * Verify that call button in the right bottom is present
+	 * 1. Start a chat with someone on device/user A </br>
+	 * 2. Accept the invitation with device/user B </br>
+	 * Verify that call button in the right bottom is present </br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers_ios","22checkuser"})
+	@Test(groups={"2drivers_ios","2checkuser"})
 	public void checkCallButtonPresenceAfterInvitedUserJoinTest() throws InterruptedException{
-		RiotRoomsListPageObjects roomsListA = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		RiotRoomsListPageObjects roomsListB = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
+		RiotHomePageTabObjects hpA = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects hpB = new RiotHomePageTabObjects(appiumFactory.getiOsDriver2());
 		//1. Start a chat with someone on device/user A
-		RiotRoomPageObjects roomPageA=roomsListA.startChatWithUser(getMatrixIdFromDisplayName(riotuser2DisplayName));
+		RiotRoomPageObjects roomPageA=hpA.startChat(getMatrixIdFromDisplayName(riotuser2DisplayName));
 		
 		//2. Accept the invitation with device/user B
-		roomsListB.previewInvitation(riotuser1DisplayName);
+		hpB.previewInvitation(riotuser1DisplayName);
 		RiotRoomPageObjects roomPageB = new RiotRoomPageObjects(appiumFactory.getiOsDriver2());
 		roomPageB.joinRoomButton.click();
 		
@@ -82,12 +82,12 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 
 		//asserts that the DM rooms are really left
 		if(roomNameFromDevice1!=null){
-			RiotRoomsListPageObjects roomsList1= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-			Assert.assertNull(roomsList1.getRoomByName(roomNameFromDevice1), "Room "+roomNameFromDevice1+" is still displayed in the list in device 1.");
+			RiotHomePageTabObjects homePage1= new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+			Assert.assertNull(homePage1.getRoomByName(roomNameFromDevice1), "Room "+roomNameFromDevice1+" is still displayed in the list in device 1.");
 		}
 		if(roomNameFromDevice1!=null){
-			RiotRoomsListPageObjects roomsList2= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
-			Assert.assertNull(roomsList2.getRoomByName(roomNameFromDevice2), "Room "+roomNameFromDevice2+" is still displayed in the list in device 1.");
+			RiotHomePageTabObjects homePage2= new RiotHomePageTabObjects(appiumFactory.getiOsDriver2());
+			Assert.assertNull(homePage2.getRoomByName(roomNameFromDevice2), "Room "+roomNameFromDevice2+" is still displayed in the list in device 1.");
 		}
 	}
 	

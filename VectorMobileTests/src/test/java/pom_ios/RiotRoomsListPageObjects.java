@@ -11,8 +11,10 @@ import io.appium.java_client.SwipeElementDirection;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
+import pom_ios.RiotSettingsPageObjects;
 import utility.TestUtilities;
 
+@Deprecated
 public class RiotRoomsListPageObjects extends TestUtilities{
 private AppiumDriver<MobileElement> driver;
 	
@@ -35,10 +37,18 @@ private AppiumDriver<MobileElement> driver;
 	@iOSFindBy(accessibility="settings icon")
 	public MobileElement settingsButton;
 	@iOSFindBy(xpath="//XCUIElementTypeNavigationBar[@name='Messages']/XCUIElementTypeStaticText")
-	public MobileElement messagesStaticText;
+	public MobileElement navigationBarStaticText;
 	@iOSFindBy(accessibility="search icon")
 	public MobileElement searchButton;
 	
+	/**
+	 * Hit the settings button in the navigation bar and returns a RiotSettingsPageObjects.
+	 * @return
+	 */
+	public RiotSettingsPageObjects openRiotSettings(){
+		settingsButton.click();
+		return new RiotSettingsPageObjects(driver);
+	}
 	/*
 	 * INVITES
 	 */
@@ -54,6 +64,7 @@ private AppiumDriver<MobileElement> driver;
 		System.out.println("No invitation cell of room: "+roomName);
 		return null;
 	}
+	
 	/**
 	 * Hit the "preview" button on an invitation.
 	 * @param roomName
@@ -129,8 +140,8 @@ private AppiumDriver<MobileElement> driver;
 			} while (!otherCategoryFound && !roomFound && actualIndex<indexLastElement);
 		}
 		return roomFound;
-		
 	}
+	
 	/**
 	 * Wait until there is at least 1 room in the rooms list.
 	 * @throws InterruptedException
@@ -261,11 +272,11 @@ private AppiumDriver<MobileElement> driver;
 	 * START / CREATE ROOM SHEET. Opened after click on plus button.
 	 */
 	@iOSFindBy(accessibility="HomeVCCreateRoomAlertActionStart chat")
-	public MobileElement startChatButton;
+	public MobileElement startChatSheetButton;
 	@iOSFindBy(accessibility="HomeVCCreateRoomAlertActionCreate room")
-	public MobileElement createRoomButton;
+	public MobileElement createRoomSheetButton;
 	@iOSFindBy(accessibility="HomeVCCreateRoomAlertActionCancel")
-	public MobileElement cancelCreationButton;
+	public MobileElement cancelCreationSheetButton;
 	
 	/**
 	 * Create a new room : click on plus button, then create room item. </br>
@@ -277,7 +288,7 @@ private AppiumDriver<MobileElement> driver;
 		 if(driver.findElementByClassName("XCUIElementTypeCollectionView")==null){
 			 plusRoomButton.click();
 		 }
-		 createRoomButton.click();
+		 createRoomSheetButton.click();
 		 return new RiotRoomPageObjects(driver);
 	 }
 	
@@ -286,112 +297,22 @@ private AppiumDriver<MobileElement> driver;
 	 * @param displayNameOrMatrixId
 	 * @return RiotRoomPageObjects
 	 */
-	public RiotRoomPageObjects startChatWithUser(String displayNameOrMatrixId){
+	public RiotRoomPageObjects startChat(String displayNameOrMatrixId){
 		plusRoomButton.click();
-		startChatButton.click();
+		startChatSheetButton.click();
 		RiotNewChatPageObjects newChatA = new RiotNewChatPageObjects(appiumFactory.getiOsDriver1());
 		newChatA.searchAndSelectMember(displayNameOrMatrixId);
 		return new RiotRoomPageObjects(driver);
-	}
-	
-	/*
-	 * SETTINGS VIEW
-	 */
-	/*
-	 * NAV BAR
-	 */
-	@iOSFindBy(accessibility="SettingsVCNavBarSaveButton")
-	public MobileElement saveNavBarButton;
-	@iOSFindBy(accessibility="Back")
-	public MobileElement backMenuButton;
-	@iOSFindBy(accessibility="SettingsVCSignOutButton")
-	public MobileElement signOutButton;
-	
-	/*
-	 * USER SETTINGS
-	 */
-	@iOSFindBy(accessibility="SettingsVCProfilPictureCell")
-	public MobileElement profilePictureCell;
-	@iOSFindBy(accessibility="SettingsVCDisplayNameTextField")
-	public MobileElement displayNameTextField;
-	@iOSFindBy(accessibility="SettingsVCChangePwdStaticText")
-	public MobileElement changePasswordStaticText;
-	@iOSFindBy(accessibility="SettingsVCSignoutAlertActionSign Out")
-	public MobileElement signOutAlertDialogButtonConfirm;
-	@iOSFindBy(accessibility="SettingsVCSignoutAlertActionCancel")
-	public MobileElement signOutAlertDialogButtonCancel;
-	/*
-	 * ADVANCED
-	 */
-	@iOSFindBy(accessibility="SettingsVCConfigStaticText")
-	public MobileElement configStaticText;
-	
-	
-	
-	
-	/**
-	 * From the settings view, erase the display name and set a new one.</br>
-	 * It doesn't click on the save button.
-	 * @param newDisplayName
-	 */
-	public void changeDisplayNameFromSettings(String newDisplayName){
-		displayNameTextField.click();
-		displayNameTextField.clear();
-		displayNameTextField.setValue(newDisplayName);
-	}
-	
-	/**
-	 * From the settings view, hit the profile picture item, and change the avatar by taking a new picture.</br>
-	 * It doesn't click on the save button.
-	 * @throws InterruptedException 
-	 */
-	public void changeAvatarFromSettings() throws InterruptedException{
-		profilePictureCell.click();
-		RiotCameraPageObjects cameraPage = new RiotCameraPageObjects(appiumFactory.getiOsDriver1());
-		cameraPage.cameraCaptureButton.click();
-		waitUntilDisplayed(driver, "OK", true, 10);
-		cameraPage.okButton.click();
-	}
-	
-	/**
-	 * From the settings view, hit the Change password item, change the password in the AlertDialog and click on save on this alert.
-	 * </br> Then click on the confirmation alertbox 'Your pwd have been updated'.
-	 * @param oldPwd
-	 * @param newPwd
-	 * @throws InterruptedException 
-	 */
-	public void changePasswordFromSettings(String oldPwd, String newPwd, Boolean expectedCorrectlyChange) throws InterruptedException{
-		changePasswordStaticText.click();
-		driver.getKeyboard().sendKeys(oldPwd+"\n");
-		driver.getKeyboard().sendKeys(newPwd+"\n");
-		driver.getKeyboard().sendKeys(newPwd);
-		//driver.findElementByAccessibilityId("Save").click();
-		driver.findElementsByClassName("XCUIElementTypeCollectionView").get(1).findElementsByClassName("XCUIElementTypeCell").get(1).click();
-		if(expectedCorrectlyChange){
-			Assert.assertTrue(waitUntilDisplayed(driver, "Your password has been updated", true, 10), "Password updated alert dialog isn't displayed after changing the password");
-			driver.findElementByAccessibilityId("SettingsVCOnPasswordUpdatedAlertActionOK").click();
-		}else{
-			Assert.assertTrue(waitUntilDisplayed(driver, "Fail to update password", true, 10), "Password updated fail dialog isn't displayed after changing the password");
-			driver.findElementByAccessibilityId("SettingsVCPasswordChangeFailedAlertActionOK").click();
-		}
-
-		
 	}
 	
 	/**
 	 * Log-out from Riot with the lateral menu.
 	 */
 	public void logOutFromRoomsList(){
-		settingsButton.click();
-		logOutFromSettingsView();
+		RiotSettingsPageObjects settingsPage = openRiotSettings();
+		settingsPage.logOutFromSettingsView();
 	}
-	/**
-	 * Log-out from Riot from the settings view.
-	 */
-	public void logOutFromSettingsView(){
-		signOutButton.click();
-		signOutAlertDialogButtonConfirm.click();
-	}
+	
 	/**
 	 * Log out from the rooms list, log in with the parameters.</br>
 	 * Return a RiotRoomsListPageObjects POM.</br> Can be used to renew the encryption keys.
@@ -403,20 +324,7 @@ private AppiumDriver<MobileElement> driver;
 	public RiotRoomsListPageObjects logOutAndLogin(String username, String pwd) throws InterruptedException {
 		logOutFromRoomsList();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
-		loginPage.logUser(username, null, pwd);
+		loginPage.logUser(username, null, pwd,false);
 		return new RiotRoomsListPageObjects(driver);
-	}
-	
-	/**
-	 * Log out from the rooms list, log in with the parameters, and with custom homeserver.</br>
-	 * Return a RiotRoomsListPageObjects POM.</br> Can be used to renew the encryption keys.
-	 * @param username
-	 * @param pwd
-	 * @return new RiotRoomsListPageObjects
-	 * @throws InterruptedException 
-	 */
-	public RiotRoomsListPageObjects logOutAndLoginFromSettingsView(String username, String pwd) throws InterruptedException {
-		logOutFromSettingsView();
-		return logOutAndLogin(username,pwd);
 	}
 }

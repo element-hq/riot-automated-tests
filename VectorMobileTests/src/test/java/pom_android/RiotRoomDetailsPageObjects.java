@@ -19,8 +19,8 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 		driver=(AndroidDriver<MobileElement>) myDriver;
 		//ExplicitWait(driver,this.messagesListView);
 		//if 'Riot permissions .... Allow Riot to access your contacts' pops up, close it.
-		if(waitUntilDisplayed(driver, "//android.widget.TextView[@resource-id='android:id/alertTitle' and @text='Riot permissions']", true, 2)){
-			driver.findElementById("android:id/button2").click();
+		if(waitUntilDisplayed(driver, "//android.widget.TextView[@resource-id='android:id/alertTitle' and @text='Information']", true, 1)){
+			driver.findElementById("android:id/button1").click();
 		}
 		
 		try {
@@ -81,6 +81,21 @@ public class RiotRoomDetailsPageObjects extends TestUtilities{
 		checkInviteConfirmationMsgBox(inviteeAddress);
 		inputDialogOkButton.click();
 		waitUntilDisplayed(driver, "//android.widget.ProgressBar", false, 10);
+	}
+	
+	/**
+	 * Return a member relativelayout using name of the member.
+	 * @param memberName
+	 * @return
+	 */
+	public MobileElement getMemberByName(String memberName){
+		try {
+			return driver.findElementByXPath("//android.widget.ExpandableListView[@resource-id='im.vector.alpha:id/room_details_members_exp_list_view']//android.widget.TextView[@resource-id='im.vector.alpha:id/filtered_list_name' and @text='"+memberName+"']/..");	
+		} catch (Exception e) {
+			System.out.println("No member found with name '"+memberName+"'");
+			return null;
+		}
+		
 	}
 	
 	/**

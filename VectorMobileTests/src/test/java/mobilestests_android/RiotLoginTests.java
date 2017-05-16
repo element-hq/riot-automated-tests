@@ -26,7 +26,7 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
 import pom_android.RiotLoginAndRegisterPageObjects;
-import pom_android.RiotRoomsListPageObjects;
+import pom_android.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.DataproviderClass;
 import utility.RiotParentTest;
@@ -40,7 +40,7 @@ public class RiotLoginTests extends RiotParentTest{
 	public void simpleLogin() throws Exception {
 		String sUserName="riotuser2", sPassword="riotuser";
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
-		loginPage.logUser(sUserName, null,sPassword);
+		loginPage.logUser(sUserName, null,sPassword,false);
 	}
 
 	/**
@@ -49,11 +49,11 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver_android","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void loginAndLogoutTest(String sUserName,String sPassword)  throws Exception {
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
-		loginPage.logUser(sUserName, null,sPassword);
+		loginPage.logUser(sUserName, null,sPassword,false);
 		//Wait for the main page (rooms list) to be opened, and log out.
-		RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		Assert.assertTrue(mainPage.roomsExpandableListView.isDisplayed(), "Rooms list ins't displayed after login.");
-		mainPage.logOut();
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		Assert.assertTrue(homePage.roomsListView.isDisplayed(), "Rooms list ins't displayed after login.");
+		homePage.logOut();
 		Assert.assertTrue(loginPage.inputsLoginLayout.isDisplayed(), "The login page isn't displayed after the log-out.");
 	}
 	
@@ -76,7 +76,7 @@ public class RiotLoginTests extends RiotParentTest{
 	}
 	
 	/**
-	 * Check the custom server options and verify the form.
+	 * Check the custom server options and verify the form. </br>
 	 */
 	@Test(groups={"1driver_android","loginpage"})
 	public void customServerOptionsCheck(){
@@ -89,11 +89,11 @@ public class RiotLoginTests extends RiotParentTest{
 		Assert.assertEquals(loginPage.homeServerTextView.getText(), homeServerTextView);
 		Assert.assertEquals(loginPage.identityServerTextView.getText(), identityServerTextView);
 		Assert.assertEquals(loginPage.homeServerEditText.getText(), Constant.DEFAULT_MATRIX_SERVER_URL);
-		Assert.assertEquals(loginPage.identityServerEditText.getText(), Constant.DEFAULT_IDENTITY_SERVER);
+		Assert.assertEquals(loginPage.identityServerEditText.getText(), Constant.DEFAULT_IDENTITY_SERVER_URL);
 	}
 	
 	/**
-	 * Check the reset password form.
+	 * Check the reset password form. </br>
 	 * Doesn't verifies the reset password function.
 	 */
 	@Test(groups={"1driver_android","loginpage"})
@@ -160,11 +160,11 @@ public class RiotLoginTests extends RiotParentTest{
 	}
 	
 	/**
-	 * Cover issue https://github.com/vector-im/riot-android/issues/1053
-	 * 1. Hit 'Forgot password?'
-	 * 2. Fill the form with existing mail, and matching passwords
-	 * Check the controls of the following screen.
-	 * 3. Click on the 'I Have verified my mal' without actually verifying the mail
+	 * Cover issue https://github.com/vector-im/riot-android/issues/1053 </br>
+	 * 1. Hit 'Forgot password?' </br>
+	 * 2. Fill the form with existing mail, and matching passwords </br>
+	 * Check the controls of the following screen. </br>
+	 * 3. Click on the 'I Have verified my mal' without actually verifying the mail </br>
 	 * Check that the screen is the same
 	 * @throws InterruptedException 
 	 */
@@ -197,7 +197,7 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver_android","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void fillLoginFormWithUnvalidPhoneNumberTest(String emailOrUserName, String phoneNumber, String pwd) throws InterruptedException, FileNotFoundException, YamlException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
-		loginPage.logUser(emailOrUserName, phoneNumber, pwd);
+		loginPage.logUser(emailOrUserName, phoneNumber, pwd,false);
 		Assert.assertFalse(waitUntilDisplayed(appiumFactory.getAndroidDriver1(),"im.vector.alpha:id/fragment_recents_list", false, 2), "Riot rooms list page is opened and shouldn't");
 		appiumFactory.getAndroidDriver1().resetApp();
 	}
@@ -294,8 +294,8 @@ public class RiotLoginTests extends RiotParentTest{
 		if (appiumFactory.getAndroidDriver1() instanceof AndroidDriver){
 			if(false==waitUntilDisplayed(appiumFactory.getAndroidDriver1(),"im.vector.alpha:id/main_input_layout", true, 5)){
 				System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
-				RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-				mainPage.logOut();
+				RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+				homePage.logOut();
 			}
 		}
 	}

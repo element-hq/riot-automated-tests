@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 import pom_android.RiotCaptchaPageObject;
 import pom_android.RiotLoginAndRegisterPageObjects;
-import pom_android.RiotRoomsListPageObjects;
+import pom_android.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.DataproviderClass;
 import utility.RiotParentTest;
@@ -111,11 +111,11 @@ public class RiotRegisterTests extends RiotParentTest {
 	}
 	
 	/**
-	 * Cover issue https://github.com/vector-im/riot-android/issues/1063
-	 * 1. Hit the register button.
-	 * 2. Fill the first form with valid displayName and matching passwords.
-	 * 3. Fill the second form with an unvalid phone number.
-	 * 4. Hit submit button
+	 * Cover issue https://github.com/vector-im/riot-android/issues/1063 </br>
+	 * 1. Hit the register button. </br>
+	 * 2. Fill the first form with valid displayName and matching passwords. </br>
+	 * 3. Fill the second form with an unvalid phone number. </br>
+	 * 4. Hit submit button </br>
 	 * Check that the form isn't sent.
 	 * @throws InterruptedException 
 	 */
@@ -142,9 +142,9 @@ public class RiotRegisterTests extends RiotParentTest {
 	}
 	
 	/**
-	 * UIAUTOMATOR VIEW don't see the mosaic anymore.
+	 * UIAUTOMATOR VIEW don't see the mosaic anymore. </br>
 	 * Start a sign-in and enters a wrong captcha.</br>
-	 * Validate that the register can't go any further.
+	 * Validate that the register can't go any further. </br>
 	 * @throws InterruptedException 
 	 */
 	@Test(groups={"logout","1driver_android"}, enabled=false)
@@ -182,8 +182,8 @@ public class RiotRegisterTests extends RiotParentTest {
 		System.out.println("Check if logout is needed for the test.");
 		if(false==waitUntilDisplayed(appiumFactory.getAndroidDriver1(),"im.vector.alpha:id/main_input_layout", true, 3)){
 			System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
-			RiotRoomsListPageObjects mainPage = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-			mainPage.logOut();
+			RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+			homePage.logOut();
 		}
 	}
 }

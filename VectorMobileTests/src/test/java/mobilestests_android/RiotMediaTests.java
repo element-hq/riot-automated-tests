@@ -11,7 +11,7 @@ import com.esotericsoftware.yamlbeans.YamlException;
 import pom_android.RiotMediaViewerPageObjects;
 import pom_android.RiotRoomDetailsPageObjects;
 import pom_android.RiotRoomPageObjects;
-import pom_android.RiotRoomsListPageObjects;
+import pom_android.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 
@@ -24,17 +24,17 @@ public class RiotMediaTests extends RiotParentTest{
 	private String roomWithPhoto="attached photos";
 
 	/**
-	 * 1. Open room roomtest.
-	 * 2. Open room details, then FILES tab.
-	 * 3. Hit a file item.
-	 * Check that the photo is opened in the image viewer.
+	 * 1. Open room roomtest. </br>
+	 * 2. Open room details, then FILES tab. </br>
+	 * 3. Hit a file item. </br>
+	 * Check that the photo is opened in the image viewer. </br>
 	 * @throws InterruptedException 
 	 */
 	@Test(groups={"1driver_android","1checkuser"})
 	public void openPhotoFromFilesTabTest() throws InterruptedException{
-		RiotRoomsListPageObjects roomsList = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 		//1. Open room roomtest.
-		roomsList.getRoomByName(roomWithPhoto).click();
+		homePage1.getRoomByName(roomWithPhoto).click();
 		RiotRoomPageObjects roomPage = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		//2. Open room details, then FILES tab.
 		roomPage.moreOptionsButton.click();

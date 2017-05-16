@@ -14,7 +14,7 @@ import pom_android.RiotCallingPageObjects;
 import pom_android.RiotIncomingCallPageObjects;
 import pom_android.RiotRoomDetailsPageObjects;
 import pom_android.RiotRoomPageObjects;
-import pom_android.RiotRoomsListPageObjects;
+import pom_android.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -41,8 +41,8 @@ public class RiotVoipTests extends RiotParentTest{
 		restartApplication(appiumFactory.getAndroidDriver1());
 		
 		//1. Launch an audio call from a room
-		RiotRoomsListPageObjects mainListRoom=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		mainListRoom.getRoomByName(roomNameTest).click();
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage.getRoomByName(roomNameTest).click();
 		RiotRoomPageObjects voipRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		voipRoom.startCallButton.click();
 		voipRoom.voiceCallFromMenuButton.click();
@@ -83,8 +83,8 @@ public class RiotVoipTests extends RiotParentTest{
 	public void cancelVideoCallFromChatRoom() throws InterruptedException{
 		restartApplication(appiumFactory.getAndroidDriver1());
 		
-		RiotRoomsListPageObjects mainListRoom=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		mainListRoom.getRoomByName(roomNameTest).click();
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage.getRoomByName(roomNameTest).click();
 		RiotRoomPageObjects voipRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		voipRoom.startCallButton.click();
 		voipRoom.videoCallFromMenuButton.click();
@@ -120,8 +120,8 @@ public class RiotVoipTests extends RiotParentTest{
 		restartApplication(appiumFactory.getAndroidDriver2());
 		
 		//call from device 1
-		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		riotListDevice1.getRoomByName(roomNameTest).click();
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage.getRoomByName(roomNameTest).click();
 		RiotRoomPageObjects voipRoomDevice1 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		voipRoomDevice1.startCallButton.click();
 		voipRoomDevice1.voiceCallFromMenuButton.click();
@@ -155,10 +155,10 @@ public class RiotVoipTests extends RiotParentTest{
 		restartApplication(appiumFactory.getAndroidDriver2());
 		
 		//call from device 1
-		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		riotListDevice1.getRoomByName(roomNameTest).click();
+		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage.getRoomByName(roomNameTest).click();
 		RiotRoomPageObjects voipRoomDevice1 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
-		RiotRoomsListPageObjects riotListDevice2=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
+		RiotHomePageTabObjects homePage2=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver2());
 		voipRoomDevice1.startCallButton.click();
 		voipRoomDevice1.voiceCallFromMenuButton.click();
 		//check that call layout is diplayed on device 1
@@ -179,7 +179,7 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertFalse(callingViewDevice2.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
 		//check end call events on messages
 		Assert.assertEquals(voipRoomDevice1.getTextViewFromPost(voipRoomDevice1.getLastPost()).getText(),riotuser2DisplayName+" ended the call.");
-		Assert.assertEquals(riotListDevice2.getLastEventByRoomName(roomNameTest,false),riotuser2DisplayName+" ended the call.");
+		Assert.assertEquals(homePage2.getLastEventByRoomName(roomNameTest,false),riotuser2DisplayName+" ended the call.");
 		//come back in rooms list on device 1
 		voipRoomDevice1.menuBackButton.click();
 	}
@@ -199,10 +199,10 @@ public class RiotVoipTests extends RiotParentTest{
 		restartApplication(appiumFactory.getAndroidDriver2());
 		
 		//call from device 1
-		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		riotListDevice1.getRoomByName(roomNameTest).click();
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage1.getRoomByName(roomNameTest).click();
 		RiotRoomPageObjects voipRoomDevice1 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
-		RiotRoomsListPageObjects riotListDevice2=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
+		RiotHomePageTabObjects homePage2=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver2());
 		voipRoomDevice1.startCallButton.click();
 		voipRoomDevice1.videoCallFromMenuButton.click();
 		//check that call layout is diplayed on device 1
@@ -227,7 +227,7 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertFalse(callingViewDevice2.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
 		//check end call events on messages
 		Assert.assertEquals(voipRoomDevice1.getTextViewFromPost(voipRoomDevice1.getLastPost()).getText(),riotuser2DisplayName+" ended the call.");
-		Assert.assertEquals(riotListDevice2.getLastEventByRoomName(roomNameTest,false),riotuser2DisplayName+" ended the call.");
+		Assert.assertEquals(homePage2.getLastEventByRoomName(roomNameTest,false),riotuser2DisplayName+" ended the call.");
 		//come back in rooms list on device 1
 		voipRoomDevice1.menuBackButton.click();
 	}
@@ -248,8 +248,8 @@ public class RiotVoipTests extends RiotParentTest{
 		restartApplication(appiumFactory.getAndroidDriver2());
 		
 		//call from device 1
-		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		riotListDevice1.getRoomByName(roomNameTest).click();
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage1.getRoomByName(roomNameTest).click();
 		RiotRoomPageObjects voipRoomDevice1 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		voipRoomDevice1.startCallButton.click();
 		voipRoomDevice1.voiceCallFromMenuButton.click();
@@ -299,10 +299,10 @@ public class RiotVoipTests extends RiotParentTest{
 		restartApplication(appiumFactory.getAndroidDriver2());
 		
 		//go on 1to1 room with device 1
-		RiotRoomsListPageObjects riotListDevice1=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		riotListDevice1.getRoomByName(roomNameTest2).click();
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePage1.getRoomByName(roomNameTest2).click();
 		RiotRoomPageObjects voipRoomDevice1 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
-		RiotRoomsListPageObjects riotListDevice2=new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
+		RiotHomePageTabObjects homePage2=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver2());
 		
 		//invite user2
 		voipRoomDevice1.moreOptionsButton.click();
@@ -312,7 +312,7 @@ public class RiotVoipTests extends RiotParentTest{
 		ExplicitWait(appiumFactory.getAndroidDriver1(), newRoomDetailsDevice1.menuBackButton);
 		newRoomDetailsDevice1.menuBackButton.click();
 		//accept invitation with device 2
-		riotListDevice2.previewInvitation(roomNameTest2);
+		homePage2.previewInvitation(roomNameTest2);
 		RiotRoomPageObjects newRoomDevice2 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
 		newRoomDevice2.joinRoomButton.click();
 		newRoomDevice2 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
@@ -357,10 +357,10 @@ public class RiotVoipTests extends RiotParentTest{
 		restartApplication(appiumFactory.getAndroidDriver2());
 		
 		//Go in room voip test with both devices
-		RiotRoomsListPageObjects roomsListDevice1 = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver1());
-		RiotRoomsListPageObjects roomsListDevice2 = new RiotRoomsListPageObjects(appiumFactory.getAndroidDriver2());
-		roomsListDevice1.getRoomByName(roomNameTest).click();
-		roomsListDevice2.getRoomByName(roomNameTest).click();
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotHomePageTabObjects homePage2=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver2());
+		homePage1.getRoomByName(roomNameTest).click();
+		homePage2.getRoomByName(roomNameTest).click();
 		RiotRoomPageObjects roomDevice2 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver2());
 		//1. Launch a voice call in 1:1 room.
 		RiotRoomPageObjects roomDevice1 = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());

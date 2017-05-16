@@ -8,9 +8,7 @@ import com.esotericsoftware.yamlbeans.YamlException;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.AndroidDeviceActionShortcuts;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.AndroidKeyCode;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
@@ -70,15 +68,19 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	 * Fill the custom server options if necessary.
 	 * @param usernameOrEmail
 	 * @param password
-	 * @throws InterruptedException 
-	 * @throws YamlException 
-	 * @throws FileNotFoundException 
 	 */
-	public void logUser(String usernameOrEmail, String phoneNumber,String password) throws FileNotFoundException, YamlException, InterruptedException{
-		if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
-			logUserWithCustomHomeServer(usernameOrEmail, phoneNumber,password,MatrixUtilities.getCustomHomeServerURL(),Constant.DEFAULT_IDENTITY_SERVER);
+	public void logUser(String usernameOrEmail, String phoneNumber,String password, Boolean forceDefaultHs) throws FileNotFoundException, YamlException, InterruptedException{
+		if("true".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal")) && false==forceDefaultHs){
+			logUserWithCustomHomeServer(usernameOrEmail, phoneNumber,password,MatrixUtilities.getLocalHomeServerUrl(false,false),Constant.DEFAULT_IDENTITY_SERVER_URL);
 		}else{
 			logUserWithDefaultHomeServer(usernameOrEmail, phoneNumber,password);
+		}
+		//wait until loading view isn't displayed to see if 'Do you accept to help us to improve...' alert is displayed.
+		waitUntilDisplayed(driver, "im.vector.alpha:id/login_inputs_layout", false, 60);
+		waitUntilDisplayed(driver, "//android.widget.ProgressBar", false, 60);//im.vector.alpha:id/animated_logo_image_view
+		if(isPresentTryAndCatch(msgboxConfirmationLayout)){
+			System.out.println("Hit Yes button on alert permission about sending crash informations");
+			msgboxConfirmationYesButton.click();
 		}
 	}
 	
@@ -131,9 +133,10 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 			msgboxConfirmationYesButton.click();
 		}
 		if(null!=hsAddress&&!homeServerEditText.getText().equals(hsAddress)){
-			homeServerEditText.clear();homeServerEditText.setValue(hsAddress);
-			//driver.hideKeyboard();
-			((AndroidDeviceActionShortcuts) driver).pressKeyCode(AndroidKeyCode.ENTER);
+			homeServerEditText.click();//homeServerEditText.clear();
+			homeServerEditText.sendKeys(hsAddress);//homeServerEditText.setValue(hsAddress);
+			//((AndroidDeviceActionShortcuts) driver).pressKeyCode(AndroidKeyCode.KEYCODE_ENTER);
+			driver.hideKeyboard();
 			if(isPresentTryAndCatch(titleTemplateFromWarningTrustRemoteServerLayout)){
 				msgboxConfirmationYesButton.click();
 			}
@@ -142,9 +145,9 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 			try {
 				driver.hideKeyboard();
 			} catch (Exception e) {
-				// TODO: handle exception
 			}
-			identityServerEditText.clear();identityServerEditText.setValue(isAddress);
+			//identityServerEditText.clear();
+			identityServerEditText.sendKeys(isAddress);
 		}
 	}
 
@@ -250,7 +253,14 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement msgboxConfirmationNoButton;
 	@AndroidFindBy(id="android:id/button1")
 	public MobileElement msgboxConfirmationYesButton;
-
+	
+	/*
+	 * PROGRESS BAR
+	 */
+	@AndroidFindBy(xpath="//android.widget.ProgressBar")
+	public MobileElement progressBar;
+	
+	
 	/**
 	 * Start a registration to the captcha webview.
 	 * @throws InterruptedException 

@@ -9,7 +9,8 @@ import org.testng.annotations.Test;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 
-import pom_ios.RiotRoomsListPageObjects;
+import pom_ios.RiotSettingsPageObjects;
+import pom_ios.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -25,83 +26,84 @@ public class RiotProfilTests extends RiotParentTest{
 	String testUser="riotuser11";
 	
 	/**
-	 * 1. Open settings from rooms list.
-	 * 2. Click on 'Change Password' from USER SETTINGS section.
-	 * 3. Change the password
-	 * Verify that the 'password have been updated' is displayed
-	 * 4. Log out
-	 * 5. Login with the new password
-	 * Check that the log-in is correctly done
-	 * 6. Open settings and change password by setting the first one.
+	 * 1. Open settings from rooms list. </br>
+	 * 2. Click on 'Change Password' from USER SETTINGS section. </br>
+	 * 3. Change the password </br>
+	 * Verify that the 'password have been updated' is displayed </br>
+	 * 4. Log out </br>
+	 * 5. Login with the new password </br>
+	 * Check that the log-in is correctly done </br>
+	 * 6. Open settings and change password by setting the first one. </br>
 	 * @throws InterruptedException 
 	 */
 	@Test(groups={"1driver_ios","checkuser"})
 	public void changePasswordWithCorrectsInputsFromSettingsTest() throws InterruptedException{
 		String newPwd="newPwd";
-		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
 		//1. Open settings from rooms list.
-		roomsList1.settingsButton.click();
+		RiotSettingsPageObjects settingsPage = homePage.openRiotSettings();
 		//2. Click on 'Change Password' from USER SETTINGS section & 3. Change the password
-		roomsList1.changePasswordFromSettings(Constant.DEFAULT_USERPWD, newPwd,true);
+		settingsPage.changePasswordFromSettings(Constant.DEFAULT_USERPWD, newPwd,true);
 		//4. Log out & 5. Login with the new password
-		roomsList1.backMenuButton.click();
-		roomsList1=roomsList1.logOutAndLogin(testUser, newPwd);
+		settingsPage.backMenuButton.click();
+		homePage=homePage.logOutAndLogin(testUser, newPwd,false);
 		//6. Open settings and change password by setting the first one.
 		waitUntilDisplayed(appiumFactory.getiOsDriver1(), "settings icon", true, 5);
-		roomsList1.settingsButton.click();
-		roomsList1.changePasswordFromSettings(newPwd,Constant.DEFAULT_USERPWD,true);
-		roomsList1.backMenuButton.click();
+		settingsPage = homePage.openRiotSettings();
+		settingsPage.changePasswordFromSettings(newPwd,Constant.DEFAULT_USERPWD,true);
+		settingsPage.backMenuButton.click();
 	}
 	
 	/**
-	 * 1. Open settings from rooms list.
-	 * 2. Click on 'Change Password' from USER SETTINGS section.
-	 * 3. Change the password with wrong inputs
-	 * Verify that the 'password change fail' is displayed
+	 * 1. Open settings from rooms list. </br>
+	 * 2. Click on 'Change Password' from USER SETTINGS section. </br>
+	 * 3. Change the password with wrong inputs </br>
+	 * Verify that the 'password change fail' is displayed </br>
 	 * @throws InterruptedException 
 	 */
 	@Test(groups={"1driver_ios","checkuser"})
 	public void changePasswordWithWrongInputsFromSettingsTest() throws InterruptedException{
 		String newPwd="newPwd", wrongPwd="fakePwd";
-		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
 		//1. Open settings from rooms list.
-		roomsList1.settingsButton.click();
+		RiotSettingsPageObjects settingsPage = homePage.openRiotSettings();
 		//2. Click on 'Change Password' from USER SETTINGS section & 3. Change the password
-		roomsList1.changePasswordFromSettings(wrongPwd, newPwd,false);
-		roomsList1.backMenuButton.click();
+		settingsPage.changePasswordFromSettings(wrongPwd, newPwd,false);
+		settingsPage.backMenuButton.click();
 	}
 	
 	/**
-	 * 1. Open settings from rooms list.
-	 * 2. Click on 'Display Name' from USER SETTINGS section.
-	 * 3. Set a new one, hit the Done button.
-	 * 4. Hit the Save button on the navigation bar, then the back button.
-	 * 5. Open settings again
-	 * Check that the new display name is correctly set.
+	 * 1. Open settings from rooms list. </br>
+	 * 2. Click on 'Display Name' from USER SETTINGS section. </br>
+	 * 3. Set a new one, hit the Done button. </br>
+	 * 4. Hit the Save button on the navigation bar, then the back button. </br>
+	 * 5. Open settings again </br>
+	 * Check that the new display name is correctly set. </br>
 	 * 6. Set the old display name, hit Save Button, then back button.
+	 * @throws InterruptedException 
 	 */
 	@Test(groups={"1driver_ios","checkuser"})
-	public void changeDisplayNameFromSettingsTest(){
+	public void changeDisplayNameFromSettingsTest() throws InterruptedException{
 		String displayNameBeforeChange;
 		String newDisplayName="newOne";
-		RiotRoomsListPageObjects roomsList1 = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
 		//1. Open settings from rooms list.
-		roomsList1.settingsButton.click();
+		RiotSettingsPageObjects settingsPage = homePage.openRiotSettings();
 		//2. Click on 'Display Name' from USER SETTINGS section.
-		displayNameBeforeChange=roomsList1.displayNameTextField.getText();
+		displayNameBeforeChange=settingsPage.displayNameTextField.getText();
 		//3. Set a new one, hit the Done button.
-		roomsList1.changeDisplayNameFromSettings(newDisplayName);
+		settingsPage.changeDisplayNameFromSettings(newDisplayName);
 		//4. Hit the Save button on the navigation bar, then the back button.
-		roomsList1.saveNavBarButton.click();
-		roomsList1.backMenuButton.click();
+		settingsPage.saveNavBarButton.click();
+		settingsPage.backMenuButton.click();
 		//5. Open settings again
-		roomsList1.settingsButton.click();
+		settingsPage = homePage.openRiotSettings();
 		//Check that the new display name is correctly set.
-		Assert.assertEquals(roomsList1.displayNameTextField.getText(), newDisplayName);
+		Assert.assertEquals(settingsPage.displayNameTextField.getText(), newDisplayName);
 		//6. Set the old display name, hit Save Button, then back button.
-		roomsList1.changeDisplayNameFromSettings(displayNameBeforeChange);
-		roomsList1.saveNavBarButton.click();
-		roomsList1.backMenuButton.click();
+		settingsPage.changeDisplayNameFromSettings(displayNameBeforeChange);
+		settingsPage.saveNavBarButton.click();
+		settingsPage.backMenuButton.click();
 	}
 	
 	/**

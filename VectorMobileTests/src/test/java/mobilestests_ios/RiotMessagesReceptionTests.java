@@ -12,16 +12,23 @@ import com.esotericsoftware.yamlbeans.YamlException;
 
 import io.appium.java_client.MobileElement;
 import pom_ios.RiotRoomPageObjects;
-import pom_ios.RiotRoomsListPageObjects;
+import pom_ios.main_tabs.RiotHomePageTabObjects;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
+import utility.ReadConfigFile;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
 
 @Listeners({ ScreenshotUtility.class })
 public class RiotMessagesReceptionTests extends RiotParentTest{
 	private String msgFromUpUser="UP";
+	
 	private String roomId="!SBpfTGBlKgELgoLALQ%3Amatrix.org";
+	private String roomIdCustomHs="!LVRuDkmtSvMXfqSgLy%3Ajeangb.org";
+	
+	private String pictureURL="mxc://matrix.org/gpQYPbjoqVeTWCGivjRshIni";
+	private String pictureURLCustomHs="mxc://jeangb.org/mQULDSeUacWtxnGlSNBofySw";
+	
 	private String roomTest="msg rcpt 4 automated tests";
 	private String riotUserDisplayNameA="riotuser4";
 	private String riotUserDisplayNameB="riotuser5";
@@ -29,27 +36,27 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	private String riotSenderAccessToken;
 
 	/**
-	 * Validates issue https://github.com/vector-im/riot-ios/issues/809
-	 * 1. Open roomtest with device A.
-	 * 2. Open roomtest with device B.
-	 * 3. User A write something in the message bar but don't send it.
-	 * Test that the typing indicator indicates '[user1] is typing..." with device B.
-	 * 4. Type an other msg and clear it with user 4 in the message bar.
-	 * Test that the typing indicator is empty on device B.
+	 * Validates issue https://github.com/vector-im/riot-ios/issues/809 </br>
+	 * 1. Open roomtest with device A. </br>
+	 * 2. Open roomtest with device B. </br>
+	 * 3. User A write something in the message bar but don't send it. </br>
+	 * Test that the typing indicator indicates '[user1] is typing..." with device B. </br>
+	 * 4. Type an other msg and clear it with user 4 in the message bar. </br>
+	 * Test that the typing indicator is empty on device B. </br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers_ios","2checkuser"})//@Test(groups="2drivers_ios")
+	@Test(groups={"2drivers_ios","2checkuser"})
 	public void typingIndicatorTest() throws InterruptedException{
 		String notSentMsg="tmp";
-		RiotRoomsListPageObjects roomsListA = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		RiotRoomsListPageObjects roomsListB= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver2());
+		RiotHomePageTabObjects homePageA = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects homePageB = new RiotHomePageTabObjects(appiumFactory.getiOsDriver2());
 
 		//1. Open roomtest with device A.
-		roomsListA.getRoomByName(roomTest).click();
+		homePageA.getRoomByName(roomTest).click();
 		RiotRoomPageObjects roomA=new  RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 
 		//2. Open roomtest with device B.		
-		roomsListB.getRoomByName(roomTest).click();
+		homePageB.getRoomByName(roomTest).click();
 		RiotRoomPageObjects roomB=new  RiotRoomPageObjects(appiumFactory.getiOsDriver2());
 
 		//3. User A write something in the message bar but don't send it.
@@ -78,19 +85,19 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	@Test(groups={"messageReceivedInList","1checkuser","1driver_ios"},priority=1)
 	public void checkBadgeAndMessageOnRoomItem() throws InterruptedException, IOException{
 		//1. Stay in recents list and get the current badge on room roomTest
-		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		Integer currentBadge=riotRoomsList.getBadgeNumberByRoomName(roomTest);
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		Integer currentBadge=homePage.getBadgeNumberByRoomName(roomTest);
 
 		//2. Receive a message in a room from an other user.
-		HttpsRequestsToMatrix.sendMessageInRoom(riotSenderAccessToken, roomId, msgFromUpUser);
+		HttpsRequestsToMatrix.sendMessageInRoom(riotSenderAccessToken, getRoomId(), msgFromUpUser);
 		if(currentBadge==null)currentBadge=0;
 		//wait until message is received
-		riotRoomsList.waitForRoomToReceiveNewMessage(roomTest, currentBadge);
+		homePage.waitForRoomToReceiveNewMessage(roomTest, currentBadge);
 		//Asserts that badge is set to 1 or incremented on the room's item in the rooms list
-		Assert.assertNotNull(riotRoomsList.getBadgeNumberByRoomName(roomTest), "There is no badge on this room.");
-		Assert.assertEquals((int)riotRoomsList.getBadgeNumberByRoomName(roomTest),currentBadge+1, "Badge number wasn't incremented after receiving the message");	
+		Assert.assertNotNull(homePage.getBadgeNumberByRoomName(roomTest), "There is no badge on this room.");
+		Assert.assertEquals((int)homePage.getBadgeNumberByRoomName(roomTest),currentBadge+1, "Badge number wasn't incremented after receiving the message");	
 		//Assertion on the message.
-		Assert.assertEquals(riotRoomsList.getLastEventByRoomName(roomTest,false), msgFromUpUser, "Received message on the room item isn't the same as sended by matrix.");
+		Assert.assertEquals(homePage.getLastEventByRoomName(roomTest,false), msgFromUpUser, "Received message on the room item isn't the same as sended by matrix.");
 	}
 
 	/**
@@ -106,7 +113,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	}
 	/**
 	 * Receive a text message in a room from an other user. </br>
-	 * 1. Open room roomName
+	 * 1. Open room roomName </br>
 	 * Asserts that badge is set to 1 or incremented on the room's item in the rooms list.</br>
 	 * Asserts that badge isn't displayed anymore on the room item when going back to rooms list.
 	 * @throws InterruptedException 
@@ -115,8 +122,8 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	@Test(dependsOnGroups="messageReceivedInList",priority=2,groups={"roomOpenned","1checkuser","1driver_ios"})
 	public void checkTextMessageOnRoomPage() throws InterruptedException{
 		//1. Open room roomName
-		RiotRoomsListPageObjects riotRoomsList = new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		riotRoomsList.getRoomByName(roomTest).click();
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		homePage.getRoomByName(roomTest).click();
 		//check that lately sended message is the last displayed in the room
 		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		MobileElement lastPost= testRoom.getLastBubble();
@@ -164,13 +171,13 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 */
 	@Test(groups={"1checkuser","1driver_ios"},priority=1)
 	public void addRoomInFavorites() throws InterruptedException{
-		RiotRoomsListPageObjects roomslist= new RiotRoomsListPageObjects(appiumFactory.getiOsDriver1());
-		roomslist.clickOnSwipedMenuOnRoom(roomTest, "favourite");
+		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		homePage.clickOnSwipedMenuOnRoom(roomTest, "favourite");
 		Thread.sleep(1000);
-		Assert.assertTrue(roomslist.checkRoomInCategory(roomTest, "FAVOURITES"), "Room "+roomTest+" isn't added in the FAVORITES category");
-		roomslist.clickOnSwipedMenuOnRoom(roomTest, "favourite");
+		Assert.assertTrue(homePage.checkRoomInCategory(roomTest, "FAVOURITES"), "Room "+roomTest+" isn't added in the FAVORITES category");
+		homePage.clickOnSwipedMenuOnRoom(roomTest, "favourite");
 		Thread.sleep(1000);
-		Assert.assertFalse(roomslist.checkRoomInCategory(roomTest, "FAVOURITES"), "Room "+roomTest+" isn't added in the FAVORITES category");
+		Assert.assertFalse(homePage.checkRoomInCategory(roomTest, "FAVOURITES"), "Room "+roomTest+" isn't added in the FAVORITES category");
 	}
 	/**
 	 * TODO
@@ -181,6 +188,34 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 
 	}
 
+	private String getRoomId() {
+		try {
+			if("false".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+				return roomId;
+			}else{
+				return roomIdCustomHs;
+			}
+		} catch (FileNotFoundException | YamlException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+
+	@SuppressWarnings("unused")
+	private String getPictureURL() {
+		try {
+			if("false".equals(ReadConfigFile.getInstance().getConfMap().get("homeserverlocal"))){
+				return pictureURL;
+			}else{
+				return pictureURLCustomHs;
+			}
+		} catch (FileNotFoundException | YamlException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	@BeforeGroups("1checkuser")
 	private void checkIfUser1Logged() throws InterruptedException, FileNotFoundException, YamlException{
 		super.checkIfUserLoggedAndHomeServerSetUpIos(appiumFactory.getiOsDriver1(), riotUserDisplayNameA, Constant.DEFAULT_USERPWD);

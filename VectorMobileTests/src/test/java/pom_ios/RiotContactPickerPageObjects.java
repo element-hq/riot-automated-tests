@@ -61,7 +61,7 @@ public class RiotContactPickerPageObjects extends TestUtilities{
 	}
 	
 	/**
-	 * Enters a member adress, mail or else in the textbox, and click on the first item in the list. 
+	 * Enters a member adress, mail or else in the textbox, and click on the first item in the list.  </br>
 	 *	If nothing is found, doesn't click.
 	 */
 	public void searchAndSelectMember(String inviteeAddress){
@@ -74,9 +74,8 @@ public class RiotContactPickerPageObjects extends TestUtilities{
 	 */
 	public void checkDefaultLayout(){
 		Assert.assertEquals(searchMemberEditText.getAttribute("label"), "Search / invite by User ID, Name or email");
-		Assert.assertEquals(getCategoriesList().size(), 2, "There is more than 2 categorie.");
-		Assert.assertTrue(getCategoriesList().get(0).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText().matches("^LOCAL CONTACTS \\([0-9]*\\)$"));
-		Assert.assertEquals(getCategoriesList().get(1).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText(), "KNOWN CONTACTS (-)");
+		Assert.assertEquals(getCategoriesList().size(), 1, "There is more than 1 categorie.");
+		Assert.assertTrue(getCategoriesList().get(0).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText().matches("^LOCAL CONTACTS   [0-9]*$"));//^LOCAL CONTACTS \\([0-9]*\\)$
 		Assert.assertTrue(getCategoriesList().get(0).findElementsByClassName("XCUIElementTypeStaticText").size()==2, "There is no checkbox in the LOCAL CONTACTS category item.");
 		Assert.assertTrue(getCategoriesList().get(0).findElementsByAccessibilityId("Matrix users only").size()==1, "Name of the checkbox isn't 'Matrix Only'.");
 		
