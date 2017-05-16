@@ -125,6 +125,19 @@ public class TestUtilities extends MatrixUtilities{
 		System.out.println("Seconds to wait element property '"+propertyName+ "' to "+msgFound+" value "+propertyValue+": "+secondsWaited);
 		return found;
 	}
+	
+	/**
+	 * TODO: finish this function
+	 * Scroll to the end of the list. </br> Scroll until the text of the last element is the same than the one from previous loop.
+	 * </br> Should only work on android since on iOS invisible elements by the user are visible bar iOS automation framework.
+	 * @param driver
+	 * @param list
+	 * @param xpathToTextToCompare
+	 */
+	public void scrollToEndOfList(AppiumDriver<MobileElement> driver, MobileElement list, String xpathToTextToCompare){
+		String lastElementText=list.findElementByXPath("*[last()]"+xpathToTextToCompare).getText();
+		lastElementText.toString();
+	}
 
 	/**
 	 * Check if connection is NONE and swith to WIFI in that case.

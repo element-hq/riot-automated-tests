@@ -104,7 +104,10 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	 * Send text in the filter bar.
 	 * @param filterText
 	 */
-	public void useFilterBar(String filterText){
+	public void useFilterBar(String filterText, Boolean cleanTextIfNecessary){
+		if (cleanTextIfNecessary)
+			if (isPresentTryAndCatch(clearTextFilterBarButton))
+				clearTextFilterBarButton.click();
 		filterBarSearchField.setValue(filterText);
 	}
 	
@@ -215,13 +218,32 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	}
 	
 	/**
+	 * Returns a section using his name. Use capital letters for ROOMS tab.
+	 * @param sectionName
+	 * @return
+	 */
+	public MobileElement getSectionHeaderByName(String sectionName){
+		try {
+			return driver.findElementsByXPath("//XCUIElementTypeStaticText[contains(@name,'"+sectionName+"')]/..").get(1);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	/**
 	 * Hit a section using his name. Can be use to focus on the related rooms or collapse a section. </br>
 	 * Use capital letters for ROOMS tab.
 	 * @param sectionName
 	 */
 	public void hitSectionHeader(String sectionName){
-		
+		MobileElement sectionHeader=getSectionHeaderByName(sectionName);
+		if (null!=sectionHeader){
+			sectionHeader.click();
+		}else{
+			Assert.fail("No section found with name: "+sectionName);
+		}
 	}
+	
 	/**
 	 * Return a room as a MobileElement using his title.</br>
 	 * Return null if not found.

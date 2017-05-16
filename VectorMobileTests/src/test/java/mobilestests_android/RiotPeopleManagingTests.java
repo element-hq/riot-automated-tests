@@ -16,6 +16,7 @@ import pom_android.RiotContactPickerPageObjects;
 import pom_android.RiotRoomDetailsPageObjects;
 import pom_android.RiotRoomPageObjects;
 import pom_android.main_tabs.RiotHomePageTabObjects;
+import pom_android.main_tabs.RiotPeopleTabPageObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -32,6 +33,9 @@ public class RiotPeopleManagingTests extends RiotParentTest{
 	private String invitedUserDisplayName="riotuser16";
 	private String riotUserDisplayName="riotuser15";
 
+	/*
+	 * 								ROOM DETAILS: PEOPLE TAB.
+	 */
 	/**
 	 * 1. Open room testRoom and open his details, then people tab. </br>
 	 * Check that text of the filter edittext is correct. </br>
@@ -91,6 +95,9 @@ public class RiotPeopleManagingTests extends RiotParentTest{
 		roomPage1.menuBackButton.click();
 	}
 
+	/*
+	 * 								CONTACT PICKER.
+	 */
 	/**
 	 * 1. Open room testRoom and open his details, then people tab. </br>
 	 * 2. Hit the addMember button </br>
@@ -211,6 +218,44 @@ public class RiotPeopleManagingTests extends RiotParentTest{
 		Assert.assertEquals(roomDetails1.categoryList.size(), 1, "Invited category is still here");
 		//Go back to room list
 		roomDetails1.menuBackButton.click();
+	}
+	
+	/*
+	 * 								PEOPLE TAB.
+	 */
+	/**
+	 * 1. Open PeopleTab </br>
+	 * 2. Scroll down to the end of people list </br>
+	 * Check that known contact list isn't displayed.
+	 * 3. Enter in the filter a matching word with KNOWN CONTACTS list.
+	 * Check that known contact list is displayed.
+	 * 4. Enter in the filter a random word matching nothing.
+	 * Check that known contact list is displayed.
+	 * @throws InterruptedException
+	 */
+	@Test(groups={"1driver_android","1checkuser"})
+	public void displayKnownContactSectionOnPeopleTab() throws InterruptedException{
+		int randInt1 = 1 + (int)(Math.random() * ((10000 - 1) + 1));
+		String notMachingAnythingWord=(new StringBuilder("random_").append(randInt1)).toString();
+		
+		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		//1. Open PeopleTab 
+		RiotPeopleTabPageObjects peopleTab = homePage1.openPeopleTab();
+		
+		//2. Scroll down to the end of people list 
+		peopleTab.scrollToBottom(appiumFactory.getAndroidDriver1());
+		//Check that known contact list isn't displayed.
+		Assert.assertNull(peopleTab.getSectionHeaderByName("KNOWN CONTACTS"), "Known contacts sections is present and shouldn't be.");
+		
+		//3. Enter in the filter a matching word with KNOWN CONTACTS list
+		peopleTab.useFilterBar(notMachingAnythingWord,true);appiumFactory.getAndroidDriver1().hideKeyboard();
+		//Check that known contact list is displayed.
+		Assert.assertNotNull(peopleTab.getSectionHeaderByName("KNOWN CONTACTS"), "Known contacts sections should be present.");
+		
+		//4. Enter in the filter a random word matching nothing.
+		peopleTab.useFilterBar(matchingWithKnownContactFilter1,true);appiumFactory.getAndroidDriver1().hideKeyboard();
+		//Check that known contact list is displayed.
+		Assert.assertNotNull(peopleTab.getSectionHeaderByName("KNOWN CONTACTS"), "Known contacts sections should be present.");
 	}
 
 	/**

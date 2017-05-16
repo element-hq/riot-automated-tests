@@ -43,12 +43,17 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/search_src_text")
 	public MobileElement filterBarEditText;
+	@AndroidFindBy(id="im.vector.alpha:id/search_close_btn")
+	public MobileElement clearTextFilterBarButton;
 	
 	/**
 	 * Send text in the filter bar.
 	 * @param filterText
 	 */
-	public void useFilterBar(String filterText){
+	public void useFilterBar(String filterText, Boolean cleanTextIfNecessary){
+		if (cleanTextIfNecessary)
+			if (isPresentTryAndCatch(clearTextFilterBarButton))
+				clearTextFilterBarButton.click();
 		filterBarEditText.setValue(filterText);
 	}
 	
@@ -210,14 +215,28 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	public List<MobileElement> roomsAndCategoriesList;
 	
 	/**
+	 * Returns a section using his name. Use capital letters for ROOMS tab.
+	 * @param sectionName
+	 * @return
+	 */
+	public MobileElement getSectionHeaderByName(String sectionName){
+		try {
+			return driver.findElementByXPath("//android.widget.RelativeLayout[@resource-id='im.vector.alpha:id/section_layout']/android.widget.TextView[contains(@text,'"+sectionName+"')]/..");
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	/**
 	 * Hit a section using his name. Can be use to focus on the related rooms or collapse a section. </br>
 	 * Use capital letters for ROOMS tab.
 	 * @param sectionName
 	 */
 	public void hitSectionHeader(String sectionName){
-		try {
-			driver.findElementByXPath("//android.widget.RelativeLayout[@resource-id='im.vector.alpha:id/section_layout']/android.widget.TextView[contains(@text,'"+sectionName+"')]/..").click();
-		} catch (Exception e) {
+		MobileElement sectionHeader=getSectionHeaderByName(sectionName);
+		if (null!=sectionHeader){
+			sectionHeader.click();
+		}else{
 			Assert.fail("No section found with name: "+sectionName);
 		}
 	}

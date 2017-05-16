@@ -39,6 +39,6 @@ public class RiotTestNewUx extends RiotParentTest{
 	public void testsDisplayAndUseFilter() throws IOException, InterruptedException{
 		RiotHomePageTabObjects riotHomePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
 		riotHomePage.displayFilterBarBySwipingDown();
-		riotHomePage.useFilterBar("jean");
+		riotHomePage.useFilterBar("jean",false);
 	}
 }
