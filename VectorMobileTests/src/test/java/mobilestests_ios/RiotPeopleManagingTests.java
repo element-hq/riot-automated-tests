@@ -126,12 +126,11 @@ public class RiotPeopleManagingTests extends RiotParentTest{
 		contactPicker1.searchMemberEditText.setValue(randomContactName);
 		//Check that the text of the first item is equal to the random string
 		Assert.assertEquals(contactPicker1.getDisplayNameOfMemberFromContactPickerList(contactPicker1.contactsOnlyList.get(0)), randomContactName);
-		//Check that there is no KNOWN CONTACTS categorie
 		Assert.assertEquals(contactPicker1.getCategoriesList().size(), 2, "There is more than 2 categories.");
 		//Check that the item of the LOCAL CONTACTS categorie is (0)
 		Assert.assertEquals(contactPicker1.getCategoriesList().get(0).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText(), "LOCAL CONTACTS (0)");
 		Assert.assertEquals(contactPicker1.getCategoriesList().get(1).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText(), "KNOWN CONTACTS (0)");
-		Assert.assertEquals(contactPicker1.contactsOnlyList.size(), 1, "There is too much members found with a random string.");
+		Assert.assertEquals(contactPicker1.contactsOnlyList.size(), 0, "There is too much members found with a random string.");
 		
 		//back to rooms list
 		contactPicker1.cancelButton.click();
@@ -168,8 +167,8 @@ public class RiotPeopleManagingTests extends RiotParentTest{
 		Assert.assertEquals(contactPicker1.getDisplayNameOfMemberFromContactPickerList(contactPicker1.contactsOnlyList.get(0)), matchingWithKnownContactFilter1);
 		//Check that KNOWN CONTACTS categorie is displayed
 		Assert.assertEquals(contactPicker1.getCategoriesList().size(), 2, "There is more than 2 categorie.");
-		Assert.assertTrue(contactPicker1.getCategoriesList().get(0).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText().matches("^LOCAL CONTACTS \\([0-9]*\\)$"));
 		String knownContacts=contactPicker1.getCategoriesList().get(1).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText();
+		Assert.assertTrue(contactPicker1.getCategoriesList().get(0).findElementsByClassName("XCUIElementTypeStaticText").get(0).getText().matches("^LOCAL CONTACTS \\[0-9]*\\)$"));
 		Assert.assertTrue(knownContacts.matches("^KNOWN CONTACTS \\([^0][0-9]*\\)$"));
 		//Check that there is at least 2 filtered people
 		Assert.assertTrue(contactPicker1.contactsOnlyList.size()>=2, "There is not enough members in the list after filtering with matching word.");

@@ -133,12 +133,11 @@ public class RiotPeopleManagingTests extends RiotParentTest{
 		appiumFactory.getAndroidDriver1().hideKeyboard();
 		//Check that the text of the first item is equal to the random string
 		Assert.assertEquals(contactPicker1.getDisplayNameOfMemberFromContactPickerList(contactPicker1.detailsMemberListView.get(0)), randomContactName);
-		//Check that there is no KNOWN CONTACTS categorie
 		Assert.assertEquals(contactPicker1.categoryList.size(), 2, "There is more than 2 categorie.");
 		//Check that the item of the LOCAL CONTACTS categorie is (0)
 		Assert.assertEquals(contactPicker1.categoryList.get(0).findElementById("im.vector.alpha:id/people_header_text_view").getText(), "LOCAL CONTACTS (0)");
 		Assert.assertEquals(contactPicker1.categoryList.get(1).findElementById("im.vector.alpha:id/people_header_text_view").getText(), "KNOWN CONTACTS (0)");
-		Assert.assertEquals(contactPicker1.detailsMemberListView.size(), 1, "There is too much members found with a random string.");
+		Assert.assertEquals(contactPicker1.detailsMemberListView.size(), 0, "There is too much members found with a random string.");
 
 		//back to rooms list
 		contactPicker1.backButton.click();
