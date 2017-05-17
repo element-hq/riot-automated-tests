@@ -28,6 +28,11 @@ public class RiotHomePageTabObjects extends RiotTabPageObjects{
 	/*
 	 * INVITES
 	 */
+	/*
+	 * 		Favourites Section.
+	 */
+	@AndroidFindBy(id="im.vector.alpha:id/invitations_section")
+	public MobileElement invitesSectionLayout;
 	
 	/*
 	 * ROOMS.

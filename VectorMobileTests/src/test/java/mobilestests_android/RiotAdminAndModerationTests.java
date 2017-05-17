@@ -162,7 +162,6 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 		roomPageB.waitForPostsToBeDisplayed();
 
 		//Check on user A device that user B has actually joined the room
-		memberPageUserB.menuBackButton.click();
 		Assert.assertEquals(roomPageA.getTextViewFromPost(roomPageA.getLastPost()).getText(), riotUserBDisplayName+" joined");
 	}
 
@@ -268,7 +267,7 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 		//4. Open user B details page with user A and make him admin him.
 		roomDetailsA.getMemberByName(riotUserBDisplayName).click();
 		RiotMemberDetailsPageObjects memberPageUserB=new RiotMemberDetailsPageObjects(appiumFactory.getAndroidDriver1());
-		//Ban user B
+		//Make him admin
 		Assert.assertNotNull(memberPageUserB.getActionItemByName("Make admin"), "There is no Make admin action visible on user B's member details page.");
 		memberPageUserB.getActionItemByName("Make admin").click();
 		//Check that a confirmation dialog is opened. 

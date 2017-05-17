@@ -166,7 +166,7 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 		roomPageB.waitForBubblesToBeDisplayed();
 
 		//Check on user A device that user B has actually joined the room
-		memberPageUserB.menuBackButton.click();
+		//memberPageUserB.menuBackButton.click();
 		Assert.assertTrue(roomPageA.getTextViewFromBubble(roomPageA.getLastBubble()).getText().contains(riotUserBDisplayName+" joined"));
 	}
 

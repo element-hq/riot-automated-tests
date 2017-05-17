@@ -192,9 +192,31 @@ public class RiotUxReworkTests extends RiotParentTest{
 	}
 	
 	/**
+	 * Brows tabs and check the filter search field text.
+	 * 1. Open home page tab, check that filter field text is 'Search for rooms'
+	 * 2. Open favourites tab, check that filter field text is 'Search for favourites'
+	 * 3. Open people tab, check that filter field text is 'Search for people'
+	 * 4. Open rooms tab, check that filter field text is 'Search for rooms'
+	 */
+	@Test(groups={"1driver_android","1checkuser"}, priority=5)
+	public void filterOptionSearchTest() throws InterruptedException{
+		//1. Open home page tab, check that filter field text is 'Search for rooms'
+		RiotHomePageTabObjects homePageTab = new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		Assert.assertEquals(homePageTab.filterBarEditText.getText(), "Search for rooms");
+		//2. Open favourites tab, check that filter field text is 'Search for favourites'
+		RiotFavouritesTabPageObjects favouritesTab= homePageTab.openFavouriteTab();
+		Assert.assertEquals(favouritesTab.filterBarEditText.getText(), "Search for favourites");
+		//3. Open people tab, check that filter field text is 'Search for people'
+		RiotPeopleTabPageObjects peopleTab = favouritesTab.openPeopleTab();
+		Assert.assertEquals(peopleTab.filterBarEditText.getText(), "Search for people");
+		//4. Open rooms tab, check that filter field text is 'Search for rooms'
+		RiotRoomsTabPageObjects roomsTab=peopleTab.openRoomsTab();
+		Assert.assertEquals(roomsTab.filterBarEditText.getText(), "Search for rooms");
+	}
+	
+	/**
 	 * Create a room by using https requests to home server.
 	 * @param roomName
-	 * @throws IOException 
 	 */
 	private void createRoomWithByRequestsToMatrix(String roomName) throws IOException{
 		//1. Create room R with user A.
