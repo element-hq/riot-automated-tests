@@ -43,8 +43,8 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		HttpsRequestsToMatrix.sendInvitationToUser(riotInviterAccessToken, getRoomId(), getMatrixIdFromDisplayName(riotUserDisplayName));
 		
 		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
-		ExplicitWait(appiumFactory.getAndroidDriver1(),homePage.invitesHeadingLayout);
-		Assert.assertTrue(homePage.invitesHeadingLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
+		ExplicitWait(appiumFactory.getAndroidDriver1(),homePage.invitesSectionLayout);
+		Assert.assertTrue(homePage.invitesSectionLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
 		//TODO check that invites layout is above rooms list
 		//check invite layout
 		homePage.checkInvitationLayout(roomName);
@@ -72,8 +72,8 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		HttpsRequestsToMatrix.sendInvitationToUser(riotInviterAccessToken, getRoomId(), getMatrixIdFromDisplayName(riotUserDisplayName));
 		
 		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
-		ExplicitWait(appiumFactory.getAndroidDriver1(),homePage.invitesHeadingLayout);
-		Assert.assertTrue(homePage.invitesHeadingLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
+		ExplicitWait(appiumFactory.getAndroidDriver1(),homePage.invitesSectionLayout);
+		Assert.assertTrue(homePage.invitesSectionLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
 		//TODO check that invites layout is above rooms list
 		//check invite layout
 		homePage.checkInvitationLayout(roomName);
@@ -109,8 +109,8 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		HttpsRequestsToMatrix.sendInvitationToUser(riotInviterAccessToken, getRoomId(), getMatrixIdFromDisplayName(riotUserDisplayName));
 		
 		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
-		ExplicitWait(appiumFactory.getAndroidDriver1(),homePage.invitesHeadingLayout);
-		Assert.assertTrue(homePage.invitesHeadingLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
+		ExplicitWait(appiumFactory.getAndroidDriver1(),homePage.invitesSectionLayout);
+		Assert.assertTrue(homePage.invitesSectionLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
 		//TODO check that invites layout is above rooms list
 		//check invite layout
 		homePage.checkInvitationLayout(roomName);
@@ -153,8 +153,8 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		HttpsRequestsToMatrix.sendInvitationToUser(riotInviterAccessToken, getRoomId(), getMatrixIdFromDisplayName(riotUserDisplayName));
 		
 		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
-		ExplicitWait(appiumFactory.getAndroidDriver1(),homePage.invitesHeadingLayout);
-		Assert.assertTrue(homePage.invitesHeadingLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
+		ExplicitWait(appiumFactory.getAndroidDriver1(),homePage.invitesSectionLayout);
+		Assert.assertTrue(homePage.invitesSectionLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
 		//TODO check that invites layout is above rooms list
 		//check invite layout
 		homePage.checkInvitationLayout(roomName);

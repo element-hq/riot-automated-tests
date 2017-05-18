@@ -29,10 +29,10 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	@AndroidFindBy(id="im.vector.alpha:id/home_toolbar")
 	public MobileElement toolBarView;
 	/** Button openning the lateral menu. */
-	@AndroidFindBy(xpath="//android.view.View[@resource-id='im.vector.alpha:id/home_toolbar']/android.widget.ImageButton[@content-desc='Navigate up']")//Menu button (opens the lateral menu)
+	@AndroidFindBy(xpath="//android.view.View[@resource-id='im.vector.alpha:id/home_toolbar']/android.widget.ImageButton[@content-desc='Navigate up']")////android.view.View[@resource-id='im.vector.alpha:id/home_toolbar']/android.widget.ImageButton[@content-desc='Navigate up']
 	public MobileElement contextMenuButton;
 	/** Search button openning the unified search. */
-	@Deprecated@AndroidFindBy(id="im.vector.alpha:id/ic_action_search_room")
+	@AndroidFindBy(id="im.vector.alpha:id/ic_action_search_room")
 	public MobileElement searchButton;
 	public void openGlobalSearchLayout(){
 		driver.pressKeyCode(AndroidKeyCode.MENU);
@@ -152,13 +152,13 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	public void checkInvitationLayout(String roomName) throws InterruptedException{
 		MobileElement roomInvitationLayout=getInvitationLayoutByName(roomName);
 		//room's avatar is not empty
-		org.openqa.selenium.Dimension roomAvatar=roomInvitationLayout.findElementById("im.vector.alpha:id/room_avatar_image_view").getSize();
+		org.openqa.selenium.Dimension roomAvatar=roomInvitationLayout.findElementById("im.vector.alpha:id/room_avatar").getSize();
 		Assert.assertTrue(roomAvatar.height!=0 && roomAvatar.width!=0, "Riot logo has null dimension");
 		//System.out.println(roomInvitationLayout.findElementById("im.vector.alpha:id/roomSummaryAdapter_roomName").getText());
 		//! warning is present
-		Assert.assertEquals(roomInvitationLayout.findElementById("im.vector.alpha:id/roomSummaryAdapter_unread_count").getText(), "!", "Unread count on the invitation layout isn't present");
+		Assert.assertEquals(roomInvitationLayout.findElementById("im.vector.alpha:id/room_unread_count").getText(), "!", "Unread count on the invitation layout isn't present");
 		//last message received is not empty
-		Assert.assertFalse(roomInvitationLayout.findElementById("im.vector.alpha:id/roomSummaryAdapter_roomMessage").getText().isEmpty(), "Last received message is empty");
+		Assert.assertFalse(roomInvitationLayout.findElementById("im.vector.alpha:id/room_message").getText().isEmpty(), "Last received message is empty");
 		//the 2 buttons are enabled
 		Assert.assertEquals(roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_reject_button").getText(), "Reject");
 		Assert.assertTrue(roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_reject_button").isEnabled(), "Reject button isn't enabled");
