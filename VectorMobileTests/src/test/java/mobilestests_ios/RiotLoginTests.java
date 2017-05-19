@@ -158,7 +158,7 @@ public class RiotLoginTests extends RiotParentTest{
 	}
 	
 	@AfterMethod(alwaysRun=true)
-	private void leaveRoomAfterTest(Method m) throws InterruptedException{
+	private void restart1ApplicationAfterTest(Method m) throws InterruptedException{
 		appiumFactory.getiOsDriver1().resetApp();
 	}
 }
