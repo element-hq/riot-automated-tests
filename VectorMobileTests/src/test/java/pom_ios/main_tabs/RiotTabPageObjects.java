@@ -49,7 +49,7 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	/**
 	 * Log-out from Riot with the lateral menu.
 	 */
-	public void logOutFromRoomsList(){
+	public void logOutFromTabs(){
 		RiotSettingsPageObjects settingsPage = openRiotSettings();
 		settingsPage.logOutFromSettingsView();
 	}
@@ -63,7 +63,7 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	 * @throws InterruptedException 
 	 */
 	public RiotHomePageTabObjects logOutAndLogin(String username, String pwd, Boolean forceDefaultHs) throws InterruptedException {
-		logOutFromRoomsList();
+		logOutFromTabs();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
 		loginPage.logUser(username, null, pwd,forceDefaultHs);
 		return new RiotHomePageTabObjects(driver);

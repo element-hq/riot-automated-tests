@@ -58,7 +58,7 @@ public class RiotRegisterTests extends RiotParentTest{
 		if(false==waitUntilDisplayed(appiumFactory.getiOsDriver1(),"AuthenticationVCView", true, 5)){
 			System.out.println("Can't access to the login page, a user must be logged. Forcing the log-out.");
 			RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
-			homePage.logOutFromRoomsList();
+			homePage.logOutFromTabs();
 		}
 	}
 }

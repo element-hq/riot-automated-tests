@@ -333,7 +333,6 @@ public class TestUtilities extends MatrixUtilities{
 	 */
 	public void restartApplication(AppiumDriver<MobileElement> myDriver) {
 		System.out.println("Restart "+Constant.APPLICATION_NAME);
-		myDriver.closeApp();
-		myDriver.launchApp();
+		myDriver.resetApp();
 	}
 }
