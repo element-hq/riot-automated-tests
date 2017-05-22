@@ -83,7 +83,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 			msgboxConfirmationYesButton.click();
 		}
 	}
-	
+
 	/**
 	 * Fill login form, and hit the login button.
 	 */
@@ -91,7 +91,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 		fillLoginForm(usernameOrEmail, phoneNumber, password);
 		loginButton.click();
 	}
-	
+
 	/**
 	 * Fill login form, custom server options, and hit the login button.
 	 * @param usernameOrEmail
@@ -105,6 +105,8 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 		fillLoginForm(usernameOrEmail, phoneNumber, password);
 		setUpHomeServerAndIdentityServer(hs, is);
 		loginButton.click();
+		//since the workaround for this https://github.com/vector-im/riot-android/issues/1227
+		//the verification identity server pop up shouldn't appear
 		if(isPresentTryAndCatch(titleTemplateFromWarningTrustRemoteServerLayout)){
 			msgboxConfirmationYesButton.click();
 		}
@@ -128,6 +130,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public void setUpHomeServerAndIdentityServer(String hsAddress, String isAddress) throws InterruptedException{
 		driver.hideKeyboard();
 		customServerOptionsCheckBox.click();
+		waitUntilDisplayed(driver, "im.vector.alpha:id/search_progress", false, 120);
 		//if warning alert "Could not verify identity of remote server" is displayed
 		if(isPresentTryAndCatch(titleTemplateFromWarningTrustRemoteServerLayout)){
 			msgboxConfirmationYesButton.click();
@@ -140,6 +143,12 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 			if(isPresentTryAndCatch(titleTemplateFromWarningTrustRemoteServerLayout)){
 				msgboxConfirmationYesButton.click();
 			}
+		}
+		//if login button is disabled, it means we have to trigger the homeserver verification
+		//https://github.com/vector-im/riot-android/issues/1227
+		identityServerEditText.click();
+		if(isPresentTryAndCatch(titleTemplateFromWarningTrustRemoteServerLayout)){
+			msgboxConfirmationYesButton.click();
 		}
 		if(null!=isAddress&&!identityServerEditText.getText().equals(isAddress)){
 			try {
@@ -194,7 +203,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement customServerOptionsCheckBox;
 	@AndroidFindBy(id="im.vector.alpha:id/login_forgot_password")
 	public MobileElement forgotPwdButton;
-	
+
 	/*
 	 * Verifying email page
 	 */
@@ -202,7 +211,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement emailSentMessageTextView;
 	@AndroidFindBy(id="im.vector.alpha:id/button_forgot_email_validate")
 	public MobileElement iVerifiedMyMailButton;
-	
+
 
 	/*
 	 * LOGIN MATRIX SERVER CUSTOM OPTIONS
@@ -224,8 +233,8 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement titleTemplateFromWarningTrustRemoteServerLayout;
 	@AndroidFindBy(id="im.vector.alpha:id/ssl_user_id")
 	public MobileElement hsURLFromWarningTrustRemoteServer;
-	
-	
+
+
 	/*
 	 * BOTTOM BAR
 	 */
@@ -253,14 +262,14 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement msgboxConfirmationNoButton;
 	@AndroidFindBy(id="android:id/button1")
 	public MobileElement msgboxConfirmationYesButton;
-	
+
 	/*
 	 * PROGRESS BAR
 	 */
 	@AndroidFindBy(xpath="//android.widget.ProgressBar")
 	public MobileElement progressBar;
-	
-	
+
+
 	/**
 	 * Start a registration to the captcha webview.
 	 * @throws InterruptedException 
