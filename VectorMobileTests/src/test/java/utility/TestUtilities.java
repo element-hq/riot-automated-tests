@@ -332,8 +332,10 @@ public class TestUtilities extends MatrixUtilities{
 	 * @param myDriver
 	 */
 	public void restartApplication(AppiumDriver<MobileElement> myDriver) {
-		System.out.println("Restart "+Constant.APPLICATION_NAME);
-		myDriver.closeApp();
-		myDriver.launchApp();
+		if(null!=myDriver){
+			System.out.println("Restart "+Constant.APPLICATION_NAME);
+			myDriver.closeApp();
+			myDriver.launchApp();
+		}
 	}
 }

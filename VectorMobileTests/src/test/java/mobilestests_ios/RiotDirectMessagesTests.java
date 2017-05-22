@@ -63,6 +63,12 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 			break;
 		}
 	}
+	
+	@AfterMethod(alwaysRun=true,groups={"2drivers_ios"})
+	private void restart2ApplicationAfterTest(Method m) throws InterruptedException{
+		restartApplication(appiumFactory.getiOsDriver1());
+		restartApplication(appiumFactory.getiOsDriver2());
+	}
 
 //	private void leaveRoomOn1DeviceFromRoomPageAfterTest(String roomNameFromDevice1) throws InterruptedException{
 //		RiotRoomPageObjects roomPage1 = new RiotRoomPageObjects(appiumFactory.getiOsDriver1());

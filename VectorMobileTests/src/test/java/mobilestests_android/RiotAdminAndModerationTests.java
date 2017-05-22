@@ -375,6 +375,12 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 			break;
 		}
 	}
+	
+	@AfterMethod(alwaysRun=true,groups={"2drivers_android"})
+	private void restart2ApplicationAfterTest(Method m) throws InterruptedException{
+		restartApplication(appiumFactory.getAndroidDriver1());
+		restartApplication(appiumFactory.getAndroidDriver2());
+	}
 
 	private void leaveAndForgetRoomWith2Users() throws IOException{
 		//leave room user A

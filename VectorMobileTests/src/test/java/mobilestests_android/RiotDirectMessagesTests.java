@@ -228,6 +228,12 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 			break;
 		}
 	}
+	
+	@AfterMethod(alwaysRun=true,groups={"2drivers_android"})
+	private void restart2ApplicationAfterTest(Method m) throws InterruptedException{
+		restartApplication(appiumFactory.getAndroidDriver1());
+		restartApplication(appiumFactory.getAndroidDriver2());
+	}
 
 	private void leaveRoomFromRoomsListAfterTest(String roomNameFromDevice1, String roomNameFromDevice2) throws InterruptedException{
 		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
