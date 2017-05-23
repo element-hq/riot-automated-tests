@@ -150,6 +150,29 @@ public class RiotUxReworkTests extends RiotParentTest{
 	}
 	
 	/**
+	 * Brows tabs and check the filter search field text.
+	 * 1. Open home page tab, check that filter field text is 'Search for rooms'
+	 * 2. Open favourites tab, check that filter field text is 'Search for favourites'
+	 * 3. Open people tab, check that filter field text is 'Search for people'
+	 * 4. Open rooms tab, check that filter field text is 'Search for rooms'
+	 */
+	@Test(groups={"1driver_android","1checkuser"}, priority=4)
+	public void filterOptionSearchTest() throws InterruptedException{
+		//1. Open home page tab, check that filter field text is 'Search for rooms'
+		RiotHomePageTabObjects homePageTab = new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		Assert.assertEquals(homePageTab.filterBarEditText.getText(), "Search for rooms");
+		//2. Open favourites tab, check that filter field text is 'Search for favourites'
+		RiotFavouritesTabPageObjects favouritesTab= homePageTab.openFavouriteTab();
+		Assert.assertEquals(favouritesTab.filterBarEditText.getText(), "Search for favourites");
+		//3. Open people tab, check that filter field text is 'Search for people'
+		RiotPeopleTabPageObjects peopleTab = favouritesTab.openPeopleTab();
+		Assert.assertEquals(peopleTab.filterBarEditText.getText(), "Search for people");
+		//4. Open rooms tab, check that filter field text is 'Search for rooms'
+		RiotRoomsTabPageObjects roomsTab=peopleTab.openRoomsTab();
+		Assert.assertEquals(roomsTab.filterBarEditText.getText(), "Search for rooms");
+	}
+	
+	/**
 	 * 1. Open people tab </br>
 	 * 2. Hit LOCAL ADDRESS BOOK sticky header </br>
 	 * Local contact list is displayed </br>
@@ -162,7 +185,7 @@ public class RiotUxReworkTests extends RiotParentTest{
 	 * Check that rooms displayed
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"1driver_android","1checkuser"}, priority=4)
+	@Test(groups={"1driver_android","1checkuser_default_hs"}, priority=5)
 	public void stickyHeaderTest() throws InterruptedException{
 		//1. Open people tab
 		RiotHomePageTabObjects homePageTab = new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
@@ -181,6 +204,7 @@ public class RiotUxReworkTests extends RiotParentTest{
 		//4. Open rooms tab 
 		RiotRoomsTabPageObjects roomsTab = peopleTab.openRoomsTab();
 		//5. Hit ROOM DIRECTORY stikcy header
+		waitUntilDisplayed(appiumFactory.getAndroidDriver1(), "im.vector.alpha:id/section_loading", false, 10);
 		roomsTab.hitSectionHeader("ROOM DIRECTORY");
 		//Check that room directory section is displayed
 		Assert.assertTrue(roomsTab.publicRoomsList.size()>1, "Rooms directory list is empty");
@@ -189,29 +213,6 @@ public class RiotUxReworkTests extends RiotParentTest{
 		roomsTab.hitSectionHeader("ROOMS");
 		//Check that room section is displayed
 		Assert.assertTrue(roomsTab.roomsList.size()>1, "Rooms list is empty");
-	}
-	
-	/**
-	 * Brows tabs and check the filter search field text.
-	 * 1. Open home page tab, check that filter field text is 'Search for rooms'
-	 * 2. Open favourites tab, check that filter field text is 'Search for favourites'
-	 * 3. Open people tab, check that filter field text is 'Search for people'
-	 * 4. Open rooms tab, check that filter field text is 'Search for rooms'
-	 */
-	@Test(groups={"1driver_android","1checkuser"}, priority=5)
-	public void filterOptionSearchTest() throws InterruptedException{
-		//1. Open home page tab, check that filter field text is 'Search for rooms'
-		RiotHomePageTabObjects homePageTab = new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
-		Assert.assertEquals(homePageTab.filterBarEditText.getText(), "Search for rooms");
-		//2. Open favourites tab, check that filter field text is 'Search for favourites'
-		RiotFavouritesTabPageObjects favouritesTab= homePageTab.openFavouriteTab();
-		Assert.assertEquals(favouritesTab.filterBarEditText.getText(), "Search for favourites");
-		//3. Open people tab, check that filter field text is 'Search for people'
-		RiotPeopleTabPageObjects peopleTab = favouritesTab.openPeopleTab();
-		Assert.assertEquals(peopleTab.filterBarEditText.getText(), "Search for people");
-		//4. Open rooms tab, check that filter field text is 'Search for rooms'
-		RiotRoomsTabPageObjects roomsTab=peopleTab.openRoomsTab();
-		Assert.assertEquals(roomsTab.filterBarEditText.getText(), "Search for rooms");
 	}
 	
 	/**
@@ -258,6 +259,12 @@ public class RiotUxReworkTests extends RiotParentTest{
 			break;
 		}
 	}
+	
+	@AfterMethod(alwaysRun=true,groups={"1driver_android"})
+	private void restart1ApplicationAfterTest(Method m) throws InterruptedException{
+		restartApplication(appiumFactory.getAndroidDriver1());
+	}
+	
 	private void leaveAndForgetRoomUsers() throws IOException{
 		//leave room user A
 		HttpsRequestsToMatrix.leaveRoom(riotUserAAccessToken, testRoomId);
@@ -267,12 +274,17 @@ public class RiotUxReworkTests extends RiotParentTest{
 	
 	/**
 	 * Log the good user if not.</br> Secure the test.
-	 * @param myDriver
-	 * @param username
-	 * @param pwd
 	 */
 	@BeforeGroups("1checkuser")
 	private void checkIfUserLogged() throws InterruptedException, FileNotFoundException, YamlException{
 		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver1(), riotUserADisplayName, Constant.DEFAULT_USERPWD);
+	}
+	
+	/**
+	 * Log the good user if not.</br> Secure the test.
+	 */
+	@BeforeGroups("1checkuser_default_hs")
+	private void checkIfUserLoggedWithDefaultHs() throws InterruptedException, FileNotFoundException, YamlException{
+		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver1(), riotUserADisplayName, Constant.DEFAULT_USERPWD,true);
 	}
 }
