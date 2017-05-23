@@ -3,13 +3,13 @@ package pom_android;
 import java.io.FileNotFoundException;
 
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
@@ -29,13 +29,8 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public RiotLoginAndRegisterPageObjects(AppiumDriver<MobileElement> myDriver) {
 		driver= myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
-		//ExplicitWaitToBeVisible(driver,this.inputsLoginLayout);
 		try {
-			if(driver instanceof AndroidDriver<?>){
-				waitUntilDisplayed((AndroidDriver<MobileElement>) driver,"im.vector.alpha:id/login_inputs_layout", true, 10);
-			}else if(driver instanceof IOSDriver<?>){
-				waitUntilDisplayed((IOSDriver<MobileElement>) driver,"//UIAApplication[1]/UIAWindow[1]/UIAScrollView[2]/UIATextField[1]", true, 5);
-			}		
+			Assert.assertTrue(waitUntilDisplayed((AndroidDriver<MobileElement>) driver,"im.vector.alpha:id/login_inputs_layout", true, 10), "Riot login/register page isn't opened");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -161,12 +156,10 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	}
 
 	/*
-	 * 		register 1 part
+	 * 		register form 1
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/creation_inputs_layout")
 	public MobileElement inputsRegisteringLayout;
-	@AndroidFindBy(id="im.vector.alpha:id/creation_email_address")
-	public MobileElement emailRegisterEditText;
 	@AndroidFindBy(id="im.vector.alpha:id/creation_your_name")
 	public MobileElement userNameRegisterEditText;
 	@AndroidFindBy(id="im.vector.alpha:id/creation_password1")
@@ -174,7 +167,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	@AndroidFindBy(id="im.vector.alpha:id/creation_password2")
 	public MobileElement pwd2EditRegisterText;
 	/*
-	 * 		register 2 part
+	 * 		register form 2
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/registration_email")
 	public MobileElement mailRegisterEditText;
@@ -274,9 +267,8 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	 * Start a registration to the captcha webview.
 	 * @throws InterruptedException 
 	 */
-	public void fillRegisterForm(String mail, String username, String pwd1, String pwd2) throws InterruptedException{
+	public void fillFirstRegisterForm(String mail, String username, String pwd1, String pwd2) throws InterruptedException{
 		registerButton.click();
-		emailRegisterEditText.setValue(mail);
 		userNameRegisterEditText.setValue(username);
 		pwd1EditRegisterText.setValue(pwd1);
 		pwd2EditRegisterText.setValue(pwd2);
