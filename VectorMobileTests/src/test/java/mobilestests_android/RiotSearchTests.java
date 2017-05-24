@@ -1,9 +1,11 @@
 package mobilestests_android;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.Method;
 
 import org.openqa.selenium.ScreenOrientation;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -172,5 +174,10 @@ public class RiotSearchTests extends RiotParentTest{
 		RiotSettingsPageObjects settingsView1= homePage.openRiotSettingsFromLateralMenu();
 		settingsView1.checkContactsPermissionIfNecessary(true);
 		settingsView1.actionBarBackButton.click();
+	}
+	
+	@AfterMethod(alwaysRun=true,groups={"1driver_android"})
+	private void restart1ApplicationAfterTest(Method m) throws InterruptedException{
+		restartApplication(appiumFactory.getAndroidDriver1());
 	}
 }

@@ -2,8 +2,10 @@ package mobilestests_android;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -15,6 +17,8 @@ import pom_android.RiotIncomingCallPageObjects;
 import pom_android.RiotRoomDetailsPageObjects;
 import pom_android.RiotRoomPageObjects;
 import pom_android.main_tabs.RiotHomePageTabObjects;
+import pom_android.main_tabs.RiotRoomsTabPageObjects;
+import utility.AppiumServerStartAndStopService;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -38,8 +42,6 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver_android","1checkuser"}, description="test on call")
 	public void cancelAudioCallFromChatRoom() throws InterruptedException{
-		restartApplication(appiumFactory.getAndroidDriver1());
-		
 		//1. Launch an audio call from a room
 		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 		homePage.getRoomByName(roomNameTest).click();
@@ -65,8 +67,6 @@ public class RiotVoipTests extends RiotParentTest{
 		//asserts on pending view
 		voipRoom.checkPendingCallView(false, null);
 		Assert.assertTrue(voipRoom.getTextViewFromPost(voipRoom.getLastPost()).getText().contains("ended the call."),"No '[user] ended the call' message in the room.");
-		//come back in rooms list
-		voipRoom.menuBackButton.click();
 	}
 
 	/**
@@ -81,8 +81,6 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"1driver_android","1checkuser",}, description="test on call")
 	public void cancelVideoCallFromChatRoom() throws InterruptedException{
-		restartApplication(appiumFactory.getAndroidDriver1());
-		
 		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 		homePage.getRoomByName(roomNameTest).click();
 		RiotRoomPageObjects voipRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
@@ -102,8 +100,6 @@ public class RiotVoipTests extends RiotParentTest{
 		//asserts on pending view
 		voipRoom.checkPendingCallView(false, null);
 		Assert.assertTrue(voipRoom.getTextViewFromPost(voipRoom.getLastPost()).getText().contains("ended the call."),"No '[user] ended the call' message in the room.");
-		//come back in rooms list
-		voipRoom.menuBackButton.click();
 	}
 
 	/**
@@ -116,9 +112,6 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"}, description="call from device 1 answered by device 2")
 	public void cancelIncomingAudioCall() throws InterruptedException{
-		restartApplication(appiumFactory.getAndroidDriver1());
-		restartApplication(appiumFactory.getAndroidDriver2());
-		
 		//call from device 1
 		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 		homePage.getRoomByName(roomNameTest).click();
@@ -136,7 +129,6 @@ public class RiotVoipTests extends RiotParentTest{
 		incomingCallDevice2.checkIncomingCallView(false, "", "");
 		//check that calling view is closed on device 1
 		callingView.isDisplayed(false);
-		voipRoomDevice1.menuBackButton.click();
 	}
 
 	/**
@@ -151,9 +143,6 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"}, description="call from device 1 answered by device 2")
 	public void acceptIncomingAudioCall() throws InterruptedException{
-		restartApplication(appiumFactory.getAndroidDriver1());
-		restartApplication(appiumFactory.getAndroidDriver2());
-		
 		//call from device 1
 		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 		homePage.getRoomByName(roomNameTest).click();
@@ -179,9 +168,8 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertFalse(callingViewDevice2.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
 		//check end call events on messages
 		Assert.assertEquals(voipRoomDevice1.getTextViewFromPost(voipRoomDevice1.getLastPost()).getText(),riotuser2DisplayName+" ended the call.");
-		Assert.assertEquals(homePage2.getLastEventByRoomName(roomNameTest,false),riotuser2DisplayName+" ended the call.");
-		//come back in rooms list on device 1
-		voipRoomDevice1.menuBackButton.click();
+		RiotRoomsTabPageObjects roomsTab2 = homePage2.openRoomsTab();
+		Assert.assertEquals(roomsTab2.getLastEventByRoomName(roomNameTest,false),riotuser2DisplayName+" ended the call.");
 	}
 	/**
 	 * Required : both devices have an user logged.
@@ -195,9 +183,6 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"}, description="call from device 1 answered by device 2")
 	public void acceptIncomingVideoCall() throws InterruptedException{
-		restartApplication(appiumFactory.getAndroidDriver1());
-		restartApplication(appiumFactory.getAndroidDriver2());
-		
 		//call from device 1
 		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 		homePage1.getRoomByName(roomNameTest).click();
@@ -227,9 +212,8 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertFalse(callingViewDevice2.isDisplayed(false),"Calling view is still displayed on device 2 after call is ended");
 		//check end call events on messages
 		Assert.assertEquals(voipRoomDevice1.getTextViewFromPost(voipRoomDevice1.getLastPost()).getText(),riotuser2DisplayName+" ended the call.");
-		Assert.assertEquals(homePage2.getLastEventByRoomName(roomNameTest,false),riotuser2DisplayName+" ended the call.");
-		//come back in rooms list on device 1
-		voipRoomDevice1.menuBackButton.click();
+		RiotRoomsTabPageObjects roomsTab2 = homePage2.openRoomsTab();
+		Assert.assertEquals(roomsTab2.getLastEventByRoomName(roomNameTest,false),riotuser2DisplayName+" ended the call.");
 	}
 
 	/**
@@ -244,9 +228,6 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"}, description="during a call desactivate mic")
 	public void disableMicrophoneDuringCall() throws InterruptedException, IOException{
-		restartApplication(appiumFactory.getAndroidDriver1());
-		restartApplication(appiumFactory.getAndroidDriver2());
-		
 		//call from device 1
 		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 		homePage1.getRoomByName(roomNameTest).click();
@@ -280,9 +261,6 @@ public class RiotVoipTests extends RiotParentTest{
 		Assert.assertFalse(compareImages("screenshots\\comparison\\muteAudioButtonNonPressed.png", "screenshots\\comparison\\muteAudioButtonPressed.png"), "Mute button not pressed");
 		//hangout
 		callingViewDevice2.hangUpButton.click();
-		voipRoomDevice1.menuBackButton.click();
-		voipRoomDevice2.menuBackButton.click();
-		
 	}
 
 	/**
@@ -295,9 +273,6 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"},priority=15, description="leave room during a call")
 	public void leaveRoomDuringCall() throws InterruptedException{
-		restartApplication(appiumFactory.getAndroidDriver1());
-		restartApplication(appiumFactory.getAndroidDriver2());
-		
 		//go on 1to1 room with device 1
 		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 		homePage1.getRoomByName(roomNameTest2).click();
@@ -353,9 +328,6 @@ public class RiotVoipTests extends RiotParentTest{
 	 */
 	@Test(groups={"2drivers_android","2checkuser"})
 	public void hangUpWhenCalleeInRoomView() throws InterruptedException{
-		restartApplication(appiumFactory.getAndroidDriver1());
-		restartApplication(appiumFactory.getAndroidDriver2());
-		
 		//Go in room voip test with both devices
 		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 		RiotHomePageTabObjects homePage2=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver2());
@@ -381,9 +353,6 @@ public class RiotVoipTests extends RiotParentTest{
 		roomDevice1.startVoiceCall();
 		incomingCallDevice2.checkIncomingCallView(true, riotuser1DisplayName, "Incoming Call");
 		incomingCallDevice2.ignoreCallButton.click();
-		//go back to the room
-		roomDevice1.menuBackButton.click();
-		roomDevice2.menuBackButton.click();
 	}
 
 	/**
@@ -405,4 +374,22 @@ public class RiotVoipTests extends RiotParentTest{
 		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver1(), riotuser1DisplayName, Constant.DEFAULT_USERPWD);
 		super.checkIfUserLoggedAndHomeServerSetUpAndroid(appiumFactory.getAndroidDriver2(), riotuser2DisplayName, Constant.DEFAULT_USERPWD);
 	}
+	
+	@AfterMethod(alwaysRun=true)
+	private void restart2ApplicationAfterTest(Method m) throws Exception{
+		try {
+			restartApplication(appiumFactory.getAndroidDriver1());
+			restartApplication(appiumFactory.getAndroidDriver2());
+		} catch (Exception e) {
+			start2AppiumServers();
+			AppiumServerStartAndStopService.startAppiumServer1IfNecessary();
+			AppiumServerStartAndStopService.startAppiumServer1IfNecessary();
+		}
+
+	}
+	
+//	@AfterMethod(alwaysRun=true,groups={"1driver_android"})
+//	private void restart1ApplicationAfterTest(Method m) throws InterruptedException{
+//		restartApplication(appiumFactory.getAndroidDriver1());
+//	}
 }

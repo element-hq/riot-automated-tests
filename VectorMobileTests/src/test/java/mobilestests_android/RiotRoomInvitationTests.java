@@ -2,8 +2,10 @@ package mobilestests_android;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -235,5 +237,10 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	private void renewRiotInviterAccessToken() throws IOException, InterruptedException{
 		System.out.println("Log "+riotInviterUserDisplayName+" to get a new AccessToken.");
 		riotInviterAccessToken=HttpsRequestsToMatrix.login(riotInviterUserDisplayName, Constant.DEFAULT_USERPWD);
+	}
+	
+	@AfterMethod(alwaysRun=true,groups={"1driver_android"})
+	private void restart1ApplicationAfterTest(Method m) throws InterruptedException{
+		restartApplication(appiumFactory.getAndroidDriver1());
 	}
 }

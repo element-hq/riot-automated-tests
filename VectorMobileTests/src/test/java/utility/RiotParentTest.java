@@ -273,7 +273,7 @@ public abstract class RiotParentTest extends TestUtilities {
 	 * According to the chosen starting mode, start the first appium server if needed.
 	 * @throws Exception 
 	 */
-	private void startAppiumServer1() throws Exception{
+	protected void startAppiumServer1() throws Exception{
 		switch (ReadConfigFile.getInstance().getConfMap().get("starting_server_mode")) {
 		case "1":
 			AppiumServerStartAndStopCmdLine.startAppiumServer1IfNecessary();
@@ -289,7 +289,7 @@ public abstract class RiotParentTest extends TestUtilities {
 	 * According to the chosen starting mode, start the two appiums servers if needed.
 	 * @throws Exception 
 	 */
-	private void start2AppiumServers() throws Exception{
+	protected void start2AppiumServers() throws Exception{
 		switch (ReadConfigFile.getInstance().getConfMap().get("starting_server_mode")) {
 		case "1":
 			AppiumServerStartAndStopCmdLine.startAppiumServer1IfNecessary();

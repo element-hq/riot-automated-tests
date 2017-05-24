@@ -89,10 +89,6 @@ public class RiotPeopleManagingTests extends RiotParentTest{
 		Assert.assertEquals(roomDetails1.membersList.size(), 0);
 		Assert.assertTrue(roomDetails1.noResultTextView.isDisplayed(), "No result text view isn't displayed after filtering members list with random string.");
 		Assert.assertEquals(roomDetails1.noResultTextView.getText(), "No results");
-
-		//back to rooms list
-		roomDetails1.menuBackButton.click();
-		roomPage1.menuBackButton.click();
 	}
 
 	/*
@@ -138,11 +134,6 @@ public class RiotPeopleManagingTests extends RiotParentTest{
 		Assert.assertEquals(contactPicker1.categoryList.get(0).findElementById("im.vector.alpha:id/people_header_text_view").getText(), "LOCAL CONTACTS (0)");
 		Assert.assertEquals(contactPicker1.categoryList.get(1).findElementById("im.vector.alpha:id/people_header_text_view").getText(), "KNOWN CONTACTS (0)");
 		Assert.assertEquals(contactPicker1.detailsMemberListView.size(), 0, "There is too much members found with a random string.");
-
-		//back to rooms list
-		contactPicker1.backButton.click();
-		roomDetails1.menuBackButton.click();
-		roomPage1.menuBackButton.click();
 	}
 
 	/**
@@ -183,11 +174,6 @@ public class RiotPeopleManagingTests extends RiotParentTest{
 		Assert.assertTrue(knownContacts.matches("^KNOWN CONTACTS \\([^0][0-9]*\\)$"));
 		//Check that there is at least 2 filtered people
 		Assert.assertTrue(contactPicker1.detailsMemberListView.size()>=2, "There is not enough members in the list after filtering with matching word.");
-		
-		//back to rooms list
-		contactPicker1.backButton.click();
-		roomDetails1.menuBackButton.click();
-		roomPage1.menuBackButton.click();
 	}
 
 	/**
@@ -278,6 +264,11 @@ public class RiotPeopleManagingTests extends RiotParentTest{
 			leaveRoomFromRoomPageAfterTest("Empty room");
 			break;
 		}
+	}
+	
+	@AfterMethod(alwaysRun=true,groups={"1driver_android"})
+	private void restart1ApplicationAfterTest(Method m) throws InterruptedException{
+		restartApplication(appiumFactory.getAndroidDriver1());
 	}
 
 	private void leaveRoomFromRoomPageAfterTest(String roomName){
