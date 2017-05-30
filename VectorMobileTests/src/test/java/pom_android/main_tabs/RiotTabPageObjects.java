@@ -390,9 +390,28 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 		}
 	}
 	
-	public Boolean isDirectMessageByRoomName(String myRoomName){
+	/**
+	 * Returns true if the room has a direct chat indicator.
+	 * @param room
+	 * @return
+	 */
+	public Boolean isRoomTaggedDirectMessage(MobileElement room){
 		try {
-			if(getRoomByName(myRoomName).findElementById("im.vector.alpha:id/direct_chat_indicator")!=null)return true;
+			if(room.findElementById("im.vector.alpha:id/direct_chat_indicator")!=null)return true;
+		} catch (Exception e) {
+			return false;
+		}
+		return false;
+	}
+	
+	/**
+	 * Returns true if the room has an encrypted icon.
+	 * @param room
+	 * @return
+	 */
+	public Boolean isRoomTaggedEncrypted(MobileElement room){
+		try {
+			if(room.findElementById("im.vector.alpha:id/room_avatar_encrypted_icon")!=null)return true;
 		} catch (Exception e) {
 			return false;
 		}

@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 
+import pom_android.RiotRoomPageObjects;
 import pom_android.main_tabs.RiotFavouritesTabPageObjects;
 import pom_android.main_tabs.RiotHomePageTabObjects;
 import pom_android.main_tabs.RiotPeopleTabPageObjects;
@@ -31,6 +32,7 @@ public class RiotUxReworkTests extends RiotParentTest{
 	private String riotUserADisplayName="riotuser1";
 	private String riotUserBDisplayName="riotuser2";
 	private String riotUserAAccessToken;
+	private String riotUserBAccessToken;
 	private String testRoomId;
 	
 	/**
@@ -216,6 +218,47 @@ public class RiotUxReworkTests extends RiotParentTest{
 	}
 	
 	/**
+	 * 1. Create a direct chat room with user B. </br>
+	 * 2. Accept invitation with user B.
+	 * 3. Send a message with user B.  </br>
+	 * Check the presence of the unread badge on the room from the home page. </br>
+	 * Check the presence of the direct message badge on the room from the home page. </br>
+	 * 4. Make the room encrypted with user A. </br>
+	 * Check the presence of the encrypted badge on the room from the home page. </br>
+	 * @throws IOException 
+	 * @throws InterruptedException 
+	 */
+	@Test(groups={"1driver_android","1checkuser"}, priority=6)
+	public void badgesOnHomePageTest() throws IOException, InterruptedException{
+		String unreadTestMsg="badge";
+		
+		//1. Create a direct chat room with user B
+		createDirectChatWithByRequestsToMatrix(MatrixUtilities.getMatrixIdFromDisplayName(riotUserBDisplayName));
+		//2. Accept invitation with user B.
+		riotUserBAccessToken=HttpsRequestsToMatrix.login(riotUserBDisplayName, Constant.DEFAULT_USERPWD);
+		HttpsRequestsToMatrix.joinRoom(riotUserBAccessToken, testRoomId);
+		
+		RiotHomePageTabObjects homePageTabA = new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		homePageTabA.clickOnContextMenuOnRoom(riotUserBDisplayName, "Direct Chat");
+		homePageTabA.getRoomByName(riotUserBDisplayName).click();
+		RiotRoomPageObjects roomPageA=new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
+		roomPageA.menuBackButton.click();
+		
+		//3. Send a message with user B
+		riotUserAAccessToken=HttpsRequestsToMatrix.login(riotUserADisplayName, Constant.DEFAULT_USERPWD);
+		HttpsRequestsToMatrix.sendMessageInRoom(riotUserBAccessToken, testRoomId, unreadTestMsg);
+		//Check the presence of the unread badge on the room from the home page.
+		Assert.assertEquals(String.valueOf(homePageTabA.getBadgeNumberByRoomName(riotUserBDisplayName)), "1");
+		//Check the presence of the direct message badge on the room from the home page. 
+		Assert.assertTrue(homePageTabA.isRoomTaggedDirectMessage(homePageTabA.getRoomByName(riotUserBDisplayName)),"Room isn't tagged Direct Chat in the HomePage.");
+		
+		//4. Make the room encrypted with user A.
+		HttpsRequestsToMatrix.enableEncryptionInRoom(riotUserAAccessToken, testRoomId);
+		//Check the presence of the encrypted badge on the room from the home page. 
+		Assert.assertTrue(homePageTabA.isRoomTaggedEncrypted(homePageTabA.getRoomByName(riotUserBDisplayName)),"Room isn't tagged Direct Chat in the HomePage.");
+	}
+	
+	/**
 	 * Create a room by using https requests to home server.
 	 * @param roomName
 	 */
@@ -244,16 +287,19 @@ public class RiotUxReworkTests extends RiotParentTest{
 	private void leaveRoomAfterTest(Method m) throws InterruptedException, IOException{
 		switch (m.getName()) {
 		case "duplicatedFavouritedRoomAccrossTabsTest":
-			leaveAndForgetRoomUsers();
+			leaveAndForgetRoom2Users();
 			break;
 		case "duplicatedDirectChatAccrossTabsTest":
-			leaveAndForgetRoomUsers();
+			leaveAndForgetRoom1User();
 			break;
 		case "notDuplicatedLowPriorityRoomAccrossTabsTest":
-			leaveAndForgetRoomUsers();
+			leaveAndForgetRoom1User();
 			break;
 		case "notDuplicatedDirectChatAccrossTabsTest":
-			leaveAndForgetRoomUsers();
+			leaveAndForgetRoom1User();
+			break;
+		case "badgesOnHomePageTest":
+			leaveAndForgetRoom2Users();
 			break;
 		default:
 			break;
@@ -265,11 +311,22 @@ public class RiotUxReworkTests extends RiotParentTest{
 		restartApplication(appiumFactory.getAndroidDriver1());
 	}
 	
-	private void leaveAndForgetRoomUsers() throws IOException{
+	private void leaveAndForgetRoom1User() throws IOException{
 		//leave room user A
 		HttpsRequestsToMatrix.leaveRoom(riotUserAAccessToken, testRoomId);
 		//forget room user A
 		HttpsRequestsToMatrix.forgetRoom(riotUserAAccessToken, testRoomId);
+	}
+	
+	private void leaveAndForgetRoom2Users() throws IOException{
+		//leave room user A
+		HttpsRequestsToMatrix.leaveRoom(riotUserAAccessToken, testRoomId);
+		//forget room user A
+		HttpsRequestsToMatrix.forgetRoom(riotUserAAccessToken, testRoomId);
+		//leave room user B
+		HttpsRequestsToMatrix.leaveRoom(riotUserBAccessToken, testRoomId);
+		//forget room user B
+		HttpsRequestsToMatrix.forgetRoom(riotUserBAccessToken, testRoomId);
 	}
 	
 	/**
