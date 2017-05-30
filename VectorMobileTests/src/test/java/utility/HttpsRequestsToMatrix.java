@@ -116,6 +116,18 @@ public class HttpsRequestsToMatrix {
 		return roomId;
 	}
 	
+	/**
+	 * Enable encryption in a room.
+	 * @param accessToken
+	 * @param roomId
+	 * @throws IOException
+	 */
+	public static void enableEncryptionInRoom(String accessToken, String roomId) throws IOException{
+		StringBuilder url=new StringBuilder(MatrixUtilities.getHomeServerUrlForRequestToMatrix(false)).append("/_matrix/client/r0/rooms/").append(roomId).append("/state/m.room.encryption").append("?access_token=").append(accessToken);
+		String postJsonData = "{\"algorithm\":\"m.megolm.v1.aes-sha2\"}";
+		executeUrl(url.toString(), "PUT", postJsonData);
+	}
+	
 	private static StringBuffer executeUrl(String url, String typeRequete, String jsonData) throws IOException{
 		// Create a trust manager that does not validate certificate chains
 		TrustManager[] trustAllCerts = new TrustManager[]{
