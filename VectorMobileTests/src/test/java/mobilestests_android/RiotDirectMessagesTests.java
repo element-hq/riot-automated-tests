@@ -55,7 +55,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		RiotRoomPageObjects newRoomDevice1= homePage1.startChat(riotuser2DisplayName);
 		newRoomDevice1.menuBackButton.click();
 		//assertion on the inviter device: the new room is seen as an direct message room.
-		Assert.assertTrue(homePage1.isDirectMessageByRoomName(riotuser2DisplayName),"Room "+riotuser2DisplayName+" doesn't have a little green man on inviter device.");
+		Assert.assertTrue(homePage1.isRoomTaggedDirectMessage(homePage1.getRoomByName(riotuser2DisplayName)),"Room "+riotuser2DisplayName+" doesn't have a little green man on inviter device.");
 		//assertion the invitee device (device 2)
 		//TODO: check little green man on invitation layout
 		homePage2.previewInvitation(riotuser1DisplayName);
@@ -67,7 +67,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		//appiumFactory.getAndroidDriver2().pressKeyCode(AndroidKeyCode.BACK);
 		newRoomDevice2.menuBackButton.click();
 		//assertion on the invitee device: the new room is seen as an direct message room.
-		Assert.assertTrue(homePage2.isDirectMessageByRoomName(riotuser1DisplayName),"Room "+riotuser1DisplayName+" doesn't have a little green man on invitee device.");
+		Assert.assertTrue(homePage2.isRoomTaggedDirectMessage(homePage2.getRoomByName(riotuser1DisplayName)),"Room "+riotuser1DisplayName+" doesn't have a little green man on invitee device.");
 		/*
 		 * SECOND PART
 		 */
@@ -113,8 +113,8 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		//Room is created, then go back in rooms list
 		RiotRoomPageObjects newRoomDevice1= new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		newRoomDevice1.menuBackButton.click();
-		//assertion on the inviter device: the new room is NOT seen as an direct message room.
-		Assert.assertFalse(homePage1.isDirectMessageByRoomName(roomNameFromDevice1),"Room "+roomNameFromDevice1+" doesn't have a little green man on inviter device.");
+		//assertion on the inviter device: the new room is NOT seen as an direct message room.homePage1.getRoomByName(roomNameFromDevice1)
+		Assert.assertFalse(homePage1.isRoomTaggedDirectMessage(homePage1.getRoomByName(roomNameFromDevice1)),"Room "+roomNameFromDevice1+" doesn't have a little green man on inviter device.");
 		//assertion the invitee device (device 2)
 		//TODO: check little green man on invitation layout
 		homePage2.previewInvitation(riotuser1DisplayName);
@@ -123,7 +123,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		ExplicitWait(appiumFactory.getAndroidDriver2(), newRoomDevice2.menuBackButton);
 		newRoomDevice2.menuBackButton.click();
 		//assertion on the invitee device: the new room is NOT seen as an direct message room.
-		Assert.assertFalse(homePage2.isDirectMessageByRoomName(riotuser1DisplayName),"Room "+riotuser1DisplayName+" doesn't have a little green man on invitee device.");
+		Assert.assertFalse(homePage2.isRoomTaggedDirectMessage(homePage2.getRoomByName(roomNameFromDevice1)),"Room "+riotuser1DisplayName+" doesn't have a little green man on invitee device.");
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		newRoomDevice1.addParticipantFromCollapsedActionBar(getMatrixIdFromDisplayName(riotuser2DisplayName));
 		newRoomDevice1.menuBackButton.click();
 		//assertion on the inviter device: the new room is NOT seen as an direct message room.
-		Assert.assertFalse(homePage1.isDirectMessageByRoomName(riotuser2DisplayName),"Room "+riotuser2DisplayName+" doesn't have a little green man on inviter device.");
+		Assert.assertFalse(homePage1.isRoomTaggedDirectMessage(homePage1.getRoomByName(riotuser2DisplayName)),"Room "+riotuser2DisplayName+" doesn't have a little green man on inviter device.");
 
 		//assertion the invitee device (device 2)
 		//TODO: check little green man on invitation layout
@@ -153,7 +153,7 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		//appiumFactory.getAndroidDriver2().pressKeyCode(AndroidKeyCode.BACK);
 		newRoomDevice2.menuBackButton.click();
 		//assertion on the invitee device: the new room is NOT seen as an direct message room.
-		Assert.assertFalse(homePage2.isDirectMessageByRoomName(riotuser1DisplayName),"Room "+riotuser1DisplayName+" doesn't have a little green man on invitee device.");
+		Assert.assertFalse(homePage2.isRoomTaggedDirectMessage(homePage2.getRoomByName(riotuser1DisplayName)),"Room "+riotuser1DisplayName+" doesn't have a little green man on invitee device.");
 	}
 
 	/**
@@ -194,17 +194,17 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 
 		//2. Tag it on DM on device 1
 		homePage1.clickOnContextMenuOnRoom(tmpRoomName, "Direct Chat");
-		Assert.assertTrue(homePage1.isDirectMessageByRoomName(tmpRoomName),"Room "+tmpRoomName+" doesn't have a little green man on inviter device.");
+		Assert.assertTrue(homePage1.isRoomTaggedDirectMessage(homePage1.getRoomByName(tmpRoomName)),"Room "+tmpRoomName+" doesn't have a little green man on inviter device.");
 		//3. Tag it on DM on device 2
 		homePage2.clickOnContextMenuOnRoom(tmpRoomName, "Direct Chat");
-		Assert.assertTrue(homePage2.isDirectMessageByRoomName(tmpRoomName),"Room "+tmpRoomName+" doesn't have a little green man on invitee device.");
+		Assert.assertTrue(homePage2.isRoomTaggedDirectMessage(homePage2.getRoomByName(tmpRoomName)),"Room "+tmpRoomName+" doesn't have a little green man on invitee device.");
 
 		//4. Untag it on DM on device 1
 		homePage1.clickOnContextMenuOnRoom(tmpRoomName, "Direct Chat");
-		Assert.assertFalse(homePage1.isDirectMessageByRoomName(tmpRoomName),"Room "+tmpRoomName+" have a little green man on inviter device.");
+		Assert.assertFalse(homePage1.isRoomTaggedDirectMessage(homePage1.getRoomByName(tmpRoomName)),"Room "+tmpRoomName+" have a little green man on inviter device.");
 		//5. Untag it on DM on device 2
 		homePage2.clickOnContextMenuOnRoom(tmpRoomName, "Direct Chat");
-		Assert.assertFalse(homePage2.isDirectMessageByRoomName(tmpRoomName),"Room "+tmpRoomName+" have a little green man on invitee device.");
+		Assert.assertFalse(homePage2.isRoomTaggedDirectMessage(homePage2.getRoomByName(tmpRoomName)),"Room "+tmpRoomName+" have a little green man on invitee device.");
 	}
 
 

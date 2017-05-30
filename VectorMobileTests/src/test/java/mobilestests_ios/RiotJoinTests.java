@@ -70,6 +70,12 @@ public class RiotJoinTests extends RiotParentTest{
 			break;
 		}
 	}
+	
+	@AfterMethod(alwaysRun=true,groups={"1driver_ios"})
+	private void restart1ApplicationAfterTest(Method m) throws InterruptedException{
+		restartApplication(appiumFactory.getiOsDriver1());
+	}
+	
 	private void leaveAndForgetRoomUsers() throws IOException{
 		//leave room user B
 		HttpsRequestsToMatrix.leaveRoom(riotUserBAccessToken, testRoomId);

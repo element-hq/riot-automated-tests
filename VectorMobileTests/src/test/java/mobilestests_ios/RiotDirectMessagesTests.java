@@ -13,6 +13,7 @@ import com.esotericsoftware.yamlbeans.YamlException;
 
 import pom_ios.RiotRoomPageObjects;
 import pom_ios.main_tabs.RiotHomePageTabObjects;
+import pom_ios.main_tabs.RiotPeopleTabPageObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -45,7 +46,8 @@ public class RiotDirectMessagesTests extends RiotParentTest{
 		RiotRoomPageObjects roomPageA=hpA.startChat(getMatrixIdFromDisplayName(riotuser2DisplayName));
 		
 		//2. Accept the invitation with device/user B
-		hpB.previewInvitation(riotuser1DisplayName);
+		RiotPeopleTabPageObjects peopleTab=hpB.openPeopleTab();
+		peopleTab.previewInvitation(riotuser1DisplayName);
 		RiotRoomPageObjects roomPageB = new RiotRoomPageObjects(appiumFactory.getiOsDriver2());
 		roomPageB.joinRoomButton.click();
 		
