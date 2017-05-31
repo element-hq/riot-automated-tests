@@ -29,7 +29,7 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	@AndroidFindBy(id="im.vector.alpha:id/home_toolbar")
 	public MobileElement toolBarView;
 	/** Button openning the lateral menu. */
-	@AndroidFindBy(xpath="//android.view.View[@resource-id='im.vector.alpha:id/home_toolbar']/android.widget.ImageButton[@content-desc='Navigate up']")////android.view.View[@resource-id='im.vector.alpha:id/home_toolbar']/android.widget.ImageButton[@content-desc='Navigate up']
+	@AndroidFindBy(xpath="//android.view.View[@resource-id='im.vector.alpha:id/home_toolbar']/android.widget.ImageButton[1]")////android.view.View[@resource-id='im.vector.alpha:id/home_toolbar']/android.widget.ImageButton[@content-desc='Navigate up']
 	public MobileElement contextMenuButton;
 	/** Search button openning the unified search. */
 	@AndroidFindBy(id="im.vector.alpha:id/ic_action_search_room")
