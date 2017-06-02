@@ -42,7 +42,7 @@ public class RiotHomePageTabObjects extends RiotTabPageObjects{
 	 */
 	public MobileElement getRoomByName(String myRoomName){
 		try {
-			return roomsTableView.findElementByXPath("//XCUIElementTypeCell/XCUIElementTypeStaticText[@name='TitleLabel' and @value='"+myRoomName+"']/..");
+			return roomsTableView.findElementByXPath("//XCUIElementTypeCell/XCUIElementTypeStaticText[@name='TitleLabel' and @value='"+myRoomName+"']");
 		} catch (Exception e) {
 			System.out.println("No room found with name "+myRoomName);
 			return null;

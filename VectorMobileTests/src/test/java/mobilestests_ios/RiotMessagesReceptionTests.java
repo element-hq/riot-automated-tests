@@ -13,6 +13,7 @@ import com.esotericsoftware.yamlbeans.YamlException;
 import io.appium.java_client.MobileElement;
 import pom_ios.RiotRoomPageObjects;
 import pom_ios.main_tabs.RiotHomePageTabObjects;
+import pom_ios.main_tabs.RiotRoomsTabPageObjects;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
 import utility.ReadConfigFile;
@@ -86,18 +87,19 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	public void checkBadgeAndMessageOnRoomItem() throws InterruptedException, IOException{
 		//1. Stay in recents list and get the current badge on room roomTest
 		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
-		Integer currentBadge=homePage.getBadgeNumberByRoomName(roomTest);
+		RiotRoomsTabPageObjects roomsTabPage= homePage.openRoomsTab();
+		Integer currentBadge=roomsTabPage.getBadgeNumberByRoomName(roomTest);
 
 		//2. Receive a message in a room from an other user.
 		HttpsRequestsToMatrix.sendMessageInRoom(riotSenderAccessToken, getRoomId(), msgFromUpUser);
 		if(currentBadge==null)currentBadge=0;
 		//wait until message is received
-		homePage.waitForRoomToReceiveNewMessage(roomTest, currentBadge);
+		roomsTabPage.waitForRoomToReceiveNewMessage(roomTest, currentBadge);
 		//Asserts that badge is set to 1 or incremented on the room's item in the rooms list
-		Assert.assertNotNull(homePage.getBadgeNumberByRoomName(roomTest), "There is no badge on this room.");
-		Assert.assertEquals((int)homePage.getBadgeNumberByRoomName(roomTest),currentBadge+1, "Badge number wasn't incremented after receiving the message");	
+		Assert.assertNotNull(roomsTabPage.getBadgeNumberByRoomName(roomTest), "There is no badge on this room.");
+		Assert.assertEquals((int)roomsTabPage.getBadgeNumberByRoomName(roomTest),currentBadge+1, "Badge number wasn't incremented after receiving the message");	
 		//Assertion on the message.
-		Assert.assertEquals(homePage.getLastEventByRoomName(roomTest,false), msgFromUpUser, "Received message on the room item isn't the same as sended by matrix.");
+		Assert.assertEquals(roomsTabPage.getLastEventByRoomName(roomTest,false), msgFromUpUser, "Received message on the room item isn't the same as sended by matrix.");
 	}
 
 	/**
@@ -122,8 +124,8 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	@Test(dependsOnGroups="messageReceivedInList",priority=2,groups={"roomOpenned","1checkuser","1driver_ios"})
 	public void checkTextMessageOnRoomPage() throws InterruptedException{
 		//1. Open room roomName
-		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
-		homePage.getRoomByName(roomTest).click();
+		RiotRoomsTabPageObjects roomsTabPage = new RiotRoomsTabPageObjects(appiumFactory.getiOsDriver1());
+		roomsTabPage.getRoomByName(roomTest).click();
 		//check that lately sended message is the last displayed in the room
 		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(appiumFactory.getiOsDriver1());
 		MobileElement lastPost= testRoom.getLastBubble();
@@ -162,23 +164,6 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 		Assert.assertTrue(testRoom.getTimeStampByBubble(beforeLastPost).getText().length()>=5, "Before last message timestamp seems bad.");
 	}
 
-	/**
-	 * 1. Add a room in favorites from the rooms list. </br>
-	 * Check that the room is added in the favorites category. </br>
-	 * 2. Remove the room from the favorites </br>
-	 * Check that the room is no more in the favorites.
-	 * @throws InterruptedException
-	 */
-	@Test(groups={"1checkuser","1driver_ios"},priority=1)
-	public void addRoomInFavorites() throws InterruptedException{
-		RiotHomePageTabObjects homePage = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
-		homePage.clickOnSwipedMenuOnRoom(roomTest, "favourite");
-		Thread.sleep(1000);
-		Assert.assertTrue(homePage.checkRoomInCategory(roomTest, "FAVOURITES"), "Room "+roomTest+" isn't added in the FAVORITES category");
-		homePage.clickOnSwipedMenuOnRoom(roomTest, "favourite");
-		Thread.sleep(1000);
-		Assert.assertFalse(homePage.checkRoomInCategory(roomTest, "FAVOURITES"), "Room "+roomTest+" isn't added in the FAVORITES category");
-	}
 	/**
 	 * TODO
 	 * Check that a thumbnail is present when a photo is uploaded, instead of the full resolution photo.
