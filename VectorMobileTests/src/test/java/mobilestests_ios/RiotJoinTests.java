@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import com.esotericsoftware.yamlbeans.YamlException;
 
 import pom_ios.main_tabs.RiotHomePageTabObjects;
+import pom_ios.main_tabs.RiotRoomsTabPageObjects;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
 import utility.MatrixUtilities;
@@ -36,15 +37,36 @@ public class RiotJoinTests extends RiotParentTest{
 	 * @throws InterruptedException
 	 */
 	@Test(groups={"1driver_ios","1checkuser"}, priority=0)
-	public void joinRoomById() throws IOException, InterruptedException{
+	public void joinRoomByIdFromHomePage() throws IOException, InterruptedException{
 		String roomName="joinroomtest";
 		//1. Create room A from home page & 2. Invite user A.
 		createRoomWithByRequestsToMatrix(roomName);
 		
 		//2. With user A, join the room from the home page.
-		RiotHomePageTabObjects homePageB = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		RiotHomePageTabObjects homePageA = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
 		//Check that the joined room is opened. 
-		Assert.assertNotNull(homePageB.joinRoom(testRoomId, true), "No room opened in riot after joining it");
+		Assert.assertNotNull(homePageA.joinRoom(testRoomId, true), "No room opened in riot after joining it");
+	}
+	
+	/**
+	 * 1. Create a room with user B </br>
+	 * 2. Invite user A. </br>
+	 * 3. With user A, join the room from the rooms page.  </br>
+	 * Check that the joined room is opened.  </br>
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	@Test(groups={"1driver_ios","1checkuser"}, priority=0)
+	public void joinRoomByIdFromRoomsPage() throws IOException, InterruptedException{
+		String roomName="joinroomtest";
+		//1. Create room A from home page & 2. Invite user A.
+		createRoomWithByRequestsToMatrix(roomName);
+		
+		//2. With user A, join the room from the home page.
+		RiotHomePageTabObjects homePageA = new RiotHomePageTabObjects(appiumFactory.getiOsDriver1());
+		RiotRoomsTabPageObjects roomsPageA=homePageA.openRoomsTab();
+		//Check that the joined room is opened. 
+		Assert.assertNotNull(roomsPageA.joinRoom(testRoomId, true), "No room opened in riot after joining it");
 	}
 	
 	/**
@@ -63,8 +85,11 @@ public class RiotJoinTests extends RiotParentTest{
 	@AfterMethod(alwaysRun=true)
 	private void leaveRoomAfterTest(Method m) throws InterruptedException, IOException{
 		switch (m.getName()) {
-		case "joinRoomById":
-			leaveAndForgetRoomUsers();
+		case "joinRoomByIdFromHomePage":
+			leaveAndForgetRoomWithBothUsers();
+			break;
+		case "joinRoomByIdFromRoomsPage":
+			leaveAndForgetRoomWithBothUsers();
 			break;
 		default:
 			break;
@@ -76,7 +101,7 @@ public class RiotJoinTests extends RiotParentTest{
 		restartApplication(appiumFactory.getiOsDriver1());
 	}
 	
-	private void leaveAndForgetRoomUsers() throws IOException{
+	private void leaveAndForgetRoomWithBothUsers() throws IOException{
 		//leave room user B
 		HttpsRequestsToMatrix.leaveRoom(riotUserBAccessToken, testRoomId);
 		//forget room user B
@@ -88,6 +113,7 @@ public class RiotJoinTests extends RiotParentTest{
 		//forget room user A
 		HttpsRequestsToMatrix.forgetRoom(riotUserAAccessToken, testRoomId);
 	}
+	
 	/**
 	 * Log the good user if not.</br> Secure the test.
 	 * @param myDriver

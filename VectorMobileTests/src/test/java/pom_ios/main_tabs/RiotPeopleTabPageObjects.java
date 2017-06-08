@@ -8,8 +8,6 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
-import pom_ios.RiotNewChatPageObjects;
-import pom_ios.RiotRoomPageObjects;
 
 public class RiotPeopleTabPageObjects extends RiotTabPageObjects{
 
