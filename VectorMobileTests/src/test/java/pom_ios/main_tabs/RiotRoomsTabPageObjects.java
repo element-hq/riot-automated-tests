@@ -10,7 +10,6 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
-import pom_ios.RiotRoomPageObjects;
 
 public class RiotRoomsTabPageObjects extends RiotTabPageObjects {
 
@@ -37,20 +36,4 @@ public class RiotRoomsTabPageObjects extends RiotTabPageObjects {
 	
 	@iOSFindBy(accessibility="PublicRoomTableViewCell")
 	public List<MobileElement> publicRoomsList;
-
-	/*
-	 * FLOATING BUTTONS OR DIALOGS .
-	 */
-	/**
-	 * Create a new room : click on plus button. </br>
-	 * Return a RiotRoomPageObjects object.
-	 * @return
-	 */
-	public RiotRoomPageObjects createRoom(){
-		createRoomFloatingButton.click();
-		if(driver.findElementByClassName("XCUIElementTypeCollectionView")==null){
-			createRoomFloatingButton.click();
-		}
-		return new RiotRoomPageObjects(driver);
-	}
 }

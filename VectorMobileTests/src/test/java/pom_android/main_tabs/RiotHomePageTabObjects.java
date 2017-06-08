@@ -12,9 +12,6 @@ import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import pom_android.RiotContactPickerPageObjects;
-import pom_android.RiotNewChatPageObjects;
-import pom_android.RiotRoomPageObjects;
 
 public class RiotHomePageTabObjects extends RiotTabPageObjects{
 
@@ -172,95 +169,4 @@ public class RiotHomePageTabObjects extends RiotTabPageObjects{
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/low_priority_section")
 	public MobileElement lowPrioritySectionLayout;
-	
-	/*
-	 * FLOATING BUTTONS OR DIALOGS .
-	 */
-	/*
-	 * 		START CHAT / CREATE ROOM
-	 */
-	@AndroidFindBy(id="android:id/select_dialog_listview")
-	public MobileElement selectRoomTypeCreationListView;
-	@AndroidFindBy(xpath="//android.widget.CheckedTextView[@text='Start chat']")
-	public MobileElement startChatCheckedTextView;
-	@AndroidFindBy(xpath="//android.widget.CheckedTextView[@text='Create room']")
-	public MobileElement createRoomCheckedTextView;
-	@AndroidFindBy(xpath="//android.widget.CheckedTextView[@text='Join room']")
-	public MobileElement joinRoomCheckedTextView;
-	@AndroidFindBy(xpath="//android.widget.Button[@text='Cancel']")
-	public MobileElement cancelCreationListButton;
-	@AndroidFindBy(xpath="//android.widget.Button[@text='OK']")
-	public MobileElement okCreationListButton;
-
-	/*
-	 * 		JOIN ROOM DIALOG
-	 */
-	@AndroidFindBy(id="android:id/parentPanel")
-	public MobileElement joinRoomParentLayout;
-	@AndroidFindBy(xpath="//android.widget.LinearLayout[@resource-id='android:id/parentPanel']//android.widget.TextView")
-	public MobileElement joinRoomDescriptionTextView;
-	@AndroidFindBy(id="im.vector.alpha:id/join_room_edit_text")
-	public MobileElement joinRoomEditText;
-	@AndroidFindBy(id="android:id/button1")
-	public MobileElement joinRoomJoinButton;
-	@AndroidFindBy(id="android:id/button2")
-	public MobileElement joinRoomCancelButton;
-	
-	/**
-	 * Create a new room : click on plus button, then create room item. </br>
-	 * Return a RiotRoomPageObjects object.
-	 * @return
-	 * @throws InterruptedException 
-	 */
-	public RiotRoomPageObjects createRoom() throws InterruptedException{
-		createRoomFloatingButton.click();
-		createRoomCheckedTextView.click();
-		return new RiotRoomPageObjects(driver);
-	}
-	
-	/**
-	 * Start a new chat with a user and returns the new created room. 
-	 * @param displayNameOrMatrixId
-	 * @return RiotRoomPageObjects
-	 * @throws InterruptedException 
-	 */
-	public RiotRoomPageObjects startChat(String displayNameOrMatrixId) throws InterruptedException{
-		createRoomFloatingButton.click();
-		startChatCheckedTextView.click();
-		RiotContactPickerPageObjects inviteViewDevice1=new RiotContactPickerPageObjects(driver);
-		inviteViewDevice1.searchAndSelectMember(getMatrixIdFromDisplayName(displayNameOrMatrixId));
-		RiotNewChatPageObjects newChatViewDevice1= new RiotNewChatPageObjects(driver);
-		newChatViewDevice1.confirmRoomCreationButton.click();
-		return new RiotRoomPageObjects(driver);
-	}
-	
-	/**
-	 * Join a room: click on plus button, then join room item, and fill the join room dialog. </br>
-	 * If roomPageExpected = true, returns a new RiotRoomPageObjects.
-	 * @param roomIdOrAlias
-	 * @throws InterruptedException 
-	 */
-	public RiotRoomPageObjects joinRoom(String roomIdOrAlias, Boolean roomPageExpected) throws InterruptedException{
-		createRoomFloatingButton.click();
-		joinRoomCheckedTextView.click();
-		joinRoomCheck();
-		joinRoomEditText.setValue(roomIdOrAlias);
-		joinRoomJoinButton.click();
-		if(roomPageExpected){
-			return new RiotRoomPageObjects(driver);
-		}else{
-			return null;
-		}
-	}
-	
-	/**
-	 * Check the join room dialog.
-	 */
-	public void joinRoomCheck(){
-		Assert.assertEquals(joinRoomDescriptionTextView.getText(), "Join a room");
-		Assert.assertEquals(joinRoomCancelButton.getText(), "Cancel");
-		Assert.assertEquals(joinRoomJoinButton.getText(), "Join");
-	}
-	
-	
 }
