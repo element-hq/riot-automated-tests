@@ -1,10 +1,10 @@
 package mobilestests_android;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,6 +16,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -52,7 +53,7 @@ public class RiotLoginTests extends RiotParentTest{
 		loginPage.logUser(sUserName, null,sPassword,false);
 		//Wait for the main page (rooms list) to be opened, and log out.
 		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
-		Assert.assertTrue(homePage.roomsListView.isDisplayed(), "Rooms list ins't displayed after login.");
+		Assert.assertFalse(homePage.roomsList.isEmpty(), "Rooms list ins't displayed after login.");
 		homePage.logOut();
 		Assert.assertTrue(loginPage.inputsLoginLayout.isDisplayed(), "The login page isn't displayed after the log-out.");
 	}
@@ -100,6 +101,7 @@ public class RiotLoginTests extends RiotParentTest{
 	public void forgotPasswordFormTest(){
 		String expectedResetPwdMessage="To reset your password, enter the email address linked to your account:";
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
+		appiumFactory.getAndroidDriver1().hideKeyboard();
 		loginPage.forgotPwdButton.click();
 		//hide the keyboard
 		appiumFactory.getAndroidDriver1().hideKeyboard();
@@ -130,6 +132,7 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver_android","loginpage"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void fillForgotFormPasswordWithForbiddenCharacter(String mailTest, String newPwdTest, String confirmPwdTest) throws InterruptedException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
+		appiumFactory.getAndroidDriver1().hideKeyboard();
 		loginPage.forgotPwdButton.click();
 		loginPage.mailResetPwdEditText.setValue(mailTest);
 		loginPage.newPwdResetPwdEditText.setValue(newPwdTest);
@@ -206,7 +209,7 @@ public class RiotLoginTests extends RiotParentTest{
 	@Test(groups={"1driver_android","loginpage"})
 	public void checkRiotLogoFromLoginPage() throws IOException{
 		RiotLoginAndRegisterPageObjects loginPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
-		boolean status = false;
+		//boolean status = false;
 	    //take screen shot
 		String destDir = "screenshots\\comparison";
 		// Capture screenshot.
@@ -241,50 +244,12 @@ public class RiotLoginTests extends RiotParentTest{
 	    FileUtils.copyFile(scrLoginPageFile, file);
 	    
 	    //get the expected image
-	    String pathToExpectedRiotLogo = "src\\test\\resources\\expected_images\\logo_login.png";
-	    File fileOutPut = new File(pathToExpectedRiotLogo);
+	  //  String pathToExpectedRiotLogo = "src\\test\\resources\\expected_images\\logo_login.png";
+	   // File fileOutPut = new File(pathToExpectedRiotLogo);
 //	    verifyImage(destDir + "/"+"riotActualLogo.png", pathToExpectedRiotLogo );
 //	    Assert.assertTrue(status, "FAIL Event doesn't match");
 	}
-	private void verifyImage(String image1, String image2) throws IOException{
-//	    File fileInput = new File(image1);
-//	    File fileOutPut = new File(image2);
-//
-//	    BufferedImage bufileInput = ImageIO.read(fileInput);
-//	    DataBuffer dafileInput = bufileInput.getData().getDataBuffer();
-//	    int sizefileInput = dafileInput.getSize();                     
-//	    BufferedImage bufileOutPut = ImageIO.read(fileOutPut);
-//	    DataBuffer dafileOutPut = bufileOutPut.getData().getDataBuffer();
-//	    int sizefileOutPut = dafileOutPut.getSize();
-//	    Boolean matchFlag = true;
-//	    if(sizefileInput == sizefileOutPut) {                         
-//	       for(int j=0; j<sizefileInput; j++) {
-//	             if(dafileInput.getElem(j) != dafileOutPut.getElem(j)) {
-//	                   matchFlag = false;
-//	                   break;
-//	             }
-//	        }
-//	    }
-//	    else                            
-//	       matchFlag = false;
-//	    Assert.assertTrue(matchFlag, "Images are not same");    
-	    File fileInput = new File(image1);
-	    File fileOutPut = new File(image2);
 
-	    BufferedImage bufileInput = ImageIO.read(fileInput);
-	    DataBuffer dafileInput = bufileInput.getData().getDataBuffer();
-	    int sizefileInput = dafileInput.getSize();                     
-	    BufferedImage bufileOutPut = ImageIO.read(fileOutPut);
-	    //Finder finder = new Finder("path/to/image", new Region(0, 0, <imgwidth>, <imgheight>));
-	 }
-	
-	private void clearFiled(AndroidDriver driver,MobileElement textFieldToClear){
-		textFieldToClear.click();
-		for (int i = 0;i<=textFieldToClear.getText().length();i++){
-			driver.pressKeyCode(AndroidKeyCode.DEL );
-		}
-
-	}
 	/**
 	 * Log-out the user if it can't see the login page.
 	 * @throws InterruptedException
@@ -298,5 +263,10 @@ public class RiotLoginTests extends RiotParentTest{
 				homePage.logOut();
 			}
 		}
+	}
+	
+	@AfterMethod(alwaysRun=true)
+	private void restart1ApplicationAfterTest(Method m) throws InterruptedException{
+		appiumFactory.getAndroidDriver1().resetApp();
 	}
 }

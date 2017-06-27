@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 
-import io.appium.java_client.SwipeElementDirection;
+import io.appium.java_client.TouchAction;
 import pom_android.main_tabs.RiotHomePageTabObjects;
 import pom_android.main_tabs.RiotRoomsTabPageObjects;
 import utility.Constant;
@@ -40,7 +40,7 @@ public class RiotPublicRoomsTests extends RiotParentTest{
 		RiotRoomsTabPageObjects roomsTab=homePageTab.openRoomsTab();
 		
 		//2. Hit ROOM DIRECTORY section to focus on the public rooms. 
-		Thread.sleep(1000);
+		waitUntilDisplayed(appiumFactory.getAndroidDriver1(), "im.vector.alpha:id/section_loading", false, 10);
 		roomsTab.hitSectionHeader("ROOM DIRECTORY");
 		//Check that list of public rooms isn't empty. 
 		Assert.assertTrue(roomsTab.publicRoomsList.size()>0, "List of public rooms is empty.");
@@ -49,9 +49,10 @@ public class RiotPublicRoomsTests extends RiotParentTest{
 		int maxScroll=5;
 		for(int i=1;i<=maxScroll;i++){
 			String lastRoomName=roomsTab.getRoomName(roomsTab.publicRoomsList.get(roomsTab.publicRoomsList.size()-2));
-			roomsTab.roomsListView.swipe(SwipeElementDirection.UP,200, 50, 100);
+			TouchAction swipeUp=new TouchAction(appiumFactory.getAndroidDriver1());
+			swipeUp.press(roomsTab.roomsListView, 100, 600).waitAction(1000).moveTo(roomsTab.toolBarView, 100, 0).release().perform();
 			//After each scroll, check that the last room isn't the same that the previous.
-			Assert.assertNotEquals(roomsTab.getRoomName(roomsTab.publicRoomsList.get(roomsTab.publicRoomsList.size()-2)), lastRoomName, "Scroll n°"+i+" on "+maxScroll+" didn't seem to work.");
+			Assert.assertNotEquals(roomsTab.getRoomName(roomsTab.publicRoomsList.get(roomsTab.publicRoomsList.size()-2)), lastRoomName/*, "Scroll n°"+i+" on "+maxScroll+" didn't seem to work." */);
 		}
 	}
 

@@ -8,8 +8,6 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
-import pom_ios.RiotNewChatPageObjects;
-import pom_ios.RiotRoomPageObjects;
 
 public class RiotPeopleTabPageObjects extends RiotTabPageObjects{
 
@@ -46,19 +44,5 @@ public class RiotPeopleTabPageObjects extends RiotTabPageObjects{
 	 */
 	public MobileElement getPeopleByName(String peopleDisplayName){
 		return null;
-	}
-	/*
-	 * FLOATING BUTTONS OR DIALOGS .
-	 */
-	/**
-	 * Start a new chat with a user and returns the new created room. 
-	 * @param displayNameOrMatrixId
-	 * @return RiotRoomPageObjects
-	 */
-	public RiotRoomPageObjects startChat(String displayNameOrMatrixId){
-		createRoomFloatingButton.click();
-		RiotNewChatPageObjects newChatA = new RiotNewChatPageObjects(appiumFactory.getiOsDriver1());
-		newChatA.searchAndSelectMember(displayNameOrMatrixId);
-		return new RiotRoomPageObjects(driver);
 	}
 }

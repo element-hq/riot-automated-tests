@@ -2,8 +2,10 @@ package mobilestests_android;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -43,8 +45,8 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		HttpsRequestsToMatrix.sendInvitationToUser(riotInviterAccessToken, getRoomId(), getMatrixIdFromDisplayName(riotUserDisplayName));
 		
 		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
-		ExplicitWait(appiumFactory.getAndroidDriver1(),homePage.invitesHeadingLayout);
-		Assert.assertTrue(homePage.invitesHeadingLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
+		ExplicitWait(appiumFactory.getAndroidDriver1(),homePage.invitesSectionLayout);
+		Assert.assertTrue(homePage.invitesSectionLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
 		//TODO check that invites layout is above rooms list
 		//check invite layout
 		homePage.checkInvitationLayout(roomName);
@@ -72,8 +74,8 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		HttpsRequestsToMatrix.sendInvitationToUser(riotInviterAccessToken, getRoomId(), getMatrixIdFromDisplayName(riotUserDisplayName));
 		
 		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
-		ExplicitWait(appiumFactory.getAndroidDriver1(),homePage.invitesHeadingLayout);
-		Assert.assertTrue(homePage.invitesHeadingLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
+		ExplicitWait(appiumFactory.getAndroidDriver1(),homePage.invitesSectionLayout);
+		Assert.assertTrue(homePage.invitesSectionLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
 		//TODO check that invites layout is above rooms list
 		//check invite layout
 		homePage.checkInvitationLayout(roomName);
@@ -109,8 +111,8 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		HttpsRequestsToMatrix.sendInvitationToUser(riotInviterAccessToken, getRoomId(), getMatrixIdFromDisplayName(riotUserDisplayName));
 		
 		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
-		ExplicitWait(appiumFactory.getAndroidDriver1(),homePage.invitesHeadingLayout);
-		Assert.assertTrue(homePage.invitesHeadingLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
+		ExplicitWait(appiumFactory.getAndroidDriver1(),homePage.invitesSectionLayout);
+		Assert.assertTrue(homePage.invitesSectionLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
 		//TODO check that invites layout is above rooms list
 		//check invite layout
 		homePage.checkInvitationLayout(roomName);
@@ -153,8 +155,8 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 		HttpsRequestsToMatrix.sendInvitationToUser(riotInviterAccessToken, getRoomId(), getMatrixIdFromDisplayName(riotUserDisplayName));
 		
 		RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
-		ExplicitWait(appiumFactory.getAndroidDriver1(),homePage.invitesHeadingLayout);
-		Assert.assertTrue(homePage.invitesHeadingLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
+		ExplicitWait(appiumFactory.getAndroidDriver1(),homePage.invitesSectionLayout);
+		Assert.assertTrue(homePage.invitesSectionLayout.isDisplayed(), "The invites collapsing bar isn't displayed");
 		//TODO check that invites layout is above rooms list
 		//check invite layout
 		homePage.checkInvitationLayout(roomName);
@@ -235,5 +237,10 @@ public class RiotRoomInvitationTests extends RiotParentTest{
 	private void renewRiotInviterAccessToken() throws IOException, InterruptedException{
 		System.out.println("Log "+riotInviterUserDisplayName+" to get a new AccessToken.");
 		riotInviterAccessToken=HttpsRequestsToMatrix.login(riotInviterUserDisplayName, Constant.DEFAULT_USERPWD);
+	}
+	
+	@AfterMethod(alwaysRun=true,groups={"1driver_android"})
+	private void restart1ApplicationAfterTest(Method m) throws InterruptedException{
+		restartApplication(appiumFactory.getAndroidDriver1());
 	}
 }

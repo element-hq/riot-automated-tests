@@ -3,13 +3,13 @@ package pom_android;
 import java.io.FileNotFoundException;
 
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSFindBy;
@@ -29,13 +29,8 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public RiotLoginAndRegisterPageObjects(AppiumDriver<MobileElement> myDriver) {
 		driver= myDriver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
-		//ExplicitWaitToBeVisible(driver,this.inputsLoginLayout);
 		try {
-			if(driver instanceof AndroidDriver<?>){
-				waitUntilDisplayed((AndroidDriver<MobileElement>) driver,"im.vector.alpha:id/login_inputs_layout", true, 10);
-			}else if(driver instanceof IOSDriver<?>){
-				waitUntilDisplayed((IOSDriver<MobileElement>) driver,"//UIAApplication[1]/UIAWindow[1]/UIAScrollView[2]/UIATextField[1]", true, 5);
-			}		
+			Assert.assertTrue(waitUntilDisplayed((AndroidDriver<MobileElement>) driver,"im.vector.alpha:id/login_inputs_layout", true, 10), "Riot login/register page isn't opened");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -83,7 +78,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 			msgboxConfirmationYesButton.click();
 		}
 	}
-	
+
 	/**
 	 * Fill login form, and hit the login button.
 	 */
@@ -91,7 +86,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 		fillLoginForm(usernameOrEmail, phoneNumber, password);
 		loginButton.click();
 	}
-	
+
 	/**
 	 * Fill login form, custom server options, and hit the login button.
 	 * @param usernameOrEmail
@@ -105,6 +100,8 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 		fillLoginForm(usernameOrEmail, phoneNumber, password);
 		setUpHomeServerAndIdentityServer(hs, is);
 		loginButton.click();
+		//since the workaround for this https://github.com/vector-im/riot-android/issues/1227
+		//the verification identity server pop up shouldn't appear
 		if(isPresentTryAndCatch(titleTemplateFromWarningTrustRemoteServerLayout)){
 			msgboxConfirmationYesButton.click();
 		}
@@ -128,6 +125,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public void setUpHomeServerAndIdentityServer(String hsAddress, String isAddress) throws InterruptedException{
 		driver.hideKeyboard();
 		customServerOptionsCheckBox.click();
+		waitUntilDisplayed(driver, "im.vector.alpha:id/search_progress", false, 120);
 		//if warning alert "Could not verify identity of remote server" is displayed
 		if(isPresentTryAndCatch(titleTemplateFromWarningTrustRemoteServerLayout)){
 			msgboxConfirmationYesButton.click();
@@ -141,6 +139,12 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 				msgboxConfirmationYesButton.click();
 			}
 		}
+		//if login button is disabled, it means we have to trigger the homeserver verification
+		//https://github.com/vector-im/riot-android/issues/1227
+		identityServerEditText.click();
+		if(isPresentTryAndCatch(titleTemplateFromWarningTrustRemoteServerLayout)){
+			msgboxConfirmationYesButton.click();
+		}
 		if(null!=isAddress&&!identityServerEditText.getText().equals(isAddress)){
 			try {
 				driver.hideKeyboard();
@@ -152,12 +156,10 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	}
 
 	/*
-	 * 		register 1 part
+	 * 		register form 1
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/creation_inputs_layout")
 	public MobileElement inputsRegisteringLayout;
-	@AndroidFindBy(id="im.vector.alpha:id/creation_email_address")
-	public MobileElement emailRegisterEditText;
 	@AndroidFindBy(id="im.vector.alpha:id/creation_your_name")
 	public MobileElement userNameRegisterEditText;
 	@AndroidFindBy(id="im.vector.alpha:id/creation_password1")
@@ -165,7 +167,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	@AndroidFindBy(id="im.vector.alpha:id/creation_password2")
 	public MobileElement pwd2EditRegisterText;
 	/*
-	 * 		register 2 part
+	 * 		register form 2
 	 */
 	@AndroidFindBy(id="im.vector.alpha:id/registration_email")
 	public MobileElement mailRegisterEditText;
@@ -194,7 +196,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement customServerOptionsCheckBox;
 	@AndroidFindBy(id="im.vector.alpha:id/login_forgot_password")
 	public MobileElement forgotPwdButton;
-	
+
 	/*
 	 * Verifying email page
 	 */
@@ -202,7 +204,7 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement emailSentMessageTextView;
 	@AndroidFindBy(id="im.vector.alpha:id/button_forgot_email_validate")
 	public MobileElement iVerifiedMyMailButton;
-	
+
 
 	/*
 	 * LOGIN MATRIX SERVER CUSTOM OPTIONS
@@ -224,8 +226,8 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement titleTemplateFromWarningTrustRemoteServerLayout;
 	@AndroidFindBy(id="im.vector.alpha:id/ssl_user_id")
 	public MobileElement hsURLFromWarningTrustRemoteServer;
-	
-	
+
+
 	/*
 	 * BOTTOM BAR
 	 */
@@ -253,21 +255,20 @@ public class RiotLoginAndRegisterPageObjects extends TestUtilities{
 	public MobileElement msgboxConfirmationNoButton;
 	@AndroidFindBy(id="android:id/button1")
 	public MobileElement msgboxConfirmationYesButton;
-	
+
 	/*
 	 * PROGRESS BAR
 	 */
 	@AndroidFindBy(xpath="//android.widget.ProgressBar")
 	public MobileElement progressBar;
-	
-	
+
+
 	/**
 	 * Start a registration to the captcha webview.
 	 * @throws InterruptedException 
 	 */
-	public void fillRegisterForm(String mail, String username, String pwd1, String pwd2) throws InterruptedException{
+	public void fillFirstRegisterForm(String mail, String username, String pwd1, String pwd2) throws InterruptedException{
 		registerButton.click();
-		emailRegisterEditText.setValue(mail);
 		userNameRegisterEditText.setValue(username);
 		pwd1EditRegisterText.setValue(pwd1);
 		pwd2EditRegisterText.setValue(pwd2);

@@ -13,7 +13,10 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
 import io.appium.java_client.pagefactory.AndroidFindBy;
+import pom_android.RiotContactPickerPageObjects;
 import pom_android.RiotLoginAndRegisterPageObjects;
+import pom_android.RiotNewChatPageObjects;
+import pom_android.RiotRoomPageObjects;
 import pom_android.RiotSettingsPageObjects;
 import utility.TestUtilities;
 
@@ -29,10 +32,10 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	@AndroidFindBy(id="im.vector.alpha:id/home_toolbar")
 	public MobileElement toolBarView;
 	/** Button openning the lateral menu. */
-	@AndroidFindBy(xpath="//android.view.View[@resource-id='im.vector.alpha:id/home_toolbar']/android.widget.ImageButton[@content-desc='Navigate up']")//Menu button (opens the lateral menu)
+	@AndroidFindBy(xpath="//android.view.View[@resource-id='im.vector.alpha:id/home_toolbar']/android.widget.ImageButton[1]")////android.view.View[@resource-id='im.vector.alpha:id/home_toolbar']/android.widget.ImageButton[@content-desc='Navigate up']
 	public MobileElement contextMenuButton;
 	/** Search button openning the unified search. */
-	@Deprecated@AndroidFindBy(id="im.vector.alpha:id/ic_action_search_room")
+	@AndroidFindBy(id="im.vector.alpha:id/ic_action_search_room")
 	public MobileElement searchButton;
 	public void openGlobalSearchLayout(){
 		driver.pressKeyCode(AndroidKeyCode.MENU);
@@ -152,13 +155,13 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	public void checkInvitationLayout(String roomName) throws InterruptedException{
 		MobileElement roomInvitationLayout=getInvitationLayoutByName(roomName);
 		//room's avatar is not empty
-		org.openqa.selenium.Dimension roomAvatar=roomInvitationLayout.findElementById("im.vector.alpha:id/room_avatar_image_view").getSize();
+		org.openqa.selenium.Dimension roomAvatar=roomInvitationLayout.findElementById("im.vector.alpha:id/room_avatar").getSize();
 		Assert.assertTrue(roomAvatar.height!=0 && roomAvatar.width!=0, "Riot logo has null dimension");
 		//System.out.println(roomInvitationLayout.findElementById("im.vector.alpha:id/roomSummaryAdapter_roomName").getText());
 		//! warning is present
-		Assert.assertEquals(roomInvitationLayout.findElementById("im.vector.alpha:id/roomSummaryAdapter_unread_count").getText(), "!", "Unread count on the invitation layout isn't present");
+		Assert.assertEquals(roomInvitationLayout.findElementById("im.vector.alpha:id/room_unread_count").getText(), "!", "Unread count on the invitation layout isn't present");
 		//last message received is not empty
-		Assert.assertFalse(roomInvitationLayout.findElementById("im.vector.alpha:id/roomSummaryAdapter_roomMessage").getText().isEmpty(), "Last received message is empty");
+		Assert.assertFalse(roomInvitationLayout.findElementById("im.vector.alpha:id/room_message").getText().isEmpty(), "Last received message is empty");
 		//the 2 buttons are enabled
 		Assert.assertEquals(roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_reject_button").getText(), "Reject");
 		Assert.assertTrue(roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_reject_button").isEnabled(), "Reject button isn't enabled");
@@ -172,7 +175,7 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	 * @throws InterruptedException 
 	 */
 	public void previewInvitation(String roomName) throws InterruptedException{
-		waitUntilDisplayed(driver, "im.vector.alpha:id/recents_groups_invitation_group", true, 30);
+		waitUntilDisplayed(driver, "im.vector.alpha:id/invite_view", true, 30);
 		try {
 			MobileElement roomInvitationLayout=getInvitationLayoutByName(roomName);
 			roomInvitationLayout.findElementById("im.vector.alpha:id/recents_invite_preview_button").click();
@@ -390,9 +393,28 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 		}
 	}
 	
-	public Boolean isDirectMessageByRoomName(String myRoomName){
+	/**
+	 * Returns true if the room has a direct chat indicator.
+	 * @param room
+	 * @return
+	 */
+	public Boolean isRoomTaggedDirectMessage(MobileElement room){
 		try {
-			if(getRoomByName(myRoomName).findElementById("im.vector.alpha:id/direct_chat_indicator")!=null)return true;
+			if(room.findElementById("im.vector.alpha:id/direct_chat_indicator")!=null)return true;
+		} catch (Exception e) {
+			return false;
+		}
+		return false;
+	}
+	
+	/**
+	 * Returns true if the room has an encrypted icon.
+	 * @param room
+	 * @return
+	 */
+	public Boolean isRoomTaggedEncrypted(MobileElement room){
+		try {
+			if(room.findElementById("im.vector.alpha:id/room_avatar_encrypted_icon")!=null)return true;
 		} catch (Exception e) {
 			return false;
 		}
@@ -415,7 +437,91 @@ public abstract class RiotTabPageObjects extends TestUtilities{
 	/** "+" floating button  */
 	@AndroidFindBy(id="im.vector.alpha:id/floating_action_button")
 	public MobileElement createRoomFloatingButton;
+	/*
+	 * 		START CHAT / CREATE ROOM
+	 */
+	@AndroidFindBy(id="android:id/select_dialog_listview")
+	public MobileElement selectRoomTypeCreationListView;
+	@AndroidFindBy(xpath="//android.widget.CheckedTextView[@text='Start chat']")
+	public MobileElement startChatCheckedTextView;
+	@AndroidFindBy(xpath="//android.widget.CheckedTextView[@text='Create room']")
+	public MobileElement createRoomCheckedTextView;
+	@AndroidFindBy(xpath="//android.widget.CheckedTextView[@text='Join room']")
+	public MobileElement joinRoomCheckedTextView;
+	@AndroidFindBy(xpath="//android.widget.Button[@text='Cancel']")
+	public MobileElement cancelCreationListButton;
+	@AndroidFindBy(xpath="//android.widget.Button[@text='OK']")
+	public MobileElement okCreationListButton;
+
+	/*
+	 * 		JOIN ROOM DIALOG
+	 */
+	@AndroidFindBy(id="android:id/parentPanel")
+	public MobileElement joinRoomParentLayout;
+	@AndroidFindBy(xpath="//android.widget.LinearLayout[@resource-id='android:id/parentPanel']//android.widget.TextView")
+	public MobileElement joinRoomDescriptionTextView;
+	@AndroidFindBy(id="im.vector.alpha:id/join_room_edit_text")
+	public MobileElement joinRoomEditText;
+	@AndroidFindBy(id="android:id/button1")
+	public MobileElement joinRoomJoinButton;
+	@AndroidFindBy(id="android:id/button2")
+	public MobileElement joinRoomCancelButton;
 	
+	/**
+	 * Create a new room : click on plus button, then create room item. </br>
+	 * Return a RiotRoomPageObjects object.
+	 * @return
+	 * @throws InterruptedException 
+	 */
+	public RiotRoomPageObjects createRoom() throws InterruptedException{
+		createRoomFloatingButton.click();
+		createRoomCheckedTextView.click();
+		return new RiotRoomPageObjects(driver);
+	}
+	
+	/**
+	 * Start a new chat with a user and returns the new created room. 
+	 * @param displayNameOrMatrixId
+	 * @return RiotRoomPageObjects
+	 * @throws InterruptedException 
+	 */
+	public RiotRoomPageObjects startChat(String displayNameOrMatrixId) throws InterruptedException{
+		createRoomFloatingButton.click();
+		startChatCheckedTextView.click();
+		RiotContactPickerPageObjects inviteViewDevice1=new RiotContactPickerPageObjects(driver);
+		inviteViewDevice1.searchAndSelectMember(getMatrixIdFromDisplayName(displayNameOrMatrixId));
+		RiotNewChatPageObjects newChatViewDevice1= new RiotNewChatPageObjects(driver);
+		newChatViewDevice1.confirmRoomCreationButton.click();
+		return new RiotRoomPageObjects(driver);
+	}
+	
+	/**
+	 * Join a room: click on plus button, then join room item, and fill the join room dialog. </br>
+	 * If roomPageExpected = true, returns a new RiotRoomPageObjects.
+	 * @param roomIdOrAlias
+	 * @throws InterruptedException 
+	 */
+	public RiotRoomPageObjects joinRoom(String roomIdOrAlias, Boolean roomPageExpected) throws InterruptedException{
+		createRoomFloatingButton.click();
+		joinRoomCheckedTextView.click();
+		joinRoomCheck();
+		joinRoomEditText.setValue(roomIdOrAlias);
+		joinRoomJoinButton.click();
+		if(roomPageExpected){
+			return new RiotRoomPageObjects(driver);
+		}else{
+			return null;
+		}
+	}
+	
+	/**
+	 * Check the join room dialog.
+	 */
+	public void joinRoomCheck(){
+		Assert.assertEquals(joinRoomDescriptionTextView.getText(), "Join a room");
+		Assert.assertEquals(joinRoomCancelButton.getText(), "Cancel");
+		Assert.assertEquals(joinRoomJoinButton.getText(), "Join");
+	}
 	/**
 	 * Wait until the spinner isn't displayed anymore.
 	 * @param secondsToWait

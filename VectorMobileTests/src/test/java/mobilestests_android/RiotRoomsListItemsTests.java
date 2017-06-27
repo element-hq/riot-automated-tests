@@ -12,6 +12,7 @@ import com.esotericsoftware.yamlbeans.YamlException;
 import pom_android.RiotRoomPageObjects;
 import pom_android.RiotSettingsPageObjects;
 import pom_android.main_tabs.RiotHomePageTabObjects;
+import pom_android.main_tabs.RiotRoomsTabPageObjects;
 import utility.Constant;
 import utility.RiotParentTest;
 import utility.ScreenshotUtility;
@@ -57,11 +58,12 @@ public class RiotRoomsListItemsTests extends RiotParentTest{
 			settingsPage.changeDisplayNameFromSettings(newDisplayName);
 			//5. Come back on the rooms list.
 			settingsPage.actionBarBackButton.click();
+			RiotRoomsTabPageObjects roomsTab = homePage.openRoomsTab();
 			//Check that the last event is the msg sent in step 2
-			Assert.assertEquals(homePage.getLastEventByRoomName(roomNameTest,true), newDisplayName+": "+randomMsg);
+			Assert.assertEquals(roomsTab.getLastEventByRoomName(roomNameTest,true), newDisplayName+": "+randomMsg);
 			//6.  Set the old display name
-			homePage.contextMenuButton.click();
-			homePage.settingsButton.click();
+			roomsTab.contextMenuButton.click();
+			roomsTab.settingsButton.click();
 			settingsPage.changeDisplayNameFromSettings(riotUserDisplayName);
 			settingsPage.actionBarBackButton.click();
 		}

@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.Map;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.testng.annotations.AfterTest;
+import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeGroups;
 
 import io.appium.java_client.remote.IOSMobileCapabilityType;
@@ -103,7 +103,7 @@ public abstract class RiotParentTest extends TestUtilities {
 	//		stop2AppiumServers();
 	//	}
 
-	@AfterTest
+	@AfterGroups(groups={"2drivers_android","1driver_android","1driver_ios","2drivers_ios"})
 	public void tearDownAllDrivers() throws Exception{
 		if(null!=appiumFactory.getAndroidDriver1()){
 			appiumFactory.getAndroidDriver1().quit();
@@ -273,7 +273,7 @@ public abstract class RiotParentTest extends TestUtilities {
 	 * According to the chosen starting mode, start the first appium server if needed.
 	 * @throws Exception 
 	 */
-	private void startAppiumServer1() throws Exception{
+	protected void startAppiumServer1() throws Exception{
 		switch (ReadConfigFile.getInstance().getConfMap().get("starting_server_mode")) {
 		case "1":
 			AppiumServerStartAndStopCmdLine.startAppiumServer1IfNecessary();
@@ -289,7 +289,7 @@ public abstract class RiotParentTest extends TestUtilities {
 	 * According to the chosen starting mode, start the two appiums servers if needed.
 	 * @throws Exception 
 	 */
-	private void start2AppiumServers() throws Exception{
+	protected void start2AppiumServers() throws Exception{
 		switch (ReadConfigFile.getInstance().getConfMap().get("starting_server_mode")) {
 		case "1":
 			AppiumServerStartAndStopCmdLine.startAppiumServer1IfNecessary();

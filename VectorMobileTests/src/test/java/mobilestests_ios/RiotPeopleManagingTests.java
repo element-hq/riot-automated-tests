@@ -263,6 +263,11 @@ public class RiotPeopleManagingTests extends RiotParentTest{
 		System.out.println("Leave room "+roomName+ " with device 1");
 	}
 	
+	@AfterMethod(alwaysRun=true,groups={"1driver_ios"})
+	private void restart1ApplicationAfterTest(Method m) throws InterruptedException{
+		restartApplication(appiumFactory.getiOsDriver1());
+	}
+	
 	/**
 	 * Log the good user if not.</br> Secure the test.
 	 * @param myDriver

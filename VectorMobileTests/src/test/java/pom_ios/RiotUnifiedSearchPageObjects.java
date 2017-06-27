@@ -30,7 +30,7 @@ public class RiotUnifiedSearchPageObjects extends TestUtilities{
 	/*
 	 * NAVIGATION BAR.
 	 */
-	@iOSFindBy(accessibility="Search...")
+	@iOSFindBy(accessibility="Search")
 	public MobileElement searchSearchField;
 	@iOSFindBy(accessibility="Cancel")
 	public MobileElement cancelButton;

@@ -13,6 +13,7 @@ import com.esotericsoftware.yamlbeans.YamlException;
 import io.appium.java_client.MobileElement;
 import pom_android.RiotRoomPageObjects;
 import pom_android.main_tabs.RiotHomePageTabObjects;
+import pom_android.main_tabs.RiotRoomsTabPageObjects;
 import utility.Constant;
 import utility.HttpsRequestsToMatrix;
 import utility.ReadConfigFile;
@@ -44,20 +45,21 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	@Test(groups={"messageReceivedInList","1checkuser","1driver_android"},priority=1)
 	public void checkBadgeAndMessageOnRoomItem() throws InterruptedException, IOException{
 		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotRoomsTabPageObjects roomsTab=homePage1.openRoomsTab();
 		//get the current badge on the room.
 		Integer currentBadge=homePage1.getBadgeNumberByRoomName(roomTest);
 		//send a message to the room with an other user using https request to matrix.
 		HttpsRequestsToMatrix.sendMessageInRoom(riotSenderAccessToken, getRoomId(), msgFromUpUser);
 		if(currentBadge==null)currentBadge=0;
 		//wait until message is received
-		homePage1.waitForRoomToReceiveNewMessage(roomTest, currentBadge);
+		roomsTab.waitForRoomToReceiveNewMessage(roomTest, currentBadge);
 		//Assertion on the unread indicator.
 		//Assert.assertTrue(homePage1.doesRoomHaveUnreadIndicator(roomTest), "There is no unread indicator on this room.");
 		//Assertion on the badge
-		Assert.assertNotNull(homePage1.getBadgeNumberByRoomName(roomTest), "There is no badge on this room.");
-		Assert.assertEquals((int)homePage1.getBadgeNumberByRoomName(roomTest),currentBadge+1, "Badge number wasn't incremented after receiving the message");	
+		Assert.assertNotNull(roomsTab.getBadgeNumberByRoomName(roomTest), "There is no badge on this room.");
+		Assert.assertEquals((int)roomsTab.getBadgeNumberByRoomName(roomTest),currentBadge+1, "Badge number wasn't incremented after receiving the message");	
 		//Assertion on the message.
-		Assert.assertEquals(homePage1.getLastEventByRoomName(roomTest,false), msgFromUpUser, "Received message on the room item isn't the same as sended by matrix.");
+		Assert.assertEquals(roomsTab.getLastEventByRoomName(roomTest,false), msgFromUpUser, "Received message on the room item isn't the same as sended by matrix.");
 	}
 	
 	/**
@@ -81,9 +83,9 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 */
 	@Test(dependsOnGroups="messageReceivedInList",priority=2,groups={"roomOpenned","1checkuser","1driver_android"})
 	public void checkTextMessageOnRoomPage() throws InterruptedException{
-		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
+		RiotRoomsTabPageObjects roomsTab=new RiotRoomsTabPageObjects(appiumFactory.getAndroidDriver1());
 		//open room
-		homePage1.getRoomByName(roomTest).click();
+		roomsTab.getRoomByName(roomTest).click();
 		//check that lately sended message is the last displayed in the room
 		RiotRoomPageObjects testRoom = new RiotRoomPageObjects(appiumFactory.getAndroidDriver1());
 		MobileElement lastPost= testRoom.getLastPost();
@@ -159,24 +161,8 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 		org.openqa.selenium.Dimension riotLogoDim=uploadPicture.getSize();
 	    Assert.assertTrue(riotLogoDim.height!=0 && riotLogoDim.width!=0, "Uploaded picture seems empty");
 	    Assert.assertNotNull(testRoom.getTimeStampByPost(lastPost), "Last post doesn't have a timestamp");
-	}
-
-	/**
-	 * Add a room in favorites from the rooms list. </br>
-	 * Check that the room is added in the favorites category. </br>
-	 * Remove the room from the favorites </br>
-	 * Check that the room is no more in the favorites.
-	 * @throws InterruptedException
-	 */
-	@Test(groups={"1checkuser","1driver_android"},priority=1)
-	public void addRoomInFavorites() throws InterruptedException{
-		RiotHomePageTabObjects homePage1=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
-		//add room in favourites
-		homePage1.clickOnContextMenuOnRoom(roomTest, "Favourite");
-		Thread.sleep(2000);
-		Assert.assertTrue(homePage1.checkRoomInCategory(roomTest, "FAVORITES"), "Room "+roomTest+" isn't added in the FAVORITES category");
-		homePage1.clickOnContextMenuOnRoom(roomTest, "Favourite");
-		Assert.assertFalse(homePage1.checkRoomInCategory(roomTest, "FAVORITES"), "Room "+roomTest+" is in the FAVORITES category and should not");
+	    //come back in rooms list
+	    testRoom.menuBackButton.click();
 	}
 	
 	/**
@@ -189,7 +175,7 @@ public class RiotMessagesReceptionTests extends RiotParentTest{
 	 * Test that the typing indicator is empty on device B. </br>
 	 * @throws InterruptedException 
 	 */
-	@Test(groups={"2drivers_android","2checkuser"},priority=0)
+	@Test(groups={"2drivers_android","2checkuser"},priority=6)
 	public void typingIndicatorTest() throws InterruptedException{
 		String notSentMsg="tmp";
 		RiotHomePageTabObjects homePageA=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());

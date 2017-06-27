@@ -49,7 +49,7 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 	 * 7. Accept invitation with user B. </br>
 	 * Check on user A device that user B has actually joined the room.
 	 */
-	@Test(groups={"1driver_ios","22checkuser_ios"})
+	@Test(groups={"1driver_ios","2checkuser_ios"})
 	public void banAndUnbanUserTest() throws IOException, InterruptedException{
 		String tmpRoomName="ban temp room";
 		//1. 2. 3
@@ -166,7 +166,7 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 		roomPageB.waitForBubblesToBeDisplayed();
 
 		//Check on user A device that user B has actually joined the room
-		memberPageUserB.menuBackButton.click();
+		//memberPageUserB.menuBackButton.click();
 		Assert.assertTrue(roomPageA.getTextViewFromBubble(roomPageA.getLastBubble()).getText().contains(riotUserBDisplayName+" joined"));
 	}
 
@@ -283,6 +283,12 @@ public class RiotAdminAndModerationTests extends RiotParentTest{
 		}
 	}
 
+	@AfterMethod(alwaysRun=true,groups={"2drivers_ios"})
+	private void restart2ApplicationAfterTest(Method m) throws InterruptedException{
+		restartApplication(appiumFactory.getiOsDriver1());
+		restartApplication(appiumFactory.getiOsDriver2());
+	}
+	
 	private void leaveAndForgetRoomWith2Users() throws IOException{
 		//leave room user A
 		HttpsRequestsToMatrix.leaveRoom(riotUserAAccessToken, testRoomId);

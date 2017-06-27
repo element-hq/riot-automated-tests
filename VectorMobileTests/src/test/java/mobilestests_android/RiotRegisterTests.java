@@ -1,8 +1,10 @@
 package mobilestests_android;
 
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -44,7 +46,6 @@ public class RiotRegisterTests extends RiotParentTest {
 		//Validate that the fields are still filled
 		Assert.assertFalse(registerPage.userNameRegisterEditText.getText().isEmpty(), "The username field from the register form is empty");
 		//(Impossible to test the password text lenght)
-		restartApplication(appiumFactory.getAndroidDriver1());
 	}
 	
 	/**
@@ -67,7 +68,6 @@ public class RiotRegisterTests extends RiotParentTest {
 		//Validate the toast "Passwords don't match" : not possible with appium
 		//Validate that we are still on the register form
 		Assert.assertTrue(registerPage.inputsRegisteringLayout.isDisplayed(), "The register form is not displayed");
-		restartApplication(appiumFactory.getAndroidDriver1());
 	}
 	
 	/**
@@ -76,12 +76,12 @@ public class RiotRegisterTests extends RiotParentTest {
 	 * Verifies that the form is not sent.
 	 * @throws MalformedURLException 
 	 */
-	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class,groups={"1driver_android"})//groups={"restartneeded","logout","1driver_android"})
+	@Test(dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class,groups={"1driver_android"})
 	public void fillRegisterFormWithForbiddenCharacter(String mailTest,String userNameTest, String pwd1Test,String pwd2Test) throws MalformedURLException{
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
 		registerPage.registerButton.click();
 		//if(registerPage.emailRegisterEditText.getText().length()>0)registerPage.emailRegisterEditText.clear();
-		registerPage.emailRegisterEditText.setValue(mailTest);
+		//registerPage.emailRegisterEditText.setValue(mailTest);
 		/*if(registerPage.userNameRegisterEditText.getText().length()>0)*///registerPage.userNameRegisterEditText.clear();
 		registerPage.userNameRegisterEditText.setValue(userNameTest);
 		/*registerPage.pwd1EditRegisterText.clear();*/
@@ -92,7 +92,6 @@ public class RiotRegisterTests extends RiotParentTest {
 		//Validate the toasts : not possible with appium
 		//Validate that we are still on the register form
 		Assert.assertTrue(registerPage.isPresentTryAndCatch(registerPage.inputsRegisteringLayout), "The register form is not displayed");
-		restartApplication(appiumFactory.getAndroidDriver1());
 	}
 	
 	/**
@@ -121,7 +120,6 @@ public class RiotRegisterTests extends RiotParentTest {
 	 */
 	@Test(groups={"1driver_android"},dataProvider="SearchProvider",dataProviderClass=DataproviderClass.class)
 	public void registerWithUnvalidPhoneNumberTest(String phoneNumber) throws InterruptedException{
-		restartApplication(appiumFactory.getAndroidDriver1());
 		//Start of the test
 		int userNamesuffix = 1 + (int)(Math.random() * ((10000 - 1) + 1));
 		String displayNameTest=(new StringBuilder("riotuser").append(userNamesuffix)).toString();
@@ -154,7 +152,7 @@ public class RiotRegisterTests extends RiotParentTest {
 		String userNameTest=(new StringBuilder("riotuser").append(userNamesuffix)).toString();
 		
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
-		registerPage.fillRegisterForm("", userNameTest,Constant.DEFAULT_USERPWD, Constant.DEFAULT_USERPWD);
+		registerPage.fillFirstRegisterForm("", userNameTest,Constant.DEFAULT_USERPWD, Constant.DEFAULT_USERPWD);
 		RiotCaptchaPageObject captchaPage = new RiotCaptchaPageObject(appiumFactory.getAndroidDriver1());
 		captchaPage.notARobotCheckBox.click();
 		captchaPage.selectAllImages();
@@ -166,7 +164,7 @@ public class RiotRegisterTests extends RiotParentTest {
 	@Test(groups={"1driver_android"}, enabled=false)
 	public void registerTestWebView() throws InterruptedException{
 		RiotLoginAndRegisterPageObjects registerPage = new RiotLoginAndRegisterPageObjects(appiumFactory.getAndroidDriver1());
-		registerPage.fillRegisterForm("", "riotuser16","riotuser", "riotuser");
+		registerPage.fillFirstRegisterForm("", "riotuser16","riotuser", "riotuser");
 		RiotCaptchaPageObject captchaPage = new RiotCaptchaPageObject(appiumFactory.getAndroidDriver1());
 		captchaPage.notARobotCheckBox.click();
 		captchaPage.handleCaptchaWebView();
@@ -185,5 +183,10 @@ public class RiotRegisterTests extends RiotParentTest {
 			RiotHomePageTabObjects homePage=new RiotHomePageTabObjects(appiumFactory.getAndroidDriver1());
 			homePage.logOut();
 		}
+	}
+	
+	@AfterMethod(alwaysRun=true,groups={"1driver_android"})
+	private void restart1ApplicationAfterTest(Method m) throws InterruptedException{
+		restartApplication(appiumFactory.getAndroidDriver1());
 	}
 }

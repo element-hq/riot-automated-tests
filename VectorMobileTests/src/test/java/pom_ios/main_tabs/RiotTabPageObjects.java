@@ -10,6 +10,8 @@ import io.appium.java_client.SwipeElementDirection;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.pagefactory.iOSFindBy;
 import pom_ios.RiotLoginAndRegisterPageObjects;
+import pom_ios.RiotNewChatPageObjects;
+import pom_ios.RiotRoomPageObjects;
 import pom_ios.RiotSettingsPageObjects;
 import utility.TestUtilities;
 
@@ -49,7 +51,7 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	/**
 	 * Log-out from Riot with the lateral menu.
 	 */
-	public void logOutFromRoomsList(){
+	public void logOutFromTabs(){
 		RiotSettingsPageObjects settingsPage = openRiotSettings();
 		settingsPage.logOutFromSettingsView();
 	}
@@ -63,7 +65,7 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	 * @throws InterruptedException 
 	 */
 	public RiotHomePageTabObjects logOutAndLogin(String username, String pwd, Boolean forceDefaultHs) throws InterruptedException {
-		logOutFromRoomsList();
+		logOutFromTabs();
 		RiotLoginAndRegisterPageObjects loginPage= new RiotLoginAndRegisterPageObjects(driver);
 		loginPage.logUser(username, null, pwd,forceDefaultHs);
 		return new RiotHomePageTabObjects(driver);
@@ -372,6 +374,84 @@ public abstract class RiotTabPageObjects extends TestUtilities {
 	@iOSFindBy(accessibility="create_room")
 	public MobileElement createRoomFloatingButton;
 	
+	/*
+	 * 		Start/Create room sheet. Opened after click on plus button.
+	 */
+	@iOSFindBy(accessibility="RecentsVCCreateRoomAlertActionStart chat")
+	public MobileElement startChatSheetButton;
+	@iOSFindBy(accessibility="RecentsVCCreateRoomAlertActionCreate room")
+	public MobileElement createRoomSheetButton;
+	@iOSFindBy(accessibility="RecentsVCCreateRoomAlertActionJoin room")
+	public MobileElement joinRoomSheetButton;
+	@iOSFindBy(accessibility="RecentsVCCreateRoomAlertActionCancel")
+	public MobileElement cancelCreationSheetButton;
+	
+	/*
+	 * 		JOIN ROOM DIALOG
+	 */
+	@iOSFindBy(accessibility="RecentsVCJoinARoomAlert")
+	public MobileElement joinRoomParentLayout;
+	@iOSFindBy(accessibility="Join a room")
+	public MobileElement joinRoomDescriptionEditText;
+	@iOSFindBy(accessibility="RecentsVCJoinARoomAlertTextField0")
+	public MobileElement joinRoomEditText;
+	@iOSFindBy(accessibility="RecentsVCJoinARoomAlertActionJoin")
+	public MobileElement joinRoomJoinButton;
+	@iOSFindBy(accessibility="RecentsVCJoinARoomAlertActionCancel")
+	public MobileElement joinRoomCancelButton;
+	
+	
+	/**
+	 * Create a new room : click on plus button, then create room item. </br>
+	 * Return a RiotRoomPageObjects object.
+	 * @return
+	 */
+	public RiotRoomPageObjects createRoom(){
+		createRoomFloatingButton.click();
+		if(driver.findElementByClassName("XCUIElementTypeCollectionView")==null){
+			createRoomFloatingButton.click();
+		}
+		createRoomSheetButton.click();
+		return new RiotRoomPageObjects(driver);
+	}
+
+	/**
+	 * Start a new chat with a user and returns the new created room. 
+	 * @param displayNameOrMatrixId
+	 * @return RiotRoomPageObjects
+	 */
+	public RiotRoomPageObjects startChat(String displayNameOrMatrixId){
+		createRoomFloatingButton.click();
+		startChatSheetButton.click();
+		RiotNewChatPageObjects newChatA = new RiotNewChatPageObjects(appiumFactory.getiOsDriver1());
+		newChatA.searchAndSelectMember(displayNameOrMatrixId);
+		return new RiotRoomPageObjects(driver);
+	}
+	
+	/**
+	 * Join a room: click on plus button, then join room item, and fill the join room dialog. </br>
+	 * If roomPageExpected = true, returns a new RiotRoomPageObjects.
+	 * @param roomIdOrAlias
+	 * @throws InterruptedException 
+	 */
+	public RiotRoomPageObjects joinRoom(String roomIdOrAlias, Boolean roomPageExpected) throws InterruptedException{
+		createRoomFloatingButton.click();
+		joinRoomSheetButton.click();
+		joinRoomCheck();
+		joinRoomEditText.setValue(roomIdOrAlias);
+		joinRoomJoinButton.click();
+		if(roomPageExpected){
+			return new RiotRoomPageObjects(driver);
+		}else{
+			return null;
+		}
+	}
+	/**
+	 * Check the join room dialog.
+	 */
+	public void joinRoomCheck(){
+		Assert.assertEquals(joinRoomDescriptionEditText.getText(), "Join a room");
+	}
 	/*
 	 * BOTTOM: TABS.
 	 */

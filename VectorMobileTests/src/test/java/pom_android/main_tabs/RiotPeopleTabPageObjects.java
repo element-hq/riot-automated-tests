@@ -11,9 +11,6 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import pom_android.RiotContactPickerPageObjects;
-import pom_android.RiotNewChatPageObjects;
-import pom_ios.RiotRoomPageObjects;
 
 public class RiotPeopleTabPageObjects extends RiotTabPageObjects{
 
@@ -45,23 +42,5 @@ public class RiotPeopleTabPageObjects extends RiotTabPageObjects{
 			System.out.println("No people found with display name: "+peopleDisplayName+ " in people tab.");
 			return null;
 		}
-	}
-	
-	/*
-	 * FLOATING BUTTONS OR DIALOGS .
-	 */
-	/**
-	 * Start a new chat with a user and returns the new created room. 
-	 * @param displayNameOrMatrixId
-	 * @return RiotRoomPageObjects
-	 * @throws InterruptedException 
-	 */
-	public RiotRoomPageObjects startChat(String displayNameOrMatrixId) throws InterruptedException{
-		createRoomFloatingButton.click();
-		RiotContactPickerPageObjects inviteViewDevice1=new RiotContactPickerPageObjects(driver);
-		inviteViewDevice1.searchAndSelectMember(getMatrixIdFromDisplayName(displayNameOrMatrixId));
-		RiotNewChatPageObjects newChatViewDevice1= new RiotNewChatPageObjects(driver);
-		newChatViewDevice1.confirmRoomCreationButton.click();
-		return new RiotRoomPageObjects(driver);
 	}
 }
