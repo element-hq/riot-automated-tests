@@ -22,6 +22,6 @@ iosdevice2:
     platformName: iOS
     deviceName: Matrix's iPhone (iPhone 5C)
     udid: 2a418a9dbcd960d904a501bf558120625f96f409
-    platformVersion: 9.3.5
+    platformVersion: 10.3.2
     automationName: XCUITest
 ...

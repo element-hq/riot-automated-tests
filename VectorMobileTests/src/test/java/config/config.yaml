@@ -10,7 +10,7 @@ code_sign_identity: iPhone Developer
 #homeserver in use for the tests: matrix.org, jeangb.org
 homeserver: jeangb.org
 
-#does homeserver have same ip address than appium servers
+#does homeserver have same ip address than appium servers (true or false)
 homeserverlocal: true
 
 homeserver_address: 192.168.2.52
