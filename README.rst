@@ -1,9 +1,9 @@
-Vector-automated-tests
+Riot-automated-tests
 ==========
 
-Vector/automated-tests is an automated tests project for vector mobiles applications :
-- https://github.com/vector-im/vector-ios
-- https://github.com/vector-im/vector-android
+Riot-automated-tests is an automated tests project for riot mobiles applications :
+- https://github.com/vector-im/riot-ios
+- https://github.com/vector-im/riot-android
 
 The goal is to make regression tests on the GUI using emulator or real devices.
 In order to play the tests on the iOS client, a Mac OS environnement with XCode is needed. Mac OS can also play the tests on the Android client.
