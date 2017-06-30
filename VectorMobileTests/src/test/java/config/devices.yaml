@@ -15,13 +15,13 @@ iosdevice1:
     platformName: iOS
     deviceName: STZ_DE_13243 (iPhone 6S Plus)
     udid: e75c0085c74a872846772a6b2ee56a86849a4d92
-    platformVersion: 9.3.5
+    platformVersion: 10.3.2
     automationName: XCUITest
   
 iosdevice2:
     platformName: iOS
     deviceName: Matrix's iPhone (iPhone 5C)
     udid: 2a418a9dbcd960d904a501bf558120625f96f409
-    platformVersion: 10.3.2
+    platformVersion: 9.3.5
     automationName: XCUITest
 ...
